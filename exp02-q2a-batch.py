@@ -1,21 +1,20 @@
 from subprocess import Popen, call
+"""
+--- README of exp02-q2a-batch ---
+Title:
+    batch processing for fastq_to_fasta binary
+Original command:
+    time <bin>/fastq_to_fasta -v -Q33 -i <fastq file> -o <fasta file>
+Note:
+    command split into [linose,lino,linase,lina,lisi]
+Required files:
+    ./list.txt
+        # Path of File list
+    ./fastq_to_fasta
+        # Binary from fastx toolkit
 
-#    ---README---
-#
-# exp02-q2a-batch
-#     batch processing for fastq_to_fasta binary
-#
-# original command:
-#    time <bin>/fastq_to_fasta -v -Q33 -i <fastq file> -o <fasta file>
-#
-# Note:
-#    command split into [linose,lino,linase,lina,lisi]
-#
-# file list path:
-#    ./list.txt
-#
-#    ---README---
-
+--- README ---
+"""
 linose = ['time','./fastq_to_fasta','-v','-Q33','-i',]
 linase = ['-o']
 
