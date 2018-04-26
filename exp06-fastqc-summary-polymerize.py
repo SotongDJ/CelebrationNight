@@ -1,5 +1,15 @@
 import json, pprint
 
+"""--- README of exp06-fsp ---
+Title:
+    Polymerise Summary of FastQC
+    (f.s.p. stand for fastqc summary polymerise)
+
+Required files:
+    ./data/config.json
+
+--- README ---"""
+
 configsi = 'data/config.json'
 
 configfa = open(configsi,'r')
