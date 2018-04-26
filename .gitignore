@@ -1,7 +1,8 @@
 # something need to be exclude
-temp/
+bin/
 data/
 png/
+temp/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
