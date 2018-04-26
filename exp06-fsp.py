@@ -8,14 +8,32 @@ Title:
 Required files:
     ./data/config.json
 
---- README ---"""
+--- README ---
+Postfix:
+ -si: String
+ -ti: Intiger/Float
+ -li: List
+ -tu: Tuple
+ -di: Dictionary
+ -fa: File (with open())
+ -so: JSON
 
+Structure
+ First : tribe, e.g. raw, untrim, trimmed...
+    (var: tribe)
+ Second: group, e.g. control, A, B, 1, 2...
+    (var: grupo)
+ Third : subgroup/files, e.g. foward, reverse, pair, unpair
+    (var: fale)
+"""
+
+# config- : stand for variables related to config file
 configsi = 'data/config.json'
-
 configfa = open(configsi,'r')
-
 configso = json.load(configfa)
+
 configdi = configso.get('var',{})
+# pafwa- : related to the path/pathway
 pafwasi = configdi.get('path',{}).get('fastqc-comb',"")
 grupoli = configdi.get('group',[])
 tribeli = configdi.get('tribe',[])
@@ -51,10 +69,7 @@ resutdi={
         ]
     },
     group:{
-        tribe:[
-            fale,
-            fale
-        ]
+        tribe:[fale,fale]
     }
 }
 """
