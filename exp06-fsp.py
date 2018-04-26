@@ -19,7 +19,7 @@ Postfix:
  -fa: File (with open())
  -so: JSON
 
-Structure
+Grouping Structure:
  First : tribe, e.g. raw, untrim, trimmed...
     (var: tribe)
  Second: group, e.g. control, A, B, 1, 2...

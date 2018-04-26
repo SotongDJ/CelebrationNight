@@ -6,33 +6,44 @@ helber="""
 Title:
     batch processing for Trimmomatic
 Usage:
-    python exp07-trim <source>
-Note:
-    command split into [ linoli , linuli , linali ]
+    python exp07-trim <TRIBE> <GROUP,GROUP,GROUP...>
+Structure:
+    First : tribe,
+        e.g. raw, untrim, trimmed...
+    Second: group,
+        e.g. control, A, B, 1, 2...
+    Third : subgroup/files,
+        e.g. foward, reverse, pair, unpair
 Required variables:
   config.json
-    "var"
-      "thread"
-      "path"
-        "pwd"
-        "trimmomatic"
-        "trimmoresut"
-
-CAUTION:
-    You need to set <PATH> ("var"/"path"/"pwd" in config.json)
-      with absolute path
-    Because subprocess.call may fail to pass pwd to system
+    "var"/"tribe"
+    "var"/"group"
+    "var"/"subgroup"
+    "var"/"file-list"
+    "var"/"binding"
+    "var"/"thread"
+    "var"/"path"/"pwd"
+    "var"/"path"/"raw"
+    "var"/"path"/"log"
+    "var"/"path"/"trimmomatic"
+    "var"/"path"/"trimmoresut"
 
 Original command:
   java -jar <bin>/trimmomatic-0.35.jar PE -phred33
-    -threads <threads> -trimlog <logfile>\
-    input_forward.fq.gz input_reverse.fq.gz \
-    output_forward_paired.fq.gz output_forward_unpaired.fq.gz \
-    output_reverse_paired.fq.gz output_reverse_unpaired.fq.gz \
-    ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 \
-    TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+  -threads <threads> -trimlog <logfile>\
+  input_forward.fq.gz input_reverse.fq.gz \
+  output_forward_paired.fq.gz output_forward_unpaired.fq.gz \
+  output_reverse_paired.fq.gz output_reverse_unpaired.fq.gz \
+  ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 \
+  TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+
+CAUTION:
+    <GROUP> must separate with comma
+    <GROUP> don't allowed spacing
+
    --- README ---
 """"""
+    command split into [ linoli , linuli , linali ]
 Postfix:
  -si: String
  -ho: String(that store dir path)
