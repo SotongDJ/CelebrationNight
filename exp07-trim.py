@@ -4,9 +4,11 @@ from subprocess import call
 helber="""
    --- README of exp07-trim ---
 Title:
-    batch processing for Trimmomatic
+    Batch Processing for Trimmomatic
+
 Usage:
     python exp07-trim <TRIBE> <GROUP,GROUP,GROUP...>
+
 Structure:
     First : tribe,
         e.g. raw, untrim, trimmed...
@@ -14,6 +16,7 @@ Structure:
         e.g. control, A, B, 1, 2...
     Third : subgroup/files,
         e.g. foward, reverse, pair, unpair
+
 Required variables:
   config.json
     "var"/"tribe"
@@ -22,7 +25,6 @@ Required variables:
     "var"/"file-list"
     "var"/"binding"
     "var"/"thread"
-    "var"/"path"/"pwd"
     "var"/"path"/"raw"
     "var"/"path"/"log"
     "var"/"path"/"trimmomatic"
@@ -60,12 +62,10 @@ configfa = open(configsi,'r')
 configso = json.load(configfa)
 configdi = configso.get('var',{})
 """
-patoho: path of fastq directory
 binoho: <bin>
 resuho: path of output directory
 tredasi: threads """
 pafwadi = configdi.get('path',{})
-patoho = pafwadi.get('pwd',"")
 soroho = pafwadi.get('raw',"")
 logoho = pafwadi.get('log',"")
 binoho = pafwadi.get('trimmomatic',"")
@@ -123,7 +123,6 @@ configlog = ("FROM config.json\n" +
 "\"file-list\"  : " + pprint.pformat(fallidi) + "\n" +
 "\"binding\"    : " + pprint.pformat(bindosi) + "\n" +
 "\"thread\"     : " + pprint.pformat(tredasi) + "\n" +
-"\"pwd\"        : " + pprint.pformat(patoho) + "\n" +
 "\"raw\"        : " + pprint.pformat(soroho) + "\n" +
 "\"log\"        : " + pprint.pformat(logoho) + "\n" +
 "\"trimmomatic\": " + pprint.pformat(binoho) + "\n" +

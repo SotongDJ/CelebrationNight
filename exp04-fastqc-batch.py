@@ -1,27 +1,39 @@
 import sys
 from subprocess import call
 
-"""
---- README of exp04-fastqc-batch ---
+helber="""
+   --- README of exp04-fastqc-batch ---
 Title:
     batch processing for FastQC
-Original command:
-    time <bin>/fastqc -o <output path> --extract <fastq path>
-Note:
-    command split into [ linose , lina ]
+
+Usage:
+    python exp04-fastqc-batch <TRIBE> <GROUP,GROUP,GROUP...>
+
+Structure:
+    First : tribe,
+        e.g. raw, untrim, trimmed...
+    Second: group,
+        e.g. control, A, B, 1, 2...
+    Third : subgroup/files,
+        e.g. foward, reverse, pair, unpair
+        
 Required files:
     <PATH>/list-[source].txt
         # File list
     <bin>/fastqc
         # Binary from SolexaQA++
 
+Original command:
+    time <bin>/fastqc -o <output path> --extract <fastq path>
+
 CAUTION:
     You need to replace <PATH> with absolute path
     Because subprocess.call may fail to pass pwd to system
 
---- README ---
+   --- README ---
+""""""
+    command split into [ linose , lina ]
 """
-
 # patoho: path of <PATH>, format: "/path/to/your/folder"
 patoho = 'path'
 

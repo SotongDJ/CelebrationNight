@@ -1,12 +1,29 @@
 import json, pprint
 
-"""--- README of exp06-fsp ---
+helber="""
+   --- README of README of exp06-fsp ---
 Title:
     Polymerise Summary of FastQC
     (f.s.p. stand for fastqc summary polymerise)
 
 Required files:
     ./data/config.json
+    [exp05-fsg:]result.json
+    [template]png-template.json
+
+Required variables:
+  config.json
+    "var"/"tribe"
+    "var"/"group"
+    "var"/"prefix"
+    "var"/"blank-prefix"
+    "var"/"fastqc-list"
+    "var"/"png"
+    "var"/"path"/"pwd"
+    "var"/"path"/"raw"
+    "var"/"path"/"log"
+    "var"/"path"/"trimmomatic"
+    "var"/"path"/"fastqc-comb"
 
    --- README ---
 
@@ -42,7 +59,7 @@ prefisdi = configdi.get('prefix',{})
 blanksi = configdi.get('blank-prefix',{})
 
 pngconfi = configdi.get('png',0)
-pnglibfa = open('exp06-fsp-pngtemplate.json','r')
+pnglibfa = open('exp06-fsp-png-template.json','r')
 pnglibdi = json.load(pnglibfa)
 
 faslidi = configso.get('fastqc-list',{})
