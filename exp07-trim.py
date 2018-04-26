@@ -80,7 +80,7 @@ tredasi = configdi.get('thread',"")
 
 # linose: first part of command
 linoli = [ 'java', '-jar', binoho + "/trimmomatic-0.36.jar",
-'PE', '-phred33', '-threads', tredasi, '-trimlog']
+'PE', '-phred33', '-threads', tredasi ]
 
 linali = [ "ILLUMINACLIP:" + binoho + "/adapters/TruSeq3-PE.fa:2:30:10",
 "LEADING:3", "TRAILING:3", "SLIDINGWINDOW:4:15", "MINLEN:36"]
@@ -157,7 +157,6 @@ for grupo in metali:
     refasi = argudi.get("reverse","")
 
     linuli = [
-        logoho + "/exp07-trim-" + tribesi + "-" + grupo + ".log",
         soroho + "/" + tribesi + "/" + fofasi,
         soroho + "/" + tribesi + "/" + refasi,
         resuho + "-pr/" + fofasi,
@@ -168,5 +167,6 @@ for grupo in metali:
 
     arguli = linoli + linuli +linali
 
+    lisi = logoho + "/exp07-trim-" + tribesi + "-" + grupo + ".log"
     print('\n\nCommand: \n  ' + '  \\\n    '.join(arguli))
-    call(arguli)
+    call(arguli, stdout=open(lisi, 'w'))
