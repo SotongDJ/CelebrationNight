@@ -24,6 +24,8 @@ Structure:
     Third : subgroup/files,
         e.g. foward, reverse, pair, unpair
 
+    Visualise graph: explanation01-dataStructure.png
+
 Required variables:
   config.json
     "var"/"list-format"

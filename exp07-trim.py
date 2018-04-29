@@ -17,6 +17,8 @@ Structure:
     Third : subgroup/files,
         e.g. foward, reverse, pair, unpair
 
+    Visualise graph: explanation01-dataStructure.svg
+
 Required variables:
   config.json
     "var"/"tribe"
@@ -171,6 +173,9 @@ for grupo in metali:
 
     arguli = linoli + linuli +linali
 
-    lisi = logoho + "/exp07-trim-" + tribesi + "-" + grupo + ".log"
     print('\n\nCommand: \n  ' + '  \\\n    '.join(arguli))
-    call(arguli, stdout=open(lisi, 'w'))
+    runisi = "\n\nRUN started at " + time.strftime("%Y%m%d%H%M%S")
+    comasi = "\nCommand: \n  " + " ".join(arguli)
+    with open(logosi,'a') as logofale:
+        logofale.write(runisi + comasi)
+    call(arguli, stdout=open(logosi, 'a'))
