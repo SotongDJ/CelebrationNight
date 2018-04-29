@@ -85,6 +85,8 @@ linoli = [ 'java', '-jar', binoho + "/trimmomatic-0.36.jar",
 linali = [ "ILLUMINACLIP:" + binoho + "/adapters/TruSeq3-PE.fa:2:30:10",
 "LEADING:3", "TRAILING:3", "SLIDINGWINDOW:4:15", "MINLEN:36"]
 
+timmasi = time.strftime("%Y%m%d%H%M%S")
+
 tribesi = ""
 metali = []
 meseli = []
@@ -112,6 +114,7 @@ for n in ['-h','--help','-help','/?']:
     if n in sys.argv:
         print(helber)
 
+runninlog = ("RUN started at " + timmasi )
 scriptlog = ("LOCAL\n" +
 "Input:  " + pprint.pformat(sys.argv) + "\n" +
 "Tribe:  " + pprint.pformat(tribesi) + "\n" +
@@ -128,13 +131,15 @@ configlog = ("FROM config.json\n" +
 "\"trimmomatic\": " + pprint.pformat(binoho) + "\n" +
 "\"trimmoresut\": " + pprint.pformat(resuho) + "\n")
 print("\n\n" + scriptlog + "\n" + configlog)
-logosi = logoho + "/exp07-trim-run-" + time.strftime("%Y%m%d%H%M%S") + ".log"
+logosi = logoho + "/exp07-trim-run-" + timmasi + ".log"
 with open(logosi,'w') as logofale:
     logofale.write(scriptlog + "\n" + configlog)
 # --- Main ---
 
 fallisi = fallidi.get(tribesi,{})
 for grupo in metali:
+    runisi = ""
+    comasi = ""
     argudi = {
     "forward":"?",
     "reverse":"?"
