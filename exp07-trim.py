@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys, json, pprint, time
 from subprocess import call
 

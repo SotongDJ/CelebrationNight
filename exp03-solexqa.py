@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from subprocess import Popen, call
 """
 --- README of exp03-solexqa ---

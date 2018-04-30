@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import json, pprint
 
 configsi = 'data/config.json'

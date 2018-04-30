@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys
 from subprocess import call
 
@@ -16,7 +17,7 @@ Structure:
         e.g. control, A, B, 1, 2...
     Third : subgroup/files,
         e.g. foward, reverse, pair, unpair
-        
+
 Required files:
     <PATH>/list-[source].txt
         # File list
