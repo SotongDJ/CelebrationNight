@@ -22,6 +22,10 @@ Structure:
 
 Required variables:
   config.json
+    "trimmomatic"/"pair"
+    "trimmomatic"/"unpair"
+    "bin"/"trimmomatic"
+    "bin"/"tmmadapter"
     "var"/"tribe"
     "var"/"group"
     "var"/"subgroup"
@@ -30,8 +34,8 @@ Required variables:
     "var"/"thread"
     "var"/"path"/"raw"
     "var"/"path"/"log"
-    "var"/"path"/"trimmomatic"
     "var"/"path"/"trimmoresut"
+    "var"/"prefix" [value of pair and unpair]
 
 Original command:
   java -jar <bin>/trimmomatic-0.35.jar PE -phred33
@@ -65,14 +69,24 @@ configfa = open(configsi,'r')
 configso = json.load(configfa)
 configdi = configso.get('var',{})
 """
-binoho: <bin>
 resuho: path of output directory
 tredasi: threads """
+binodi = configso.get('bin',{})
+trimfa = binodi.get('trimmomatic',"")
+trimsi = binodi.get('tmmadapter',"")
+
 pafwadi = configdi.get('path',{})
 soroho = pafwadi.get('raw',"")
 logoho = pafwadi.get('log',"")
-binoho = pafwadi.get('trimmomatic',"")
 resuho = pafwadi.get('trimmoresut',"")
+
+trimodi = configso.get('trimmomatic',{})
+payirsi = trimodi.get('pair',"")
+unparsi = trimodi.get('unpair',"")
+
+prefidi = configdi.get('prefix',{})
+prepisi = prefidi.get(payirsi,"")
+preunsi = prefidi.get(unparsi,"")
 
 tribeli = configdi.get('tribe',[])
 grupoli = configdi.get('group',[])
@@ -82,10 +96,10 @@ bindosi = configdi.get('binding',"")
 tredasi = configdi.get('thread',"")
 
 # linose: first part of command
-linoli = [ 'java', '-jar', binoho + "/trimmomatic-0.36.jar",
+linoli = [ 'java', '-jar', trimfa ,
 'PE', '-phred33', '-threads', tredasi ]
 
-linali = [ "ILLUMINACLIP:" + binoho + "/adapters/TruSeq3-PE.fa:2:30:10",
+linali = [ "ILLUMINACLIP:" + trimsi + "/adapters/TruSeq3-PE.fa:2:30:10",
 "LEADING:3", "TRAILING:3", "SLIDINGWINDOW:4:15", "MINLEN:36"]
 
 timmasi = time.strftime("%Y%m%d%H%M%S")
@@ -126,12 +140,15 @@ configlog = ("FROM config.json\n" +
 "\"tribe\"      : " + pprint.pformat(tribeli) + "\n" +
 "\"group\"      : " + pprint.pformat(grupoli) + "\n" +
 "\"subgroup\"   : " + pprint.pformat(sugrudi) + "\n" +
+"\"trimmomatic\": " + pprint.pformat(trimodi) + "\n" +
+"\"prefix\"     : " + pprint.pformat(prefidi) + "\n" +
 "\"file-list\"  : " + pprint.pformat(fallidi) + "\n" +
 "\"binding\"    : " + pprint.pformat(bindosi) + "\n" +
 "\"thread\"     : " + pprint.pformat(tredasi) + "\n" +
 "\"raw\"        : " + pprint.pformat(soroho) + "\n" +
 "\"log\"        : " + pprint.pformat(logoho) + "\n" +
-"\"trimmomatic\": " + pprint.pformat(binoho) + "\n" +
+"\"trimmomatic\": " + pprint.pformat(trimfa) + "\n" +
+"\"tmmadapter\" : " + pprint.pformat(trimsi) + "\n" +
 "\"trimmoresut\": " + pprint.pformat(resuho) + "\n")
 print("\n\n" + scriptlog + "\n" + configlog)
 logosi = logoho + "/exp07-trim-run-" + timmasi + ".log"
@@ -163,13 +180,16 @@ for grupo in metali:
     fofasi = argudi.get("forward","")
     refasi = argudi.get("reverse","")
 
+    call(["mkdir",resuho + "-pr/"])
+    call(["mkdir",resuho + "-un/"])
+
     linuli = [
         soroho + "/" + tribesi + "/" + fofasi,
         soroho + "/" + tribesi + "/" + refasi,
-        resuho + "-pr/" + fofasi,
-        resuho + "-un/" + fofasi,
-        resuho + "-pr/" + refasi,
-        resuho + "-un/" + refasi,
+        resuho + "-pr/" + prepisi + "-" + fofasi,
+        resuho + "-un/" + preunsi + "-" + fofasi,
+        resuho + "-pr/" + prepisi + "-" + refasi,
+        resuho + "-un/" + preunsi + "-" + refasi,
     ]
 
     arguli = linoli + linuli +linali
