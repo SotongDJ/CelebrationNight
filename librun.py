@@ -1,147 +1,159 @@
-import pprint, time
+import pprint, time, json
 from subprocess import call
 
-def maxlen(lisli=['la','fafa']):
-    metali = []
-    for namasi in lisli:
-        metali.append(len(namasi))
-    return max(metali)
+class loggi():
 
-def timme(timasi="",sepere=""):
-    if timasi == "":
-        timasi = time.strftime("%Y%m%d%H%M%S")
+    def pesonai(self):
+        self.filasi = "librun.py"
+        self.hebesi = ""
 
-    yearsi = timasi[0:4]
-    montsi = timasi[4:6]
-    dayesi = timasi[6:8]
-    hoursi = timasi[8:10]
-    minusi = timasi[10:12]
-    secosi = timasi[12:14]
+        configfi = "data/config.json"
+        configfa = open(configfi,'r')
+        self.config = json.load(configfa)
 
-    if len(sepere) != 3:
-        sepere =  "-_-"
-    timaki = (sepere[0].join([yearsi,montsi,dayesi]) +
-        sepere[1] + sepere[2].join([hoursi,minusi,secosi]))
+        self.comali=['echo','wahaha']
 
-    return timaki
+        self.begisi=""
+        self.logisi=""
 
-def printe(frasi="",logisi=""):
-    if frasi != "":
-        if logisi != "":
-            print(frasi)
-            with open(logisi,'a') as logifa:
-                logifa.write(frasi+"\n")
+        self.locadi = {}
+        self.libadi = {}
+        self.prelogi = "temp/temp-"
 
-def calti(begisi="20200202020202"):
-    timasi = time.strftime("%Y%m%d%H%M%S")
-    yedifi = int(timasi[0:4])-int(begisi[0:4])
-    modifi = int(timasi[4:6])-int(begisi[4:6])
-    dadifi = int(timasi[6:8])-int(begisi[6:8])
-    hodifi = int(timasi[8:10])-int(begisi[8:10])
-    midifi = int(timasi[10:12])-int(begisi[10:12])
-    sedifi = int(timasi[12:14])-int(begisi[12:14])
+        self.timosi = ""
+        self.frasi = ""
+        self.sepere = ""
+        self.lisli = []
 
-    if sedifi < 0 :
-        midifi = midifi -1
-        sedifi = sedifi + 60
-    if midifi < 0 :
-        hodifi = hodifi -1
-        midifi = midifi + 60
-    if hodifi < 0 :
-        dadifi = dadifi -1
-        hodifi = hodifi + 24
 
-    if dadifi < 0 :
-        resut = "More than one month..."
-    else:
-        resut = (
-            str(hodifi) + " hr "+
-            str(midifi) + " min "+
-            str(sedifi) + " s "
-        )
+    def printe(self):
+        print(self.frasi)
+        with open(self.logisi,'a') as logifa:
+            logifa.write(self.frasi+"\n")
 
-    return resut
+    def maxlen(self):
+        metali = []
+        for namasi in self.lisli:
+            metali.append(len(namasi))
+        return max(metali)
 
-def hedda(filasi='',locadi={},libadi={},prelogi=""):
-    if filasi == '':
-        filasi='librun.py'
-    timani = time.strftime("%Y%m%d%H%M%S")
-    runninlog = ("RUN "+filasi+", begin at ["
-        + timme(timasi=timani,sepere="- :") +"]\n~~~~~~~~~~~~\n" )
+    def timme(self):
+        yearsi = self.timosi[0:4]
+        montsi = self.timosi[4:6]
+        dayesi = self.timosi[6:8]
+        hoursi = self.timosi[8:10]
+        minusi = self.timosi[10:12]
+        secosi = self.timosi[12:14]
 
-    if locadi != {}:
-        scriptlog = "LOCAL\n"
+        if len(self.sepere) != 3:
+            self.sepere =  "-_-"
+        timaki = (self.sepere[0].join([yearsi,montsi,dayesi]) +
+            self.sepere[1] + self.sepere[2].join([hoursi,minusi,secosi]))
 
-        metali = list(locadi.keys())
-        metain = maxlen(metali)
-        for loca in metali:
-            if len(loca) < metain :
-                loca = loca + ' '*(metain-len(loca))
+        return timaki
 
-            scriptlog = (scriptlog + loca + ": " +
-                pprint.pformat(locadi.get(loca)) + "\n")
+    def hedda(self):
+        self.begisi = time.strftime("%Y%m%d%H%M%S")
 
-    else:
-        scriptlog = ""
+        self.timosi = time.strftime("%Y%m%d%H%M%S")
 
-    if libadi != {}:
-        configlog = "FROM config.json\n"
+        self.sepere = "- :"
+        runninlog = ("RUN "+self.filasi+", begin at ["
+            + self.timme() +"]\n~~~~~~~~~~~~\n" )
 
-        metali = list(libadi.keys())
-        metain = maxlen(metali)
-        for liba in metali:
-            if len(loca) < metain :
-                liba = "\"" + liba + "\"" + ' '*(metain-len(liba))
-            else:
-                liba = "\"" + liba + "\""
+        if self.locadi != {}:
+            scriptlog = "LOCAL\n"
 
-            configlog = (configlog + liba + ": " +
-                pprint.pformat(libadi.get(liba)) + "\n")
+            self.lisli = []
+            self.lisli = list(self.locadi.keys())
+            metain = self.maxlen()
+            for loca in self.lisli:
+                if len(loca) < metain :
+                    loca = loca + ' '*(metain-len(loca))
 
-    else:
-        configlog = ""
+                scriptlog = (scriptlog + loca + ": " +
+                    pprint.pformat(self.locadi.get(loca)) + "\n")
 
-    if prelogi == "":
-        logisi = 'temp/temp-' + timme(timasi=timani,sepere="-_-") + '.log'
-    else:
-        logisi = prelogi + timme(timasi=timani,sepere="-_-") + '.log'
-
-    print(runninlog + scriptlog + "\n" + configlog)
-    with open(logisi,"w") as logifa:
-        logifa.write(runninlog + scriptlog + "\n" + configlog + "\n")
-
-    return timani,logisi
-
-def ranni(comali=[], logini='', modde='a'):
-    comman = []
-    logisi = ''
-    timani = ''
-    modden = ''
-
-    if comali == []:
-        comman = ['echo','wahaha']
-    else:
-        comman = comali
-
-    if logini == '':
-        timani = time.strftime("%Y%m%d%H%M%S")
-        modden = 'a'
-        logisi = "temp/temp-" + timme(timasi=timani,sepere="-_-") + '.log'
-    else:
-        logisi = logini
-
-    if modden == '':
-        if modde != '':
-            modden = modde
         else:
-            modden = 'a'
+            scriptlog = ""
 
-    runisi = "\n[" + timme(timasi=timani,sepere="- :") + "]"
-    comasi = " Command: " + " ".join(comman)
+        if self.libadi != {}:
+            configlog = "FROM config.json\n"
 
-    print(runisi + comasi)
+            self.lisli = []
+            self.lisli = list(self.libadi.keys())
+            metain = self.maxlen()
+            for liba in self.lisli:
+                if len(loca) < metain :
+                    liba = "\"" + liba + "\"" + ' '*(metain-len(liba))
+                else:
+                    liba = "\"" + liba + "\""
 
-    with open(logisi,modden) as logifa:
-        logifa.write(runisi + comasi + "\n")
+                configlog = (configlog + liba + ": " +
+                    pprint.pformat(self.libadi.get(liba)) + "\n")
 
-    call(comman, stdout=open(logisi, 'a'))
+        else:
+            configlog = ""
+
+        self.sepere = "-_-"
+        self.logisi = self.prelogi + self.timme() + '.log'
+
+        self.frasi = runninlog + scriptlog + "\n" + configlog
+        self.printe()
+
+        self.timosi = ""
+        self.frasi = ""
+        self.sepere = ""
+
+    def ranni(self):
+        self.timosi = time.strftime("%Y%m%d%H%M%S")
+
+        self.sepere = "- :"
+        runisi = "\n[" + self.timme() + "]"
+        comasi = " Command: " + " ".join(self.comali)
+
+        self.frasi = runisi + comasi
+        self.printe()
+
+        call(self.comali, stdout=open(self.logisi, 'a'))
+
+        self.timosi = ""
+        self.frasi = ""
+        self.sepere = ""
+
+    def calti(self):
+        self.timosi = time.strftime("%Y%m%d%H%M%S")
+        yedifi = int(self.timosi[0:4])-int(self.begisi[0:4])
+        modifi = int(self.timosi[4:6])-int(self.begisi[4:6])
+        dadifi = int(self.timosi[6:8])-int(self.begisi[6:8])
+        hodifi = int(self.timosi[8:10])-int(self.begisi[8:10])
+        midifi = int(self.timosi[10:12])-int(self.begisi[10:12])
+        sedifi = int(self.timosi[12:14])-int(self.begisi[12:14])
+
+        if sedifi < 0 :
+            midifi = midifi -1
+            sedifi = sedifi + 60
+        if midifi < 0 :
+            hodifi = hodifi -1
+            midifi = midifi + 60
+        if hodifi < 0 :
+            dadifi = dadifi -1
+            hodifi = hodifi + 24
+
+        if dadifi < 0 :
+            resut = "More than one month..."
+        else:
+            resut = (
+                str(hodifi) + " hr "+
+                str(midifi) + " min "+
+                str(sedifi) + " s "
+            )
+
+        self.frasi = resut
+        self.printe()
+
+        self.frasi = ""
+        self.timosi = ""
+
+    def __init__(self):
+        self.pesonai()
