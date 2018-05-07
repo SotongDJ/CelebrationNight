@@ -4,13 +4,13 @@ from subprocess import call
 
 helber="""
    --- README of exp07-trim ---
-Title:
+ Title:
     Batch Processing for Trimmomatic
 
-Usage:
+ Usage:
     python exp07-trim <TRIBE> <GROUP,GROUP,GROUP...>
 
-Structure:
+ Structure:
     First : tribe,
         e.g. raw, untrim, trimmed...
     Second: group,
@@ -20,7 +20,7 @@ Structure:
 
     Visualise graph: explanation01-dataStructure.svg
 
-Required variables:
+ Required variables:
   config.json
     "trimmomatic"/"pair"
     "trimmomatic"/"unpair"
@@ -37,7 +37,7 @@ Required variables:
     "var"/"path"/"trimmoresut"
     "var"/"prefix" [value of pair and unpair]
 
-Original command:
+ Original command:
   java -jar <bin>/trimmomatic-0.35.jar PE -phred33
   -threads <threads> -trimlog <logfile>\
   input_forward.fq.gz input_reverse.fq.gz \
@@ -46,22 +46,22 @@ Original command:
   ILLUMINACLIP:TruSeq3-PE.fa:2:30:10 LEADING:3 \
   TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
 
-CAUTION:
+ CAUTION:
     <GROUP> must separate with comma
     <GROUP> don't allowed spacing
 
    --- README ---
 """"""
     command split into [ linoli , linuli , linali ]
-Postfix:
- -si: String
- -ho: String(that store dir path)
- -ti: Intiger/Float
- -li: List
- -tu: Tuple
- -di: Dictionary
- -fa: File (with open())
- -so: JSON
+ Postfix:
+  -si: String
+  -ho: String(that store dir path)
+  -ti: Intiger/Float
+  -li: List
+  -tu: Tuple
+  -di: Dictionary
+  -fa: File (with open())
+  -so: JSON
 """
 # config- : stand for variables related to config file
 configsi = 'data/config.json'
