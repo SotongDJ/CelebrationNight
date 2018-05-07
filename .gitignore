@@ -4,6 +4,7 @@ data/
 png/
 temp/
 .fuse*
+ar-priv/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
