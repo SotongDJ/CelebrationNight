@@ -5,25 +5,11 @@ class loggi():
 
     def pesonai(self):
         self.filasi = "librun.py"
-        self.hebesi = ""
-
-        configfi = "data/config.json"
-        configfa = open(configfi,'r')
-        self.config = json.load(configfa)
 
         self.comali=['echo','wahaha']
 
-        self.begisi=""
-        self.logisi=""
-
-        self.locadi = {}
         self.libadi = {}
         self.prelogi = "temp/temp-"
-
-        self.timosi = ""
-        self.frasi = ""
-        self.sepere = ""
-        self.lisli = []
 
 
     def printe(self):
@@ -156,4 +142,22 @@ class loggi():
         self.timosi = ""
 
     def __init__(self):
+        self.hebesi = helber
+        self.siarli = sys.argv
+        self.argudi = {}
+        self.begisi=""
+        self.logisi=""
+
+        self.timosi = ""
+        self.frasi = ""
+        self.sepere = ""
+        self.lisli = []
+
+        self.Confi = self.confi()
+        self.argv()
         self.pesonai()
+
+        self.locadi = {
+            'Input' : self.siarli,
+            'Argv.' : self.argudi
+        }
