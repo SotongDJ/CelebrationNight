@@ -1,4 +1,4 @@
-import pprint, time, json, sys
+import pprint, time, json, sys, libconfig
 from subprocess import call
 global helber
 helber="""
@@ -48,34 +48,28 @@ class loggi:
         self.libadi = {}
         self.prelogi = "temp/temp-"
 
-    class confi:
-        def loadso(self):
-            configfi = "data/config.json"
-            configfa = open(configfi,'r')
-            self.confi = json.load(configfa)
-        def get(self,wodsi):
-            resut = self.confi.get(wodsi)
-            return resut
-        def getli(self,wodli):
-            resut = ""
-            for n in wodli:
-                resut = resut + "/" + self.confi.get(wodsi,"")
-            return resut
-        def check(self,wodsi):
-            resut = False
-            metali = list(self.confi.keys())
-            if wodsi in metali:
-                resut = True
-            return resut
-
-        def __init__(self):
-            self.loadso()
-
     def hebe(self):
         print('haha')
 
     def sync(self):
-        print('hehe')
+        for dico in tuple(self.dicodi.keys()):
+            if dico in tuple(self.argudi.keys()):
+                arti = type(self.dicodi.get(dico))
+                bati = type(self.argudi.get(dico))
+
+                siti = type(str())
+                liti = type(list())
+
+                if bati == liti:
+                    babo = len(self.argudi.get(dico)) > 0
+
+                if arti == bati:
+                    self.dicodi.update({ dico : self.argudi.get(dico) })
+                elif bati == siti and arti == liti:
+                    self.dicodi.update({ dico : [self.argudi.get(dico)] })
+                elif bati == liti and arti == siti and babo:
+                    metali = sorted(self.argudi.get(dico))
+                    self.dicodi.update({ dico : metali[0] })
 
     def printe(self):
         print(self.frasi)
@@ -276,7 +270,7 @@ class loggi:
         self.sepere = ""
         self.lisli = []
 
-        self.Confi = self.confi()
+        self.Confi = libconfig.confi()
         self.argv()
         self.pesonai()
 
