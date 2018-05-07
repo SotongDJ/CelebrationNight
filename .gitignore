@@ -3,6 +3,7 @@ bin/
 data/
 png/
 temp/
+.fuse*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
