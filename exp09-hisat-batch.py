@@ -29,18 +29,17 @@ helber="""
 
    --- README ---
 """"""
-    command split into [ linoli , linuli , linali ]
-     Postfix of variables:
-      -si: String
-       -ni: alternative/second string for same Usage
-       -fi: string for open()
-      -ho: String(that store dir path)
-      -ti: Intiger/Float
-      -li: List
-      -tu: Tuple
-      -di: Dictionary
-      -fa: File (with open())
-      -so: JSON
+ Postfix of variables:
+  -si: String
+   -ni: alternative/second string for same Usage
+   -fi: string for open()
+  -ho: String(that store dir path)
+  -ti: Intiger/Float
+  -li: List
+  -tu: Tuple
+  -di: Dictionary
+  -fa: File (with open())
+  -so: JSON
 """
 Confi = libconfig.confi()
 class loggo(librun.loggi):
