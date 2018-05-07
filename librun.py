@@ -1,9 +1,46 @@
-import pprint, time, json
+import pprint, time, json, sys
 from subprocess import call
+global helber
+helber="""
+   --- README of exp00-librun ---
+ Title:
+    General class for bio-info-misc project
 
-class loggi():
+ Usage:
+    import this library while running you python scripts
+
+ Structure:
+    First : tribe,
+        e.g. raw, untrim, trimmed...
+    Second: group,
+        e.g. control, A, B, 1, 2...
+    Third : subgroup/files,
+        e.g. foward, reverse, pair, unpair
+
+    Visualise graph: explanation01-dataStructure.png
+
+   --- README ---
+""""""
+ Postfix of variables:
+  -si: String
+   -ni: alternative/second string for same Usage
+   -fi: string for open()
+  -ho: String(that store dir path)
+  -ti: Intiger/Float
+  -li: List
+  -tu: Tuple
+  -di: Dictionary
+  -fa: File (with open())
+  -so: JSON
+"""
+
+class loggi:
 
     def pesonai(self):
+        self.dicli = {
+            "hello" : ""
+        }
+        self.sync()
         self.filasi = "librun.py"
 
         self.comali=['echo','wahaha']
@@ -11,6 +48,34 @@ class loggi():
         self.libadi = {}
         self.prelogi = "temp/temp-"
 
+    class confi:
+        def loadso(self):
+            configfi = "data/config.json"
+            configfa = open(configfi,'r')
+            self.confi = json.load(configfa)
+        def get(self,wodsi):
+            resut = self.confi.get(wodsi)
+            return resut
+        def getli(self,wodli):
+            resut = ""
+            for n in wodli:
+                resut = resut + "/" + self.confi.get(wodsi,"")
+            return resut
+        def check(self,wodsi):
+            resut = False
+            metali = list(self.confi.keys())
+            if wodsi in metali:
+                resut = True
+            return resut
+
+        def __init__(self):
+            self.loadso()
+
+    def hebe(self):
+        print('haha')
+
+    def sync(self):
+        print('hehe')
 
     def printe(self):
         print(self.frasi)
@@ -38,6 +103,64 @@ class loggi():
 
         return timaki
 
+    def argv(self):
+        metali = self.siarli
+        metasi = " ".join(self.siarli)
+        while "--" in metasi:
+            metali = metasi.split(" ")
+            for n in range(len(metali)):
+                if "--" == metali[n][0:2]:
+                    semesi = metali.pop(n)
+                    semesi = semesi.split("--")[1]
+                    if "=" in semesi:
+                        semeli = semesi.split("=")
+                        self.argudi.update({ semeli[0] : [semeli[1]] })
+                        metasi = " ".join(metali)
+                        break
+
+        self.siarli = metali
+        arguli = []
+
+        for nanasi in range(len(self.siarli)):
+            if self.siarli[nanasi][0] == '-':
+                arguli.append(nanasi)
+
+        for n in arguli:
+            metasi = self.siarli[n]
+            metasi = metasi.split("-")[1]
+            metali = self.argudi.get(metasi,[])
+
+            if arguli.index(n) == 0:
+                self.argudi.update({ "argv" : self.siarli[0:n] })
+                metali.extend(self.siarli[n+1:arguli[arguli.index(n)+1]])
+            elif arguli.index(n) == len(arguli)-1:
+                metali.extend(self.siarli[n+1:len(self.siarli)])
+            else:
+                metali.extend(self.siarli[n+1:arguli[arguli.index(n)+1]])
+
+            self.argudi.update({ metasi : metali })
+
+        metatu = tuple(self.argudi.keys())
+        for argu in metatu:
+            if len(argu) == 1 and self.Confi.check("synom/"+argu):
+                metali = list(self.Confi.confi.keys())
+                metadi = {}
+                for meta in metali:
+                    metasi = ""
+                    if "synom/" in meta:
+                        metasi = self.Confi.confi.get(meta)
+                        metadi.update({
+                            meta.replace("synom/","") : metasi
+                        })
+
+        for meta in metatu:
+            if meta in list(metadi.keys()):
+                metali = []
+                metasi = metadi.get(meta)
+                metali = self.argudi.get(metasi,[])
+                metali.extend(self.argudi.get(meta))
+                self.argudi.update({ metasi : metali })
+
     def hedda(self):
         self.begisi = time.strftime("%Y%m%d%H%M%S")
 
@@ -57,7 +180,7 @@ class loggi():
                 if len(loca) < metain :
                     loca = loca + ' '*(metain-len(loca))
 
-                scriptlog = (scriptlog + loca + ": " +
+                scriptlog = (scriptlog + "    " + loca + ": " +
                     pprint.pformat(self.locadi.get(loca)) + "\n")
 
         else:
@@ -75,7 +198,7 @@ class loggi():
                 else:
                     liba = "\"" + liba + "\""
 
-                configlog = (configlog + liba + ": " +
+                configlog = (configlog + "    " + liba + ": " +
                     pprint.pformat(self.libadi.get(liba)) + "\n")
 
         else:
