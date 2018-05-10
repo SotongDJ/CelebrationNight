@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import librun, libconfig, sys
 helber="""
    --- README of exp09-hisat-batch ---
