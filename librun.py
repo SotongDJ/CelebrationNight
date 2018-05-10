@@ -252,6 +252,9 @@ class loggi:
                 str(sedifi) + " s "
             )
 
+        self.sepere = "- :"
+        runisi = "\n[" + self.timme() + "] Total time: "
+
         self.frasi = resut
         self.printe()
 
