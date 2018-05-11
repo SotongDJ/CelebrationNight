@@ -64,7 +64,7 @@ class loggo(librun.loggi):
 
         self.libadi = {}
 
-        self.filasi = "test09.py"
+        self.filasi = "exp09-hisat-batch.py"
 
         self.comali = []
 
@@ -76,22 +76,32 @@ tibeli = Runni.dicodi.get("tribe",[])
 gupoli = Runni.dicodi.get("group",[])
 argvli = Runni.dicodi.get("argv",[])
 
+pofidi = {0:[]}
+argvdi = {0:""}
+timein = 0
+timoli = [0]
 for argv in argvli:
-    pofisi = []
-    argvsi = ""
 
     if argv == "stringtie":
-        pofisi = ["--dta"]
-        argvsi = "-stringtie"
+        if timein != 0:
+            timoli.append(timein)
+        pofidi.update({ timein : ["--dta"] })
+        argvdi.update({ timein : "-stringtie" })
+        timein = timein + 1
     elif argv == "cufflinks":
-        pofisi = ["--dta-cufflinks"]
-        argvsi = "-cufflinks"
+        if timein != 0:
+            timoli.append(timein)
+        pofidi.update({ timein : ["--dta-cufflinks"] })
+        argvdi.update({ timein : "-cufflinks" })
+        timein = timein + 1
 
-    Runni.hedda()
-    for tibe in tibeli:
-        for gupo in gupoli:
+Runni.hedda()
+for tibe in tibeli:
+    for gupo in gupoli:
+        for timo in timoli:
             Runni.comali = []
             Runni.comali.extend(Runni.adcoli)
+            pofisi = pofidi.get(timo)
             Runni.comali.extend(pofisi)
             Runni.comali.extend(Runni.becoli)
             Runni.comali.extend(Runni.cecoli)
@@ -120,6 +130,7 @@ for argv in argvli:
             Runni.comali.extend(hecoli)
             Runni.comali.extend(Runni.idcoli)
 
+            argvsi = argvdi.get(timo)
             jecoli = [
                 Confi.get("result/hisat") + "/" +
                 Confi.get("data/prefix/"+tibe) + "-" +
@@ -133,4 +144,4 @@ for argv in argvli:
 
             # Runni.test()
             Runni.ranni()
-    Runni.calti()
+Runni.calti()
