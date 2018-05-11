@@ -6,7 +6,7 @@ helber="""
     Batch Processing for HISAT2
 
   Usage:
-    python exp09-hisat-batch -t <TRIBE> -g <GROUP,GROUP,GROUP...>
+    python exp09-hisat-batch [stringtie|cufflinks] -t <TRIBE> -g <GROUP,GROUP,GROUP...>
 
   Data Structure:
     First : tribe,
@@ -19,7 +19,7 @@ helber="""
     Visualise graph: explanation01-dataStructure.svg
 
   Original command:
-    hisat2 -q --phred[33] -p [4]
+    hisat2 -q [--dta/--dta-cufflinks] --phred[33] -p [4]
         -x [prefix of HISAT2-build genome index]
         -1 [forward fastq files of]
         -2 [reverse fastq files of]
@@ -48,6 +48,7 @@ class loggo(librun.loggi):
         self.dicodi = {
             "tribe"   : [],
             "group"   : [],
+            "argv" : []
         }
         self.sync()
 
@@ -73,49 +74,66 @@ Runni = loggo()
 
 tibeli = Runni.dicodi.get("tribe",[])
 gupoli = Runni.dicodi.get("group",[])
-Runni.hedda()
-for tibe in tibeli:
-    for gupo in gupoli:
-        Runni.comali = []
-        Runni.comali.extend(Runni.adcoli)
-        Runni.comali.extend(Runni.becoli)
-        Runni.comali.extend(Runni.cecoli)
-        Runni.comali.extend(Runni.decoli)
-        Runni.comali.extend(Runni.edcoli)
+argvli = Runni.dicodi.get("argv",[])
 
-        fecoli = [
-            Confi.get("result/raw") + "/" +
-            tibe + "/" +
-            Confi.get("data/prefix/"+tibe) + "-" +
-            gupo + "-" +
-            Confi.get("string/forward") + ".fastq"
-        ]
+for argv in argvli:
+    pofisi = []
+    argvsi = ""
 
-        Runni.comali.extend(fecoli)
-        Runni.comali.extend(Runni.gecoli)
+    if argv == "stringtie":
+        pofisi = ["--dta"]
+        argvsi = "-stringtie"
+    elif argv == "cufflinks":
+        pofisi = ["--dta-cufflinks"]
+        argvsi = "-cufflinks"
 
-        hecoli = [
-            Confi.get("result/raw") + "/" +
-            tibe + "/" +
-            Confi.get("data/prefix/"+tibe) + "-" +
-            gupo + "-" +
-            Confi.get("string/reverse") + ".fastq"
-        ]
+    Runni.hedda()
+    for tibe in tibeli:
+        for gupo in gupoli:
+            Runni.comali = []
+            Runni.comali.extend(Runni.adcoli)
+            Runni.comali.extend(pofisi)
+            Runni.comali.extend(Runni.becoli)
+            Runni.comali.extend(Runni.cecoli)
+            Runni.comali.extend(Runni.decoli)
+            Runni.comali.extend(Runni.edcoli)
 
-        Runni.comali.extend(hecoli)
-        Runni.comali.extend(Runni.idcoli)
+            fecoli = [
+                Confi.get("result/raw") + "/" +
+                tibe + "/" +
+                Confi.get("data/prefix/"+tibe) + "-" +
+                gupo + "-" +
+                Confi.get("string/forward") + ".fastq"
+            ]
 
-        jecoli = [
-            Confi.get("result/hisat") + "/" +
-            Confi.get("data/prefix/"+tibe) + "-" +
-            gupo + ".sam"
-        ]
+            Runni.comali.extend(fecoli)
+            Runni.comali.extend(Runni.gecoli)
 
-        Runni.comali.extend(jecoli)
+            hecoli = [
+                Confi.get("result/raw") + "/" +
+                tibe + "/" +
+                Confi.get("data/prefix/"+tibe) + "-" +
+                gupo + "-" +
+                Confi.get("string/reverse") + ".fastq"
+            ]
 
-        # Runni.frasi = " ".join(Runni.comali)
-        # Runni.logisi = "temp/temp.log"
-        # Runni.printe()
+            Runni.comali.extend(hecoli)
+            Runni.comali.extend(Runni.idcoli)
 
-        Runni.ranni()
-Runni.calti()
+            jecoli = [
+                Confi.get("result/hisat") + "/" +
+                Confi.get("data/prefix/"+tibe) + "-" +
+                gupo + argvsi + ".sam"
+            ]
+
+            Runni.comali.extend(jecoli)
+
+            # Runni.frasi = " ".join(Runni.comali)
+            # Runni.logisi = "temp/temp.log"
+            # Runni.printe()
+
+            Runni.tagesi = Confi.get("result/hisat") + "/"
+            Runni.chkpaf()
+
+            Runni.ranni()
+    Runni.calti()
