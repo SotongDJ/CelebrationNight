@@ -105,9 +105,9 @@ for tibe in tibeli:
         ]
         Runni.comali.extend(gecoli)
 
-        # Runni.frasi = " ".join(Runni.comali)
-        # Runni.logisi = "temp/temp.log"
-        # Runni.printe()
+        Runni.tagesi = Confi.get("result/tophat") 
+        Runni.chkpaf()
 
+        # Runni.test()
         Runni.ranni()
 Runni.calti()

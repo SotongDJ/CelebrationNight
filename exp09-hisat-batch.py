@@ -128,12 +128,9 @@ for argv in argvli:
 
             Runni.comali.extend(jecoli)
 
-            # Runni.frasi = " ".join(Runni.comali)
-            # Runni.logisi = "temp/temp.log"
-            # Runni.printe()
-
-            Runni.tagesi = Confi.get("result/hisat") + "/"
+            Runni.tagesi = Confi.get("result/hisat")
             Runni.chkpaf()
 
+            # Runni.test()
             Runni.ranni()
     Runni.calti()

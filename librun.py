@@ -1,4 +1,5 @@
-import pprint, time, json, sys, libconfig
+import pprint, time, json, sys
+import libconfig
 from subprocess import call
 global helber
 helber="""
@@ -229,6 +230,11 @@ class loggi:
         self.frasi = ""
         self.sepere = ""
 
+    def test(self):
+        self.frasi = " ".join(self.comali)
+        self.logisi = "temp/temp.log"
+        self.printe()
+        time.sleep(1)
 
     def ranni(self):
         self.timosi = time.strftime("%Y%m%d%H%M%S")
