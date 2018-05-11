@@ -41,6 +41,9 @@ class loggi:
             "hello" : ""
         }
         self.sync()
+
+        self.tagesi = ""
+
         self.filasi = "librun.py"
 
         self.comali=['echo','wahaha']
@@ -207,6 +210,25 @@ class loggi:
         self.timosi = ""
         self.frasi = ""
         self.sepere = ""
+
+    def chkpaf(self):
+        self.timosi = time.strftime("%Y%m%d%H%M%S")
+
+        tageli = [ "mkdir", "-v", self.tagesi ]
+
+        self.sepere = "- :"
+        runisi = "\n[" + self.timme() + "]"
+        comasi = " Command: " + " ".join(tageli)
+
+        self.frasi = runisi + comasi
+        self.printe()
+
+        call(tageli, stdout=open(self.logisi, 'a'))
+
+        self.timosi = ""
+        self.frasi = ""
+        self.sepere = ""
+
 
     def ranni(self):
         self.timosi = time.strftime("%Y%m%d%H%M%S")

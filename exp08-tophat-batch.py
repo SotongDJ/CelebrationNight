@@ -51,6 +51,9 @@ class loggo(librun.loggi):
             "group"   : [],
         }
         self.sync()
+
+        self.tagesi = ""
+
         self.adcoli = ["tophat2"]
         self.becoli = ["-p",Confi.get("run/thread")]
         self.cecoli = ["-o"]

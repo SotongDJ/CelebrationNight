@@ -51,6 +51,8 @@ class loggo(librun.loggi):
         }
         self.sync()
 
+        self.tagesi = ""
+
         self.adcoli = ["hisat2","-q"]
         self.becoli = ["--phred"+Confi.get("run/phred")]
         self.cecoli = ["-p",Confi.get("run/thread")]
