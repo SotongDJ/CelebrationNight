@@ -48,14 +48,26 @@ class loggi:
         self.comali=['echo','wahaha']
 
         self.filasi = "librun.py"
-        self.libadi = {}
+        self.libadi = {
+            "prefix/wawa" : "haha/wulala"
+        }
         self.prelogi = "temp/temp-"
 
     def actor(self):
-        ""
+        tibeli = self.dicodi.get("tribe",[])
+        gupoli = self.dicodi.get("group",[])
+
+        self.hedda()
+
+        self.tagesi = "temp"
+        self.chkpaf()
+
+        self.ranni()
+
+        self.calti()
 
     def redirek(self):
-        ""
+        self.actor()
 
     def sync(self):
         for dico in tuple(self.dicodi.keys()):
@@ -336,4 +348,4 @@ class loggi:
             'Argv.' : self.argudi
         }
 
-        self.actor()
+        self.redirek()
