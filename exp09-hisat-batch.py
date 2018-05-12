@@ -68,7 +68,7 @@ class loggo(librun.loggi):
 
         self.comali = []
 
-        self.prelogi = "data/99-log/exp09-hisat-batch-"
+        self.prelogi = Confi.get("result/log")+"/exp09-hisat-batch-"
 
 Runni = loggo()
 

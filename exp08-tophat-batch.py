@@ -65,7 +65,7 @@ class loggo(librun.loggi):
 
         self.comali = []
 
-        self.prelogi = "data/99-log/exp08-tophat-batch-"
+        self.prelogi = Confi.get("result/log")+"/exp08-tophat-batch-"
 
 Runni = loggo()
 
@@ -105,7 +105,7 @@ for tibe in tibeli:
         ]
         Runni.comali.extend(gecoli)
 
-        Runni.tagesi = Confi.get("result/tophat") 
+        Runni.tagesi = Confi.get("result/tophat")
         Runni.chkpaf()
 
         # Runni.test()
