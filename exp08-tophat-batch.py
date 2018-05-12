@@ -57,7 +57,7 @@ class loggo(librun.loggi):
         self.adcoli = ["tophat2"]
         self.becoli = ["-p",Confi.get("run/thread")]
         self.cecoli = ["-o"]
-        self.edcoli = [Confi.getli(["result/bowtie", "idx/genome"])]
+        self.edcoli = [Confi.getpaf(["result/bowtie", "idx/genome"])]
 
         self.libadi = {}
 

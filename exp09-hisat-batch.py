@@ -57,7 +57,7 @@ class loggo(librun.loggi):
         self.adcoli = ["hisat2","-q"]
         self.becoli = ["--phred"+Confi.get("run/phred")]
         self.cecoli = ["-p",Confi.get("run/thread")]
-        self.decoli = ["-x",Confi.getli(["result/hisat", "idx/genome"])]
+        self.decoli = ["-x",Confi.getpaf(["result/hisat", "idx/genome"])]
         self.edcoli = ["-1"]
         self.gecoli = ["-2"]
         self.idcoli = ["-S"]
