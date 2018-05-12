@@ -38,22 +38,19 @@ helber="""
 class loggi:
 
     def pesonai(self):
-        self.dicli = {
+        self.dicodi = {
             "hello" : ""
         }
         self.sync()
 
         self.tagesi = ""
 
-        self.filasi = "librun.py"
-
         self.comali=['echo','wahaha']
 
+        self.filasi = "librun.py"
         self.libadi = {}
         self.prelogi = "temp/temp-"
 
-    def hebe(self):
-        print('haha')
 
     def sync(self):
         for dico in tuple(self.dicodi.keys()):
@@ -102,47 +99,68 @@ class loggi:
         return timaki
 
     def argv(self):
+        arbeli = []
         metali = self.siarli
         metasi = " ".join(self.siarli)
         while "--" in metasi:
             metali = metasi.split(" ")
             for n in range(len(metali)):
                 if "--" == metali[n][0:2]:
-                    semesi = metali.pop(n)
-                    semesi = semesi.split("--")[1]
-                    if "=" in semesi:
+                    if "=" in metali[n]:
+                        semesi = metali.pop(n)
+                        semesi = semesi.split("--")[1]
                         semeli = semesi.split("=")
                         self.argudi.update({ semeli[0] : [semeli[1]] })
                         metasi = " ".join(metali)
                         break
+                    else:
+                        semesi = metali.pop(n)
+                        arbeli.append(semesi.replace("--",""))
+                        metasi = " ".join(metali)
+                        break
 
-        self.siarli = metali
+        self.siarli = metasi.split(" ")
         arguli = []
 
         for nanasi in range(len(self.siarli)):
             if self.siarli[nanasi][0] == '-':
                 arguli.append(nanasi)
 
+        begibo = True
         for n in arguli:
             metasi = self.siarli[n]
             metasi = metasi.split("-")[1]
             metali = self.argudi.get(metasi,[])
 
-            if arguli.index(n) == 0:
-                self.argudi.update({ "argv" : self.siarli[0:n] })
-                metali.extend(self.siarli[n+1:arguli[arguli.index(n)+1]])
-            elif arguli.index(n) == len(arguli)-1:
-                metali.extend(self.siarli[n+1:len(self.siarli)])
-            else:
-                metali.extend(self.siarli[n+1:arguli[arguli.index(n)+1]])
+            begoin = n+1
 
+            endoin = 0
+            if arguli.index(n) == 0:
+                arbeli.extend(self.siarli[1:n])
+                begibo = False
+
+            if arguli.index(n) == len(arguli)-1:
+                endoin = len(self.siarli)
+            else:
+                endoin = arguli[arguli.index(n)+1]
+
+            if begoin > len(self.siarli):
+                begoin = len(self.siarli)
+            if endoin > len(self.siarli):
+                endoin = len(self.siarli)
+
+            metali.extend(self.siarli[begoin:endoin])
             self.argudi.update({ metasi : metali })
 
+        if begibo:
+            arbeli.extend(self.siarli[1:len(self.siarli)])
+        self.argudi.update({ "argv" : list(set(arbeli)) })
+
         metatu = tuple(self.argudi.keys())
+        metadi = {}
         for argu in metatu:
             if len(argu) == 1 and self.Confi.check("synom/"+argu):
                 metali = list(self.Confi.confi.keys())
-                metadi = {}
                 for meta in metali:
                     metasi = ""
                     if "synom/" in meta:
