@@ -7,7 +7,7 @@ class confi:
     def get(self,wodsi):
         resut = self.confi.get(wodsi)
         return resut
-    def getli(self,wodli):
+    def getpaf(self,wodli):
         resut = []
         for wodsi in wodli:
             resut.append(self.confi.get(wodsi,""))
