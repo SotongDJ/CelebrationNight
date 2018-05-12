@@ -51,6 +51,11 @@ class loggi:
         self.libadi = {}
         self.prelogi = "temp/temp-"
 
+    def actor(self):
+        ""
+
+    def redirek(self):
+        ""
 
     def sync(self):
         for dico in tuple(self.dicodi.keys()):
@@ -301,7 +306,7 @@ class loggi:
         self.sepere = "- :"
         runisi = "\n[" + self.timme() + "] Total time: "
 
-        self.frasi = resut
+        self.frasi = runisi + resut
         self.printe()
 
         self.frasi = ""
@@ -327,3 +332,5 @@ class loggi:
             'Input' : self.siarli,
             'Argv.' : self.argudi
         }
+
+        self.actor()
