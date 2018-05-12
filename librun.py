@@ -189,10 +189,10 @@ class loggi:
 
         self.sepere = "- :"
         runninlog = ("RUN "+self.filasi+", begin at ["
-            + self.timme() +"]\n~~~~~~~~~~~~\n" )
+            + self.timme() +"]\n~~~~~~~~~~~~" )
 
         if self.locadi != {}:
-            scriptlog = "LOCAL\n"
+            scriptlog = ["LOCAL"]
 
             self.lisli = []
             self.lisli = list(self.locadi.keys())
@@ -201,11 +201,11 @@ class loggi:
                 if len(loca) < metain :
                     loca = loca + ' '*(metain-len(loca))
 
-                scriptlog = (scriptlog + "    " + loca + ": " +
-                    pprint.pformat(self.locadi.get(loca)) + "\n")
+                scriptlog.append("    " + loca + ": " +
+                    pprint.pformat(self.locadi.get(loca),compact=True,width=150))
 
         else:
-            scriptlog = ""
+            scriptlog = []
 
         if self.libadi != {}:
             configlog = "FROM config.json\n"
@@ -228,7 +228,10 @@ class loggi:
         self.sepere = "-_-"
         self.logisi = self.prelogi + self.timme() + '.log'
 
-        self.frasi = runninlog + scriptlog + "\n" + configlog
+        metali = [runninlog]
+        metali.extend(scriptlog)
+        metali.extend(configlog)
+        self.frasi = "\n".join(metali)
         self.printe()
 
         self.timosi = ""
