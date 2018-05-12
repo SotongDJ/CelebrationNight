@@ -208,22 +208,22 @@ class loggi:
             scriptlog = []
 
         if self.libadi != {}:
-            configlog = "FROM config.json\n"
+            configlog = ["FROM config.json"]
 
             self.lisli = []
             self.lisli = list(self.libadi.keys())
             metain = self.maxlen()
             for liba in self.lisli:
-                if len(loca) < metain :
-                    liba = "\"" + liba + "\"" + ' '*(metain-len(liba))
+                if len(liba) < metain :
+                    semein = metain-len(liba)
                 else:
-                    liba = "\"" + liba + "\""
+                    semein = 0
 
-                configlog = (configlog + "    " + liba + ": " +
-                    pprint.pformat(self.libadi.get(liba)) + "\n")
+                configlog.append("    \"" + liba + "\""+ (" "*semein) +": "+
+                    pprint.pformat(self.libadi.get(liba)))
 
         else:
-            configlog = ""
+            configlog = []
 
         self.sepere = "-_-"
         self.logisi = self.prelogi + self.timme() + '.log'
