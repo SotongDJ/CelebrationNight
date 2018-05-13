@@ -57,8 +57,8 @@ class loggo(librun.loggi):
 
         self.filasi = "exp11-sam2bam-batch"
         self.libadi = {}
-        # self.prelogi = Confi.get("result/log")+"/exp11-sam2bam-batch-"
-        self.prelogi = "temp/temp-"
+        self.prelogi = Confi.get("result/log")+"/exp11-sam2bam-batch-"
+        # self.prelogi = "temp/temp-"
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])

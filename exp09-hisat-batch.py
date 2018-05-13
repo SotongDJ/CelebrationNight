@@ -76,6 +76,7 @@ tibeli = Runni.dicodi.get("tribe",[])
 gupoli = Runni.dicodi.get("group",[])
 argvli = Runni.dicodi.get("argv",[])
 
+stinbo = false
 pofidi = {0:[]}
 argvdi = {0:""}
 timein = 0
@@ -87,6 +88,7 @@ for argv in argvli:
             timoli.append(timein)
         pofidi.update({ timein : ["--dta"] })
         argvdi.update({ timein : "-stringtie" })
+        stinbo = True
         timein = timein + 1
     elif argv == "cufflinks":
         if timein != 0:
@@ -144,4 +146,7 @@ for tibe in tibeli:
 
             # Runni.test()
             Runni.ranni()
+
+            if stinbo:
+                Runni.comali = []
 Runni.calti()
