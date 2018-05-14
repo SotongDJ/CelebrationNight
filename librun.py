@@ -258,8 +258,8 @@ class loggi:
         tageli = [ "mkdir", "-v", self.tagesi ]
 
         self.sepere = "- :"
-        runisi = "\n[" + self.timme() + "]"
-        comasi = " Command: " + " ".join(tageli)
+        runisi = "[" + self.timme() + "]"
+        comasi = " chkpaf: " + " ".join(tageli)
 
         self.frasi = runisi + comasi
         self.printe()
@@ -350,7 +350,7 @@ class loggi:
             )
 
         self.sepere = "- :"
-        runisi = "\n[" + self.timme() + "] Total time: "
+        runisi = "[" + self.timme() + "] Total time: "
 
         self.frasi = runisi + resut
         self.printe()
