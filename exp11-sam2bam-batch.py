@@ -53,8 +53,13 @@ class loggo(librun.loggi):
 
         self.tagesi = ""
 
-        self.comali = [
-        ]
+        self.becoli = ["samtools","view","-o"]
+        self.beinli = ["-Su"]
+
+        self.cecoli = ["samtools","sort","-o"]
+
+        self.lscoli = ["ls", "-alFh"]
+        self.rmcoli = ["rm", "-v"]
 
         self.filasi = "exp11-sam2bam-batch"
         self.libadi = {}
@@ -67,10 +72,51 @@ class loggo(librun.loggi):
 
         self.hedda()
 
-        self.tagesi = "data/05-hisat"
+        self.tagesi = Confi.get("result/hisat")
         self.chkpaf()
+        for tibe in tibeli:
+            for gupo in gupoli:
+                self.filesi = (
+                    Confi.get("result/hisat") + "/" +
+                    Confi.get("data/prefix/"+tibe) + "-" +
+                    gupo
+                )
 
-        self.ranni()
+                self.comali = []
+                self.comali.extend( self.rmcoli )
+                self.comali.append( self.filesi + argvsi + ".bam" )
+
+                self.ranni()
+
+                self.comali = []
+                self.comali.extend( self.becoli )
+                self.comali.append( self.filesi + argvsi + ".bam" )
+                self.comali.extend( self.beinli )
+                self.comali.append( self.filesi + argvsi + ".sam" )
+
+                self.ranni()
+
+                self.comali = []
+                self.comali.extend( self.cecoli )
+                self.comali.append( self.filesi + argvsi + "-sorted" + ".bam" )
+                self.comali.append( self.filesi + argvsi + ".bam" )
+
+                self.ranni()
+
+                self.comali = []
+                self.comali.extend( self.lscoli )
+                self.comali.append( self.filesi + argvsi + ".sam" )
+                self.comali.append( self.filesi + argvsi + ".bam" )
+                self.comali.append( self.filesi + "sorted" + ".bam" )
+
+                self.ranni()
+
+                self.comali = []
+                self.comali.extend( self.rmcoli )
+                self.comali.append( self.filesi + argvsi + ".bam" )
+                self.comali.append( self.filesi + argvsi + ".sam" )
+
+                self.ranni()
 
         self.calti()
 Runni = loggo()
