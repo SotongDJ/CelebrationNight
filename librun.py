@@ -270,10 +270,45 @@ class loggi:
         self.frasi = ""
         self.sepere = ""
 
+    def chkfal(self):
+        resut = False
+
+        self.timosi = time.strftime("%Y%m%d%H%M%S")
+        tageli = [ "head", "-v", self.tagesi ]
+        call(tageli, stdout=open("temp/head-"+self.timosi, 'a'))
+
+        self.sepere = "- :"
+        runisi = "[" + self.timme() + "]"
+        comasi = " chkfal: " + " ".join(tageli)
+        self.frasi = runisi + comasi
+        self.printe()
+
+        filafi = open("temp/head-"+self.timosi,"ab")
+        filafi.close()
+        if open("temp/head-"+self.timosi).read() != "":
+            resut = True
+
+        tageli = [ "rm", "-v", "temp/head-"+self.timosi ]
+        call(tageli, stdout=open("temp/head-"+self.timosi, 'a'))
+
+        self.timosi = time.strftime("%Y%m%d%H%M%S")
+        self.sepere = "- :"
+        runisi = "[" + self.timme() + "]"
+        comasi = "\n        chkfal: " + " ".join(tageli)
+        resusi = "\n        result: " + pprint.pformat(resut)
+        self.frasi = runisi + resusi + comasi
+        self.printe()
+
+        self.timosi = ""
+        self.frasi = ""
+        self.sepere = ""
+
+        return resut
+
     def ranni(self):
         self.timosi = time.strftime("%Y%m%d%H%M%S")
         self.sepere = "- :"
-        runisi = "\n[" + self.timme() + "]"
+        runisi = "[" + self.timme() + "]"
         comasi = " Command: " + " ".join(self.comali)
 
         self.frasi = runisi + comasi
