@@ -47,7 +47,7 @@ helber="""
   TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
 
  CAUTION:
-    <GROUP> must separate with comma
+    <GROUP> must separate with space
     <GROUP> don't allowed spacing
 
    --- README ---

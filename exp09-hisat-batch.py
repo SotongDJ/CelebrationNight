@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import librun, libconfig, sys
+global helber
 helber="""
    --- README of exp09-hisat-batch ---
   Title:
@@ -25,7 +26,7 @@ helber="""
         -2 [reverse fastq files of]
         -S [output SAM files]
   CAUTION:
-    <GROUP> must separate with comma
+    <GROUP> must separate with space
     <GROUP> don't allowed spacing
 
    --- README ---

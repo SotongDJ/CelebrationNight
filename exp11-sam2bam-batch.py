@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import librun, libconfig, sys
+global helber
 helber="""
    --- README of exp11-sam2bam-batch ---
   Title:
@@ -23,7 +24,7 @@ helber="""
     samtools sort -o [out-sorted.bam] [in.bam]
 
   CAUTION:
-    <GROUP> must separate with comma
+    <GROUP> must separate with space
     <GROUP> don't allowed spacing
 
    --- README ---

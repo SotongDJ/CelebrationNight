@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import librun, libconfig, sys
+global helber
 helber="""
    --- README of exp11-stringtie-batch ---
   Title:
@@ -22,7 +23,7 @@ helber="""
 
 
   CAUTION:
-    <GROUP> must separate with comma
+    <GROUP> must separate with space
     <GROUP> don't allowed spacing
 
    --- README ---
