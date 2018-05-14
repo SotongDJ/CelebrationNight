@@ -38,6 +38,8 @@ helber="""
 class loggi:
 
     def pesonai(self):
+        self.testing = False
+
         self.dicodi = {
             "hello" : ""
         }
@@ -268,15 +270,8 @@ class loggi:
         self.frasi = ""
         self.sepere = ""
 
-    def test(self):
-        self.frasi = " ".join(self.comali)
-        self.logisi = "temp/temp.log"
-        self.printe()
-        time.sleep(1)
-
     def ranni(self):
         self.timosi = time.strftime("%Y%m%d%H%M%S")
-
         self.sepere = "- :"
         runisi = "\n[" + self.timme() + "]"
         comasi = " Command: " + " ".join(self.comali)
@@ -284,7 +279,8 @@ class loggi:
         self.frasi = runisi + comasi
         self.printe()
 
-        call(self.comali, stdout=open(self.logisi, 'a'))
+        if not self.testing:
+            call(self.comali, stdout=open(self.logisi, 'a'))
 
         self.timosi = ""
         self.frasi = ""
@@ -338,6 +334,8 @@ class loggi:
         self.frasi = ""
         self.sepere = ""
         self.lisli = []
+
+        self.testing = False
 
         self.Confi = libconfig.confi()
         self.argv()
