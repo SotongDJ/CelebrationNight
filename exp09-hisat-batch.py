@@ -55,13 +55,13 @@ class loggo(librun.loggi):
 
         self.tagesi = ""
 
-        self.adcoli = ["hisat2","-q"]
-        self.becoli = ["--phred"+Confi.get("run/phred")]
-        self.cecoli = ["-p",Confi.get("run/thread")]
-        self.decoli = ["-x",Confi.getpaf(["result/hisat", "idx/genome"])]
-        self.edcoli = ["-1"]
-        self.gecoli = ["-2"]
-        self.idcoli = ["-S"]
+        self.adcoli = [Confi.get("bin/hisat2"),"-q"]
+        self.adphli = ["--phred"+Confi.get("run/phred")]
+        self.adthli = ["-p",Confi.get("run/thread")]
+        self.adgnli = ["-x",Confi.getpaf(["result/hisat", "idx/genome"])]
+        self.adh1li = ["-1"]
+        self.adh2li = ["-2"]
+        self.adrsli = ["-S"]
 
         self.libadi = {}
 
@@ -71,83 +71,10 @@ class loggo(librun.loggi):
 
         self.prelogi = Confi.get("result/log")+"/exp09-hisat-batch-"
 
+    def actor(self):
+        tibeli = self.dicodi.get("tribe",[])
+        gupoli = self.dicodi.get("group",[])
+        argvli = self.dicodi.get("argv",[])
+        self.calti()
+
 Runni = loggo()
-
-tibeli = Runni.dicodi.get("tribe",[])
-gupoli = Runni.dicodi.get("group",[])
-argvli = Runni.dicodi.get("argv",[])
-
-stinbo = false
-pofidi = {0:[]}
-argvdi = {0:""}
-timein = 0
-timoli = [0]
-for argv in argvli:
-
-    if argv == "stringtie":
-        if timein != 0:
-            timoli.append(timein)
-        pofidi.update({ timein : ["--dta"] })
-        argvdi.update({ timein : "-stringtie" })
-        stinbo = True
-        timein = timein + 1
-    elif argv == "cufflinks":
-        if timein != 0:
-            timoli.append(timein)
-        pofidi.update({ timein : ["--dta-cufflinks"] })
-        argvdi.update({ timein : "-cufflinks" })
-        timein = timein + 1
-
-Runni.hedda()
-for tibe in tibeli:
-    for gupo in gupoli:
-        for timo in timoli:
-            Runni.comali = []
-            Runni.comali.extend(Runni.adcoli)
-            pofisi = pofidi.get(timo)
-            Runni.comali.extend(pofisi)
-            Runni.comali.extend(Runni.becoli)
-            Runni.comali.extend(Runni.cecoli)
-            Runni.comali.extend(Runni.decoli)
-            Runni.comali.extend(Runni.edcoli)
-
-            fecoli = [
-                Confi.get("result/raw") + "/" +
-                tibe + "/" +
-                Confi.get("data/prefix/"+tibe) + "-" +
-                gupo + "-" +
-                Confi.get("string/postfix/forward") + ".fastq"
-            ]
-
-            Runni.comali.extend(fecoli)
-            Runni.comali.extend(Runni.gecoli)
-
-            hecoli = [
-                Confi.get("result/raw") + "/" +
-                tibe + "/" +
-                Confi.get("data/prefix/"+tibe) + "-" +
-                gupo + "-" +
-                Confi.get("string/postfix/reverse") + ".fastq"
-            ]
-
-            Runni.comali.extend(hecoli)
-            Runni.comali.extend(Runni.idcoli)
-
-            argvsi = argvdi.get(timo)
-            jecoli = [
-                Confi.get("result/hisat") + "/" +
-                Confi.get("data/prefix/"+tibe) + "-" +
-                gupo + argvsi + ".sam"
-            ]
-
-            Runni.comali.extend(jecoli)
-
-            Runni.tagesi = Confi.get("result/hisat")
-            Runni.chkpaf()
-
-            # Runni.test()
-            Runni.ranni()
-
-            if stinbo:
-                Runni.comali = []
-Runni.calti()
