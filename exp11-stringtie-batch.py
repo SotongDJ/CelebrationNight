@@ -20,7 +20,8 @@ helber="""
     Visualise graph: explanation01-dataStructure.svg
 
   Original command:
-
+    stringtie [BAM file] -o [path for result]\
+        -p [thread] -G [reference gff file] -ev
 
   CAUTION:
     <GROUP> must separate with space
@@ -54,12 +55,22 @@ class loggo(librun.loggi):
         self.adcoli = []
         self.comali = []
 
-        self.filasi = "exp11-stringtie-batch.py"
+        self.filasi = "exp11-stringtie-batch"
         self.libadi = {}
         self.prelogi = Confi.get("result/log")+"/exp11-stringtie-batch-"
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
         gupoli = self.dicodi.get("group",[])
+
+        self.hedda()
+
+        self.comali = [
+            'stringtie',
+            '-p', '4',
+
+        self.ranni()
+
+        self.calti()
 
 Runni = loggo()
