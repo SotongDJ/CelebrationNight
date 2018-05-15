@@ -96,6 +96,11 @@ class loggi:
         with open(self.logisi,'a') as logifa:
             logifa.write(self.frasi+"\n")
 
+    def printbr(self):
+            print("  ")
+            with open(self.logisi,'a') as logifa:
+                logifa.write("  \n")
+
     def maxlen(self):
         metali = []
         for namasi in self.lisli:
@@ -371,6 +376,7 @@ class loggi:
         self.lisli = []
 
         self.testing = False
+        self.dicodi = {}
 
         self.Confi = libconfig.confi()
         self.argv()
@@ -378,7 +384,8 @@ class loggi:
 
         self.locadi = {
             'Input' : self.siarli,
-            'Argv.' : self.argudi
+            'Argv.' : self.argudi,
+            'Para.' : self.dicodi
         }
 
         self.redirek()
