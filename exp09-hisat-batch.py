@@ -161,7 +161,7 @@ class loggo(librun.loggi):
 
                     self.tagesi = self.jecosi + argvsi + ".sam"
                     abanbo = self.chkfal()
-                    self.tagesi = self.jecosi + argvsi + "-sorted" + ".bam"
+                    self.tagesi = self.jecosi + argvsi + "-sorted.bam"
                     bababo = self.chkfal()
                     """
                        sam bam hisat samtool
