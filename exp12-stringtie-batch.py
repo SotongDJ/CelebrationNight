@@ -20,8 +20,8 @@ helber="""
     Visualise graph: explanation01-dataStructure.svg
 
   Original command:
-    stringtie [BAM file] -o [path for result]\
-        -p [thread] -G [reference gff file] -e
+    stringtie [BAM file] -o [Result GTF file]\
+        -p [Thread] -G [Reference GFF file] -e
 
   CAUTION:
     <GROUP> must separate with space
