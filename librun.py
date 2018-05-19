@@ -38,7 +38,8 @@ helber="""
 class loggi:
 
     def pesonai(self):
-        self.testing = False
+        # self.testing = True
+        self.typesi = 'library'
 
         self.dicodi = {
             "hello" : ""
@@ -69,7 +70,8 @@ class loggi:
         self.calti()
 
     def redirek(self):
-        self.actor()
+        if self.typesi == "script":
+            self.actor()
 
     def sync(self):
         for dico in tuple(self.dicodi.keys()):
@@ -376,6 +378,7 @@ class loggi:
         self.lisli = []
 
         self.testing = False
+        self.typesi = 'library'
         self.dicodi = {}
 
         self.Confi = libconfig.confi()
