@@ -81,21 +81,25 @@ class loggo(librun.loggi):
         self.chkpaf()
 
         for tibe in tibeli:
+            self.printbr()
+            Marge.testing = self.testing
+            Marge.prelogi = Confi.get("result/log")+"/exp14-s2b-Merge-"
+
+            metali = []
+            metali.extend(gupoli)
+            metali.append(cotosi)
+            Marge.dicodi = {
+                "tribe"   : [tibe],
+                "group"   : metali
+            }
+            Marge.actor()
+            self.printbr()
+
+            self.adinsi = Marge.outusi
+            self.tagesi = self.adinsi
+            self.chkfal()
+
             for gupo in gupoli:
-                self.printbr()
-                Marge.testing = self.testing
-                Marge.prelogi = Confi.get("result/log")+"/exp14-s2b-Merge-"
-
-                Marge.dicodi = {
-                    "tribe"   : [tibe],
-                    "group"   : [cotosi,gupo]
-                }
-                Marge.actor()
-                self.printbr()
-
-                self.adinsi = Marge.outusi
-                self.tagesi = self.adinsi
-                self.chkfal()
 
                 if cotosi != "":
                     self.comali = []
@@ -110,6 +114,7 @@ class loggo(librun.loggi):
 
                     self.comali.extend(self.adrfli)
                     self.comali.append(self.adinsi)
+
                     self.comali.extend(self.adphli)
 
                     self.comali.extend(self.adfoli)
@@ -124,7 +129,7 @@ class loggo(librun.loggi):
                     adresi = (
                         Confi.get("result/stringtie") + "/" +
                         Confi.get("data/prefix/"+tibe) + "-" +
-                        "-".join(sorted([cotosi,gupo])) + "-s2t.gtf"
+                        gupo + "-s2b.gtf"
                     )
                     self.comali.append(adresi)
 
