@@ -95,7 +95,7 @@ for tibe in tibeli:
             tibe + "/" +
             Confi.get("data/prefix/"+tibe) + "-" +
             gupo + "-" +
-            Confi.get("string/postfix/forward") + ".fastq"
+            Confi.get("postfix/forward") + ".fastq"
         ]
         Runni.comali.extend(fecoli)
 
@@ -104,7 +104,7 @@ for tibe in tibeli:
             tibe + "/" +
             Confi.get("data/prefix/"+tibe) + "-" +
             gupo + "-" +
-            Confi.get("string/postfix/reverse") + ".fastq"
+            Confi.get("postfix/reverse") + ".fastq"
         ]
         Runni.comali.extend(gecoli)
 

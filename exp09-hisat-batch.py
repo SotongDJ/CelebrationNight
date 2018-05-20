@@ -137,7 +137,7 @@ class loggo(librun.loggi):
                         tibe + "/" +
                         Confi.get("data/prefix/"+tibe) + "-" +
                         gupo + "-" +
-                        Confi.get("string/postfix/forward") + ".fastq"
+                        Confi.get("postfix/forward") + ".fastq"
                     )
                     self.comali.append(fecosi)
 
@@ -148,7 +148,7 @@ class loggo(librun.loggi):
                         tibe + "/" +
                         Confi.get("data/prefix/"+tibe) + "-" +
                         gupo + "-" +
-                        Confi.get("string/postfix/reverse") + ".fastq"
+                        Confi.get("postfix/reverse") + ".fastq"
                     )
                     self.comali.append(hecosi)
 
