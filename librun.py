@@ -82,10 +82,10 @@ class loggi:
                 siti = type(str())
                 liti = type(list())
 
-                if bati == liti:
+                if bati == liti: # if type(b) == list
                     babo = len(self.argudi.get(dico)) > 0
 
-                if arti == bati:
+                if arti == bati: # if type(a) == type(b)
                     self.dicodi.update({ dico : self.argudi.get(dico) })
                 elif bati == siti and arti == liti:
                     self.dicodi.update({ dico : [self.argudi.get(dico)] })
@@ -212,21 +212,23 @@ class loggi:
         runninlog = ("RUN "+self.filasi+", begin at ["
             + self.timme() +"]\n~~~~~~~~~~~~" )
 
-        if self.locadi != {}:
-            scriptlog = ["LOCAL"]
+        self.locadi = {
+            'Input' : self.siarli,
+            'Argv.' : self.argudi,
+            'Para.' : self.dicodi
+        }
 
-            self.lisli = []
-            self.lisli = list(self.locadi.keys())
-            metain = self.maxlen()
-            for loca in self.lisli:
-                if len(loca) < metain :
-                    loca = loca + ' '*(metain-len(loca))
+        scriptlog = ["LOCAL"]
 
-                scriptlog.append("    " + loca + ": " +
-                    pprint.pformat(self.locadi.get(loca),compact=True,width=150))
+        self.lisli = []
+        self.lisli = list(self.locadi.keys())
+        metain = self.maxlen()
+        for loca in self.lisli:
+            if len(loca) < metain :
+                loca = loca + ' '*(metain-len(loca))
 
-        else:
-            scriptlog = []
+            scriptlog.append("    " + loca + ": " +
+                pprint.pformat(self.locadi.get(loca),compact=True,width=150))
 
         if self.libadi != {}:
             configlog = ["FROM config.json"]
@@ -384,11 +386,5 @@ class loggi:
         self.Confi = libconfig.confi()
         self.argv()
         self.pesonai()
-
-        self.locadi = {
-            'Input' : self.siarli,
-            'Argv.' : self.argudi,
-            'Para.' : self.dicodi
-        }
 
         self.redirek()
