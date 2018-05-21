@@ -43,7 +43,10 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-Marge = libstmerge.loggo()
+class marge(libstmerge.loggo):
+    def redirek(self):
+        """"""
+Marge = marge()
 Confi = libconfig.confi()
 class loggo(librun.loggi):
     def pesonai(self):
