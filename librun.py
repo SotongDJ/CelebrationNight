@@ -149,8 +149,9 @@ class loggi:
         arguli = []
 
         for nanasi in range(len(self.siarli)):
-            if self.siarli[nanasi][0] == '-':
-                arguli.append(nanasi)
+            if len(self.siarli[nanasi]) > 0:
+                if self.siarli[nanasi][0] == '-':
+                    arguli.append(nanasi)
 
         begibo = True
         for n in arguli:
