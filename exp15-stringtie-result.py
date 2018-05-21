@@ -46,7 +46,6 @@ Confi = libconfig.confi()
 class loggo(librun.loggi):
     def pesonai(self):
         # self.testing = True
-        self.typesi = 'script'
 
         self.dicodi = {
             "tribe"   : [],
@@ -71,8 +70,13 @@ class loggo(librun.loggi):
         self.chkpaf()
 
         for tibe in tibeli:
-
-            for gupo in metali:
+            for gupo in gupoli:
+                socesi = (
+                    Confi.get("result/stringtie") + "/" +
+                    Confi.get("data/prefix/"+tibe) + "-" +
+                    gupo + "t_data.ctab"
+                )
+                socefi = open
 
         self.calti()
 

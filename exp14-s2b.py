@@ -48,7 +48,6 @@ Confi = libconfig.confi()
 class loggo(librun.loggi):
     def pesonai(self):
         # self.testing = True
-        self.typesi = 'script'
 
         self.dicodi = {
             "tribe"   : [],

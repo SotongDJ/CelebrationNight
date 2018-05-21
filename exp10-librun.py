@@ -6,7 +6,6 @@ class runno(librun.loggi):
 
     def pesonai(self):
         # self.testing = True
-        self.typesi = 'script'
 
         self.dicodi = {
             "hello" : ""

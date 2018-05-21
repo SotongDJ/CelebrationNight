@@ -6,7 +6,6 @@ class runno(librun.loggi):
 
     def pesonai(self):
         # self.testing = True
-        self.typesi = 'library'
 
         self.dicodi = {
             "files" : []
@@ -45,4 +44,3 @@ class runno(librun.loggi):
                     for meta in colutu:
                         line = line + "	" + metadi.get(meta,"")
                     resufi.write(line+"\n")
-Ano = runno()
