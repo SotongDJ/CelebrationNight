@@ -43,7 +43,6 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-
 Marge = libstmerge.loggo()
 Confi = libconfig.confi()
 class loggo(librun.loggi):
@@ -101,7 +100,7 @@ class loggo(librun.loggi):
             self.tagesi = self.adinsi
             self.chkfal()
 
-            for gupo in gupoli:
+            for gupo in metali:
 
                 if cotosi != "":
                     self.comali = []
@@ -123,7 +122,7 @@ class loggo(librun.loggi):
                     adresi = (
                         Confi.get("result/stringtie") + "/" +
                         Confi.get("data/prefix/"+tibe) + "-" +
-                        "-".join(sorted([cotosi,gupo]))
+                        gupo
                     )
                     self.comali.append(adresi)
 
