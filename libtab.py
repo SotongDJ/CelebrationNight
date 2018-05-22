@@ -9,7 +9,8 @@ class tab2json(librun.loggi):
 
         self.dicodi = {
             "files" : [],
-            "id" : ""
+            "id" : "",
+            "column" : ""
         }
         self.sync()
 
@@ -24,36 +25,60 @@ class tab2json(librun.loggi):
     def actor(self):
         soceli = self.dicodi.get("files",[])
         tagesi = self.dicodi.get("id","")
-        print((soceli,tagesi))
+        comusi = self.dicodi.get("column","")
+        print((soceli,tagesi,len(comusi)))
+
 
         for socesi in soceli:
             print(socesi)
             lineli = open(socesi).read().splitlines()
-            adnubo = True
+
             namedi = {}
 
             resudi = {}
             remadi = {}
 
+
+            if comusi != "":
+                metali = comusi.split("	")
+                for n in range(len(metali)):
+                    if metali[n] not in namedi.values():
+                        namedi.update({ n : metali[n] })
+                    if metali[n] not in remadi.keys():
+                        remadi.update({ metali[n] :{} })
+                colubo = False
+            else:
+                colubo = True
+
+            if tagesi != "":
+                tagebo = True
+            else:
+                tagebo = False
+
+            numein = 0
             for line in lineli:
-                if adnubo:
+                if colubo:
                     metali = line.split("	")
                     for n in range(len(metali)):
                         if metali[n] not in namedi.values():
                             namedi.update({ n : metali[n] })
                         if metali[n] not in remadi.keys():
                             remadi.update({ metali[n] :{} })
-                    adnubo = False
-                else:
+                    colubo = False
+                elif "#" not in line:
                     metali = line.split("	")
                     metadi = {}
                     idisi = ""
+
+                    if not tagebo:
+                        numein = numein + 1
+                        idisi = str(numein)
 
                     for n in range(len(list(namedi.keys()))):
                         colusi = namedi.get(n)
                         metadi.update({ colusi : metali[n]})
 
-                        if colusi == tagesi:
+                        if colusi == tagesi and tagebo:
                             idisi = metali[n]
 
                     resudi.update({ idisi : metadi })
