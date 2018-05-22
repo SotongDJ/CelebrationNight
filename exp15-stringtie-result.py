@@ -72,7 +72,7 @@ class loggo(librun.loggi):
         self.tagesi = Confi.get("result/stringtie")
         self.chkpaf()
 
-        self.frasi = "Stage 1 : Convert ctab to json"
+        self.frasi = "Stage 1 : Convert TSV/CTAB to JSON"
         self.printe()
 
         taboli = []
@@ -173,7 +173,7 @@ class loggo(librun.loggi):
         with open(resusi,"w") as resufi:
             json.dump(self.resudi,resufi,indent=4,sort_keys=True)
 
-        self.frasi = "Stage 4 : Convert json back to tsv/ctab"
+        self.frasi = "Stage 4 : Convert JSON back to TSV/CTAB"
         self.printe()
 
         CoveTab = covetab()
