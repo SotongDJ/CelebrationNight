@@ -4,7 +4,7 @@ global helber
 helber="""
    --- README of exp13-stringtie-merge ---
   Title:
-    Batch Processing for StringTie
+    Merge transcriptome for StringTie
 
   Usage:
     python exp13-stringtie-merge -t <TRIBE> -g <GROUP,GROUP,GROUP...>

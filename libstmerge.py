@@ -2,12 +2,23 @@
 import librun, libconfig
 global helber
 helber="""
-   --- README of exp13-stringtie-merge ---
+   --- README of library-stringtie-merge ---
   Title:
-    Batch Processing for StringTie
+    Merge transcriptome for StringTie
 
   Usage:
-    python exp13-stringtie-merge -t <TRIBE> -g <GROUP,GROUP,GROUP...>
+    import libstmerge
+    class marge(libstmerge.loggo):
+        def redirek(self):
+            """"""
+    Marge = marge()
+    Marge.testing = self.testing
+    Marge.prelogi = < Log File Path>
+    Marge.dicodi = {
+        "tribe"   : <TRIBE>,
+        "group"   : [<GROUP>,<GROUP>......]
+    }
+    Marge.actor()
 
   Data Structure:
     First : tribe,
