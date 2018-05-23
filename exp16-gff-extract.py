@@ -56,6 +56,8 @@ class loggo(librun.loggi):
     def actor(self):
         inpuli = self.dicodi.get("input",[])
         oupusi = self.dicodi.get("output","")
+        eopusi = oupusi.replace(".json","-extra.json")
+        reopsi = oupusi.replace(".json","-refer.json")
 
         self.hedda()
 
@@ -110,7 +112,14 @@ class loggo(librun.loggi):
 
         print(( len(self.resudi) , len(self.copedi) ))
 
-        self.frasi = "Stage 4 : Export Dictionaries into JSON"
+        self.frasi = "Stage 4 : Generate Refer. Dictionary for Result"
+        self.printe()
+
+        self.refedi = {}
+        self.ekfedi = {}
+
+
+        self.frasi = "Stage 5 : Export Dictionaries into JSON"
         self.printe()
 
         setosi = "json"
@@ -133,11 +142,11 @@ class loggo(librun.loggi):
         with open(oupusi,"w") as resufi:
             json.dump(self.resudi,resufi,indent=4,sort_keys=True)
 
-        with open(oupusi.replace(".json","-extra.json"),"w") as resufi:
+        with open(eopusi,"w") as resufi:
             json.dump(self.copedi,resufi,indent=4,sort_keys=True)
 
         if setosi != "json":
-            self.frasi = "Stage 5 : Convert JSON back to TSV/CTAB"
+            self.frasi = "Stage 6 : Convert JSON back to TSV/CTAB"
             self.printe()
 
             CoveTab = covetab()
