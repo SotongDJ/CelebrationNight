@@ -5,7 +5,7 @@ global helber
 helber="""
    --- README of exp14-stringtie2ballgown ---
   Title:
-    Batch Processing for StringTie
+    Batch Processing for StringTie (Compare)
 
   Usage:
     python exp14-s2b -t <TRIBE> --control=<Control Group> -g <GROUP,GROUP,GROUP...>

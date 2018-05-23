@@ -5,7 +5,7 @@ global helber
 helber="""
    --- README of exp15-stringtie-result.py ---
   Title:
-    Batch Processing for StringTie
+    Batch Processing for StringTie (Summarise)
 
   Usage:
     python3 exp15-stringtie-result.py -t <TRIBE> --control=<Control Group> -g <GROUP,GROUP,GROUP...>

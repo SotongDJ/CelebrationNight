@@ -4,7 +4,7 @@ global helber
 helber="""
    --- README of exp12-stringtie-batch ---
   Title:
-    Batch Processing for StringTie
+    Batch Processing for StringTie (Assembly)
 
   Usage:
     python exp12-stringtie-batch -t <TRIBE> -g <GROUP,GROUP,GROUP...>
