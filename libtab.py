@@ -1,7 +1,47 @@
 #!/usr/bin/env python3
 import sys, pprint, json
 import librun
+global helber
+helber="""
+   --- README of library-tab ---
+  Title:
+    Conversion tool for JSON and TSV/CTAB
 
+  Usage:
+    import libtab
+
+    class covejos(libtab.tab2json):
+        def redirek(self):
+            """"""
+    CoveJos = covejos()
+    CoveJos.dicodi = {
+        "files" : [<INPUT>,<INPUT>......] ,
+        "id" : "" ,
+        "column": < Column separate by tab >
+    }
+    CoveJos.actor()
+
+    class covetab(libtab.json2tab):
+        def redirek(self):
+            """"""
+    CoveTab = covetab()
+    CoveTab.dicodi = { "files" : [<INPUT>,<INPUT>......] }
+    CoveTab.actor()
+
+   --- README ---
+""""""
+ Postfix of variables:
+  -si: String
+   -ni: alternative/second string for same Usage
+   -fi: string for open()
+  -ho: String(that store dir path)
+  -ti: Intiger/Float
+  -li: List
+  -tu: Tuple
+  -di: Dictionary
+  -fa: File (with open())
+  -so: JSON
+"""
 class tab2json(librun.loggi):
 
     def pesonai(self):
