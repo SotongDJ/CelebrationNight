@@ -86,18 +86,63 @@ class loggo(librun.loggi):
         self.frasi = "Stage 3 : Extract Attributes into Dictionaries"
         self.printe()
 
+        self.resudi = {}
+        self.copedi = {}
+        for reco in self.socese:
+            metali = reco.split(";")
+            idisi = ""
+            metadi = {}
+            for meta in metali:
+                if "Name=" in meta:
+                    idisi = meta.split("=")[1]
+                    metadi.update({ meta.split("=")[0] : meta.split("=")[1] })
+                elif "=" in meta:
+                    metadi.update({ meta.split("=")[0] : meta.split("=")[1] })
+
+            metali = []
+            metali = list(self.copedi.keys())
+            numein = 0
+            if idisi != "" and idisi not in metali:
+                self.resudi.update({ idisi : metadi })
+            elif idisi != "" and idisi in metali:
+                self.copedi.update({ str(numein)+"|"+idisi : metadi })
+                numein = numein + 1
+
+        print(( len(self.resudi) , len(self.copedi) ))
+
         self.frasi = "Stage 4 : Export Dictionaries into JSON"
         self.printe()
 
-        """
-        self.frasi = "Stage 5 : Convert JSON back to TSV/CTAB"
-        self.printe()
+        setosi = "json"
+        if "." in oupusi:
+            metali = []
+            metali = oupusi.split(".")
+            if metali[-1] == "json":
+                setosi = metali.pop(-1)
+            elif metali[-1] in ["ctab","tsv"]:
+                setosi = metali.pop(-1)
+                oupusi = setosi.replace("."+setosi,".json")
+            else:
+                metasi = metali.pop(-1)
+                setosi = "json"
+                oupusi = setosi.replace("."+metasi,".json")
+        else:
+            setosi = "json"
+            oupusi = setosi+".json"
 
+        with open(oupusi,"w") as resufi:
+            json.dump(self.resudi,resufi,indent=4,sort_keys=True)
 
-        CoveTab = covetab()
-        CoveTab.dicodi = { "files" : [resusi] }
-        CoveTab.actor()
-        """
+        with open(oupusi.replace(".json","-extra.json"),"w") as resufi:
+            json.dump(self.copedi,resufi,indent=4,sort_keys=True)
+
+        if setosi != "json":
+            self.frasi = "Stage 5 : Convert JSON back to TSV/CTAB"
+            self.printe()
+
+            CoveTab = covetab()
+            CoveTab.dicodi = { "files" : [oupusi] }
+            CoveTab.actor()
         self.calti()
 
 Runni = loggo()
