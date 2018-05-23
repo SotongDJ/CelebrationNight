@@ -68,78 +68,87 @@ class tab2json(librun.loggi):
         comusi = self.dicodi.get("column","")
         print((soceli,tagesi,len(comusi)))
 
-
         for socesi in soceli:
             print(socesi)
-            lineli = open(socesi).read().splitlines()
+            resusi = socesi.split(".")[0]+".json"
+            remasi = socesi.split(".")[0]+"-column.json"
 
-            namedi = {}
+            self.tagesi = resusi
+            resubo = self.chkfal()
+            self.tagesi = remasi
+            remabo = self.chkfal()
 
-            resudi = {}
-            remadi = {}
+            if resubo or remabo :
+
+                lineli = open(socesi).read().splitlines()
+
+                namedi = {}
+
+                resudi = {}
+                remadi = {}
 
 
-            if comusi != "":
-                metali = comusi.split("	")
-                for n in range(len(metali)):
-                    if metali[n] not in namedi.values():
-                        namedi.update({ n : metali[n] })
-                    if metali[n] not in remadi.keys():
-                        remadi.update({ metali[n] :{} })
-                colubo = False
-            else:
-                colubo = True
-
-            if tagesi != "":
-                tagebo = True
-            else:
-                tagebo = False
-
-            numein = 0
-            for line in lineli:
-                if colubo:
-                    metali = line.split("	")
+                if comusi != "":
+                    metali = comusi.split("	")
                     for n in range(len(metali)):
                         if metali[n] not in namedi.values():
                             namedi.update({ n : metali[n] })
                         if metali[n] not in remadi.keys():
                             remadi.update({ metali[n] :{} })
                     colubo = False
-                elif "#" not in line:
-                    metali = line.split("	")
-                    metadi = {}
-                    idisi = ""
+                else:
+                    colubo = True
 
-                    if not tagebo:
-                        numein = numein + 1
-                        idisi = str(numein)
+                if tagesi != "":
+                    tagebo = True
+                else:
+                    tagebo = False
 
-                    for n in range(len(list(namedi.keys()))):
-                        colusi = namedi.get(n)
-                        metadi.update({ colusi : metali[n]})
+                numein = 0
+                for line in lineli:
+                    if colubo:
+                        metali = line.split("	")
+                        for n in range(len(metali)):
+                            if metali[n] not in namedi.values():
+                                namedi.update({ n : metali[n] })
+                            if metali[n] not in remadi.keys():
+                                remadi.update({ metali[n] :{} })
+                        colubo = False
+                    elif "#" not in line:
+                        metali = line.split("	")
+                        metadi = {}
+                        idisi = ""
 
-                        if colusi == tagesi and tagebo:
-                            idisi = metali[n]
+                        if not tagebo:
+                            numein = numein + 1
+                            idisi = str(numein)
 
-                    resudi.update({ idisi : metadi })
+                        for n in range(len(list(namedi.keys()))):
+                            colusi = namedi.get(n)
+                            metadi.update({ colusi : metali[n]})
 
-                    for n in range(len(list(namedi.keys()))):
-                        colusi = namedi.get(n)
+                            if colusi == tagesi and tagebo:
+                                idisi = metali[n]
 
-                        almedi = remadi.get(colusi,{})
-                        almeli = almedi.get(metali[n],[])
+                        resudi.update({ idisi : metadi })
 
-                        almeli.append(idisi)
+                        for n in range(len(list(namedi.keys()))):
+                            colusi = namedi.get(n)
 
-                        almedi.update({ metali[n] : almeli })
-                        remadi.update({ colusi : almedi })
+                            almedi = remadi.get(colusi,{})
+                            almeli = almedi.get(metali[n],[])
+
+                            almeli.append(idisi)
+
+                            almedi.update({ metali[n] : almeli })
+                            remadi.update({ colusi : almedi })
 
 
-            with open(socesi.split(".")[0]+".json","w") as resufi:
-                json.dump(resudi,resufi,indent=4,sort_keys=True)
+                with open(resusi) as resufi:
+                    json.dump(resudi,resufi,indent=4,sort_keys=True)
 
-            with open(socesi.split(".")[0]+"-column.json","w") as resufi:
-                json.dump(remadi,resufi,indent=4,sort_keys=True)
+                with open(remasi) as resufi:
+                    json.dump(remadi,resufi,indent=4,sort_keys=True)
 
 class json2tab(librun.loggi):
 
