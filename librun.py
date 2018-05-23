@@ -4,22 +4,49 @@ import libconfig
 from subprocess import call
 global helber
 helber="""
-   --- README of exp00-librun ---
+   --- README of library-run ---
  Title:
     General class for bio-info-misc project
 
  Usage:
-    import this library while running you python scripts
+    import librun
+    class <CLASS_NAME>(librun.loggi):
 
- Structure:
-    First : tribe,
-        e.g. raw, untrim, trimmed...
-    Second: group,
-        e.g. control, A, B, 1, 2...
-    Third : subgroup/files,
-        e.g. foward, reverse, pair, unpair
+        def pesonai(self):
+            # self.testing = True
 
-    Visualise graph: explanation01-dataStructure.png
+            self.dicodi = {
+                < VAR_NAME_A > : < VAR_VALUE > ,
+                < VAR_NAME_B > : < VAR_VALUE > ,
+                < VAR_NAME_C > : < VAR_VALUE > ,
+            }
+            self.sync()
+
+            self.tagesi = ""
+
+            self.comali=[]
+
+            self.filasi = < Library Name >
+            self.libadi = {}
+            self.prelogi = < Path of Log Files >
+
+        def actor(self):
+            < VAR_A > = self.dicodi.get(< VAR_NAME_A >,"")
+            < VAR_B > = self.dicodi.get(< VAR_NAME_B >,"")
+            < VAR_C > = self.dicodi.get(< VAR_NAME_C >,"")
+            print((< VAR_A >, < VAR_B >, < VAR_C >))
+
+            self.hedda()
+
+            self.tagesi = < TARGET_FILE >
+            self.chkpaf()
+
+            self.ranni()
+
+            self.calti()
+
+    Ano = <CLASS_NAME>()
+    Ano.actor()
 
    --- README ---
 """"""

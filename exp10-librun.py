@@ -22,7 +22,20 @@ class runno(librun.loggi):
         }
         self.prelogi = "temp/temp-"
 
+    def actor(self):
+        self.hedda()
+
+        self.tagesi = "temp"
+        self.chkpaf()
+
+        self.ranni()
+
+        self.frasi = "Ano.dicodi:\n"+pprint.pformat(Ano.dicodi,compact=True)
+        self.printe()
+        self.frasi = "Ano.locadi:\n"+pprint.pformat(Ano.locadi,compact=True)
+        self.printe()
+        self.frasi = "Ano.libadi:\n"+pprint.pformat(Ano.libadi,compact=True)
+        self.printe()
+
+        self.calti()
 Ano = runno()
-print("Ano.dicodi:\n"+pprint.pformat(Ano.dicodi,compact=True))
-print("Ano.locadi:\n"+pprint.pformat(Ano.locadi,compact=True))
-print("Ano.libadi:\n"+pprint.pformat(Ano.libadi,compact=True))
