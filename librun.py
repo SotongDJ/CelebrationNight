@@ -36,14 +36,14 @@ helber="""
             < VAR_C > = self.dicodi.get(< VAR_NAME_C >,"")
             print((< VAR_A >, < VAR_B >, < VAR_C >))
 
-            self.hedda()
+            self.head()
 
             self.tagesi = < TARGET_FILE >
             self.chkpaf()
 
             self.ranni()
 
-            self.calti()
+            self.endin()
 
     Ano = <CLASS_NAME>()
     Ano.actor()
@@ -87,14 +87,14 @@ class loggi:
         tibeli = self.dicodi.get("tribe",[])
         gupoli = self.dicodi.get("group",[])
 
-        self.hedda()
+        self.head()
 
         self.tagesi = "temp"
         self.chkpaf()
 
         self.ranni()
 
-        self.calti()
+        self.endin()
 
     def redirek(self):
         self.actor()

@@ -171,6 +171,7 @@ class json2tab(librun.loggi):
     def actor(self):
         soceli = self.dicodi.get("files",[])
         print(soceli)
+        self.head()
 
         for socesi in soceli:
             socefi = open(socesi,'r')
@@ -192,3 +193,5 @@ class json2tab(librun.loggi):
                     for meta in colutu:
                         line = line + "	" + metadi.get(meta,"")
                     resufi.write(line+"\n")
+
+        self.endin()
