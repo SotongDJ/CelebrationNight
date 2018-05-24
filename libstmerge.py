@@ -81,7 +81,7 @@ class loggo(librun.loggi):
         tibeli = self.dicodi.get("tribe",[])
         gupoli = self.dicodi.get("group",[])
 
-        self.hedda()
+        self.head()
 
         self.tagesi = Confi.get("result/stringtie")
         self.chkpaf()
@@ -109,4 +109,4 @@ class loggo(librun.loggi):
             self.comali.extend(self.adrfli)
 
             self.ranni()
-        self.calti()
+        self.endin()
