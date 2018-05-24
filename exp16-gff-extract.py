@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import librun, libconfig, libtab
-import time, json
+import time, json, pprint
 global helber
 helber="""
    --- README of exp16-gff-extract.py ---
@@ -12,8 +12,6 @@ helber="""
 
   CAUTION:
     Exp16 required libtab
-    <GROUP> must separate with space
-    <GROUP> don't allowed spacing
 
    --- README ---
 """"""
@@ -54,103 +52,143 @@ class loggo(librun.loggi):
         self.prelogi = Confi.get("result/log")+"/exp15-sr-"
 
     def actor(self):
-        inpuli = self.dicodi.get("input",[])
-        oupusi = self.dicodi.get("output","")
-        eopusi = oupusi.replace(".json","-extra.json")
-        reopsi = oupusi.replace(".json","-refer.json")
+        self.inpuli = self.dicodi.get("input",[])
+        self.oupusi = self.dicodi.get("output","")
+        self.refesi = self.oupusi.replace(".json","-refer.json")
+        self.valesi = self.oupusi.replace(".json","-value.json")
+        self.desisi = self.oupusi.replace(".json","-description.json")
 
         self.head()
 
         self.tagesi = Confi.get("result/stringtie")
         self.chkpaf()
 
-        self.frasi = "Stage 1 : Convert GFF(v3) to JSON"
+        self.printbr()
+        self.frasi = "==========\nStage 1 : Convert GFF(v3) to JSON\n=========="
         self.printe()
 
         comusi = (
             "sequence	source	feature	start	end	"+
-            "score	strand	phase	Attributes"
+            "score	srefed	phase	Attributes"
         )
 
         CoveJos = covejos()
-        CoveJos.dicodi = { "files" : inpuli ,"id" : "" ,"column":comusi}
+        CoveJos.dicodi = { "files" : self.inpuli ,"id" : "" ,"column":comusi}
         CoveJos.actor()
 
-        self.frasi = "Stage 2 : Grab Attributes from JSON"
+        self.printbr()
+        self.frasi = "==========\nStage 2 : Grab Attributes from JSON\n=========="
         self.printe()
 
-        self.socese = set()
-        for inpu in inpuli:
-            filafi = open(inpu.split(".")[0]+"-column.json","r")
+        self.socedi = dict()
+        for inpu in self.inpuli:
+            metali = inpu.split(".")
+            metali[-1] = "json"
+            resusi = ".".join(metali)
+            remasi = resusi.replace(".json","-column.json")
+            filafi = open(remasi,"r")
             filaso = json.load(filafi)
-            self.socese.update(set(filaso.get("Attributes",{}).keys()))
+            self.socedi.update(filaso.get("Attributes",{}))
 
-        self.frasi = "Stage 3 : Extract Attributes into Dictionaries"
-        self.printe()
+        self.frasi = pprint.pformat(( len(self.socedi)))
+        self.printimo()
 
-        self.resudi = {}
-        self.copedi = {}
-        for reco in self.socese:
-            metali = reco.split(";")
-            idisi = ""
-            metadi = {}
-            for meta in metali:
-                if "Name=" in meta:
-                    idisi = meta.split("=")[1]
-                    metadi.update({ meta.split("=")[0] : meta.split("=")[1] })
-                elif "=" in meta:
-                    metadi.update({ meta.split("=")[0] : meta.split("=")[1] })
-
-            metali = []
-            metali = list(self.copedi.keys())
-            numein = 0
-            if idisi != "" and idisi not in metali:
-                self.resudi.update({ idisi : metadi })
-            elif idisi != "" and idisi in metali:
-                self.copedi.update({ str(numein)+"|"+idisi : metadi })
-                numein = numein + 1
-
-        print(( len(self.resudi) , len(self.copedi) ))
-
-        self.frasi = "Stage 4 : Generate Refer. Dictionary for Result"
+        self.printbr()
+        self.frasi = "==========\nStage 3 : Extract Attributes into Dictionaries\n=========="
         self.printe()
 
         self.refedi = {}
-        self.ekfedi = {}
+        self.valedi = {}
+        for reco in list(self.socedi.keys()):
+            metali = []
+            metali = reco.split(";")
+            numeli = self.socedi.get(reco)
+            namasi = ""
+            for meta in metali:
+                if "ID=" in meta:
+                    namasi = meta.split("=")[1]
+                    self.refedi.update({ namasi : reco })
+                    self.valedi.update({ namasi : numeli })
+                elif "Name=" in meta:
+                    namasi = meta.split("=")[1]
+                    self.refedi.update({ namasi : reco })
+                    self.valedi.update({ namasi : numeli })
 
+        self.frasi = pprint.pformat(( len(self.refedi) , len(self.valedi) ))
+        self.printimo()
 
-        self.frasi = "Stage 5 : Export Dictionaries into JSON"
+        self.printbr()
+        self.frasi = "==========\nStage 4 : Generate Refer. Dictionary for Result\n=========="
+        self.printe()
+
+        self.resudi = {}
+        self.desidi = {}
+
+        for nama in list(self.refedi.keys()):
+            refesi = self.refedi.get(nama)
+            refeli = refesi.replace("=",";").split(";")
+            keyosi = ""
+            valusi = ""
+            for n in range(len(refeli)):
+                if "_id" in refeli[n]:
+                    metadi = self.resudi.get(refeli[n],{})
+                    keyosi = refeli[n]
+                    valusi = refeli[n+1]
+                    metadi.update({  valusi : refesi })
+                    self.resudi.update({ keyosi : metadi })
+
+            for n in range(len(refeli)):
+                if refeli[n] == "description" and keyosi != "" and valusi != "":
+                    metadi = self.desidi.get(keyosi,{})
+                    metadi.update({  valusi : refeli[n+1] })
+                    self.desidi.update({ keyosi : metadi })
+
+        self.frasi = pprint.pformat( list(self.resudi.keys()) )
+        self.printimo()
+
+        self.frasi = pprint.pformat( list(self.desidi.keys()) )
+        self.printimo()
+
+        self.printbr()
+        self.frasi = "==========\nStage 5 : Export Dictionaries into JSON\n=========="
         self.printe()
 
         setosi = "json"
-        if "." in oupusi:
+        if "." in self.oupusi:
             metali = []
-            metali = oupusi.split(".")
+            metali = self.oupusi.split(".")
             if metali[-1] == "json":
                 setosi = metali.pop(-1)
             elif metali[-1] in ["ctab","tsv"]:
                 setosi = metali.pop(-1)
-                oupusi = setosi.replace("."+setosi,".json")
+                self.oupusi = setosi.replace("."+setosi,".json")
             else:
                 metasi = metali.pop(-1)
                 setosi = "json"
-                oupusi = setosi.replace("."+metasi,".json")
+                self.oupusi = setosi.replace("."+metasi,".json")
         else:
             setosi = "json"
-            oupusi = setosi+".json"
+            self.oupusi = setosi+".json"
 
-        with open(oupusi,"w") as resufi:
-            json.dump(self.resudi,resufi,indent=4,sort_keys=True)
+        with open(self.refesi,"w") as refefi:
+            json.dump(self.refedi,refefi,indent=4,sort_keys=True)
 
-        with open(eopusi,"w") as resufi:
-            json.dump(self.copedi,resufi,indent=4,sort_keys=True)
+        with open(self.valesi,"w") as valefi:
+            json.dump(self.valedi,valefi,indent=4,sort_keys=True)
+
+        with open(self.desisi,"w") as desifi:
+            json.dump(self.desidi,desifi,indent=4,sort_keys=True)
+
+        with open(self.oupusi,"w") as oupufi:
+            json.dump(self.resudi,oupufi,indent=4,sort_keys=True)
 
         if setosi != "json":
-            self.frasi = "Stage 6 : Convert JSON back to TSV/CTAB"
+            self.printbr()
+            self.frasi = "==========\nStage 6 : Convert JSON back to TSV/CTAB\n=========="
             self.printe()
 
             CoveTab = covetab()
-            CoveTab.dicodi = { "files" : [oupusi] }
+            CoveTab.dicodi = { "files" : [self.oupusi] }
             CoveTab.actor()
 
         self.endin()
