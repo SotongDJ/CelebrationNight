@@ -8,7 +8,9 @@ helber="""
     Batch Processing for StringTie (Summarise)
 
   Usage:
-    python3 exp15-stringtie-result.py -t <TRIBE> --control=<Control Group> -g <GROUP,GROUP,GROUP...>
+    python3 exp15-stringtie-result.py -t <TRIBE> \
+        -r [Description JSON file (Exp16)]\
+        -g <GROUP,GROUP,GROUP...>
 
   Data Structure:
     First : tribe,
@@ -22,6 +24,7 @@ helber="""
 
   CAUTION:
     Exp15 required libtab
+    Exp15 required result from Exp16
     <GROUP> must separate with space
     <GROUP> don't allowed spacing
 
@@ -45,14 +48,18 @@ class covejos(libtab.tab2json):
 class covetab(libtab.json2tab):
     def redirek(self):
         """"""
+class geneid(libsnm.geneid):
+    def redirek(self):
+        """"""
 Confi = libconfig.confi()
 class loggo(librun.loggi):
     def pesonai(self):
         # self.testing = True
 
         self.dicodi = {
-            "tribe"   : [],
-            "group"   : [],
+            "tribe" : [],
+            "group" : [],
+            "refer" : ""
         }
         self.sync()
 
@@ -66,13 +73,14 @@ class loggo(librun.loggi):
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
         gupoli = self.dicodi.get("group",[])
+        refesi = self.dicodi.get("refer",[])
 
         self.head()
 
         self.tagesi = Confi.get("result/stringtie")
         self.chkpaf()
 
-        self.frasi = "Stage 1 : Convert TSV/CTAB to JSON"
+        self.frasi = "==========\nStage 1 : Convert TSV/CTAB to JSON\n=========="
         self.printe()
 
         taboli = []
@@ -93,9 +101,11 @@ class loggo(librun.loggi):
 
         CoveJos = covejos()
         CoveJos.dicodi = { "files" : taboli ,"id" : "t_id" }
+        CoveJos.filasi = "libtab.tab2json"
+        CoveJos.prelogi = Confi.get("result/log")+"/exp15-sr-covejos-"
         CoveJos.actor()
 
-        self.frasi = "Stage 2 : Scanning for Variable Parts"
+        self.frasi = "==========\nStage 2 : Scanning for Variable Parts\n=========="
         self.printe()
 
         self.tunodi = {}
@@ -141,7 +151,7 @@ class loggo(librun.loggi):
                             break
         print(self.tunodi)
 
-        self.frasi = "Stage 3 : Merging"
+        self.frasi = "==========\nStage 3 : Merging\n=========="
         self.printe()
 
         self.resudi = {}
@@ -173,13 +183,36 @@ class loggo(librun.loggi):
         with open(resusi,"w") as resufi:
             json.dump(self.resudi,resufi,indent=4,sort_keys=True)
 
-        self.frasi = "Stage 4 : Convert JSON back to TSV/CTAB"
-        self.printe()
+        if refesi != "":
+            self.frasi = "==========\nStage 4 : Combine Description from GFF3\n=========="
+            self.printe()
+
+            GeneID = geneid()
+            GeneID.dicodi = {
+                "description" : refesi ,
+                "basement" : resusi ,
+                "if" : "gene_id",
+                "key" : "gene:",
+                "to" : "Description",
+            }
+            GeneID.filasi = "libsnm.geneid"
+            GeneID.prelogi = Confi.get("result/log")+"/exp15-sr-geneid-"
+            GeneID.actor()
+
+            self.frasi = "==========\nStage 5 : Convert JSON back to TSV/CTAB\n=========="
+            self.printe()
+        else:
+            self.frasi = "==========\nStage 4 : Convert JSON back to TSV/CTAB\n=========="
+            self.printe()
 
         CoveTab = covetab()
         CoveTab.dicodi = { "files" : [resusi] }
+        CoveTab.filasi = "libtab.json2tab"
+        CoveTab.prelogi = Confi.get("result/log")+"/exp15-sr-covetab-"
         CoveTab.actor()
 
+        self.printbr()
+        
         self.endin()
 
 Runni = loggo()
