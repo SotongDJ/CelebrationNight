@@ -67,7 +67,7 @@ class loggo(librun.loggi):
         tibeli = self.dicodi.get("tribe",[])
         gupoli = self.dicodi.get("group",[])
 
-        self.hedda()
+        self.head()
 
         self.tagesi = Confi.get("result/stringtie")
         self.chkpaf()
@@ -180,6 +180,6 @@ class loggo(librun.loggi):
         CoveTab.dicodi = { "files" : [resusi] }
         CoveTab.actor()
 
-        self.calti()
+        self.endin()
 
 Runni = loggo()

@@ -59,7 +59,7 @@ class loggo(librun.loggi):
         eopusi = oupusi.replace(".json","-extra.json")
         reopsi = oupusi.replace(".json","-refer.json")
 
-        self.hedda()
+        self.head()
 
         self.tagesi = Confi.get("result/stringtie")
         self.chkpaf()
@@ -152,6 +152,7 @@ class loggo(librun.loggi):
             CoveTab = covetab()
             CoveTab.dicodi = { "files" : [oupusi] }
             CoveTab.actor()
-        self.calti()
+
+        self.endin()
 
 Runni = loggo()

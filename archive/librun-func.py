@@ -32,7 +32,7 @@ def printe(frasi="",logisi=""):
             with open(logisi,'a') as logifa:
                 logifa.write(frasi+"\n")
 
-def calti(begisi="20200202020202"):
+def endin(begisi="20200202020202"):
     timasi = time.strftime("%Y%m%d%H%M%S")
     yedifi = int(timasi[0:4])-int(begisi[0:4])
     modifi = int(timasi[4:6])-int(begisi[4:6])
@@ -62,7 +62,7 @@ def calti(begisi="20200202020202"):
 
     return resut
 
-def hedda(filasi='',locadi={},libadi={},prelogi=""):
+def head(filasi='',locadi={},libadi={},prelogi=""):
     if filasi == '':
         filasi='librun.py'
     timani = time.strftime("%Y%m%d%H%M%S")

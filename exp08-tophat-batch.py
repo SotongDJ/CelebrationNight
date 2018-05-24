@@ -73,7 +73,7 @@ Runni = loggo()
 
 tibeli = Runni.dicodi.get("tribe",[])
 gupoli = Runni.dicodi.get("group",[])
-Runni.hedda()
+Runni.head()
 for tibe in tibeli:
     for gupo in gupoli:
         Runni.comali = []
@@ -112,4 +112,4 @@ for tibe in tibeli:
 
         # Runni.test()
         Runni.ranni()
-Runni.calti()
+Runni.endin()

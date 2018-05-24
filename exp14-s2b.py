@@ -78,7 +78,7 @@ class loggo(librun.loggi):
         gupoli = self.dicodi.get("group",[])
         cotosi = self.dicodi.get("control","")
 
-        self.hedda()
+        self.head()
 
         self.tagesi = Confi.get("result/stringtie")
         self.chkpaf()
@@ -138,6 +138,6 @@ class loggo(librun.loggi):
 
                     self.ranni()
 
-        self.calti()
+        self.endin()
 
 Runni = loggo()

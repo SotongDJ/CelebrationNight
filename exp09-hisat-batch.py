@@ -113,7 +113,7 @@ class loggo(librun.loggi):
             if argv == "testing":
                 self.testing = True
 
-        self.hedda()
+        self.head()
 
         self.tagesi = Confi.get("result/hisat")
         self.chkpaf()
@@ -211,6 +211,6 @@ class loggo(librun.loggi):
                         self.comali.append( self.jecosi + argvsi + ".sam" )
 
                         self.ranni()
-        self.calti()
+        self.endin()
 
 Runni = loggo()

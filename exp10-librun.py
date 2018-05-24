@@ -23,7 +23,7 @@ class runno(librun.loggi):
         self.prelogi = "temp/temp-"
 
     def actor(self):
-        self.hedda()
+        self.head()
 
         self.tagesi = "temp"
         self.chkpaf()
@@ -37,5 +37,5 @@ class runno(librun.loggi):
         self.frasi = "Ano.libadi:\n"+pprint.pformat(Ano.libadi,compact=True)
         self.printe()
 
-        self.calti()
+        self.endin()
 Ano = runno()
