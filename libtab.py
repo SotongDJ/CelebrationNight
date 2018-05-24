@@ -85,8 +85,7 @@ class tab2json(librun.loggi):
             self.tagesi = remasi
             remabo = self.chkfal()
 
-            if resubo or remabo :
-
+            if not resubo or not remabo :
                 lineli = open(socesi).read().splitlines()
 
                 namedi = {}
@@ -150,11 +149,12 @@ class tab2json(librun.loggi):
                             remadi.update({ colusi : almedi })
 
 
-                with open(resusi) as resufi:
+                with open(resusi,"w") as resufi:
                     json.dump(resudi,resufi,indent=4,sort_keys=True)
 
-                with open(remasi) as resufi:
-                    json.dump(remadi,resufi,indent=4,sort_keys=True)
+                with open(remasi,"w") as remafi:
+                    json.dump(remadi,remafi,indent=4,sort_keys=True)
+        self.endin()
 
 class json2tab(librun.loggi):
 
