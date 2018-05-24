@@ -60,18 +60,25 @@ class tab2json(librun.loggi):
 
         self.filasi = "libtab.py"
         self.libadi = {}
-        self.prelogi = "tmp/tmp-"
+        self.prelogi = "temp/tmp-"
 
     def actor(self):
         soceli = self.dicodi.get("files",[])
         tagesi = self.dicodi.get("id","")
         comusi = self.dicodi.get("column","")
-        print((soceli,tagesi,len(comusi)))
+        self.head()
+
+        self.frasi = pprint.pformat((soceli,tagesi,len(comusi)))
+        self.printimo()
 
         for socesi in soceli:
-            print(socesi)
-            resusi = socesi.split(".")[0]+".json"
-            remasi = socesi.split(".")[0]+"-column.json"
+            self.frasi = pprint.pformat(socesi)
+            self.printimo()
+
+            metali = socesi.split(".")
+            metali[-1] = "json"
+            resusi = ".".join(metali)
+            remasi = resusi.replace(".json","-column.json")
 
             self.tagesi = resusi
             resubo = self.chkfal()
@@ -86,7 +93,6 @@ class tab2json(librun.loggi):
 
                 resudi = {}
                 remadi = {}
-
 
                 if comusi != "":
                     metali = comusi.split("	")
@@ -166,12 +172,14 @@ class json2tab(librun.loggi):
 
         self.filasi = "libtab.py"
         self.libadi = {}
-        self.prelogi = "tmp/tmp-"
+        self.prelogi = "temp/tmp-"
 
     def actor(self):
         soceli = self.dicodi.get("files",[])
-        print(soceli)
         self.head()
+
+        self.frasi = pprint.pformat(soceli)
+        self.printimo()
 
         for socesi in soceli:
             socefi = open(socesi,'r')
