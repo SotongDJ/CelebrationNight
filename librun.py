@@ -96,28 +96,6 @@ class loggi:
 
         self.endin()
 
-    def redirek(self):
-        self.actor()
-
-    def sync(self):
-        for dico in tuple(self.dicodi.keys()):
-            if dico in tuple(self.argudi.keys()):
-                arti = type(self.dicodi.get(dico))
-                bati = type(self.argudi.get(dico))
-
-                siti = type(str())
-                liti = type(list())
-
-                if bati == liti: # if type(b) == list
-                    babo = len(self.argudi.get(dico)) > 0
-
-                if arti == bati: # if type(a) == type(b)
-                    self.dicodi.update({ dico : self.argudi.get(dico) })
-                elif bati == siti and arti == liti:
-                    self.dicodi.update({ dico : [self.argudi.get(dico)] })
-                elif bati == liti and arti == siti and babo:
-                    metali = sorted(self.argudi.get(dico))
-                    self.dicodi.update({ dico : metali[0] })
 
     def printe(self):
         print(self.frasi)
@@ -125,9 +103,9 @@ class loggi:
             logifa.write(self.frasi+"\n")
 
     def printbr(self):
-            print("  ")
-            with open(self.logisi,'a') as logifa:
-                logifa.write("  \n")
+        print("  ")
+        with open(self.logisi,'a') as logifa:
+            logifa.write("  \n")
 
     def maxlen(self):
         metali = []
@@ -149,6 +127,27 @@ class loggi:
             self.sepere[1] + self.sepere[2].join([hoursi,minusi,secosi]))
 
         return timaki
+
+    def __init__(self):
+        self.hebesi = helber
+        self.siarli = sys.argv
+        self.argudi = {}
+        self.begisi=""
+        self.logisi=""
+
+        self.timosi = ""
+        self.frasi = ""
+        self.sepere = ""
+        self.lisli = []
+
+        self.testing = False
+        self.dicodi = {}
+
+        self.Confi = libconfig.confi()
+        self.argv()
+        self.pesonai()
+
+        self.redirek()
 
     def argv(self):
         arbeli = []
@@ -230,7 +229,30 @@ class loggi:
                 metali.extend(self.argudi.get(meta))
                 self.argudi.update({ metasi : metali })
 
-    def hedda(self):
+    def sync(self):
+        for dico in tuple(self.dicodi.keys()):
+            if dico in tuple(self.argudi.keys()):
+                arti = type(self.dicodi.get(dico))
+                bati = type(self.argudi.get(dico))
+
+                siti = type(str())
+                liti = type(list())
+
+                if bati == liti: # if type(b) == list
+                    babo = len(self.argudi.get(dico)) > 0
+
+                if arti == bati: # if type(a) == type(b)
+                    self.dicodi.update({ dico : self.argudi.get(dico) })
+                elif bati == siti and arti == liti:
+                    self.dicodi.update({ dico : [self.argudi.get(dico)] })
+                elif bati == liti and arti == siti and babo:
+                    metali = sorted(self.argudi.get(dico))
+                    self.dicodi.update({ dico : metali[0] })
+
+    def redirek(self):
+        self.actor()
+
+    def head(self):
         self.begisi = time.strftime("%Y%m%d%H%M%S")
 
         self.timosi = time.strftime("%Y%m%d%H%M%S")
@@ -288,59 +310,6 @@ class loggi:
         self.frasi = ""
         self.sepere = ""
 
-    def chkpaf(self):
-        self.timosi = time.strftime("%Y%m%d%H%M%S")
-
-        tageli = [ "mkdir", "-v", self.tagesi ]
-
-        self.sepere = "- :"
-        runisi = "[" + self.timme() + "]"
-        comasi = " chkpaf: " + " ".join(tageli)
-
-        self.frasi = runisi + comasi
-        self.printe()
-
-        call(tageli, stdout=open(self.logisi, 'a'))
-
-        self.timosi = ""
-        self.frasi = ""
-        self.sepere = ""
-
-    def chkfal(self):
-        resut = False
-
-        self.timosi = time.strftime("%Y%m%d%H%M%S")
-        tageli = [ "head", "-v", self.tagesi ]
-        call(tageli, stdout=open("temp/head-"+self.timosi, 'a'))
-
-        self.sepere = "- :"
-        runisi = "[" + self.timme() + "]"
-        comasi = " chkfal: " + " ".join(tageli)
-        self.frasi = runisi + comasi
-        self.printe()
-
-        filafi = open("temp/head-"+self.timosi,"ab")
-        filafi.close()
-        if open("temp/head-"+self.timosi).read() != "":
-            resut = True
-
-        tageli = [ "rm", "-v", "temp/head-"+self.timosi ]
-        call(tageli, stdout=open("temp/head-"+self.timosi, 'a'))
-
-        self.timosi = time.strftime("%Y%m%d%H%M%S")
-        self.sepere = "- :"
-        runisi = "[" + self.timme() + "]"
-        comasi = "\n        chkfal: " + " ".join(tageli)
-        resusi = "\n        result: " + pprint.pformat(resut)
-        self.frasi = runisi + resusi + comasi
-        self.printe()
-
-        self.timosi = ""
-        self.frasi = ""
-        self.sepere = ""
-
-        return resut
-
     def ranni(self):
         self.timosi = time.strftime("%Y%m%d%H%M%S")
         self.sepere = "- :"
@@ -357,7 +326,7 @@ class loggi:
         self.frasi = ""
         self.sepere = ""
 
-    def calti(self):
+    def endin(self):
         self.timosi = time.strftime("%Y%m%d%H%M%S")
         yedifi = int(self.timosi[0:4])-int(self.begisi[0:4])
         modifi = int(self.timosi[4:6])-int(self.begisi[4:6])
@@ -393,24 +362,3 @@ class loggi:
 
         self.frasi = ""
         self.timosi = ""
-
-    def __init__(self):
-        self.hebesi = helber
-        self.siarli = sys.argv
-        self.argudi = {}
-        self.begisi=""
-        self.logisi=""
-
-        self.timosi = ""
-        self.frasi = ""
-        self.sepere = ""
-        self.lisli = []
-
-        self.testing = False
-        self.dicodi = {}
-
-        self.Confi = libconfig.confi()
-        self.argv()
-        self.pesonai()
-
-        self.redirek()
