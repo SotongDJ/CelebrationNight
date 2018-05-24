@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import librun, libconfig, libtab
+import librun, libconfig, libtab, libsnm
 import time, json
 global helber
 helber="""
