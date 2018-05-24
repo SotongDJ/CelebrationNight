@@ -96,6 +96,13 @@ class loggi:
 
         self.endin()
 
+    def printimo(self):
+        self.timosi = time.strftime("%Y%m%d%H%M%S")
+        self.sepere = "- :"
+        timisi = "[" + self.timme() + "] "
+        print(timisi+self.frasi)
+        with open(self.logisi,'a') as logifa:
+            logifa.write(timisi+self.frasi+"\n")
 
     def printe(self):
         print(self.frasi)
@@ -127,6 +134,49 @@ class loggi:
             self.sepere[1] + self.sepere[2].join([hoursi,minusi,secosi]))
 
         return timaki
+
+    def chkpaf(self):
+        tageli = [ "mkdir", "-v", self.tagesi ]
+        comasi = "\n chkpaf: " + " ".join(tageli)
+
+        self.frasi = comasi
+        self.printimo()
+
+        call(tageli, stdout=open(self.logisi, 'a'))
+
+        self.timosi = ""
+        self.frasi = ""
+        self.sepere = ""
+
+    def chkfal(self):
+        resut = False
+
+        self.timosi = time.strftime("%Y%m%d%H%M%S")
+        tageli = [ "head", "-v", self.tagesi ]
+        call(tageli, stdout=open("temp/head-"+self.timosi, 'a'))
+
+        comasi = "\n        chkfal: " + " ".join(tageli)
+        self.frasi = comasi
+        self.printimo()
+
+        filafi = open("temp/head-"+self.timosi,"ab")
+        filafi.close()
+        if open("temp/head-"+self.timosi).read() != "":
+            resut = True
+
+        tageli = [ "rm", "-v", "temp/head-"+self.timosi ]
+        call(tageli, stdout=open("temp/head-"+self.timosi, 'a'))
+
+        comasi = "        chkfal: " + " ".join(tageli)
+        resusi = "\n        result: " + pprint.pformat(resut)
+        self.frasi = comasi + resusi
+        self.printe()
+
+        self.timosi = ""
+        self.frasi = ""
+        self.sepere = ""
+
+        return resut
 
     def __init__(self):
         self.hebesi = helber
@@ -258,8 +308,8 @@ class loggi:
         self.timosi = time.strftime("%Y%m%d%H%M%S")
 
         self.sepere = "- :"
-        runninlog = ("RUN "+self.filasi+", begin at ["
-            + self.timme() +"]\n~~~~~~~~~~~~" )
+        runninlog = ("==========\nRUN "+self.filasi+", begin at ["
+            + self.timme() +"]\n==========" )
 
         self.locadi = {
             'Input' : self.siarli,
@@ -355,9 +405,10 @@ class loggi:
             )
 
         self.sepere = "- :"
-        runisi = "[" + self.timme() + "] Total time: "
+        runisi = ("==========\n"+self.filasi+", finished on ["
+            + self.timme() +"]\n     Total time: "+resut+"\n==========" )
 
-        self.frasi = runisi + resut
+        self.frasi = runisi
         self.printe()
 
         self.frasi = ""
