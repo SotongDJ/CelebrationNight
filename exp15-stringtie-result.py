@@ -315,9 +315,18 @@ class loggo(librun.loggi):
             self.printe()
 
         CoveTab = covetab()
-        CoveTab.dicodi = { "files" : [adresusi,baresusi] }
         CoveTab.filasi = "libtab.json2tab"
         CoveTab.prelogi = Confi.get("result/log")+"/exp15-sr-covetab-"
+        CoveTab.dicodi = {
+            "files" : [adresusi],
+            "column" : Confi.getnoli("libtab/case1")
+        }
+        CoveTab.actor()
+
+        CoveTab.dicodi = {
+            "files" : [baresusi],
+            "column" : Confi.getnoli("libtab/case2")
+        }
         CoveTab.actor()
 
         self.printbr()
