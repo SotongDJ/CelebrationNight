@@ -162,7 +162,8 @@ class json2tab(librun.loggi):
         # self.testing = True
 
         self.dicodi = {
-            "files" : []
+            "files" : [],
+            "column" : []
         }
         self.sync()
 
@@ -176,6 +177,7 @@ class json2tab(librun.loggi):
 
     def actor(self):
         soceli = self.dicodi.get("files",[])
+        coluli = self.dicodi.get("column",[])
         self.head()
 
         self.frasi = pprint.pformat(soceli)
@@ -185,13 +187,16 @@ class json2tab(librun.loggi):
             socefi = open(socesi,'r')
             soceso = json.load(socefi)
 
-            coluse = set()
-            metadi = dict()
-            for id in list(soceso.keys()):
-                metadi = soceso.get(id,{})
-                coluse.update(set(metadi.keys()))
+            if coluli == []:
+                coluse = set()
+                metadi = dict()
+                for id in list(soceso.keys()):
+                    metadi = soceso.get(id,{})
+                    coluse.update(set(metadi.keys()))
+                colutu = tuple(sorted(coluse))
+            else:
+                colutu = tuple(coluli)
 
-            colutu = tuple(sorted(coluse))
             with open(socesi.replace(".json",".tsv"),"w") as resufi:
                 resufi.write("id"+"	"+"	".join(colutu)+"\n")
                 for id in list(soceso.keys()):

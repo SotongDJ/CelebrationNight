@@ -10,6 +10,10 @@ class confi:
         resut = self.confi.get(wodsi)
         return resut
 
+    def getnoli(self,wodsi):
+        resut = self.confi.get(wodsi,[])
+        return resut
+
     def getpaf(self,wodli):
         resut = []
         for wodsi in wodli:
