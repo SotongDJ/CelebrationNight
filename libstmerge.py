@@ -73,7 +73,7 @@ class loggo(librun.loggi):
         self.adrfli = [ "-G", Confi.get("refer/annotate") ]
 
 
-        self.filasi = "exp13-stringtie-merge"
+        self.filasi = "library-stringtie-merge"
         self.libadi = {}
         self.prelogi = Confi.get("result/log")+"/exp13-stringtie-merge-"
 

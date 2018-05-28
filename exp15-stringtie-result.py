@@ -99,17 +99,41 @@ class loggo(librun.loggi):
                 if cetabo and not jasobo:
                     taboli.append(socesi)
 
-        CoveJos = covejos()
-        CoveJos.dicodi = { "files" : taboli ,"id" : "t_id" }
-        CoveJos.filasi = "libtab.tab2json"
-        CoveJos.prelogi = Confi.get("result/log")+"/exp15-sr-covejos-"
-        CoveJos.actor()
+        if taboli != []:
+            CoveJos = covejos()
+            CoveJos.dicodi = { "files" : taboli ,"id" : "t_id" }
+            CoveJos.filasi = "libtab.tab2json"
+            CoveJos.prelogi = Confi.get("result/log")+"/exp15-sr-covejos-"
+            CoveJos.actor()
+
+        taboli = []
+        for tibe in tibeli:
+            for gupo in gupoli:
+                socesi = (
+                    Confi.get("result/stringtie") + "/" +
+                    Confi.get("data/prefix/"+tibe) + "-" +
+                    gupo + "-gene.tsv"
+                )
+                self.tagesi = socesi
+                cetabo = self.chkfal()
+                self.tagesi = socesi.replace(".tsv",".json")
+                jasobo = self.chkfal()
+
+                if cetabo and not jasobo:
+                    taboli.append(socesi)
+
+        if taboli != []:
+            CoveJos = covejos()
+            CoveJos.dicodi = { "files" : taboli ,"id" : "Gene ID" }
+            CoveJos.filasi = "libtab.tab2json"
+            CoveJos.prelogi = Confi.get("result/log")+"/exp15-sr-covejos-"
+            CoveJos.actor()
 
         self.frasi = "==========\nStage 2 : Scanning for Variable Parts\n=========="
         self.printe()
 
-        self.tunodi = {}
-        self.refedi = {}
+        self.adtunodi = {}
+        self.adrefedi = {}
         for tibe in tibeli:
             for gupo in gupoli:
                 socesi = (
@@ -121,19 +145,19 @@ class loggo(librun.loggi):
                 soceso = json.load(socefi)
 
                 numein = 0
-                if self.refedi != {}:
+                if self.adrefedi != {}:
                     for id in list(soceso.keys()):
                         admedi = soceso.get(id)
-                        bamedi = self.refedi.get(id)
+                        bamedi = self.adrefedi.get(id)
                         numein = numein + 1
                         if numein <= 10:
                             for colu in list(soceso.get(id).keys()):
                                 adsi = admedi.get(colu)
                                 basi = bamedi.get(colu)
                                 if adsi == basi:
-                                    self.tunodi.update({ colu : False })
+                                    self.adtunodi.update({ colu : False })
                                 else:
-                                    self.tunodi.update({ colu : True })
+                                    self.adtunodi.update({ colu : True })
                         else:
                             break
                 else:
@@ -146,15 +170,58 @@ class loggo(librun.loggi):
                                 basi = admedi.get(colu)
                                 bamedi.update({ colu : basi})
 
-                            self.refedi.update({ id : bamedi})
+                            self.adrefedi.update({ id : bamedi})
                         else:
                             break
-        print(self.tunodi)
+        print(self.adtunodi)
+
+        self.batunodi = {}
+        self.barefedi = {}
+        for tibe in tibeli:
+            for gupo in gupoli:
+                socesi = (
+                    Confi.get("result/stringtie") + "/" +
+                    Confi.get("data/prefix/"+tibe) + "-" +
+                    gupo + "-gene.json"
+                )
+                socefi = open(socesi,"r")
+                soceso = json.load(socefi)
+
+                numein = 0
+                if self.barefedi != {}:
+                    for id in list(soceso.keys()):
+                        admedi = soceso.get(id)
+                        bamedi = self.barefedi.get(id)
+                        numein = numein + 1
+                        if numein <= 10:
+                            for colu in list(soceso.get(id).keys()):
+                                adsi = admedi.get(colu)
+                                basi = bamedi.get(colu)
+                                if adsi == basi:
+                                    self.batunodi.update({ colu : False })
+                                else:
+                                    self.batunodi.update({ colu : True })
+                        else:
+                            break
+                else:
+                    for id in list(soceso.keys()):
+                        admedi = soceso.get(id)
+                        bamedi = {}
+                        numein = numein + 1
+                        if numein <= 10:
+                            for colu in list(soceso.get(id).keys()):
+                                basi = admedi.get(colu)
+                                bamedi.update({ colu : basi})
+
+                            self.barefedi.update({ id : bamedi})
+                        else:
+                            break
+        print(self.batunodi)
 
         self.frasi = "==========\nStage 3 : Merging\n=========="
         self.printe()
 
-        self.resudi = {}
+        self.adresudi = {}
         for tibe in tibeli:
             for gupo in gupoli:
                 socesi = (
@@ -168,20 +235,49 @@ class loggo(librun.loggi):
                 numein = 0
                 for id in list(soceso.keys()):
                     somedi = soceso.get(id)
-                    remedi = self.resudi.get(id,{})
+                    remedi = self.adresudi.get(id,{})
                     for colu in list(somedi.keys()):
-                        if self.tunodi.get(colu,False):
+                        if self.adtunodi.get(colu,False):
                             remedi.update({ colu+"("+gupo+")" : somedi.get(colu) })
                         elif remedi.get(colu,"") == "":
                             remedi.update({ colu : somedi.get(colu) })
-                    self.resudi.update({ id : remedi })
+                    self.adresudi.update({ id : remedi })
 
-        resusi = (
+        adresusi = (
             Confi.get("result/stringtie") + "/" +
-            Confi.get("data/prefix/"+tibe) + "-result.json"
+            Confi.get("data/prefix/"+tibe) + "-trsp-result.json"
         )
-        with open(resusi,"w") as resufi:
-            json.dump(self.resudi,resufi,indent=4,sort_keys=True)
+        with open(adresusi,"w") as adresufi:
+            json.dump(self.adresudi,adresufi,indent=4,sort_keys=True)
+
+        self.baresudi = {}
+        for tibe in tibeli:
+            for gupo in gupoli:
+                socesi = (
+                    Confi.get("result/stringtie") + "/" +
+                    Confi.get("data/prefix/"+tibe) + "-" +
+                    gupo + "-gene.json"
+                )
+                socefi = open(socesi,"r")
+                soceso = json.load(socefi)
+
+                numein = 0
+                for id in list(soceso.keys()):
+                    somedi = soceso.get(id)
+                    remedi = self.baresudi.get(id,{})
+                    for colu in list(somedi.keys()):
+                        if self.batunodi.get(colu,False):
+                            remedi.update({ colu+"("+gupo+")" : somedi.get(colu) })
+                        elif remedi.get(colu,"") == "":
+                            remedi.update({ colu : somedi.get(colu) })
+                    self.baresudi.update({ id : remedi })
+
+        baresusi = (
+            Confi.get("result/stringtie") + "/" +
+            Confi.get("data/prefix/"+tibe) + "-gene-result.json"
+        )
+        with open(baresusi,"w") as baresufi:
+            json.dump(self.baresudi,baresufi,indent=4,sort_keys=True)
 
         if refesi != "":
             self.frasi = "==========\nStage 4 : Combine Description from GFF3\n=========="
@@ -190,8 +286,19 @@ class loggo(librun.loggi):
             GeneID = geneid()
             GeneID.dicodi = {
                 "description" : refesi ,
-                "basement" : resusi ,
+                "basement" : adresusi ,
                 "if" : "gene_id",
+                "key" : "gene:",
+                "to" : "Description",
+            }
+            GeneID.filasi = "libsnm.geneid"
+            GeneID.prelogi = Confi.get("result/log")+"/exp15-sr-geneid-"
+            GeneID.actor()
+
+            GeneID.dicodi = {
+                "description" : refesi ,
+                "basement" : baresusi ,
+                "if" : "Gene ID",
                 "key" : "gene:",
                 "to" : "Description",
             }
@@ -206,13 +313,13 @@ class loggo(librun.loggi):
             self.printe()
 
         CoveTab = covetab()
-        CoveTab.dicodi = { "files" : [resusi] }
+        CoveTab.dicodi = { "files" : [adresusi,baresusi] }
         CoveTab.filasi = "libtab.json2tab"
         CoveTab.prelogi = Confi.get("result/log")+"/exp15-sr-covetab-"
         CoveTab.actor()
 
         self.printbr()
-        
+
         self.endin()
 
 Runni = loggo()

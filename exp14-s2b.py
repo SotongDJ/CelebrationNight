@@ -67,7 +67,7 @@ class loggo(librun.loggi):
         self.adphli = [ "-p", Confi.get("run/thread")]
         self.adfoli = [ "-b" ]
         self.adotli = [ "-o" ]
-
+        self.adagli = [ "-A" ]
 
         self.filasi = "exp14-stringtie2ballgown"
         self.libadi = {}
@@ -135,6 +135,14 @@ class loggo(librun.loggi):
                         gupo + "-s2b.gtf"
                     )
                     self.comali.append(adresi)
+
+                    self.comali.extend(self.adagli)
+                    adgesi = (
+                        Confi.get("result/stringtie") + "/" +
+                        Confi.get("data/prefix/"+tibe) + "-" +
+                        gupo + "-gene.tsv"
+                    )
+                    self.comali.append(adgesi)
 
                     self.ranni()
 

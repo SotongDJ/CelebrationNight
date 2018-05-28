@@ -72,7 +72,7 @@ class geneid(librun.loggi):
                 metadi = soceso.get(id)
                 if keyosi in metadi.get(ifasi):
                     refesi = metadi.get(ifasi).replace(keyosi,"")
-                    resusi = addaso.get(ifasi).get(refesi,"N/A")
+                    resusi = addaso.get(ifasi,{}).get(refesi,"N/A")
                     metadi.update({ tonsi : resusi })
                     soceso.update({ id : metadi })
                     blanbo = True
