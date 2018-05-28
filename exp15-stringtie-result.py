@@ -289,6 +289,7 @@ class loggo(librun.loggi):
                 "basement" : adresusi ,
                 "if" : "gene_id",
                 "key" : "gene:",
+                "from" : "gene_id",
                 "to" : "Description",
             }
             GeneID.filasi = "libsnm.geneid"
@@ -300,6 +301,7 @@ class loggo(librun.loggi):
                 "basement" : baresusi ,
                 "if" : "Gene ID",
                 "key" : "gene:",
+                "from" : "gene_id",
                 "to" : "Description",
             }
             GeneID.filasi = "libsnm.geneid"

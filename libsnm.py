@@ -35,6 +35,7 @@ class geneid(librun.loggi):
             "basement" : "" ,
             "if" : "",
             "key" : "",
+            "from" : "",
             "to" : "",
         }
         self.sync()
@@ -52,6 +53,7 @@ class geneid(librun.loggi):
         socesi = self.dicodi.get("basement","")
         ifasi = self.dicodi.get("if","")
         keyosi = self.dicodi.get("key","")
+        frosi = self.dicodi.get("from","")
         tonsi = self.dicodi.get("to","")
 
         self.head()
@@ -72,7 +74,7 @@ class geneid(librun.loggi):
                 metadi = soceso.get(id)
                 if keyosi in metadi.get(ifasi):
                     refesi = metadi.get(ifasi).replace(keyosi,"")
-                    resusi = addaso.get(ifasi,{}).get(refesi,"N/A")
+                    resusi = addaso.get(frosi).get(refesi,"N/A")
                     metadi.update({ tonsi : resusi })
                     soceso.update({ id : metadi })
                     blanbo = True
