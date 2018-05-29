@@ -55,11 +55,11 @@ class runno(librun.loggi):
 
         self.ranni()
 
-        self.frasi = "Ano.dicodi:\n"+pprint.pformat(Ano.dicodi,compact=True)
+        self.frasi = "Ano.dicodi:\n"+pprint.pformat(self.dicodi,compact=True)
         self.printe()
-        self.frasi = "Ano.locadi:\n"+pprint.pformat(Ano.locadi,compact=True)
+        self.frasi = "Ano.locadi:\n"+pprint.pformat(self.locadi,compact=True)
         self.printe()
-        self.frasi = "Ano.libadi:\n"+pprint.pformat(Ano.libadi,compact=True)
+        self.frasi = "Ano.libadi:\n"+pprint.pformat(self.libadi,compact=True)
         self.printe()
 
         self.endin()
