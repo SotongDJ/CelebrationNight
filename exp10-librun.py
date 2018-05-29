@@ -29,7 +29,8 @@ class runno(librun.loggi):
 
     def pesonai(self):
         # self.testing = True
-
+        self.helb = helber
+        
         self.dicodi = {
             "hello" : ""
         }

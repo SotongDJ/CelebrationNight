@@ -86,7 +86,8 @@ class loggi:
 
     def pesonai(self):
         # self.testing = True
-
+        self.helb = helber
+        
         self.dicodi = {
             "hello" : ""
         }
@@ -311,7 +312,10 @@ class loggi:
                     self.dicodi.update({ dico : metali[0] })
 
     def redirek(self):
-        self.actor()
+        if self.argudi.get('argv',[]) == ['help']:
+            print(self.helb)
+        else:
+            self.actor()
 
     def head(self):
         self.begisi = time.strftime("%Y%m%d%H%M%S")
