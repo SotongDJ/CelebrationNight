@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import pprint, time, json, sys
-import libconfig
 from subprocess import call
 global helber
 helber="""
@@ -62,6 +61,25 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
+class dicto:
+    def input(self,socedi):
+        if type(socedi) == type(dict())
+            self.cotedi.update(socedi)
+
+    def list(self):
+        return list(self.cotedi.keys())
+
+    def siget(self,askasi):
+        return self.cotedi.get(askasi,"")
+
+    def liget(self,askasi):
+        return self.cotedi.get(askasi,[])
+
+    def vomit(self):
+        return self.cotedi
+
+    def __init__(self):
+        self.cotedi = {}
 
 class loggi:
 
@@ -81,6 +99,7 @@ class loggi:
         self.libadi = {
             "prefix/wawa" : "haha/wulala"
         }
+        self.Synom.input({})
         self.prelogi = "temp/temp-"
 
     def actor(self):
@@ -192,8 +211,7 @@ class loggi:
 
         self.testing = False
         self.dicodi = {}
-
-        self.Confi = libconfig.confi()
+        self.Synom = dicto()
         self.argv()
         self.pesonai()
 
@@ -258,25 +276,17 @@ class loggi:
             arbeli.extend(self.siarli[1:len(self.siarli)])
         self.argudi.update({ "argv" : list(set(arbeli)) })
 
-        metatu = tuple(self.argudi.keys())
-        metadi = {}
-        for argu in metatu:
-            if len(argu) == 1 and self.Confi.check("synom/"+argu):
-                metali = list(self.Confi.confi.keys())
-                for meta in metali:
-                    metasi = ""
-                    if "synom/" in meta:
-                        metasi = self.Confi.confi.get(meta)
-                        metadi.update({
-                            meta.replace("synom/","") : metasi
-                        })
+        argutu = tuple(self.argudi.keys())
+        sinodi = {}
+        for argu in argutu:
+            if len(argu) == 1 and self.Synom.siget(argu) != "":
+                sinodi.update({ argu : self.Synom.siget(argu) })
 
-        for meta in metatu:
-            if meta in list(metadi.keys()):
-                metali = []
-                metasi = metadi.get(meta)
+        for argu in argutu:
+            if argu in list(sinodi.keys()):
+                metasi = sinodi.get(argu)
                 metali = self.argudi.get(metasi,[])
-                metali.extend(self.argudi.get(meta))
+                metali.extend(self.argudi.get(argu))
                 self.argudi.update({ metasi : metali })
 
     def sync(self):
