@@ -1,7 +1,30 @@
 #!/usr/bin/env python3
 import sys, pprint
 import librun
+global helber
+helber="""
+   --- README of exp10-librun ---
+ Title:
+    Showcase of librun
 
+ Usage:
+    python3 exp10-librun.py --hello=waha -h a ba -t ca -hello mow
+
+   --- README ---
+"""
+"""
+ Postfix of variables:
+  -si: String
+   -ni: alternative/second string for same Usage
+   -fi: string for open()
+  -ho: String(that store dir path)
+  -ti: Intiger/Float
+  -li: List
+  -tu: Tuple
+  -di: Dictionary
+  -fa: File (with open())
+  -so: JSON
+"""
 class runno(librun.loggi):
 
     def pesonai(self):

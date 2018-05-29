@@ -14,7 +14,8 @@ helber="""
     Exp16 required libtab
 
    --- README ---
-""""""
+"""
+"""
  Postfix of variables:
   -si: String
    -ni: alternative/second string for same Usage

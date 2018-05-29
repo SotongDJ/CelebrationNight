@@ -30,7 +30,8 @@ helber="""
     <GROUP> don't allowed spacing
 
    --- README ---
-""""""
+"""
+"""
  Postfix of variables:
   -si: String
    -ni: alternative/second string for same Usage

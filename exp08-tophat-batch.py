@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import librun, libconfig, sys
+global helber
 helber="""
    --- README of exp08-tophat-batch ---
   Title:
@@ -30,7 +31,8 @@ helber="""
     <GROUP> don't allowed spacing
 
    --- README ---
-""""""
+"""
+"""
  Postfix of variables:
   -si: String
    -ni: alternative/second string for same Usage

@@ -48,7 +48,8 @@ helber="""
     Ano.actor()
 
    --- README ---
-""""""
+"""
+"""
  Postfix of variables:
   -si: String
    -ni: alternative/second string for same Usage
