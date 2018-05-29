@@ -44,9 +44,8 @@ class loggo(librun.loggi):
         self.tagesi = ""
 
         self.comali = []
-        self.filasi = "exp15-stringtie-result"
-        self.libadi = {}
-        self.prelogi = Confi.siget("result/log")+"/exp15-sr-"
+        self.filasi = "exp16-gff-extract"
+        self.prelogi = Confi.siget("result/log")+"/exp16-ge-"
 
     def actor(self):
         self.inpuli = self.dicodi.get("input",[])
