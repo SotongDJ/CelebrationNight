@@ -8,10 +8,7 @@ helber="""
 
   Usage:
     import libstmerge
-    class marge(libstmerge.loggo):
-        def redirek(self):
-            """"""
-    Marge = marge()
+    Marge = libstmerge.loggo()
     Marge.testing = self.testing
     Marge.prelogi = < Log File Path>
     Marge.dicodi = {
@@ -39,7 +36,8 @@ helber="""
     <GROUP> don't allowed spacing
 
    --- README ---
-""""""
+"""
+"""
  Postfix of variables:
   -si: String
    -ni: alternative/second string for same Usage
@@ -54,6 +52,8 @@ helber="""
 """
 Confi = libconfig.confi()
 class loggo(librun.loggi):
+    def redirek(self):
+        """"""
     def pesonai(self):
         # self.testing = True
 

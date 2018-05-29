@@ -9,10 +9,21 @@ helber="""
 
   Usage:
     import libsnm
-
+    GeneID = libsnm.geneid()
+    GeneID.dicodi = {
+        "description" : [file of gene description] ,
+        "basement" : [result file] ,
+        "if" : [column name of gene id in result file],
+        "key" : [header of gene id, "gene:"],
+        "from" : [column name of gene id in gene description file],
+        "to" : [column name of description],
+    }
+    GeneID.filasi = "libsnm.geneid"
+    GeneID.actor()
 
    --- README ---
-""""""
+"""
+"""
  Postfix of variables:
   -si: String
    -ni: alternative/second string for same Usage
@@ -26,7 +37,8 @@ helber="""
   -so: JSON
 """
 class geneid(librun.loggi):
-
+    def redirek(self):
+        """"""
     def pesonai(self):
         # self.testing = True
 

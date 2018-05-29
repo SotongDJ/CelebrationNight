@@ -28,12 +28,6 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-class covejos(libtab.tab2json):
-    def redirek(self):
-        """"""
-class covetab(libtab.json2tab):
-    def redirek(self):
-        """"""
 Confi = libconfig.confi()
 class loggo(librun.loggi):
     def pesonai(self):
@@ -74,7 +68,7 @@ class loggo(librun.loggi):
             "score	srefed	phase	Attributes"
         )
 
-        CoveJos = covejos()
+        CoveJos = libtab.tab2json()
         CoveJos.dicodi = { "files" : self.inpuli ,"id" : "" ,"column":comusi}
         CoveJos.actor()
 
@@ -189,7 +183,7 @@ class loggo(librun.loggi):
             self.frasi = "==========\nStage 6 : Convert JSON back to TSV/CTAB\n=========="
             self.printe()
 
-            CoveTab = covetab()
+            CoveTab = libtab.json2tab()
             CoveTab.dicodi = { "files" : [self.oupusi] }
             CoveTab.actor()
 

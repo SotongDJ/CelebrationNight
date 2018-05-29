@@ -10,10 +10,7 @@ helber="""
   Usage:
     import libtab
 
-    class covejos(libtab.tab2json):
-        def redirek(self):
-            """"""
-    CoveJos = covejos()
+    CoveJos = libtab.tab2json()
     CoveJos.dicodi = {
         "files" : [<INPUT>,<INPUT>......] ,
         "id" : "" ,
@@ -21,15 +18,13 @@ helber="""
     }
     CoveJos.actor()
 
-    class covetab(libtab.json2tab):
-        def redirek(self):
-            """"""
-    CoveTab = covetab()
+    CoveTab = libtab.json2tab()
     CoveTab.dicodi = { "files" : [<INPUT>,<INPUT>......] }
     CoveTab.actor()
 
    --- README ---
-""""""
+"""
+"""
  Postfix of variables:
   -si: String
    -ni: alternative/second string for same Usage
@@ -43,7 +38,8 @@ helber="""
   -so: JSON
 """
 class tab2json(librun.loggi):
-
+    def redirek(self):
+        """"""
     def pesonai(self):
         # self.testing = True
 
@@ -157,6 +153,8 @@ class tab2json(librun.loggi):
         self.endin()
 
 class json2tab(librun.loggi):
+    def redirek(self):
+        """"""
 
     def pesonai(self):
         # self.testing = True

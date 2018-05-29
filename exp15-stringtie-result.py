@@ -43,15 +43,6 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-class covejos(libtab.tab2json):
-    def redirek(self):
-        """"""
-class covetab(libtab.json2tab):
-    def redirek(self):
-        """"""
-class geneid(libsnm.geneid):
-    def redirek(self):
-        """"""
 Confi = libconfig.confi()
 class loggo(librun.loggi):
     def pesonai(self):
@@ -102,7 +93,7 @@ class loggo(librun.loggi):
                     taboli.append(socesi)
 
         if taboli != []:
-            CoveJos = covejos()
+            CoveJos = libtab.tab2json()
             CoveJos.dicodi = { "files" : taboli ,"id" : "t_id" }
             CoveJos.filasi = "libtab.tab2json"
             CoveJos.prelogi = Confi.siget("result/log")+"/exp15-sr-covejos-"
@@ -125,7 +116,7 @@ class loggo(librun.loggi):
                     taboli.append(socesi)
 
         if taboli != []:
-            CoveJos = covejos()
+            CoveJos = libtab.tab2json()
             CoveJos.dicodi = { "files" : taboli ,"id" : "Gene ID" }
             CoveJos.filasi = "libtab.tab2json"
             CoveJos.prelogi = Confi.siget("result/log")+"/exp15-sr-covejos-"
@@ -285,7 +276,7 @@ class loggo(librun.loggi):
             self.frasi = "==========\nStage 4 : Combine Description from GFF3\n=========="
             self.printe()
 
-            GeneID = geneid()
+            GeneID = libsnm.geneid()
             GeneID.dicodi = {
                 "description" : refesi ,
                 "basement" : adresusi ,
@@ -316,7 +307,7 @@ class loggo(librun.loggi):
             self.frasi = "==========\nStage 4 : Convert JSON back to TSV/CTAB\n=========="
             self.printe()
 
-        CoveTab = covetab()
+        CoveTab = libtab.json2tab()
         CoveTab.filasi = "libtab.json2tab"
         CoveTab.prelogi = Confi.siget("result/log")+"/exp15-sr-covetab-"
         CoveTab.dicodi = {
