@@ -87,7 +87,7 @@ class loggi:
     def pesonai(self):
         # self.testing = True
         self.helb = helber
-        
+
         self.dicodi = {
             "hello" : ""
         }
@@ -345,7 +345,7 @@ class loggi:
                 pprint.pformat(self.locadi.get(loca),compact=True,width=150))
 
         if self.libadi != {}:
-            configlog = ["FROM config.json"]
+            configlog = ["\nFROM config.json"]
 
             self.lisli = []
             self.lisli = list(self.libadi.keys())
@@ -357,7 +357,7 @@ class loggi:
                     semein = 0
 
                 configlog.append("    \"" + liba + "\""+ (" "*semein) +": "+
-                    pprint.pformat(self.libadi.get(liba)))
+                    pprint.pformat(self.libadi.get(liba),compact=True,width=150))
 
         else:
             configlog = []
@@ -368,7 +368,7 @@ class loggi:
         metali = [runninlog]
         metali.extend(scriptlog)
         metali.extend(configlog)
-        self.frasi = "\n".join(metali)
+        self.frasi = "\n".join(metali)+"\n"
         self.printe()
 
         self.timosi = ""

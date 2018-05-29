@@ -45,6 +45,9 @@ class loggo(librun.loggi):
 
         self.comali = []
         self.filasi = "exp16-gff-extract"
+        self.libadi = {
+            "result/stringtie" : Confi.siget("result/stringtie")
+        }
         self.prelogi = Confi.siget("result/log")+"/exp16-ge-"
 
     def actor(self):
@@ -56,7 +59,7 @@ class loggo(librun.loggi):
 
         self.head()
 
-        self.tagesi = Confi.siget("result/stringtie")
+        self.tagesi = self.libadi.get("result/stringtie")
         self.chkpaf()
 
         self.printbr()
