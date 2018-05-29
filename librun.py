@@ -64,7 +64,7 @@ helber="""
 """
 class dicto:
     def input(self,socedi):
-        if type(socedi) == type(dict())
+        if type(socedi) == type(dict()):
             self.cotedi.update(socedi)
 
     def list(self):
@@ -277,6 +277,7 @@ class loggi:
             arbeli.extend(self.siarli[1:len(self.siarli)])
         self.argudi.update({ "argv" : list(set(arbeli)) })
 
+    def sync(self):
         argutu = tuple(self.argudi.keys())
         sinodi = {}
         for argu in argutu:
@@ -290,7 +291,6 @@ class loggi:
                 metali.extend(self.argudi.get(argu))
                 self.argudi.update({ metasi : metali })
 
-    def sync(self):
         for dico in tuple(self.dicodi.keys()):
             if dico in tuple(self.argudi.keys()):
                 arti = type(self.dicodi.get(dico))
