@@ -51,6 +51,7 @@ class loggo(librun.loggi):
             "tribe"   : [],
             "group"   : []
         }
+        self.Synom.input(Confi.diget("synom"))
         self.sync()
 
         self.tagesi = ""

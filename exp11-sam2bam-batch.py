@@ -52,6 +52,7 @@ class loggo(librun.loggi):
             "group" : [],
             "method" : []
         }
+        self.Synom.input(Confi.diget("synom"))
         self.sync()
 
         self.tagesi = ""

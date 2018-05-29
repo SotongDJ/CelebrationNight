@@ -49,6 +49,10 @@ class confi:
         resut = self.confi.get(wodsi,[])
         return resut
 
+    def diget(self,wodsi):
+        resut = self.confi.get(wodsi,{})
+        return resut
+
     def hoget(self,wodli):
         resut = []
         for wodsi in wodli:

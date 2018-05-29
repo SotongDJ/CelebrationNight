@@ -33,6 +33,7 @@ class runno(librun.loggi):
         self.dicodi = {
             "hello" : ""
         }
+        self.Synom.input({"h":"hello"})
         self.sync()
 
         self.tagesi = ""

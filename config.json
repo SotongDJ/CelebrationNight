@@ -23,5 +23,17 @@
         "Overrepresented sequences",
         "Adapter Content"
     ],
+    "run/phred": "33",
+    "run/thread": "4",
+    "synom": {
+        "c": "control",
+        "g": "group",
+        "i": "input",
+        "m": "method",
+        "o": "output",
+        "p": "thread",
+        "r": "refer",
+        "t": "tribe"
+    },
     "trimmo/adapter": "bin/trimmomatic/adapters"
 }
