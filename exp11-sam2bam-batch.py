@@ -65,7 +65,7 @@ class loggo(librun.loggi):
 
         self.filasi = "exp11-sam2bam-batch"
         self.libadi = {}
-        self.prelogi = Confi.get("result/log")+"/exp11-sam2bam-batch-"
+        self.prelogi = Confi.siget("result/log")+"/exp11-sam2bam-batch-"
         # self.prelogi = "temp/temp-"
 
     def actor(self):
@@ -74,13 +74,13 @@ class loggo(librun.loggi):
 
         self.head()
 
-        self.tagesi = Confi.get("result/hisat")
+        self.tagesi = Confi.siget("result/hisat")
         self.chkpaf()
         for tibe in tibeli:
             for gupo in gupoli:
                 self.filesi = (
-                    Confi.get("result/hisat") + "/" +
-                    Confi.get("data/prefix/"+tibe) + "-" +
+                    Confi.siget("result/hisat") + "/" +
+                    Confi.siget("data/prefix/"+tibe) + "-" +
                     gupo
                 )
 

@@ -68,7 +68,7 @@ class loggo(librun.loggi):
         self.comali = []
         self.filasi = "exp15-stringtie-result"
         self.libadi = {}
-        self.prelogi = Confi.get("result/log")+"/exp15-sr-"
+        self.prelogi = Confi.siget("result/log")+"/exp15-sr-"
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
@@ -77,7 +77,7 @@ class loggo(librun.loggi):
 
         self.head()
 
-        self.tagesi = Confi.get("result/stringtie")
+        self.tagesi = Confi.siget("result/stringtie")
         self.chkpaf()
 
         self.frasi = "==========\nStage 1 : Convert TSV/CTAB to JSON\n=========="
@@ -87,8 +87,8 @@ class loggo(librun.loggi):
         for tibe in tibeli:
             for gupo in gupoli:
                 socesi = (
-                    Confi.get("result/stringtie") + "/" +
-                    Confi.get("data/prefix/"+tibe) + "-" +
+                    Confi.siget("result/stringtie") + "/" +
+                    Confi.siget("data/prefix/"+tibe) + "-" +
                     gupo + "/t_data.ctab"
                 )
                 self.tagesi = socesi
@@ -103,15 +103,15 @@ class loggo(librun.loggi):
             CoveJos = covejos()
             CoveJos.dicodi = { "files" : taboli ,"id" : "t_id" }
             CoveJos.filasi = "libtab.tab2json"
-            CoveJos.prelogi = Confi.get("result/log")+"/exp15-sr-covejos-"
+            CoveJos.prelogi = Confi.siget("result/log")+"/exp15-sr-covejos-"
             CoveJos.actor()
 
         taboli = []
         for tibe in tibeli:
             for gupo in gupoli:
                 socesi = (
-                    Confi.get("result/stringtie") + "/" +
-                    Confi.get("data/prefix/"+tibe) + "-" +
+                    Confi.siget("result/stringtie") + "/" +
+                    Confi.siget("data/prefix/"+tibe) + "-" +
                     gupo + "-gene.tsv"
                 )
                 self.tagesi = socesi
@@ -126,7 +126,7 @@ class loggo(librun.loggi):
             CoveJos = covejos()
             CoveJos.dicodi = { "files" : taboli ,"id" : "Gene ID" }
             CoveJos.filasi = "libtab.tab2json"
-            CoveJos.prelogi = Confi.get("result/log")+"/exp15-sr-covejos-"
+            CoveJos.prelogi = Confi.siget("result/log")+"/exp15-sr-covejos-"
             CoveJos.actor()
 
         self.frasi = "==========\nStage 2 : Scanning for Variable Parts\n=========="
@@ -137,8 +137,8 @@ class loggo(librun.loggi):
         for tibe in tibeli:
             for gupo in gupoli:
                 socesi = (
-                    Confi.get("result/stringtie") + "/" +
-                    Confi.get("data/prefix/"+tibe) + "-" +
+                    Confi.siget("result/stringtie") + "/" +
+                    Confi.siget("data/prefix/"+tibe) + "-" +
                     gupo + "/t_data.json"
                 )
                 socefi = open(socesi,"r")
@@ -180,8 +180,8 @@ class loggo(librun.loggi):
         for tibe in tibeli:
             for gupo in gupoli:
                 socesi = (
-                    Confi.get("result/stringtie") + "/" +
-                    Confi.get("data/prefix/"+tibe) + "-" +
+                    Confi.siget("result/stringtie") + "/" +
+                    Confi.siget("data/prefix/"+tibe) + "-" +
                     gupo + "-gene.json"
                 )
                 socefi = open(socesi,"r")
@@ -225,8 +225,8 @@ class loggo(librun.loggi):
         for tibe in tibeli:
             for gupo in gupoli:
                 socesi = (
-                    Confi.get("result/stringtie") + "/" +
-                    Confi.get("data/prefix/"+tibe) + "-" +
+                    Confi.siget("result/stringtie") + "/" +
+                    Confi.siget("data/prefix/"+tibe) + "-" +
                     gupo + "/t_data.json"
                 )
                 socefi = open(socesi,"r")
@@ -244,8 +244,8 @@ class loggo(librun.loggi):
                     self.adresudi.update({ id : remedi })
 
         adresusi = (
-            Confi.get("result/stringtie") + "/" +
-            Confi.get("data/prefix/"+tibe) + "-trsp-result.json"
+            Confi.siget("result/stringtie") + "/" +
+            Confi.siget("data/prefix/"+tibe) + "-trsp-result.json"
         )
         with open(adresusi,"w") as adresufi:
             json.dump(self.adresudi,adresufi,indent=4,sort_keys=True)
@@ -254,8 +254,8 @@ class loggo(librun.loggi):
         for tibe in tibeli:
             for gupo in gupoli:
                 socesi = (
-                    Confi.get("result/stringtie") + "/" +
-                    Confi.get("data/prefix/"+tibe) + "-" +
+                    Confi.siget("result/stringtie") + "/" +
+                    Confi.siget("data/prefix/"+tibe) + "-" +
                     gupo + "-gene.json"
                 )
                 socefi = open(socesi,"r")
@@ -273,8 +273,8 @@ class loggo(librun.loggi):
                     self.baresudi.update({ id : remedi })
 
         baresusi = (
-            Confi.get("result/stringtie") + "/" +
-            Confi.get("data/prefix/"+tibe) + "-gene-result.json"
+            Confi.siget("result/stringtie") + "/" +
+            Confi.siget("data/prefix/"+tibe) + "-gene-result.json"
         )
         with open(baresusi,"w") as baresufi:
             json.dump(self.baresudi,baresufi,indent=4,sort_keys=True)
@@ -293,7 +293,7 @@ class loggo(librun.loggi):
                 "to" : "Description",
             }
             GeneID.filasi = "libsnm.geneid"
-            GeneID.prelogi = Confi.get("result/log")+"/exp15-sr-geneid-"
+            GeneID.prelogi = Confi.siget("result/log")+"/exp15-sr-geneid-"
             GeneID.actor()
 
             GeneID.dicodi = {
@@ -305,7 +305,7 @@ class loggo(librun.loggi):
                 "to" : "Description",
             }
             GeneID.filasi = "libsnm.geneid"
-            GeneID.prelogi = Confi.get("result/log")+"/exp15-sr-geneid-"
+            GeneID.prelogi = Confi.siget("result/log")+"/exp15-sr-geneid-"
             GeneID.actor()
 
             self.frasi = "==========\nStage 5 : Convert JSON back to TSV/CTAB\n=========="
@@ -316,16 +316,16 @@ class loggo(librun.loggi):
 
         CoveTab = covetab()
         CoveTab.filasi = "libtab.json2tab"
-        CoveTab.prelogi = Confi.get("result/log")+"/exp15-sr-covetab-"
+        CoveTab.prelogi = Confi.siget("result/log")+"/exp15-sr-covetab-"
         CoveTab.dicodi = {
             "files" : [adresusi],
-            "column" : Confi.getnoli("libtab/case1")
+            "column" : Confi.liget("libtab/case1")
         }
         CoveTab.actor()
 
         CoveTab.dicodi = {
             "files" : [baresusi],
-            "column" : Confi.getnoli("libtab/case2")
+            "column" : Confi.liget("libtab/case2")
         }
         CoveTab.actor()
 

@@ -55,16 +55,16 @@ class loggo(librun.loggi):
         self.tagesi = ""
 
         self.comali = []
-        self.adcoli = [ Confi.get("bin/stringtie") ]
+        self.adcoli = [ Confi.siget("bin/stringtie") ]
         self.admgli = [ "--merge" ]
         self.adotli = [ "-o" ]
-        self.adphli = [ "-p", Confi.get("run/thread")]
-        self.adrfli = [ "-G", Confi.get("refer/annotate") ]
+        self.adphli = [ "-p", Confi.siget("run/thread")]
+        self.adrfli = [ "-G", Confi.siget("refer/annotate") ]
 
 
         self.filasi = "exp13-stringtie-merge"
         self.libadi = {}
-        self.prelogi = Confi.get("result/log")+"/exp13-stringtie-merge-"
+        self.prelogi = Confi.siget("result/log")+"/exp13-stringtie-merge-"
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
@@ -72,7 +72,7 @@ class loggo(librun.loggi):
 
         self.head()
 
-        self.tagesi = Confi.get("result/stringtie")
+        self.tagesi = Confi.siget("result/stringtie")
         self.chkpaf()
         for tibe in tibeli:
             self.comali = []
@@ -81,8 +81,8 @@ class loggo(librun.loggi):
             for gupo in gupoli:
                 guposi = ""
                 guposi = (
-                    Confi.get("result/stringtie") + "/" +
-                    Confi.get("data/prefix/"+tibe) + "-" + gupo +
+                    Confi.siget("result/stringtie") + "/" +
+                    Confi.siget("data/prefix/"+tibe) + "-" + gupo +
                     "-stringtie.gtf"
                 )
                 self.comali.append(guposi)
@@ -90,8 +90,8 @@ class loggo(librun.loggi):
             self.comali.extend(self.admgli)
             self.comali.extend(self.adotli)
             self.outusi = (
-                Confi.get("result/stringtie") + "/" +
-                Confi.get("data/prefix/"+tibe) + "-" + "-".join(sorted(gupoli)) +"-stringtie-merged.gtf"
+                Confi.siget("result/stringtie") + "/" +
+                Confi.siget("data/prefix/"+tibe) + "-" + "-".join(sorted(gupoli)) +"-stringtie-merged.gtf"
             )
             self.comali.append(self.outusi)
             self.comali.extend(self.adphli)

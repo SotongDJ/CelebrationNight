@@ -57,10 +57,10 @@ class loggo(librun.loggi):
 
         self.tagesi = ""
 
-        self.adcoli = [Confi.get("bin/hisat2"),"-q"]
-        self.adphli = ["--phred"+Confi.get("run/phred")]
-        self.adthli = ["-p",Confi.get("run/thread")]
-        self.adgnli = ["-x",Confi.getpaf(["result/hisat", "idx/genome"])]
+        self.adcoli = [Confi.siget("bin/hisat2"),"-q"]
+        self.adphli = ["--phred"+Confi.siget("run/phred")]
+        self.adthli = ["-p",Confi.siget("run/thread")]
+        self.adgnli = ["-x",Confi.hoget(["result/hisat", "idx/genome"])]
         self.adh1li = ["-1"]
         self.adh2li = ["-2"]
         self.adrsli = ["-S"]
@@ -79,7 +79,7 @@ class loggo(librun.loggi):
 
         self.comali = []
 
-        self.prelogi = Confi.get("result/log")+"/exp09-hisat-batch-"
+        self.prelogi = Confi.siget("result/log")+"/exp09-hisat-batch-"
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
@@ -115,7 +115,7 @@ class loggo(librun.loggi):
 
         self.head()
 
-        self.tagesi = Confi.get("result/hisat")
+        self.tagesi = Confi.siget("result/hisat")
         self.chkpaf()
         for tibe in tibeli:
             for gupo in gupoli:
@@ -132,22 +132,22 @@ class loggo(librun.loggi):
                     self.comali.extend(self.adh1li)
 
                     fecosi = (
-                        Confi.get("result/raw") + "/" +
+                        Confi.siget("result/raw") + "/" +
                         tibe + "/" +
-                        Confi.get("data/prefix/"+tibe) + "-" +
+                        Confi.siget("data/prefix/"+tibe) + "-" +
                         gupo + "-" +
-                        Confi.get("postfix/forward") + ".fastq"
+                        Confi.siget("postfix/forward") + ".fastq"
                     )
                     self.comali.append(fecosi)
 
                     self.comali.extend(self.adh2li)
 
                     hecosi = (
-                        Confi.get("result/raw") + "/" +
+                        Confi.siget("result/raw") + "/" +
                         tibe + "/" +
-                        Confi.get("data/prefix/"+tibe) + "-" +
+                        Confi.siget("data/prefix/"+tibe) + "-" +
                         gupo + "-" +
-                        Confi.get("postfix/reverse") + ".fastq"
+                        Confi.siget("postfix/reverse") + ".fastq"
                     )
                     self.comali.append(hecosi)
 
@@ -155,8 +155,8 @@ class loggo(librun.loggi):
 
                     argvsi = self.argvdi.get(timo)
                     self.jecosi = (
-                        Confi.get("result/hisat") + "/" +
-                        Confi.get("data/prefix/"+tibe) + "-" +
+                        Confi.siget("result/hisat") + "/" +
+                        Confi.siget("data/prefix/"+tibe) + "-" +
                         gupo
                     )
                     self.comali.append( self.jecosi + argvsi + ".sam" )

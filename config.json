@@ -1,0 +1,27 @@
+{
+    "bin/bowtie2": "bin/bowtie2/bowtie2",
+    "bin/fastq2a": "bin/fastx-toolkit/fastq_to_fasta",
+    "bin/fastqc": "bin/fastqc/fastqc",
+    "bin/hisat2": "bin/hisat2/hisat2",
+    "bin/samtools": "bin/samtools/samtools",
+    "bin/solexqa": "bin/solexqa/Linux_x64/SolexaQA++",
+    "bin/stringtie": "bin/stringtie/stringtie",
+    "bin/tmmadapter": "bin/trimmomatic",
+    "bin/tophat2": "bin/tophat2/tophat2",
+    "bin/trimmomatic": "bin/trimmomatic/trimmomatic-0.36.jar",
+    "fql/colspan": 2,
+    "fql/row": [
+        "Basic Statistics",
+        "Per base sequence quality",
+        "Per tile sequence quality",
+        "Per sequence quality scores",
+        "Per base sequence content",
+        "Per sequence GC content",
+        "Per base N content",
+        "Sequence Length Distribution",
+        "Sequence Duplication Levels",
+        "Overrepresented sequences",
+        "Adapter Content"
+    ],
+    "trimmo/adapter": "bin/trimmomatic/adapters"
+}

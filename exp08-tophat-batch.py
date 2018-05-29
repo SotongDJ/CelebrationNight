@@ -57,9 +57,9 @@ class loggo(librun.loggi):
         self.tagesi = ""
 
         self.adcoli = ["tophat2"]
-        self.becoli = ["-p",Confi.get("run/thread")]
+        self.becoli = ["-p",Confi.siget("run/thread")]
         self.cecoli = ["-o"]
-        self.edcoli = [Confi.getpaf(["result/bowtie", "idx/genome"])]
+        self.edcoli = [Confi.hoget(["result/bowtie", "idx/genome"])]
 
         self.libadi = {}
 
@@ -67,7 +67,7 @@ class loggo(librun.loggi):
 
         self.comali = []
 
-        self.prelogi = Confi.get("result/log")+"/exp08-tophat-batch-"
+        self.prelogi = Confi.siget("result/log")+"/exp08-tophat-batch-"
 
 Runni = loggo()
 
@@ -82,32 +82,32 @@ for tibe in tibeli:
         Runni.comali.extend(Runni.cecoli)
 
         decoli = [
-            Confi.get("result/tophat") + "/" +
-            Confi.get("data/prefix/"+tibe) + "-" + gupo
+            Confi.siget("result/tophat") + "/" +
+            Confi.siget("data/prefix/"+tibe) + "-" + gupo
         ]
         Runni.comali.extend(decoli)
 
         Runni.comali.extend(Runni.edcoli)
 
         fecoli = [
-            Confi.get("result/raw") + "/" +
+            Confi.siget("result/raw") + "/" +
             tibe + "/" +
-            Confi.get("data/prefix/"+tibe) + "-" +
+            Confi.siget("data/prefix/"+tibe) + "-" +
             gupo + "-" +
-            Confi.get("postfix/forward") + ".fastq"
+            Confi.siget("postfix/forward") + ".fastq"
         ]
         Runni.comali.extend(fecoli)
 
         gecoli = [
-            Confi.get("result/raw") + "/" +
+            Confi.siget("result/raw") + "/" +
             tibe + "/" +
-            Confi.get("data/prefix/"+tibe) + "-" +
+            Confi.siget("data/prefix/"+tibe) + "-" +
             gupo + "-" +
-            Confi.get("postfix/reverse") + ".fastq"
+            Confi.siget("postfix/reverse") + ".fastq"
         ]
         Runni.comali.extend(gecoli)
 
-        Runni.tagesi = Confi.get("result/tophat")
+        Runni.tagesi = Confi.siget("result/tophat")
         Runni.chkpaf()
 
         # Runni.test()

@@ -55,15 +55,15 @@ class loggo(librun.loggi):
         self.tagesi = ""
 
         self.comali = []
-        self.adcoli = [ Confi.get("bin/stringtie") ]
+        self.adcoli = [ Confi.siget("bin/stringtie") ]
         self.adotli = [ "-o" ]
-        self.adphli = [ "-p", Confi.get("run/thread")]
-        self.adrfli = [ "-G", Confi.get("refer/annotate") ]
+        self.adphli = [ "-p", Confi.siget("run/thread")]
+        self.adrfli = [ "-G", Confi.siget("refer/annotate") ]
 
 
         self.filasi = "exp12-stringtie-batch"
         self.libadi = {}
-        self.prelogi = Confi.get("result/log")+"/exp12-stringtie-batch-"
+        self.prelogi = Confi.siget("result/log")+"/exp12-stringtie-batch-"
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
@@ -71,22 +71,22 @@ class loggo(librun.loggi):
 
         self.head()
 
-        self.tagesi = Confi.get("result/stringtie")
+        self.tagesi = Confi.siget("result/stringtie")
         self.chkpaf()
         for tibe in tibeli:
             for gupo in gupoli:
                 self.comali = []
                 self.comali.extend(self.adcoli)
                 adinsi = (
-                    Confi.get("result/hisat") + "/" +
-                    Confi.get("data/prefix/"+tibe) + "-" + gupo +
+                    Confi.siget("result/hisat") + "/" +
+                    Confi.siget("data/prefix/"+tibe) + "-" + gupo +
                     "-stringtie-sorted.bam"
                 )
                 self.comali.append(adinsi)
                 self.comali.extend(self.adotli)
                 adotsi = (
-                    Confi.get("result/stringtie") + "/" +
-                    Confi.get("data/prefix/"+tibe) + "-" + gupo +
+                    Confi.siget("result/stringtie") + "/" +
+                    Confi.siget("data/prefix/"+tibe) + "-" + gupo +
                     "-stringtie.gtf"
                 )
                 self.comali.append(adotsi)

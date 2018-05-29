@@ -62,16 +62,16 @@ class loggo(librun.loggi):
         self.tagesi = ""
 
         self.comali = []
-        self.adcoli = [ Confi.get("bin/stringtie") ]
+        self.adcoli = [ Confi.siget("bin/stringtie") ]
         self.adrfli = [ "-G" ]
-        self.adphli = [ "-p", Confi.get("run/thread")]
+        self.adphli = [ "-p", Confi.siget("run/thread")]
         self.adfoli = [ "-b" ]
         self.adotli = [ "-o" ]
         self.adagli = [ "-A" ]
 
         self.filasi = "exp14-stringtie2ballgown"
         self.libadi = {}
-        self.prelogi = Confi.get("result/log")+"/exp14-s2b-"
+        self.prelogi = Confi.siget("result/log")+"/exp14-s2b-"
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
@@ -80,13 +80,13 @@ class loggo(librun.loggi):
 
         self.head()
 
-        self.tagesi = Confi.get("result/stringtie")
+        self.tagesi = Confi.siget("result/stringtie")
         self.chkpaf()
 
         for tibe in tibeli:
             self.printbr()
             Marge.testing = self.testing
-            Marge.prelogi = Confi.get("result/log")+"/exp14-s2b-Merge-"
+            Marge.prelogi = Confi.siget("result/log")+"/exp14-s2b-Merge-"
 
             metali = []
             metali.extend(gupoli)
@@ -109,8 +109,8 @@ class loggo(librun.loggi):
                     self.comali.extend(self.adcoli)
 
                     adsbsi = (
-                        Confi.get("result/hisat") + "/" +
-                        Confi.get("data/prefix/"+tibe) + "-" +
+                        Confi.siget("result/hisat") + "/" +
+                        Confi.siget("data/prefix/"+tibe) + "-" +
                         gupo + "-stringtie-sorted.bam"
                     )
                     self.comali.append(adsbsi)
@@ -122,24 +122,24 @@ class loggo(librun.loggi):
 
                     self.comali.extend(self.adfoli)
                     adresi = (
-                        Confi.get("result/stringtie") + "/" +
-                        Confi.get("data/prefix/"+tibe) + "-" +
+                        Confi.siget("result/stringtie") + "/" +
+                        Confi.siget("data/prefix/"+tibe) + "-" +
                         gupo
                     )
                     self.comali.append(adresi)
 
                     self.comali.extend(self.adotli)
                     adresi = (
-                        Confi.get("result/stringtie") + "/" +
-                        Confi.get("data/prefix/"+tibe) + "-" +
+                        Confi.siget("result/stringtie") + "/" +
+                        Confi.siget("data/prefix/"+tibe) + "-" +
                         gupo + "-s2b.gtf"
                     )
                     self.comali.append(adresi)
 
                     self.comali.extend(self.adagli)
                     adgesi = (
-                        Confi.get("result/stringtie") + "/" +
-                        Confi.get("data/prefix/"+tibe) + "-" +
+                        Confi.siget("result/stringtie") + "/" +
+                        Confi.siget("data/prefix/"+tibe) + "-" +
                         gupo + "-gene.tsv"
                     )
                     self.comali.append(adgesi)

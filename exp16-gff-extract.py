@@ -49,7 +49,7 @@ class loggo(librun.loggi):
         self.comali = []
         self.filasi = "exp15-stringtie-result"
         self.libadi = {}
-        self.prelogi = Confi.get("result/log")+"/exp15-sr-"
+        self.prelogi = Confi.siget("result/log")+"/exp15-sr-"
 
     def actor(self):
         self.inpuli = self.dicodi.get("input",[])
@@ -60,7 +60,7 @@ class loggo(librun.loggi):
 
         self.head()
 
-        self.tagesi = Confi.get("result/stringtie")
+        self.tagesi = Confi.siget("result/stringtie")
         self.chkpaf()
 
         self.printbr()
