@@ -33,7 +33,8 @@
         "o": "output",
         "p": "thread",
         "r": "refer",
-        "t": "tribe"
+        "t": "tribe",
+        "s": "subgroup"
     },
     "trimmo/adapter": "bin/trimmomatic/adapters"
 }
