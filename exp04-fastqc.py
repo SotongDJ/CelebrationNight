@@ -2,32 +2,32 @@
 import librun, libconfig, sys
 global helber
 helber="""
-   --- README of exp04-fastqc ---
-  Title:
-    Batch Processing for FastQC
+--- README of exp04-fastqc ---
+ Title:
+  Batch Processing for FastQC
 
-  Usage:
-    python exp04-fastqc -t <TRIBE> -g <GROUP> <GROUP> <GROUP>... \\
-        -s <SUBGROUP> <SUBGROUP> <SUBGROUP>...
+ Usage:
+  python exp04-fastqc -t <TRIBE> -g <GROUP> <GROUP> <GROUP>... \\
+    -s <SUBGROUP> <SUBGROUP> <SUBGROUP>...
 
-  Data Structure:
-    First : tribe,
-        e.g. raw, untrim, trimmed...
-    Second: group,
-        e.g. control, A, B, 1, 2...
-    Third : subgroup/files,
-        e.g. foward, reverse, pair, unpair
+ Data Structure:
+  First : tribe,
+    e.g. raw, untrim, trimmed...
+  Second: group,
+    e.g. control, A, B, 1, 2...
+  Third : subgroup/files,
+    e.g. foward, reverse, pair, unpair
 
-    Visualise graph: explanation01-dataStructure.svg
+ Visualise graph: explanation01-dataStructure.svg
 
-  Original command:
-    fastqc -o [Result Folder] [FASTQ files]
+ Original command:
+  fastqc -o [Result Folder] [FASTQ files]
 
-  CAUTION:
-    <GROUP> must separate with space
-    <GROUP> don't allowed spacing
+ CAUTION:
+  <GROUP> must separate with space
+  <GROUP> don't allowed spacing
 
-   --- README ---
+--- README ---
 """
 """
  Postfix of variables:
