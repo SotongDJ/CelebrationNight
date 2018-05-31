@@ -2,40 +2,40 @@
 import librun, libconfig
 global helber
 helber="""
-   --- README of library-stringtie-merge ---
-  Title:
-    Merge transcriptome for StringTie
+--- README of library-stringtie-merge ---
+ Title:
+  Merge transcriptome for StringTie
 
-  Usage:
-    import libstmerge
-    Marge = libstmerge.loggo()
-    Marge.testing = self.testing
-    Marge.prelogi = < Log File Path>
-    Marge.dicodi = {
-        "tribe"   : <TRIBE>,
-        "group"   : [<GROUP>,<GROUP>......]
-    }
-    Marge.actor()
+ Usage:
+  import libstmerge
+  Marge = libstmerge.loggo()
+  Marge.testing = self.testing
+  Marge.prelogi = < Log File Path>
+  Marge.dicodi = {
+    "tribe"   : <TRIBE>,
+    "group"   : [<GROUP>,<GROUP>......]
+  }
+  Marge.actor()
 
-  Data Structure:
-    First : tribe,
-        e.g. raw, untrim, trimmed...
-    Second: group,
-        e.g. control, A, B, 1, 2...
-    Third : subgroup/files,
-        e.g. foward, reverse, pair, unpair
+ Data Structure:
+  First : tribe,
+    e.g. raw, untrim, trimmed...
+  Second: group,
+    e.g. control, A, B, 1, 2...
+  Third : subgroup/files,
+    e.g. foward, reverse, pair, unpair
 
-    Visualise graph: explanation01-dataStructure.svg
+  Visualise graph: explanation01-dataStructure.svg
 
-  Original command:
-    stringtie [gtf files] --merge -o [path for result]\
-        -p [thread] -G [reference gff file]
+ Original command:
+  stringtie [gtf files] --merge -o [path for result] \\
+  -p [thread] -G [reference gff file]
 
-  CAUTION:
-    <GROUP> must separate with space
-    <GROUP> don't allowed spacing
+ CAUTION:
+  <GROUP> must separate with space
+  <GROUP> don't allowed spacing
 
-   --- README ---
+--- README ---
 """
 """
  Postfix of variables:

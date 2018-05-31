@@ -3,33 +3,33 @@ import librun, libconfig, libstmerge
 import time
 global helber
 helber="""
-   --- README of exp14-stringtie2ballgown ---
-  Title:
-    Batch Processing for StringTie (Compare)
+--- README of exp14-stringtie2ballgown ---
+ Title:
+  Batch Processing for StringTie (Compare)
 
-  Usage:
-    python exp14-s2b -t <TRIBE> --control=<Control Group> -g <GROUP,GROUP,GROUP...>
+ Usage:
+  python exp14-s2b -t <TRIBE> --control=<Control Group> -g <GROUP,GROUP,GROUP...>
 
-  Data Structure:
-    First : tribe,
-        e.g. raw, untrim, trimmed...
-    Second: group,
-        e.g. control, A, B, 1, 2...
-    Third : subgroup/files,
-        e.g. foward, reverse, pair, unpair
+ Data Structure:
+  First : tribe,
+    e.g. raw, untrim, trimmed...
+  Second: group,
+    e.g. control, A, B, 1, 2...
+  Third : subgroup/files,
+    e.g. foward, reverse, pair, unpair
 
-    Visualise graph: explanation01-dataStructure.svg
+  Visualise graph: explanation01-dataStructure.svg
 
-  Original command:
-    stringtie [GROUP BAM file] -B \
+ Original command:
+  stringtie [GROUP BAM file] -B \\
     -G [Merged GTF file] -p [thread] -b [Result PATH]
 
-  CAUTION:
-    Exp14 required Exp13
-    <GROUP> must separate with space
-    <GROUP> don't allowed spacing
+ CAUTION:
+  Exp14 required libstm
+  <GROUP> must separate with space
+  <GROUP> don't allowed spacing
 
-   --- README ---
+--- README ---
 """
 """
  Postfix of variables:

@@ -3,32 +3,32 @@ import librun, libconfig, libtab, libsnm
 import time, json
 global helber
 helber="""
-   --- README of exp15-stringtie-result.py ---
-  Title:
-    Batch Processing for StringTie (Summarise)
+--- README of exp15-stringtie-result.py ---
+ Title:
+  Batch Processing for StringTie (Summarise)
 
-  Usage:
-    python3 exp15-stringtie-result.py -t <TRIBE> \
-        -r [Description JSON file (Exp16)]\
-        -g <GROUP,GROUP,GROUP...>
+ Usage:
+  python3 exp15-stringtie-result.py -t <TRIBE> \\
+    -r [Description JSON file (Exp16)]\\
+    -g <GROUP,GROUP,GROUP...>
 
-  Data Structure:
-    First : tribe,
-        e.g. raw, untrim, trimmed...
-    Second: group,
-        e.g. control, A, B, 1, 2...
-    Third : subgroup/files,
-        e.g. foward, reverse, pair, unpair
+ Data Structure:
+  First : tribe,
+    e.g. raw, untrim, trimmed...
+  Second: group,
+    e.g. control, A, B, 1, 2...
+  Third : subgroup/files,
+    e.g. foward, reverse, pair, unpair
 
-    Visualise graph: explanation01-dataStructure.svg
+  Visualise graph: explanation01-dataStructure.svg
 
-  CAUTION:
-    Exp15 required libtab
-    Exp15 required result from Exp16
-    <GROUP> must separate with space
-    <GROUP> don't allowed spacing
+ CAUTION:
+  Exp15 required libtab
+  Exp15 required result from Exp16
+  <GROUP> must separate with space
+  <GROUP> don't allowed spacing
 
-   --- README ---
+--- README ---
 """
 """
  Postfix of variables:
