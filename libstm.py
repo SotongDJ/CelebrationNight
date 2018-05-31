@@ -61,21 +61,28 @@ class loggo(librun.loggi):
             "tribe"   : [],
             "group"   : []
         }
-        self.sync()
+        # self.sync()
+
+        self.filasi = "library-stringtie-merge"
+        self.libadi = {
+            "bin/stringtie" : Confi.siget("bin/stringtie"),
+            "result/stringtie" : Confi.siget("result/stringtie"),
+            "result/hisat" : Confi.siget("result/hisat"),
+            "result/log" : Confi.siget("result/log"),
+            "run/thread" : Confi.siget("run/thread"),
+            "data/prefix" : Confi.diget("data/prefix"),
+            "refer/annotate" : Confi.siget("refer/annotate"),
+        }
+        self.prelogi = self.libadi.get("result/log")+"/exp13-stringtie-merge-"
 
         self.tagesi = ""
 
         self.comali = []
-        self.adcoli = [ Confi.siget("bin/stringtie") ]
+        self.adcoli = [ self.libadi.get("bin/stringtie") ]
         self.admgli = [ "--merge" ]
         self.adotli = [ "-o" ]
-        self.adphli = [ "-p", Confi.siget("run/thread")]
-        self.adrfli = [ "-G", Confi.siget("refer/annotate") ]
-
-
-        self.filasi = "library-stringtie-merge"
-        self.libadi = {}
-        self.prelogi = Confi.siget("result/log")+"/exp13-stringtie-merge-"
+        self.adphli = [ "-p", self.libadi.get("run/thread")]
+        self.adrfli = [ "-G", self.libadi.get("refer/annotate") ]
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
@@ -83,7 +90,7 @@ class loggo(librun.loggi):
 
         self.head()
 
-        self.tagesi = Confi.siget("result/stringtie")
+        self.tagesi = self.libadi.get("result/stringtie")
         self.chkpaf()
         for tibe in tibeli:
             self.comali = []
@@ -92,8 +99,8 @@ class loggo(librun.loggi):
             for gupo in gupoli:
                 guposi = ""
                 guposi = (
-                    Confi.siget("result/stringtie") + "/" +
-                    Confi.siget("data/prefix/"+tibe) + "-" + gupo +
+                    self.libadi.get("result/stringtie") + "/" +
+                    self.libadi.get("data/prefix").get(tibe) + "-" + gupo +
                     "-stringtie.gtf"
                 )
                 self.comali.append(guposi)
@@ -101,8 +108,8 @@ class loggo(librun.loggi):
             self.comali.extend(self.admgli)
             self.comali.extend(self.adotli)
             self.outusi = (
-                Confi.siget("result/stringtie") + "/" +
-                Confi.siget("data/prefix/"+tibe) + "-" + "-".join(sorted(gupoli)) +"-stringtie-merged.gtf"
+                self.libadi.get("result/stringtie") + "/" +
+                self.libadi.get("data/prefix").get(tibe) + "-" + "-".join(sorted(gupoli)) +"-stringtie-merged.gtf"
             )
             self.comali.append(self.outusi)
             self.comali.extend(self.adphli)

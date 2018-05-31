@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import librun, libconfig, libstmerge
+import librun, libconfig, libstm
 import time
 global helber
 helber="""
@@ -44,7 +44,7 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-class marge(libstmerge.loggo):
+class marge(libstm.loggo):
     def redirek(self):
         """"""
 Marge = marge()
@@ -64,17 +64,24 @@ class loggo(librun.loggi):
 
         self.tagesi = ""
 
+        self.filasi = "exp14-stringtie2ballgown"
+        self.libadi = {
+            "bin/stringtie" : Confi.siget("bin/stringtie"),
+            "result/stringtie" : Confi.siget("result/stringtie"),
+            "result/hisat" : Confi.siget("result/hisat"),
+            "result/log" : Confi.siget("result/log"),
+            "run/thread" : Confi.siget("run/thread"),
+            "data/prefix" : Confi.diget("data/prefix"),
+        }
+        self.prelogi = self.libadi.get("result/log")+"/exp14-s2b-"
+
         self.comali = []
-        self.adcoli = [ Confi.siget("bin/stringtie") ]
+        self.adcoli = [ self.libadi.get("bin/stringtie") ]
         self.adrfli = [ "-G" ]
-        self.adphli = [ "-p", Confi.siget("run/thread")]
+        self.adphli = [ "-p", self.libadi.get("run/thread")]
         self.adfoli = [ "-b" ]
         self.adotli = [ "-o" ]
-        self.adagli = [ "-A" ]
-
-        self.filasi = "exp14-stringtie2ballgown"
-        self.libadi = {}
-        self.prelogi = Confi.siget("result/log")+"/exp14-s2b-"
+        self.adagli = [ "-eA" ]
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
@@ -83,13 +90,13 @@ class loggo(librun.loggi):
 
         self.head()
 
-        self.tagesi = Confi.siget("result/stringtie")
+        self.tagesi = self.libadi.get("result/stringtie")
         self.chkpaf()
 
         for tibe in tibeli:
             self.printbr()
             Marge.testing = self.testing
-            Marge.prelogi = Confi.siget("result/log")+"/exp14-s2b-Merge-"
+            Marge.prelogi = self.libadi.get("result/log")+"/exp14-s2b-Merge-"
 
             metali = []
             metali.extend(gupoli)
@@ -112,8 +119,8 @@ class loggo(librun.loggi):
                     self.comali.extend(self.adcoli)
 
                     adsbsi = (
-                        Confi.siget("result/hisat") + "/" +
-                        Confi.siget("data/prefix/"+tibe) + "-" +
+                        self.libadi.get("result/hisat") + "/" +
+                        self.libadi.get("data/prefix").get(tibe) + "-" +
                         gupo + "-stringtie-sorted.bam"
                     )
                     self.comali.append(adsbsi)
@@ -125,24 +132,24 @@ class loggo(librun.loggi):
 
                     self.comali.extend(self.adfoli)
                     adresi = (
-                        Confi.siget("result/stringtie") + "/" +
-                        Confi.siget("data/prefix/"+tibe) + "-" +
+                        self.libadi.get("result/stringtie") + "/" +
+                        self.libadi.get("data/prefix").get(tibe) + "-" +
                         gupo
                     )
                     self.comali.append(adresi)
 
                     self.comali.extend(self.adotli)
                     adresi = (
-                        Confi.siget("result/stringtie") + "/" +
-                        Confi.siget("data/prefix/"+tibe) + "-" +
+                        self.libadi.get("result/stringtie") + "/" +
+                        self.libadi.get("data/prefix").get(tibe) + "-" +
                         gupo + "-s2b.gtf"
                     )
                     self.comali.append(adresi)
 
                     self.comali.extend(self.adagli)
                     adgesi = (
-                        Confi.siget("result/stringtie") + "/" +
-                        Confi.siget("data/prefix/"+tibe) + "-" +
+                        self.libadi.get("result/stringtie") + "/" +
+                        self.libadi.get("data/prefix").get(tibe) + "-" +
                         gupo + "-gene.tsv"
                     )
                     self.comali.append(adgesi)
