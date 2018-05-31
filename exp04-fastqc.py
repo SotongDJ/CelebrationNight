@@ -90,15 +90,18 @@ class loggo(librun.loggi):
                     self.comali = []
                     self.comali.extend(self.adcoli)
 
-                    inpusi = (
-                        self.libadi.get("result/raw") + "/" + tibe + "/" +
-                        self.libadi.get("data/prefix").get(tibe) + "-" +
-                        gupo + "-" + sugu + "." + self.libadi.get("raw/type")
-                    )
+                    if self.libadi.get("data/prefix").get(tibe) == "":
+                        inpusi = (
+                            self.libadi.get("result/raw") + "/" + tibe + "/"+
+                            gupo + "-" + sugu + "." + self.libadi.get("raw/type")
+                        )
+                    else:
+                        inpusi = (
+                            self.libadi.get("result/raw") + "/" + tibe + "/" +
+                            self.libadi.get("data/prefix").get(tibe) + "-" +
+                            gupo + "-" + sugu + "." + self.libadi.get("raw/type")
+                        )
                     self.comali.append(inpusi)
-
-                    self.tagesi = oputsi
-                    self.chkpaf()
 
                     self.ranni()
 
