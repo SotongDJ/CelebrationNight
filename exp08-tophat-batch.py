@@ -70,6 +70,8 @@ class loggo(librun.loggi):
 
         self.prelogi = Confi.siget("result/log")+"/exp08-tophat-batch-"
 
+    def actor(self):
+
 Runni = loggo()
 
 tibeli = Runni.dicodi.get("tribe",[])
