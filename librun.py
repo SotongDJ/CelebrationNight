@@ -93,8 +93,6 @@ class loggi:
         }
         self.sync()
 
-        self.tagesi = ""
-
         self.comali=['echo','wahaha']
 
         self.filasi = "librun.py"
@@ -157,14 +155,19 @@ class loggi:
         return timaki
 
     def chkpaf(self):
-        tageli = [ "mkdir", "-v", self.tagesi ]
-        comasi = "\n chkpaf: " + " ".join(tageli)
+        if self.tageli == []:
+            self.tageli.append(self.tagesi)
+        for tage in tageli:
+            comali = [ "mkdir", "-v", tage ]
+            comasi = "\n chkpaf: " + " ".join(comali)
 
-        self.frasi = comasi
-        self.printimo()
+            self.frasi = comasi
+            self.printimo()
 
-        call(tageli, stdout=open(self.logisi, 'a'))
+            call(comali, stdout=open(self.logisi, 'a'))
 
+        self.tagesi = ""
+        self.tageli = []
         self.timosi = ""
         self.frasi = ""
         self.sepere = ""
@@ -211,6 +214,9 @@ class loggi:
         self.frasi = ""
         self.sepere = ""
         self.lisli = []
+
+        self.tagesi = ""
+        self.tageli = []
 
         self.testing = False
         self.dicodi = {}
