@@ -51,19 +51,32 @@ class loggo(librun.loggi):
         self.helb = helber
 
         self.dicodi = {
-            "tribe"   : [],
-            "group"   : [],
-            "argv" : []
+            "tribe" : [],
+            "group" : [],
+            "index" : "",
+            "argv"  : []
         }
         self.Synom.input(Confi.diget("synom"))
         self.sync()
+        self.libadi = {
+            "bin/hisat2"     : Confi.siget("bin/hisat2")     ,
+            "run/phred"      : Confi.siget("run/phred")      ,
+            "run/thread"     : Confi.siget("run/thread")     ,
+            "index/hisat"    : Confi.siget("index/hisat")    ,
+            "result/log"     : Confi.siget("result/log")     ,
+            "result/hisat"   : Confi.siget("result/hisat")   ,
+            "result/raw"     : Confi.siget("result/raw")     ,
+            "data/prefix"    : Confi.diget("data/prefix")    ,
+            "postfix/forward": Confi.siget("postfix/forward"),
+            "postfix/reverse": Confi.siget("postfix/reverse"),
+        }
 
         self.tagesi = ""
 
-        self.adcoli = [Confi.siget("bin/hisat2"),"-q"]
-        self.adphli = ["--phred"+Confi.siget("run/phred")]
-        self.adthli = ["-p",Confi.siget("run/thread")]
-        self.adgnli = ["-x",Confi.hoget(["result/hisat", "idx/genome"])]
+        self.adcoli = [self.libadi.get("bin/hisat2"),"-q"]
+        self.adphli = ["--phred"+self.libadi.get("run/phred")]
+        self.adthli = ["-p",self.libadi.get("run/thread")]
+        self.adgnli = ["-x"]
         self.adh1li = ["-1"]
         self.adh2li = ["-2"]
         self.adrsli = ["-S"]
@@ -76,17 +89,17 @@ class loggo(librun.loggi):
         self.lscoli = ["ls", "-alFh"]
         self.rmcoli = ["rm", "-v"]
 
-        self.libadi = {}
 
         self.filasi = "exp09-hisat-batch.py"
 
         self.comali = []
 
-        self.prelogi = Confi.siget("result/log")+"/exp09-hisat-batch-"
+        self.prelogi = self.libadi.get("result/log")+"/exp09-hisat-batch-"
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
         gupoli = self.dicodi.get("group",[])
+        indesi = self.dicodi.get("index","")
         argvli = self.dicodi.get("argv",[])
 
         self.stinli = [ 0 , False ]
@@ -96,124 +109,127 @@ class loggo(librun.loggi):
         self.timoli = [0]
         self.jecosi = ""
 
-        for argv in argvli:
+        if indesi != "" and argvli != []:
+            self.indesi =  self.libadi.get("index/hisat") + "/" + indesi
+            for argv in argvli:
 
-            if argv == "stringtie":
-                if timein != 0:
-                    self.timoli.append(timein)
-                self.stinli = [ timein , True ]
-                self.pofidi.update({ timein : ["--dta"] })
-                self.argvdi.update({ timein : "-stringtie" })
-                timein = timein + 1
+                if argv == "stringtie":
+                    if timein != 0:
+                        self.timoli.append(timein)
+                    self.stinli = [ timein , True ]
+                    self.pofidi.update({ timein : ["--dta"] })
+                    self.argvdi.update({ timein : "-stringtie" })
+                    timein = timein + 1
 
-            elif argv == "cufflinks":
-                if timein != 0:
-                    self.timoli.append(timein)
-                self.pofidi.update({ timein : ["--dta-cufflinks"] })
-                self.argvdi.update({ timein : "-cufflinks" })
-                timein = timein + 1
+                elif argv == "cufflinks":
+                    if timein != 0:
+                        self.timoli.append(timein)
+                    self.pofidi.update({ timein : ["--dta-cufflinks"] })
+                    self.argvdi.update({ timein : "-cufflinks" })
+                    timein = timein + 1
 
-            if argv == "testing":
-                self.testing = True
+                if argv == "testing":
+                    self.testing = True
 
-        self.head()
+            self.head()
 
-        self.tagesi = Confi.siget("result/hisat")
-        self.chkpaf()
-        for tibe in tibeli:
-            for gupo in gupoli:
-                for timo in self.timoli:
-                    self.comali = []
-                    self.comali.extend(self.adcoli)
-
-                    pofili = self.pofidi.get(timo)
-                    self.comali.extend(pofili)
-
-                    self.comali.extend(self.adphli)
-                    self.comali.extend(self.adthli)
-                    self.comali.extend(self.adgnli)
-                    self.comali.extend(self.adh1li)
-
-                    fecosi = (
-                        Confi.siget("result/raw") + "/" +
-                        tibe + "/" +
-                        Confi.siget("data/prefix/"+tibe) + "-" +
-                        gupo + "-" +
-                        Confi.siget("postfix/forward") + ".fastq"
-                    )
-                    self.comali.append(fecosi)
-
-                    self.comali.extend(self.adh2li)
-
-                    hecosi = (
-                        Confi.siget("result/raw") + "/" +
-                        tibe + "/" +
-                        Confi.siget("data/prefix/"+tibe) + "-" +
-                        gupo + "-" +
-                        Confi.siget("postfix/reverse") + ".fastq"
-                    )
-                    self.comali.append(hecosi)
-
-                    self.comali.extend(self.adrsli)
-
-                    argvsi = self.argvdi.get(timo)
-                    self.jecosi = (
-                        Confi.siget("result/hisat") + "/" +
-                        Confi.siget("data/prefix/"+tibe) + "-" +
-                        gupo
-                    )
-                    self.comali.append( self.jecosi + argvsi + ".sam" )
-
-                    self.tagesi = self.jecosi + argvsi + ".sam"
-                    abanbo = self.chkfal()
-                    self.tagesi = self.jecosi + argvsi + "-sorted.bam"
-                    bababo = self.chkfal()
-                    """
-                       sam bam hisat samtool
-                        0   0   1     1
-                        1   0   0     1
-                        0   1   0     0
-                        1   1   0     1
-                    """
-                    if not abanbo and not bababo:
-                        self.ranni()
-
-                    if timo == self.stinli[0] and self.stinli[1] and not bababo:
+            self.tagesi = self.libadi.get("result/hisat")
+            self.chkpaf()
+            for tibe in tibeli:
+                for gupo in gupoli:
+                    for timo in self.timoli:
                         self.comali = []
-                        self.comali.extend( self.rmcoli )
-                        self.comali.append( self.jecosi + argvsi + ".bam" )
+                        self.comali.extend(self.adcoli)
 
-                        self.ranni()
+                        pofili = self.pofidi.get(timo)
+                        self.comali.extend(pofili)
 
-                        self.comali = []
-                        self.comali.extend( self.becoli )
-                        self.comali.append( self.jecosi + argvsi + ".bam" )
-                        self.comali.extend( self.beinli )
+                        self.comali.extend(self.adphli)
+                        self.comali.extend(self.adthli)
+                        self.comali.extend(self.adgnli)
+                        self.comali.append(self.indesi)
+                        self.comali.extend(self.adh1li)
+
+                        fecosi = (
+                            self.libadi.get("result/raw") + "/" +
+                            tibe + "/" +
+                            self.libadi.get("data/prefix").get(tibe) + "-" +
+                            gupo + "-" +
+                            self.libadi.get("postfix/forward") + ".fastq"
+                        )
+                        self.comali.append(fecosi)
+
+                        self.comali.extend(self.adh2li)
+
+                        hecosi = (
+                            self.libadi.get("result/raw") + "/" +
+                            tibe + "/" +
+                            self.libadi.get("data/prefix").get(tibe) + "-" +
+                            gupo + "-" +
+                            self.libadi.get("postfix/reverse") + ".fastq"
+                        )
+                        self.comali.append(hecosi)
+
+                        self.comali.extend(self.adrsli)
+
+                        argvsi = self.argvdi.get(timo)
+                        self.jecosi = (
+                            self.libadi.get("result/hisat") + "/" +
+                            self.libadi.get("data/prefix").get(tibe) + "-" +
+                            gupo
+                        )
                         self.comali.append( self.jecosi + argvsi + ".sam" )
 
-                        self.ranni()
+                        self.tagesi = self.jecosi + argvsi + ".sam"
+                        abanbo = self.chkfal()
+                        self.tagesi = self.jecosi + argvsi + "-sorted.bam"
+                        bababo = self.chkfal()
+                        """
+                           sam bam hisat samtool
+                            0   0   1     1
+                            1   0   0     1
+                            0   1   0     0
+                            1   1   0     1
+                        """
+                        if not abanbo and not bababo:
+                            self.ranni()
 
-                        self.comali = []
-                        self.comali.extend( self.cecoli )
-                        self.comali.append( self.jecosi + argvsi + "-sorted" + ".bam" )
-                        self.comali.append( self.jecosi + argvsi + ".bam" )
+                        if timo == self.stinli[0] and self.stinli[1] and not bababo:
+                            self.comali = []
+                            self.comali.extend( self.rmcoli )
+                            self.comali.append( self.jecosi + argvsi + ".bam" )
 
-                        self.ranni()
+                            self.ranni()
 
-                        self.comali = []
-                        self.comali.extend( self.lscoli )
-                        self.comali.append( self.jecosi + argvsi + ".sam" )
-                        self.comali.append( self.jecosi + argvsi + ".bam" )
-                        self.comali.append( self.jecosi + argvsi + "sorted" + ".bam" )
+                            self.comali = []
+                            self.comali.extend( self.becoli )
+                            self.comali.append( self.jecosi + argvsi + ".bam" )
+                            self.comali.extend( self.beinli )
+                            self.comali.append( self.jecosi + argvsi + ".sam" )
 
-                        self.ranni()
+                            self.ranni()
 
-                        self.comali = []
-                        self.comali.extend( self.rmcoli )
-                        self.comali.append( self.jecosi + argvsi + ".bam" )
-                        self.comali.append( self.jecosi + argvsi + ".sam" )
+                            self.comali = []
+                            self.comali.extend( self.cecoli )
+                            self.comali.append( self.jecosi + argvsi + "-sorted" + ".bam" )
+                            self.comali.append( self.jecosi + argvsi + ".bam" )
 
-                        self.ranni()
-        self.endin()
+                            self.ranni()
+
+                            self.comali = []
+                            self.comali.extend( self.lscoli )
+                            self.comali.append( self.jecosi + argvsi + ".sam" )
+                            self.comali.append( self.jecosi + argvsi + ".bam" )
+                            self.comali.append( self.jecosi + argvsi + "sorted" + ".bam" )
+
+                            self.ranni()
+
+                            self.comali = []
+                            self.comali.extend( self.rmcoli )
+                            self.comali.append( self.jecosi + argvsi + ".bam" )
+                            self.comali.append( self.jecosi + argvsi + ".sam" )
+
+                            self.ranni()
+            self.endin()
 
 Runni = loggo()
