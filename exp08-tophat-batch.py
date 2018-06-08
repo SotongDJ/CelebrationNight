@@ -56,65 +56,73 @@ class loggo(librun.loggi):
         self.Synom.input(Confi.diget("synom"))
         self.sync()
 
+        self.libadi = {
+            "result/tophat" : Confi.siget("result/tophat"),
+            "result/log" : Confi.siget("result/log"),
+            "run/thread" : Confi.siget("run/thread"),
+            "data/prefix" : Confi.diget("data/prefix"),
+            "result/raw" : Confi.siget("result/raw"),
+            "postfix/forward" : Confi.siget("postfix/forward"),
+            "postfix/reverse" : Confi.siget("postfix/reverse")
+        }
+
         self.tagesi = ""
 
         self.adcoli = ["tophat2"]
-        self.becoli = ["-p",Confi.siget("run/thread")]
+        self.becoli = ["-p",self.libadi.get("run/thread")]
         self.cecoli = ["-o"]
-
-        self.libadi = {
-            "result/stringtie" : Confi.siget("result/stringtie")
-        }
 
         self.filasi = "exp08-tophat-batch.py"
 
         self.comali = []
 
-        self.prelogi = Confi.siget("result/log")+"/exp08-tophat-batch-"
+        self.prelogi = self.libadi.get("result/log")+"/exp08-tophat-batch-"
 
     def actor(self):
+        tibeli = self.dicodi.get("tribe",[])
+        gupoli = self.dicodi.get("group",[])
+        indesi = self.dicodi.get("index","")
+
+        self.head()
+
+        if indesi != "":
+            for tibe in tibeli:
+                for gupo in gupoli:
+                    self.comali = []
+                    self.comali.extend(self.adcoli)
+                    self.comali.extend(self.becoli)
+                    self.comali.extend(self.cecoli)
+
+                    decoli = [
+                        self.libadi.get("result/tophat") + "/" +
+                        self.libadi.get("data/prefix").get(tibe) + "-" + gupo
+                    ]
+                    self.comali.extend(decoli)
+
+                    self.comali.append(indesi)
+
+                    fecoli = [
+                        self.libadi.get("result/raw") + "/" +
+                        tibe + "/" +
+                        self.libadi.get("data/prefix").get(tibe) + "-" +
+                        gupo + "-" +
+                        self.libadi.get("postfix/forward") + ".fastq"
+                    ]
+                    self.comali.extend(fecoli)
+
+                    gecoli = [
+                        self.libadi.get("result/raw") + "/" +
+                        tibe + "/" +
+                        self.libadi.get("data/prefix").get(tibe) + "-" +
+                        gupo + "-" +
+                        self.libadi.get("postfix/reverse") + ".fastq"
+                    ]
+                    self.comali.extend(gecoli)
+
+                    self.tagesi = self.libadi.get("result/tophat")
+                    self.chkpaf()
+
+                    self.ranni()
+        self.endin()
 
 Runni = loggo()
-
-tibeli = Runni.dicodi.get("tribe",[])
-gupoli = Runni.dicodi.get("group",[])
-Runni.head()
-for tibe in tibeli:
-    for gupo in gupoli:
-        Runni.comali = []
-        Runni.comali.extend(Runni.adcoli)
-        Runni.comali.extend(Runni.becoli)
-        Runni.comali.extend(Runni.cecoli)
-
-        decoli = [
-            Confi.siget("result/tophat") + "/" +
-            Confi.siget("data/prefix/"+tibe) + "-" + gupo
-        ]
-        Runni.comali.extend(decoli)
-
-        Runni.comali.extend(Runni.edcoli)
-
-        fecoli = [
-            Confi.siget("result/raw") + "/" +
-            tibe + "/" +
-            Confi.siget("data/prefix/"+tibe) + "-" +
-            gupo + "-" +
-            Confi.siget("postfix/forward") + ".fastq"
-        ]
-        Runni.comali.extend(fecoli)
-
-        gecoli = [
-            Confi.siget("result/raw") + "/" +
-            tibe + "/" +
-            Confi.siget("data/prefix/"+tibe) + "-" +
-            gupo + "-" +
-            Confi.siget("postfix/reverse") + ".fastq"
-        ]
-        Runni.comali.extend(gecoli)
-
-        Runni.tagesi = Confi.siget("result/tophat")
-        Runni.chkpaf()
-
-        # Runni.test()
-        Runni.ranni()
-Runni.endin()
