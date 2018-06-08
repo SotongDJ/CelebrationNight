@@ -20,12 +20,9 @@ helber="""
     Visualise graph: explanation01-dataStructure.svg
 
   Original command:
-  tophat2
-        -p [4]
-        -o [output folder]
-        [prefix of bowtie2-build genome index]
-        [forward fastq files]
-        [reverse fastq files]
+  tophat2 -p [4] -o [output folder] \\
+    [prefix of bowtie2-build genome index] \\
+    [forward fastq files] [reverse fastq files]
   CAUTION:
     <GROUP> must separate with space
     <GROUP> don't allowed spacing
