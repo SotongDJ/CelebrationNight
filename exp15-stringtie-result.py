@@ -57,12 +57,12 @@ class loggo(librun.loggi):
         self.Synom.input(Confi.diget("synom"))
         self.sync()
 
-        self.tagesi = ""
-
         self.comali = []
         self.filasi = "exp15-stringtie-result"
         self.libadi = {
             "result/stringtie" : Confi.siget("result/stringtie"),
+            "result/ballgown" : Confi.siget("result/ballgown"),
+            "result/st-result" : Confi.siget("result/st-result"),
             "data/prefix" : Confi.diget("data/prefix"),
             "result/log" : Confi.siget("result/log"),
             "libtab/case1" : Confi.liget("libtab/case1"),
@@ -77,7 +77,10 @@ class loggo(librun.loggi):
 
         self.head()
 
-        self.tagesi = self.libadi.get("result/stringtie")
+        self.tageli = []
+        self.tageli.append(self.libadi.get("result/stringtie"))
+        self.tageli.append(self.libadi.get("result/ballgown"))
+        self.tageli.append(self.libadi.get("result/st-result"))
         self.chkpaf()
 
         self.frasi = "==========\nStage 1 : Convert TSV/CTAB to JSON\n=========="
@@ -87,7 +90,7 @@ class loggo(librun.loggi):
         for tibe in tibeli:
             for gupo in gupoli:
                 socesi = (
-                    self.libadi.get("result/stringtie") + "/" +
+                    self.libadi.get("result/ballgown") + "/" +
                     self.libadi.get("data/prefix").get(tibe) + "-" +
                     gupo + "/t_data.ctab"
                 )
@@ -137,7 +140,7 @@ class loggo(librun.loggi):
         for tibe in tibeli:
             for gupo in gupoli:
                 socesi = (
-                    self.libadi.get("result/stringtie") + "/" +
+                    self.libadi.get("result/ballgown") + "/" +
                     self.libadi.get("data/prefix").get(tibe) + "-" +
                     gupo + "/t_data.json"
                 )
@@ -225,7 +228,7 @@ class loggo(librun.loggi):
         for tibe in tibeli:
             for gupo in gupoli:
                 socesi = (
-                    self.libadi.get("result/stringtie") + "/" +
+                    self.libadi.get("result/ballgown") + "/" +
                     self.libadi.get("data/prefix").get(tibe) + "-" +
                     gupo + "/t_data.json"
                 )
@@ -244,8 +247,8 @@ class loggo(librun.loggi):
                     self.adresudi.update({ id : remedi })
 
         adresusi = (
-            self.libadi.get("result/stringtie") + "/" +
-            self.libadi.get("data/prefix").get(tibe) + "-trsp-result.json"
+            self.libadi.get("result/st-result") + "/" +
+            self.libadi.get("data/prefix").get(tibe) + "-TranscriptExpression.json"
         )
         with open(adresusi,"w") as adresufi:
             json.dump(self.adresudi,adresufi,indent=4,sort_keys=True)
@@ -273,8 +276,8 @@ class loggo(librun.loggi):
                     self.baresudi.update({ id : remedi })
 
         baresusi = (
-            self.libadi.get("result/stringtie") + "/" +
-            self.libadi.get("data/prefix").get(tibe) + "-gene-result.json"
+            self.libadi.get("result/st-result") + "/" +
+            self.libadi.get("data/prefix").get(tibe) + "-GeneExpression.json"
         )
         with open(baresusi,"w") as baresufi:
             json.dump(self.baresudi,baresufi,indent=4,sort_keys=True)
