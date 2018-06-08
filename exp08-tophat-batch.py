@@ -51,6 +51,7 @@ class loggo(librun.loggi):
         self.dicodi = {
             "tribe"   : [],
             "group"   : [],
+            "index" : ""
         }
         self.Synom.input(Confi.diget("synom"))
         self.sync()
@@ -60,7 +61,6 @@ class loggo(librun.loggi):
         self.adcoli = ["tophat2"]
         self.becoli = ["-p",Confi.siget("run/thread")]
         self.cecoli = ["-o"]
-        self.edcoli = [Confi.hoget(["result/bowtie", "idx/genome"])]
 
         self.libadi = {}
 
