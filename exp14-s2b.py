@@ -62,12 +62,11 @@ class loggo(librun.loggi):
         self.Synom.input(Confi.diget("synom"))
         self.sync()
 
-        self.tagesi = ""
-
         self.filasi = "exp14-stringtie2ballgown"
         self.libadi = {
             "bin/stringtie" : Confi.siget("bin/stringtie"),
             "result/stringtie" : Confi.siget("result/stringtie"),
+            "result/ballgown" : Confi.siget("result/ballgown"),
             "result/hisat" : Confi.siget("result/hisat"),
             "result/log" : Confi.siget("result/log"),
             "run/thread" : Confi.siget("run/thread"),
@@ -90,7 +89,10 @@ class loggo(librun.loggi):
 
         self.head()
 
-        self.tagesi = self.libadi.get("result/stringtie")
+        self.tageli = []
+        self.tageli.append(self.libadi.get("result/stringtie"))
+        self.tageli.append(self.libadi.get("result/hisat"))
+        self.tageli.append(self.libadi.get("result/ballgown"))
         self.chkpaf()
 
         for tibe in tibeli:
@@ -132,7 +134,7 @@ class loggo(librun.loggi):
 
                     self.comali.extend(self.adfoli)
                     adresi = (
-                        self.libadi.get("result/stringtie") + "/" +
+                        self.libadi.get("result/ballgown") + "/" +
                         self.libadi.get("data/prefix").get(tibe) + "-" +
                         gupo
                     )
@@ -140,9 +142,9 @@ class loggo(librun.loggi):
 
                     self.comali.extend(self.adotli)
                     adresi = (
-                        self.libadi.get("result/stringtie") + "/" +
+                        self.libadi.get("result/ballgown") + "/" +
                         self.libadi.get("data/prefix").get(tibe) + "-" +
-                        gupo + "-s2b.gtf"
+                        gupo + "-ballgown.gtf"
                     )
                     self.comali.append(adresi)
 
