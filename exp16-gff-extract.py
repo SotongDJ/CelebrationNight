@@ -41,25 +41,26 @@ class loggo(librun.loggi):
         self.Synom.input(Confi.diget("synom"))
         self.sync()
 
-        self.tagesi = ""
-
         self.comali = []
         self.filasi = "exp16-gff-extract"
         self.libadi = {
             "result/stringtie" : Confi.siget("result/stringtie")
+            "result/ge"        : Confi.siget("result/ge")
         }
         self.prelogi = Confi.siget("result/log")+"/exp16-ge-"
 
     def actor(self):
         self.inpuli = self.dicodi.get("input",[])
-        self.oupusi = self.dicodi.get("output","")
+        self.oupusi = self.libadi.get("result/ge") + "/" +self.dicodi.get("output","")
         self.refesi = self.oupusi.replace(".json","-refer.json")
         self.valesi = self.oupusi.replace(".json","-value.json")
         self.desisi = self.oupusi.replace(".json","-description.json")
 
         self.head()
 
-        self.tagesi = self.libadi.get("result/stringtie")
+        self.tageli = []
+        self.tageli.append(self.libadi.get("result/stringtie"))
+        self.tageli.append(self.libadi.get("result/ge"))
         self.chkpaf()
 
         self.printbr()
