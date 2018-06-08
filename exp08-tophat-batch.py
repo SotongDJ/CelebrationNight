@@ -62,7 +62,9 @@ class loggo(librun.loggi):
         self.becoli = ["-p",Confi.siget("run/thread")]
         self.cecoli = ["-o"]
 
-        self.libadi = {}
+        self.libadi = {
+            "result/stringtie" : Confi.siget("result/stringtie")
+        }
 
         self.filasi = "exp08-tophat-batch.py"
 
