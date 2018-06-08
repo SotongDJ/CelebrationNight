@@ -181,8 +181,9 @@ class loggi:
         self.printimo()
 
         filafi = open("temp/head-"+self.timosi,"ab")
+        filafi.write("-=#".encode("UTF-8"))
         filafi.close()
-        if open("temp/head-"+self.timosi).read() != "":
+        if open("temp/head-"+self.timosi,"rb").read() != "-=#".encode("UTF-8"):
             resut = True
 
         tageli = [ "rm", "-v", "temp/head-"+self.timosi ]
