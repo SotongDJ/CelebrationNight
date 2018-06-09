@@ -115,17 +115,11 @@ class loggo(librun.loggi):
         for tibe in tibeli:
             for gupo in gupoli:
                 for sugu in suguli:
-                    if self.libadi.get("data/prefix").get(tibe) == "":
-                        socesi = (
-                            self.libadi.get("result/fastqc") + "/" +
-                            gupo + "-" + sugu + "_fastqc/summary.txt"
-                        )
-                    else:
-                        socesi = (
-                            self.libadi.get("result/fastqc") + "/" +
-                            self.libadi.get("data/prefix").get(tibe) + "-" +
-                            gupo + "-" + sugu + "_fastqc/summary.txt"
-                        )
+                    socesi = (
+                        self.libadi.get("result/fastqc") + "/" +
+                        self.libadi.get("data/prefix").get(tibe) +
+                        gupo + "-" + sugu + "_fastqc/summary.txt"
+                    )
                     self.tagesi = socesi
                     if self.chkfal():
                         for lino in open(socesi).read().splitlines():
@@ -182,13 +176,10 @@ class loggo(librun.loggi):
                     resufi.write(metasi)
 
                     for sugu in suguli:
-                        if self.libadi.get("data/prefix").get(tibe) != "":
-                            inpusi = (
-                                self.libadi.get("data/prefix").get(tibe) + "-" +
-                                gupo + "-" + sugu + "." + self.libadi.get("raw/type")
-                            )
-                        else:
-                            inpusi = gupo + "-" + sugu + "." + self.libadi.get("raw/type")
+                        inpusi = (
+                            self.libadi.get("data/prefix").get(tibe)  +
+                            gupo + "-" + sugu + "." + self.libadi.get("raw/type")
+                        )
                         filali.append(inpusi)
 
                 metasi = "    </tr>\n"

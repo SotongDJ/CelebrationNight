@@ -100,7 +100,7 @@ class loggo(librun.loggi):
                 guposi = ""
                 guposi = (
                     self.libadi.get("result/stringtie") + "/" +
-                    self.libadi.get("data/prefix").get(tibe) + "-" + gupo +
+                    self.libadi.get("data/prefix").get(tibe) + gupo +
                     "-stringtie.gtf"
                 )
                 self.comali.append(guposi)
@@ -109,7 +109,7 @@ class loggo(librun.loggi):
             self.comali.extend(self.adotli)
             self.outusi = (
                 self.libadi.get("result/stringtie") + "/" +
-                self.libadi.get("data/prefix").get(tibe) + "-" + "-".join(sorted(gupoli)) +"-stringtie-merged.gtf"
+                self.libadi.get("data/prefix").get(tibe) + "-".join(sorted(gupoli)) +"-stringtie-merged.gtf"
             )
             self.comali.append(self.outusi)
             self.comali.extend(self.adphli)

@@ -91,7 +91,7 @@ class loggo(librun.loggi):
             for gupo in gupoli:
                 socesi = (
                     self.libadi.get("result/ballgown") + "/" +
-                    self.libadi.get("data/prefix").get(tibe) + "-" +
+                    self.libadi.get("data/prefix").get(tibe) +
                     gupo + "/t_data.ctab"
                 )
                 self.tagesi = socesi
@@ -114,7 +114,7 @@ class loggo(librun.loggi):
             for gupo in gupoli:
                 socesi = (
                     self.libadi.get("result/stringtie") + "/" +
-                    self.libadi.get("data/prefix").get(tibe) + "-" +
+                    self.libadi.get("data/prefix").get(tibe) +
                     gupo + "-gene.tsv"
                 )
                 self.tagesi = socesi
@@ -141,7 +141,7 @@ class loggo(librun.loggi):
             for gupo in gupoli:
                 socesi = (
                     self.libadi.get("result/ballgown") + "/" +
-                    self.libadi.get("data/prefix").get(tibe) + "-" +
+                    self.libadi.get("data/prefix").get(tibe)+
                     gupo + "/t_data.json"
                 )
                 socefi = open(socesi,"r")
@@ -184,7 +184,7 @@ class loggo(librun.loggi):
             for gupo in gupoli:
                 socesi = (
                     self.libadi.get("result/stringtie") + "/" +
-                    self.libadi.get("data/prefix").get(tibe) + "-" +
+                    self.libadi.get("data/prefix").get(tibe)+
                     gupo + "-gene.json"
                 )
                 socefi = open(socesi,"r")
@@ -229,7 +229,7 @@ class loggo(librun.loggi):
             for gupo in gupoli:
                 socesi = (
                     self.libadi.get("result/ballgown") + "/" +
-                    self.libadi.get("data/prefix").get(tibe) + "-" +
+                    self.libadi.get("data/prefix").get(tibe)+
                     gupo + "/t_data.json"
                 )
                 socefi = open(socesi,"r")
@@ -248,7 +248,7 @@ class loggo(librun.loggi):
 
         adresusi = (
             self.libadi.get("result/st-result") + "/" +
-            self.libadi.get("data/prefix").get(tibe) + "-TranscriptExpression.json"
+            self.libadi.get("data/prefix").get(tibe) + "TranscriptExpression.json"
         )
         with open(adresusi,"w") as adresufi:
             json.dump(self.adresudi,adresufi,indent=4,sort_keys=True)
@@ -258,7 +258,7 @@ class loggo(librun.loggi):
             for gupo in gupoli:
                 socesi = (
                     self.libadi.get("result/stringtie") + "/" +
-                    self.libadi.get("data/prefix").get(tibe) + "-" +
+                    self.libadi.get("data/prefix").get(tibe) +
                     gupo + "-gene.json"
                 )
                 socefi = open(socesi,"r")
@@ -277,7 +277,7 @@ class loggo(librun.loggi):
 
         baresusi = (
             self.libadi.get("result/st-result") + "/" +
-            self.libadi.get("data/prefix").get(tibe) + "-GeneExpression.json"
+            self.libadi.get("data/prefix").get(tibe) + "GeneExpression.json"
         )
         with open(baresusi,"w") as baresufi:
             json.dump(self.baresudi,baresufi,indent=4,sort_keys=True)

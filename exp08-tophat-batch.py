@@ -57,11 +57,11 @@ class loggo(librun.loggi):
         self.sync()
 
         self.libadi = {
-            "result/tophat" : Confi.siget("result/tophat"),
-            "result/log" : Confi.siget("result/log"),
-            "run/thread" : Confi.siget("run/thread"),
-            "data/prefix" : Confi.diget("data/prefix"),
-            "result/raw" : Confi.siget("result/raw"),
+            "result/tophat"   : Confi.siget("result/tophat"),
+            "result/log"      : Confi.siget("result/log"),
+            "run/thread"      : Confi.siget("run/thread"),
+            "data/prefix"     : Confi.diget("data/prefix"),
+            "result/raw"      : Confi.siget("result/raw"),
             "postfix/forward" : Confi.siget("postfix/forward"),
             "postfix/reverse" : Confi.siget("postfix/reverse")
         }
@@ -95,7 +95,7 @@ class loggo(librun.loggi):
 
                     decoli = [
                         self.libadi.get("result/tophat") + "/" +
-                        self.libadi.get("data/prefix").get(tibe) + "-" + gupo
+                        self.libadi.get("data/prefix").get(tibe) + gupo
                     ]
                     self.comali.extend(decoli)
 
@@ -104,7 +104,7 @@ class loggo(librun.loggi):
                     fecoli = [
                         self.libadi.get("result/raw") + "/" +
                         tibe + "/" +
-                        self.libadi.get("data/prefix").get(tibe) + "-" +
+                        self.libadi.get("data/prefix").get(tibe) +
                         gupo + "-" +
                         self.libadi.get("postfix/forward") + ".fastq"
                     ]
@@ -113,7 +113,7 @@ class loggo(librun.loggi):
                     gecoli = [
                         self.libadi.get("result/raw") + "/" +
                         tibe + "/" +
-                        self.libadi.get("data/prefix").get(tibe) + "-" +
+                        self.libadi.get("data/prefix").get(tibe) +
                         gupo + "-" +
                         self.libadi.get("postfix/reverse") + ".fastq"
                     ]

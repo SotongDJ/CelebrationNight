@@ -153,7 +153,7 @@ class loggo(librun.loggi):
                         fecosi = (
                             self.libadi.get("result/raw") + "/" +
                             tibe + "/" +
-                            self.libadi.get("data/prefix").get(tibe) + "-" +
+                            self.libadi.get("data/prefix").get(tibe) +
                             gupo + "-" +
                             self.libadi.get("postfix/forward") + ".fastq"
                         )
@@ -164,7 +164,7 @@ class loggo(librun.loggi):
                         hecosi = (
                             self.libadi.get("result/raw") + "/" +
                             tibe + "/" +
-                            self.libadi.get("data/prefix").get(tibe) + "-" +
+                            self.libadi.get("data/prefix").get(tibe) +
                             gupo + "-" +
                             self.libadi.get("postfix/reverse") + ".fastq"
                         )
@@ -175,7 +175,7 @@ class loggo(librun.loggi):
                         argvsi = self.argvdi.get(timo)
                         self.jecosi = (
                             self.libadi.get("result/hisat") + "/" +
-                            self.libadi.get("data/prefix").get(tibe) + "-" +
+                            self.libadi.get("data/prefix").get(tibe) +
                             gupo
                         )
                         self.comali.append( self.jecosi + argvsi + ".sam" )

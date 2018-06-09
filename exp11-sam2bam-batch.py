@@ -83,8 +83,7 @@ class loggo(librun.loggi):
             for gupo in gupoli:
                 self.filesi = (
                     Confi.siget("result/hisat") + "/" +
-                    Confi.siget("data/prefix/"+tibe) + "-" +
-                    gupo
+                    Confi.siget("data/prefix/"+tibe) + gupo
                 )
 
                 self.comali = []

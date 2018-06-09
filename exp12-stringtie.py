@@ -82,14 +82,14 @@ class loggo(librun.loggi):
                 self.comali.extend(self.adcoli)
                 adinsi = (
                     Confi.siget("result/hisat") + "/" +
-                    Confi.siget("data/prefix/"+tibe) + "-" + gupo +
+                    Confi.siget("data/prefix/"+tibe) + gupo +
                     "-stringtie-sorted.bam"
                 )
                 self.comali.append(adinsi)
                 self.comali.extend(self.adotli)
                 adotsi = (
                     Confi.siget("result/stringtie") + "/" +
-                    Confi.siget("data/prefix/"+tibe) + "-" + gupo +
+                    Confi.siget("data/prefix/"+tibe) + gupo +
                     "-stringtie.gtf"
                 )
                 self.comali.append(adotsi)

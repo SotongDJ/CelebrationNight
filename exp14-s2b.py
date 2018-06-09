@@ -122,7 +122,7 @@ class loggo(librun.loggi):
 
                     adsbsi = (
                         self.libadi.get("result/hisat") + "/" +
-                        self.libadi.get("data/prefix").get(tibe) + "-" +
+                        self.libadi.get("data/prefix").get(tibe) +
                         gupo + "-stringtie-sorted.bam"
                     )
                     self.comali.append(adsbsi)
@@ -135,7 +135,7 @@ class loggo(librun.loggi):
                     self.comali.extend(self.adfoli)
                     adresi = (
                         self.libadi.get("result/ballgown") + "/" +
-                        self.libadi.get("data/prefix").get(tibe) + "-" +
+                        self.libadi.get("data/prefix").get(tibe) +
                         gupo
                     )
                     self.comali.append(adresi)
@@ -143,7 +143,7 @@ class loggo(librun.loggi):
                     self.comali.extend(self.adotli)
                     adresi = (
                         self.libadi.get("result/ballgown") + "/" +
-                        self.libadi.get("data/prefix").get(tibe) + "-" +
+                        self.libadi.get("data/prefix").get(tibe) +
                         gupo + "-ballgown.gtf"
                     )
                     self.comali.append(adresi)
@@ -151,7 +151,7 @@ class loggo(librun.loggi):
                     self.comali.extend(self.adagli)
                     adgesi = (
                         self.libadi.get("result/stringtie") + "/" +
-                        self.libadi.get("data/prefix").get(tibe) + "-" +
+                        self.libadi.get("data/prefix").get(tibe) +
                         gupo + "-gene.tsv"
                     )
                     self.comali.append(adgesi)
