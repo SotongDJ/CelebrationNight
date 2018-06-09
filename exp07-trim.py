@@ -20,23 +20,6 @@ helber="""
 
     Visualise graph: explanation01-dataStructure.svg
 
- Required variables:
-  config.json
-    "trimmomatic"/"pair"
-    "trimmomatic"/"unpair"
-    "bin"/"trimmomatic"
-    "bin"/"tmmadapter"
-    "var"/"tribe"
-    "var"/"group"
-    "var"/"subgroup"
-    "var"/"file-list"
-    "var"/"binding"
-    "var"/"thread"
-    "var"/"path"/"raw"
-    "var"/"path"/"log"
-    "var"/"path"/"trimmoresut"
-    "var"/"prefix" [value of pair and unpair]
-
  Original command:
   java -jar <bin>/trimmomatic-0.35.jar PE -phred33
   -threads <threads> -trimlog <logfile>\
@@ -63,98 +46,103 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-# config- : stand for variables related to config file
-configsi = 'data/config.json'
-configfa = open(configsi,'r')
-configso = json.load(configfa)
-configdi = configso.get('var',{})
-"""
-resuho: path of output directory
-tredasi: threads """
-binodi = configso.get('bin',{})
-trimfa = binodi.get('trimmomatic',"")
-trimsi = binodi.get('tmmadapter',"")
 
-pafwadi = configdi.get('path',{})
-soroho = pafwadi.get('raw',"")
-logoho = pafwadi.get('log',"")
-resuho = pafwadi.get('trimmoresut',"")
+Confi = libconfig.confi()
+class loggo(librun.loggi):
+    def pesonai(self):
+        # self.testing = True
+        self.helb = helber
 
-trimodi = configso.get('trimmomatic',{})
-payirsi = trimodi.get('pair',"")
-unparsi = trimodi.get('unpair',"")
+        self.dicodi = {
+            "raw"    : "",
+            "Pair"   : "",
+            "unPair" : "",
+            "group"  : [],
+        }
+        self.Synom.input(Confi.diget("synom"))
+        self.sync()
 
-prefidi = configdi.get('prefix',{})
-prepisi = prefidi.get(payirsi,"")
-preunsi = prefidi.get(unparsi,"")
+        self.libadi = {
+            "bin/trimmomatic" : Confi.siget("bin/trimmomatic")
+            "raw/type"        : Confi.siget("raw/type")
+            "run/phred"       : Confi.siget("run/phred")
+            "run/thread"      : Confi.siget("run/thread")
+            "postfix/forward" : Confi.siget("postfix/forward")
+            "postfix/reverse" : Confi.siget("postfix/reverse")
+            "trimmo/lead"     : Confi.siget("trimmo/lead")
+            "trimmo/trail"    : Confi.siget("trimmo/trail")
+            "trimmo/slide"    : Confi.siget("trimmo/slide")
+            "trimmo/length"   : Confi.siget("trimmo/length")
+            "trimmo/adapter"  : Confi.siget("trimmo/adapter")
+            "data/prefix"     : Confi.diget("data/prefix")
+            "result/raw"      : Confi.siget("result/raw")
+        }
 
-tribeli = configdi.get('tribe',[])
-grupoli = configdi.get('group',[])
-sugrudi = configdi.get('subgroup',{})
-fallidi = configdi.get('file-list',{})
-bindosi = configdi.get('binding',"")
-tredasi = configdi.get('thread',"")
+        self.comali = []
+        self.adcoli = [
+            'java', '-jar', self.libadi.get("bin/trimmomatic"),
+            'PE', '-phred'+self.libadi.get("trimmo/phred"),
+            '-threads', self.libadi.get("trimmo/thread")
+        ]
+        self.adpali = []
+        self.adpali.append(self.libadi.get("trimmo/lead"))
+        self.adpali.append(self.libadi.get("trimmo/trail"))
+        self.adpali.append(self.libadi.get("trimmo/slide"))
+        self.adpali.append(self.libadi.get("trimmo/length"))
+        self.adpali.append(self.libadi.get("trimmo/adapter"))
 
-# linose: first part of command
-linoli = [ 'java', '-jar', trimfa ,
-'PE', '-phred33', '-threads', tredasi ]
+        self.filasi = "exp07-trim"
+        self.prelogi = Confi.siget("result/log")+"/exp07-trim-"
 
-linali = [ "ILLUMINACLIP:" + trimsi + "/adapters/TruSeq3-PE.fa:2:30:10",
-"LEADING:3", "TRAILING:3", "SLIDINGWINDOW:4:15", "MINLEN:36"]
+    def actor(self):
+        self.gupoli = self.dicodi.get("group" ,[])
+        self.rawusi = self.dicodi.get("raw"   ,"")
+        self.pairsi = self.dicodi.get("Pair"  ,"")
+        self.unpasi = self.dicodi.get("unPair","")
 
-timmasi = time.strftime("%Y%m%d%H%M%S")
+        inrasi = self.libadi.get("result/raw") + "/" + self.rawusi
+        otpasi = self.libadi.get("result/raw") + "/" + self.pairsi
+        otunsi = self.libadi.get("result/raw") + "/" + self.unpasi
+        self.tageli = [ inrasi, otpasi, otunsi ]
+        self.chkpaf()
 
-tribesi = ""
-metali = []
-meseli = []
-
-if len(sys.argv) < 1:
-    print(helber)
-elif len(sys.argv) == 2:
-    # if sys.argv[-1] in tribeli:
-    tribesi = sys.argv[-1]
-    metali = grupoli
-elif len(sys.argv) == 3:
-    meseli.extend(sys.argv)
-    # if metali[2] in tribeli:
-    tribesi = meseli[-2]
-    metali = []
-    metali = meseli[-1].split(',')
-    for n in metali:
-        if n not in grupoli:
-            metali.pop(metali.index(n))
-
-else:
-    print(helber)
-
-for n in ['-h','--help','-help','/?']:
-    if n in sys.argv:
-        print(helber)
-
-runninlog = ("RUN started at " + timmasi )
-scriptlog = ("LOCAL\n" +
-"Input:  " + pprint.pformat(sys.argv) + "\n" +
-"Tribe:  " + pprint.pformat(tribesi) + "\n" +
-"Group:  " + pprint.pformat(metali) + "\n")
-configlog = ("FROM config.json\n" +
-"\"tribe\"      : " + pprint.pformat(tribeli) + "\n" +
-"\"group\"      : " + pprint.pformat(grupoli) + "\n" +
-"\"subgroup\"   : " + pprint.pformat(sugrudi) + "\n" +
-"\"trimmomatic\": " + pprint.pformat(trimodi) + "\n" +
-"\"prefix\"     : " + pprint.pformat(prefidi) + "\n" +
-"\"file-list\"  : " + pprint.pformat(fallidi) + "\n" +
-"\"binding\"    : " + pprint.pformat(bindosi) + "\n" +
-"\"thread\"     : " + pprint.pformat(tredasi) + "\n" +
-"\"raw\"        : " + pprint.pformat(soroho) + "\n" +
-"\"log\"        : " + pprint.pformat(logoho) + "\n" +
-"\"trimmomatic\": " + pprint.pformat(trimfa) + "\n" +
-"\"tmmadapter\" : " + pprint.pformat(trimsi) + "\n" +
-"\"trimmoresut\": " + pprint.pformat(resuho) + "\n")
-print("\n\n" + scriptlog + "\n" + configlog)
-logosi = logoho + "/exp07-trim-run-" + timmasi + ".log"
-with open(logosi,'w') as logofale:
-    logofale.write(scriptlog + "\n" + configlog)
-# --- Main ---
+        for gupo in gupoli:
+            input_forward = (
+                inrasi + "/" +
+                self.libadi.get("data/prefix").get(self.rawusi,"") +
+                gupo + "-" + self.libadi.get("postfix/forward") +
+                "." + self.libadi.get("raw/type")
+            )
+            input_reverse = (
+                inrasi + "/" +
+                self.libadi.get("data/prefix").get(self.rawusi,"") +
+                gupo + "-" + self.libadi.get("postfix/reverse") +
+                "." + self.libadi.get("raw/type")
+            )
+            output_forward_paired   = (
+                otpasi + "/" +
+                self.libadi.get("data/prefix").get(self.pairsi,"") +
+                gupo + "-" + self.libadi.get("postfix/forward") +
+                "." + self.libadi.get("raw/type")
+            )
+            output_forward_unpaired = (
+                otunsi + "/" +
+                self.libadi.get("data/prefix").get(self.unpasi,"") +
+                gupo + "-" + self.libadi.get("postfix/forward") +
+                "." + self.libadi.get("raw/type")
+            )
+            output_reverse_paired   = (
+                otpasi + "/" +
+                self.libadi.get("data/prefix").get(self.pairsi,"") +
+                gupo + "-" + self.libadi.get("postfix/reverse") +
+                "." + self.libadi.get("raw/type")
+            )
+            output_reverse_unpaired = (
+                otunsi + "/" +
+                self.libadi.get("data/prefix").get(self.unpasi,"") +
+                gupo + "-" + self.libadi.get("postfix/reverse") +
+                "." + self.libadi.get("raw/type")
+            )
 
 fallisi = fallidi.get(tribesi,{})
 for grupo in metali:
