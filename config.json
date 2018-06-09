@@ -40,5 +40,5 @@
     "trimmo/trail": "TRAILING:25",
     "trimmo/slide": "SLIDINGWINDOW:4:25",
     "trimmo/length": "MINLEN:36",
-    "trimmo/adapter": "ILLUMINACLIP:bin/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10
+    "trimmo/adapter": "ILLUMINACLIP:bin/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10"
 }
