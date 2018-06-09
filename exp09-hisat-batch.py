@@ -45,7 +45,7 @@ helber="""
   -so: JSON
 """
 Confi = libconfig.confi()
-class loggo(librun.loggi):
+class hisatbat(librun.workflow):
     def pesonai(self):
         # self.testing = True
         self.helb = helber
@@ -192,14 +192,14 @@ class loggo(librun.loggi):
                             1   1   0     1
                         """
                         if not abanbo and not bababo:
-                            self.ranni()
+                            self.runit()
 
                         if timo == self.stinli[0] and self.stinli[1] and not bababo:
                             self.comali = []
                             self.comali.extend( self.rmcoli )
                             self.comali.append( self.jecosi + argvsi + ".bam" )
 
-                            self.ranni()
+                            self.runit()
 
                             self.comali = []
                             self.comali.extend( self.becoli )
@@ -207,14 +207,14 @@ class loggo(librun.loggi):
                             self.comali.extend( self.beinli )
                             self.comali.append( self.jecosi + argvsi + ".sam" )
 
-                            self.ranni()
+                            self.runit()
 
                             self.comali = []
                             self.comali.extend( self.cecoli )
                             self.comali.append( self.jecosi + argvsi + "-sorted" + ".bam" )
                             self.comali.append( self.jecosi + argvsi + ".bam" )
 
-                            self.ranni()
+                            self.runit()
 
                             self.comali = []
                             self.comali.extend( self.lscoli )
@@ -222,14 +222,14 @@ class loggo(librun.loggi):
                             self.comali.append( self.jecosi + argvsi + ".bam" )
                             self.comali.append( self.jecosi + argvsi + "sorted" + ".bam" )
 
-                            self.ranni()
+                            self.runit()
 
                             self.comali = []
                             self.comali.extend( self.rmcoli )
                             self.comali.append( self.jecosi + argvsi + ".bam" )
                             self.comali.append( self.jecosi + argvsi + ".sam" )
 
-                            self.ranni()
+                            self.runit()
             self.endin()
 
-Runni = loggo()
+HiSaB = hisatbat()

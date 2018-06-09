@@ -25,7 +25,7 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-class runno(librun.loggi):
+class runno(librun.workflow):
 
     def pesonai(self):
         # self.testing = True
@@ -53,7 +53,7 @@ class runno(librun.loggi):
         self.tagesi = "temp"
         self.chkpaf()
 
-        self.ranni()
+        self.runit()
 
         self.frasi = "Ano.dicodi:\n"+pprint.pformat(self.dicodi,compact=True)
         self.printe()

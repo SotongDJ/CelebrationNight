@@ -36,7 +36,7 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-class geneid(librun.loggi):
+class geneid(librun.workflow):
     def redirek(self):
         """"""
     def pesonai(self):

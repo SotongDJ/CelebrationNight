@@ -43,7 +43,7 @@ helber="""
   -so: JSON
 """
 Confi = libconfig.confi()
-class loggo(librun.loggi):
+class stitiemerge(librun.workflow):
     def pesonai(self):
         # self.testing = True
         self.helb = helber
@@ -100,7 +100,7 @@ class loggo(librun.loggi):
             self.comali.extend(self.adphli)
             self.comali.extend(self.adrfli)
 
-            self.ranni()
+            self.runit()
         self.endin()
 
-Runni = loggo()
+StiTim = stitiemerge()

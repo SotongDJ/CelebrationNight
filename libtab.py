@@ -37,7 +37,7 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-class tab2json(librun.loggi):
+class tab2json(librun.workflow):
     def redirek(self):
         """"""
     def pesonai(self):
@@ -152,7 +152,7 @@ class tab2json(librun.loggi):
                     json.dump(remadi,remafi,indent=4,sort_keys=True)
         self.endin()
 
-class json2tab(librun.loggi):
+class json2tab(librun.workflow):
     def redirek(self):
         """"""
 

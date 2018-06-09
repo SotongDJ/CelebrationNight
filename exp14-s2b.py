@@ -44,12 +44,12 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-class marge(libstm.loggo):
+class marge(libstm.marge):
     def redirek(self):
         """"""
 Marge = marge()
 Confi = libconfig.confi()
-class loggo(librun.loggi):
+class stititobago(librun.workflow):
     def pesonai(self):
         # self.testing = True
         self.helb = helber
@@ -156,8 +156,8 @@ class loggo(librun.loggi):
                     )
                     self.comali.append(adgesi)
 
-                    self.ranni()
+                    self.runit()
 
         self.endin()
 
-Runni = loggo()
+StiToB = stititobago()

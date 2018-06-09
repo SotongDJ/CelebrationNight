@@ -43,7 +43,7 @@ helber="""
   -so: JSON
 """
 Confi = libconfig.confi()
-class loggo(librun.loggi):
+class tophatbat(librun.workflow):
     def pesonai(self):
         # self.testing = True
         self.helb = helber
@@ -122,7 +122,7 @@ class loggo(librun.loggi):
                     self.tagesi = self.libadi.get("result/tophat")
                     self.chkpaf()
 
-                    self.ranni()
+                    self.runit()
         self.endin()
 
-Runni = loggo()
+ToHab = tophatbat()

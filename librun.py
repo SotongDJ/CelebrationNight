@@ -9,7 +9,7 @@ helber="""
 
  Usage:
     import librun
-    class <CLASS_NAME>(librun.loggi):
+    class <CLASS_NAME>(librun.workflow):
 
         def pesonai(self):
             # self.testing = True
@@ -40,7 +40,7 @@ helber="""
             self.tagesi = < TARGET_FILE >
             self.chkpaf()
 
-            self.ranni()
+            self.runit()
 
             self.endin()
 
@@ -82,7 +82,7 @@ class dicto:
     def __init__(self):
         self.cotedi = {}
 
-class loggi:
+class workflow:
 
     def pesonai(self):
         # self.testing = True
@@ -111,7 +111,7 @@ class loggi:
         self.tagesi = "temp"
         self.chkpaf()
 
-        self.ranni()
+        self.runit()
 
         self.endin()
 
@@ -157,7 +157,7 @@ class loggi:
     def chkpaf(self):
         if self.tageli == []:
             self.tageli.append(self.tagesi)
-        for tage in tageli:
+        for tage in self.tageli:
             comali = [ "mkdir", "-v", tage ]
             comasi = "\n chkpaf: " + " ".join(comali)
 
@@ -382,7 +382,7 @@ class loggi:
         self.frasi = ""
         self.sepere = ""
 
-    def ranni(self):
+    def runit(self):
         self.timosi = time.strftime("%Y%m%d%H%M%S")
         self.sepere = "- :"
         runisi = "[" + self.timme() + "]"

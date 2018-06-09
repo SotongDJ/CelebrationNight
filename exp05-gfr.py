@@ -41,7 +41,7 @@ helber="""
   -so: JSON
 """
 Confi = libconfig.confi()
-class loggo(librun.loggi):
+class grafasre(librun.workflow):
     def pesonai(self):
         # self.testing = True
         self.helb = helber
@@ -120,4 +120,4 @@ class loggo(librun.loggi):
 
         self.endin()
 
-Runni = loggo()
+GaFar = grafasre()

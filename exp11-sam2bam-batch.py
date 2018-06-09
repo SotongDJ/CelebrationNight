@@ -43,7 +43,7 @@ helber="""
   -so: JSON
 """
 Confi = libconfig.confi()
-class loggo(librun.loggi):
+class samtobam(librun.workflow):
     def pesonai(self):
         # self.testing = True
         self.helb = helber
@@ -90,7 +90,7 @@ class loggo(librun.loggi):
                 self.comali.extend( self.rmcoli )
                 self.comali.append( self.filesi + argvsi + ".bam" )
 
-                self.ranni()
+                self.runit()
 
                 self.comali = []
                 self.comali.extend( self.becoli )
@@ -98,14 +98,14 @@ class loggo(librun.loggi):
                 self.comali.extend( self.beinli )
                 self.comali.append( self.filesi + argvsi + ".sam" )
 
-                self.ranni()
+                self.runit()
 
                 self.comali = []
                 self.comali.extend( self.cecoli )
                 self.comali.append( self.filesi + argvsi + "-sorted" + ".bam" )
                 self.comali.append( self.filesi + argvsi + ".bam" )
 
-                self.ranni()
+                self.runit()
 
                 self.comali = []
                 self.comali.extend( self.lscoli )
@@ -113,14 +113,14 @@ class loggo(librun.loggi):
                 self.comali.append( self.filesi + argvsi + ".bam" )
                 self.comali.append( self.filesi + "sorted" + ".bam" )
 
-                self.ranni()
+                self.runit()
 
                 self.comali = []
                 self.comali.extend( self.rmcoli )
                 self.comali.append( self.filesi + argvsi + ".bam" )
                 self.comali.append( self.filesi + argvsi + ".sam" )
 
-                self.ranni()
+                self.runit()
 
         self.endin()
-Runni = loggo()
+SaToB = samtobam()

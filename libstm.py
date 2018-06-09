@@ -8,7 +8,7 @@ helber="""
 
  Usage:
   import libstmerge
-  Marge = libstmerge.loggo()
+  Marge = libstm.marge()
   Marge.testing = self.testing
   Marge.prelogi = < Log File Path>
   Marge.dicodi = {
@@ -51,7 +51,7 @@ helber="""
   -so: JSON
 """
 Confi = libconfig.confi()
-class loggo(librun.loggi):
+class marge(librun.workflow):
     def redirek(self):
         """"""
     def pesonai(self):
@@ -115,5 +115,5 @@ class loggo(librun.loggi):
             self.comali.extend(self.adphli)
             self.comali.extend(self.adrfli)
 
-            self.ranni()
+            self.runit()
         self.endin()
