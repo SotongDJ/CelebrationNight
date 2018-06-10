@@ -53,20 +53,28 @@ class stringtie(librun.workflow):
             "group"   : []
         }
         self.Synom.input(Confi.diget("synom"))
+        self.libadi = {
+            "bin/stringtie"    : Confi.siget("bin/stringtie"),
+            "run/thread"       : Confi.siget("run/thread"),
+            "data/prefix"      : Confi.diget("data/prefix"),
+            "refer/annotate"   : Confi.siget("refer/annotate"),
+            "result/stringtie" : Confi.siget("result/stringtie"),
+            "result/hisat"     : Confi.siget("result/hisat"),
+            "result/log"       : Confi.siget("result/log"),
+        }
         self.sync()
 
         self.tagesi = ""
 
         self.comali = []
-        self.adcoli = [ Confi.siget("bin/stringtie") ]
+        self.adcoli = [ self.libadi.get("bin/stringtie") ]
         self.adotli = [ "-o" ]
-        self.adphli = [ "-p", Confi.siget("run/thread")]
-        self.adrfli = [ "-G", Confi.siget("refer/annotate") ]
+        self.adphli = [ "-p", self.libadi.get("run/thread")]
+        self.adrfli = [ "-G", self.libadi.get("refer/annotate") ]
 
 
         self.filasi = "exp12-stringtie-batch"
-        self.libadi = {}
-        self.prelogi = Confi.siget("result/log")+"/exp12-stringtie-batch-"
+        self.prelogi = self.libadi.get("result/log")+"/exp12-stringtie-batch-"
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
@@ -74,22 +82,22 @@ class stringtie(librun.workflow):
 
         self.head()
 
-        self.tagesi = Confi.siget("result/stringtie")
+        self.tagesi = self.libadi.get("result/stringtie")
         self.chkpaf()
         for tibe in tibeli:
             for gupo in gupoli:
                 self.comali = []
                 self.comali.extend(self.adcoli)
                 adinsi = (
-                    Confi.siget("result/hisat") + "/" +
-                    Confi.siget("data/prefix/"+tibe) + gupo +
+                    self.libadi.get("result/hisat") + "/" +
+                    self.libadi.get("data/prefix").get(tibe) + gupo +
                     "-stringtie-sorted.bam"
                 )
                 self.comali.append(adinsi)
                 self.comali.extend(self.adotli)
                 adotsi = (
-                    Confi.siget("result/stringtie") + "/" +
-                    Confi.siget("data/prefix/"+tibe) + gupo +
+                    self.libadi.get("result/stringtie") + "/" +
+                    self.libadi.get("data/prefix").get(tibe) + gupo +
                     "-stringtie.gtf"
                 )
                 self.comali.append(adotsi)
