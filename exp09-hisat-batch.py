@@ -27,6 +27,8 @@ helber="""
         -1 [forward fastq files of]
         -2 [reverse fastq files of]
         -S [output SAM files]
+    samtools sort -o [out-sorted.bam] [in.bam]
+    samtools view -o [out.bam] -Su [in.sam]
   CAUTION:
     <GROUP> must separate with space
     <GROUP> don't allowed spacing
@@ -128,6 +130,7 @@ class hisatbat(librun.workflow):
                 elif argv == "cufflinks":
                     if timein != 0:
                         self.timoli.append(timein)
+                    self.stinli = [ timein , True ]
                     self.pofidi.update({ timein : ["--dta-cufflinks"] })
                     self.argvdi.update({ timein : "-cufflinks" })
                     timein = timein + 1
