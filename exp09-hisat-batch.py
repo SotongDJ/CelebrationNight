@@ -7,7 +7,9 @@ helber="""
     Batch Processing for HISAT2
 
   Usage:
-    python exp09-hisat-batch [stringtie|cufflinks] -t <TRIBE> -g <GROUP,GROUP,GROUP...>
+    python exp09-hisat-batch \\
+      [stringtie|cufflinks] -t <TRIBE> -g <GROUP,GROUP,GROUP...> \\
+      -x <GENOME PREFIX that USE in HISAT2-BUILD>
 
   Data Structure:
     First : tribe,
@@ -102,6 +104,8 @@ class hisatbat(librun.workflow):
         indesi = self.dicodi.get("index","")
         argvli = self.dicodi.get("argv",[])
 
+        self.head()
+
         self.stinli = [ 0 , False ]
         self.pofidi = {0:[]}
         self.argvdi = {0:""}
@@ -130,8 +134,6 @@ class hisatbat(librun.workflow):
 
                 if argv == "testing":
                     self.testing = True
-
-            self.head()
 
             self.tagesi = self.libadi.get("result/hisat")
             self.chkpaf()
@@ -230,6 +232,6 @@ class hisatbat(librun.workflow):
                             self.comali.append( self.jecosi + argvsi + ".sam" )
 
                             self.runit()
-            self.endin()
+        self.endin()
 
 HiSaB = hisatbat()
