@@ -54,20 +54,27 @@ class stitiemerge(librun.workflow):
         }
         self.Synom.input(Confi.diget("synom"))
         self.sync()
+        self.libadi = {
+            "bin/stringtie"    : Confi.siget("bin/stringtie"),
+            "run/thread"       : Confi.siget("run/thread"),
+            "refer/annotate"   : Confi.siget("refer/annotate"),
+            "result/log"       : Confi.siget("result/log"),
+            "result/stringtie" : Confi.siget("result/stringtie"),
+            "data/prefix"      : Confi.diget("data/prefix"),
+        }
 
         self.tagesi = ""
 
         self.comali = []
-        self.adcoli = [ Confi.siget("bin/stringtie") ]
+        self.adcoli = [ self.libadi.get("bin/stringtie") ]
         self.admgli = [ "--merge" ]
         self.adotli = [ "-o" ]
-        self.adphli = [ "-p", Confi.siget("run/thread")]
-        self.adrfli = [ "-G", Confi.siget("refer/annotate") ]
+        self.adphli = [ "-p", self.libadi.get("run/thread")]
+        self.adrfli = [ "-G", self.libadi.get("refer/annotate") ]
 
 
-        self.filasi = "exp13-stringtie-merge"
-        self.libadi = {}
-        self.prelogi = Confi.siget("result/log")+"/exp13-stringtie-merge-"
+        self.filasi  = "exp13-stringtie-merge"
+        self.prelogi = self.libadi.get("result/log")+"/exp13-stringtie-merge-"
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
@@ -75,7 +82,7 @@ class stitiemerge(librun.workflow):
 
         self.head()
 
-        self.tagesi = Confi.siget("result/stringtie")
+        self.tagesi = self.libadi.get("result/stringtie")
         self.chkpaf()
         for tibe in tibeli:
             self.comali = []
@@ -84,8 +91,8 @@ class stitiemerge(librun.workflow):
             for gupo in gupoli:
                 guposi = ""
                 guposi = (
-                    Confi.siget("result/stringtie") + "/" +
-                    Confi.siget("data/prefix/"+tibe) + gupo +
+                    self.libadi.get("result/stringtie") + "/" +
+                    self.libadi.get("data/prefix").get(tibe) + gupo +
                     "-stringtie.gtf"
                 )
                 self.comali.append(guposi)
@@ -93,8 +100,8 @@ class stitiemerge(librun.workflow):
             self.comali.extend(self.admgli)
             self.comali.extend(self.adotli)
             self.outusi = (
-                Confi.siget("result/stringtie") + "/" +
-                Confi.siget("data/prefix/"+tibe) + "-".join(sorted(gupoli)) +"-stringtie-merged.gtf"
+                self.libadi.get("result/stringtie") + "/" +
+                self.libadi.get("data/prefix").get(tibe) + "-".join(sorted(gupoli)) +"-stringtie-merged.gtf"
             )
             self.comali.append(self.outusi)
             self.comali.extend(self.adphli)
