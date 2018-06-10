@@ -15,7 +15,7 @@ class confi:
             primoconfigfa = open(primoconfigfi,'r')
             self.confi = json.load(primoconfigfa)
 
-        seconconfigfi = "data/ConfigFile/config.json"
+        seconconfigfi = "data/config.json"
         seconconfigfa = open(seconconfigfi,'a+')
         seconconfigfa.close()
 
@@ -35,7 +35,7 @@ class confi:
         with open(primoconfigfi,'w') as configfa:
             json.dump(metaso,configfa,indent=4,sort_keys=True)
 
-        seconconfigfi = "data/ConfigFile/config.json"
+        seconconfigfi = "data/config.json"
         seconconfigfa = open(seconconfigfi,'r')
         metaso = json.load(seconconfigfa)
         with open(seconconfigfi,'w') as configfa:
