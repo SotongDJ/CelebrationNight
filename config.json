@@ -1,5 +1,6 @@
 {
     "bin/bowtie2": "bin/bowtie2/bowtie2",
+    "bin/cuffdiff": "bin/cufflinks/cuffdiff",
     "bin/fastq2a": "bin/fastx-toolkit/fastq_to_fasta",
     "bin/fastqc": "bin/fastqc/fastqc",
     "bin/hisat2": "bin/hisat2/hisat2",
