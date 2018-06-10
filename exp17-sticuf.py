@@ -72,8 +72,9 @@ class stiticuffdiff(librun.workflow):
         self.tagesi = ""
 
         self.comali = []
-        self.adcoli = [ self.libadi.get("bin/cuffdiff") ]
-        self.adotli = [ "-o" ]
+        self.adcosi = self.libadi.get("bin/cuffdiff")
+        self.adlasi = "-L"
+        self.adotsi = "-o"
         self.adphli = [ "-p", self.libadi.get("run/thread")]
 
 
@@ -112,7 +113,7 @@ class stiticuffdiff(librun.workflow):
                 self.cosasi = (
                     self.libadi.get("result/hisat") + "/" +
                     self.libadi.get("data/prefix").get(tibe) +
-                    cotosi + "-cufflinks.sam"
+                    cotosi + "-cufflinks-sorted.bam"
                 )
                 for gupo in gupoli:
                     adinli = []
@@ -120,14 +121,15 @@ class stiticuffdiff(librun.workflow):
                     adinsi = (
                         self.libadi.get("result/hisat") + "/" +
                         self.libadi.get("data/prefix").get(tibe) +
-                        gupo + "-cufflinks.sam"
+                        gupo + "-cufflinks-sorted.bam"
                     )
                     adinli.append(adinsi)
 
-
                     self.comali = []
-                    self.comali.extend(self.adcoli)
-                    self.comali.extend(self.adotli)
+                    self.comali.append(self.adcosi)
+                    self.comali.append(self.adlasi)
+                    self.comali.append(cotosi+","+gupo)
+                    self.comali.append(self.adotsi)
                     adotsi = (
                         self.libadi.get("result/cuffdiff") + "/" +
                         self.libadi.get("data/prefix").get(tibe) + gupo + "-Result"
