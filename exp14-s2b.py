@@ -44,10 +44,7 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-class marge(libstm.marge):
-    def redirek(self):
-        """"""
-Marge = marge()
+Marge = libstm.marge()
 Confi = libconfig.confi()
 class stititobago(librun.workflow):
     def pesonai(self):
