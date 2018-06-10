@@ -177,6 +177,7 @@ class workflow:
 
         self.timosi = time.strftime("%Y%m%d%H%M%S")
         tageli = [ "head", "-v", self.tagesi ]
+        call([ "mkdir", "-v", "temp" ])
         call(tageli, stdout=open("temp/head-"+self.timosi, 'a'))
 
         comasi = "\n        chkfal: " + " ".join(tageli)
