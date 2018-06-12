@@ -37,6 +37,7 @@ class miksing(librun.workflow):
             "group"   : [],
             "prefix"  : "",
             "postfix" : "",
+            "libtab"  : []
         }
 
         self.comali = []
@@ -44,9 +45,10 @@ class miksing(librun.workflow):
             "data/prefix" : Confi.diget("data/prefix"),
             "result/log" : Confi.siget("result/log"),
         }
+        self.filasi = "libmar"
         self.prelogi = Confi.siget("result/log")+"/libmar-"
 
-        self.result = {}
+        self.resusi = ""
 
     def scanning(self):
         tibeli = self.dicodi.get("tribe",[])
@@ -70,43 +72,42 @@ class miksing(librun.workflow):
                 soceso = json.load(socefi)
 
                 numein = 0
+                if len(list(soceso.keys())) >= 20:
+                    endain = 20
+                else:
+                    endain = len(list(soceso.keys()))
+
                 if self.refedi == {}:
-                    for id in list(soceso.keys()):
+                    for id in list(soceso.keys())[0:endain]:
                         admedi = soceso.get(id)
                         bamedi = {}
-                        numein = numein + 1
-                        if numein <= 10:
-                            for colu in list(soceso.get(id).keys()):
-                                basi = admedi.get(colu)
-                                bamedi.update({ colu : basi})
-
-                                self.refedi.update({ id : bamedi})
-                            else:
-                                break
+                        for colu in list(soceso.get(id).keys()):
+                            basi = admedi.get(colu)
+                            bamedi.update({ colu : basi})
+                            self.refedi.update({ id : bamedi})
                 else:
-                    for id in list(soceso.keys()):
+                    for id in list(soceso.keys())[0:endain]:
                         admedi = soceso.get(id)
                         bamedi = self.refedi.get(id)
-                        numein = numein + 1
-                        if numein <= 10:
-                            for colu in list(soceso.get(id).keys()):
-                                adsi = admedi.get(colu)
-                                basi = bamedi.get(colu)
-                                if adsi == basi:
-                                    self.tunodi.update({ colu : False })
-                                else:
-                                    self.tunodi.update({ colu : True })
-                                else:
-                                    break
+                        for colu in list(soceso.get(id).keys()):
+                            adsi = admedi.get(colu)
+                            basi = bamedi.get(colu)
+                            if adsi == basi:
+                                self.tunodi.update({ colu : False })
+                            else:
+                                self.tunodi.update({ colu : True })
         self.endin()
 
     def fusion(self):
         tibeli = self.dicodi.get("tribe",[])
         gupoli = self.dicodi.get("group",[])
+        pifisi = self.dicodi.get("prefix",[])
+        pofisi = self.dicodi.get("postfix",[])
 
-        self.filasi = "scanning from libmar"
+        self.filasi = "fusion from libmar"
         self.head()
 
+        self.coludi = {}
         self.resudi = {}
         for tibe in tibeli:
             for gupo in gupoli:
@@ -124,7 +125,34 @@ class miksing(librun.workflow):
                     for colu in list(somedi.keys()):
                         if self.tunodi.get(colu,False):
                             remedi.update({ colu+"("+gupo+")" : somedi.get(colu) })
+
+                            comeli = self.coludi.get(colu,[])
+                            if colu+"("+gupo+")" not in comeli:
+                                comeli.append(colu+"("+gupo+")")
+                                self.coludi.update({ colu : comeli })
+                            comeli = []
+
                         elif remedi.get(colu,"") == "":
                             remedi.update({ colu : somedi.get(colu) })
                     self.resudi.update({ id : remedi })
+        self.endin()
+
+    def arrange(self):
+        self.filasi = "arrange from libmar"
+        self.head()
+
+        self.coluli = []
+        litali = self.dicodi.get("libtab",[])
+        if litali == []:
+            litali = list(self.tunodi.keys())
+        litasi = "*@*"+"*@*".join(litali)+"*@*"
+        for colu in list(self.coludi.keys()):
+            if "*@*"+colu+"*@*" in litasi:
+                metasi = "*@*".join(self.coludi.get(colu))
+                litasi = litasi.replace("*@*"+colu+"*@*","*@*"+metasi+"*@*")
+        litasi = litasi[3:len(litasi)-3]
+        self.coluli = litasi.split("*@*")
+        print(list(self.tunodi.keys()))
+        print(list(self.coludi.keys()))
+        print(self.coluli)
         self.endin()
