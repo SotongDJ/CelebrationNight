@@ -1,13 +1,32 @@
 #!/usr/bin/env python3
-import librun, libconfig, libtab, libsnm
-import time, json
+import librun, libconfig
+import time, json, random
 global helber
 helber="""
 --- README of library-mix-analysis-result.py ---
  Title:
   Library for Mixing analysis result
 
- Usage:
+ Usage: # Replace * with related string
+    Miski = libmar.miksing()
+    Miski.dicodi = {
+      "tribe"   : tibeli,
+      "group"   : gupoli,
+      "prefix"  : self.libadi.get("result/*") + "/",
+      "postfix" : "/*.json", OR "postfix" : "-*.json",
+      "libtab"  : self.libadi.get("libtab/*")
+    }
+    Miski.prelogi = self.prelogi + "Miski-"
+    Miski.scanning()
+
+    Miski.fusion()
+    Miski.resusi = (
+        self.libadi.get("result/*") + "/" +
+        self.libadi.get("data/prefix").get(tibe) + "*.json"
+    )
+    with open(Miski.resusi,"w") as resufi:
+        json.dump(Miski.resudi,resufi,indent=4,sort_keys=True)
+    Miski.arrange()
 
 --- README ---
 """
