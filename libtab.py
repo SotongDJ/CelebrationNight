@@ -14,12 +14,15 @@ helber="""
     CoveJos.dicodi = {
         "files" : [<INPUT>,<INPUT>......] ,
         "id" : "" ,
-        "column": < Column separate by tab >
+        "column": < Column separate by tab > # for headless file
     }
     CoveJos.actor()
 
     CoveTab = libtab.json2tab()
-    CoveTab.dicodi = { "files" : [<INPUT>,<INPUT>......] }
+    CoveTab.dicodi = {
+        "files" : [<INPUT>,<INPUT>......] ,
+        "column": [<NAME>,<NAME>......] # for sorting
+    }
     CoveTab.actor()
 
    --- README ---
