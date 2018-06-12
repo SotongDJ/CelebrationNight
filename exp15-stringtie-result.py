@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import librun, libconfig, libtab, libsnm
+import librun, libconfig, libtab, libsnm, libmar
 import time, json
 global helber
 helber="""
@@ -135,152 +135,48 @@ class stitieresult(librun.workflow):
         self.frasi = "==========\nStage 2 : Scanning for Variable Parts\n=========="
         self.printe()
 
-        self.adtunodi = {}
-        self.adrefedi = {}
-        for tibe in tibeli:
-            for gupo in gupoli:
-                socesi = (
-                    self.libadi.get("result/ballgown") + "/" +
-                    self.libadi.get("data/prefix").get(tibe)+
-                    gupo + "/t_data.json"
-                )
-                socefi = open(socesi,"r")
-                soceso = json.load(socefi)
+        Transki = libmar.miksing()
+        Transki.dicodi = {
+            "tribe"   : tibeli,
+            "group"   : gupoli,
+            "prefix"  : self.libadi.get("result/ballgown") + "/",
+            "postfix" : "/t_data.json",
+            "libtab"  : self.libadi.get("libtab/TranscriptExpression")
+        }
+        Transki.prelogi = self.prelogi + "Transki-"
+        Transki.scanning()
 
-                numein = 0
-                if self.adrefedi != {}:
-                    for id in list(soceso.keys()):
-                        admedi = soceso.get(id)
-                        bamedi = self.adrefedi.get(id)
-                        numein = numein + 1
-                        if numein <= 10:
-                            for colu in list(soceso.get(id).keys()):
-                                adsi = admedi.get(colu)
-                                basi = bamedi.get(colu)
-                                if adsi == basi:
-                                    self.adtunodi.update({ colu : False })
-                                else:
-                                    self.adtunodi.update({ colu : True })
-                        else:
-                            break
-                else:
-                    for id in list(soceso.keys()):
-                        admedi = soceso.get(id)
-                        bamedi = {}
-                        numein = numein + 1
-                        if numein <= 10:
-                            for colu in list(soceso.get(id).keys()):
-                                basi = admedi.get(colu)
-                                bamedi.update({ colu : basi})
-
-                            self.adrefedi.update({ id : bamedi})
-                        else:
-                            break
-        print(self.adtunodi)
-
-        self.batunodi = {}
-        self.barefedi = {}
-        for tibe in tibeli:
-            for gupo in gupoli:
-                socesi = (
-                    self.libadi.get("result/stringtie") + "/" +
-                    self.libadi.get("data/prefix").get(tibe)+
-                    gupo + "-gene.json"
-                )
-                socefi = open(socesi,"r")
-                soceso = json.load(socefi)
-
-                numein = 0
-                if self.barefedi != {}:
-                    for id in list(soceso.keys()):
-                        admedi = soceso.get(id)
-                        bamedi = self.barefedi.get(id)
-                        numein = numein + 1
-                        if numein <= 10:
-                            for colu in list(soceso.get(id).keys()):
-                                adsi = admedi.get(colu)
-                                basi = bamedi.get(colu)
-                                if adsi == basi:
-                                    self.batunodi.update({ colu : False })
-                                else:
-                                    self.batunodi.update({ colu : True })
-                        else:
-                            break
-                else:
-                    for id in list(soceso.keys()):
-                        admedi = soceso.get(id)
-                        bamedi = {}
-                        numein = numein + 1
-                        if numein <= 10:
-                            for colu in list(soceso.get(id).keys()):
-                                basi = admedi.get(colu)
-                                bamedi.update({ colu : basi})
-
-                            self.barefedi.update({ id : bamedi})
-                        else:
-                            break
-        print(self.batunodi)
+        Geniski = libmar.miksing()
+        Geniski.dicodi = {
+            "tribe"   : tibeli,
+            "group"   : gupoli,
+            "prefix"  : self.libadi.get("result/stringtie") + "/",
+            "postfix" : "-gene.json",
+            "libtab"  : self.libadi.get("libtab/GeneExpression")
+        }
+        Geniski.prelogi = self.prelogi + "Geniski-"
+        Geniski.scanning()
 
         self.frasi = "==========\nStage 3 : Merging\n=========="
         self.printe()
 
-        self.adresudi = {}
-        for tibe in tibeli:
-            for gupo in gupoli:
-                socesi = (
-                    self.libadi.get("result/ballgown") + "/" +
-                    self.libadi.get("data/prefix").get(tibe)+
-                    gupo + "/t_data.json"
-                )
-                socefi = open(socesi,"r")
-                soceso = json.load(socefi)
-
-                numein = 0
-                for id in list(soceso.keys()):
-                    somedi = soceso.get(id)
-                    remedi = self.adresudi.get(id,{})
-                    for colu in list(somedi.keys()):
-                        if self.adtunodi.get(colu,False):
-                            remedi.update({ colu+"("+gupo+")" : somedi.get(colu) })
-                        elif remedi.get(colu,"") == "":
-                            remedi.update({ colu : somedi.get(colu) })
-                    self.adresudi.update({ id : remedi })
-
-        adresusi = (
+        Transki.fusion()
+        Transki.resusi = (
             self.libadi.get("result/st-result") + "/" +
             self.libadi.get("data/prefix").get(tibe) + "TranscriptExpression.json"
         )
-        with open(adresusi,"w") as adresufi:
-            json.dump(self.adresudi,adresufi,indent=4,sort_keys=True)
+        with open(Transki.resusi,"w") as resufi:
+            json.dump(Transki.resudi,resufi,indent=4,sort_keys=True)
+        Transki.arrange()
 
-        self.baresudi = {}
-        for tibe in tibeli:
-            for gupo in gupoli:
-                socesi = (
-                    self.libadi.get("result/stringtie") + "/" +
-                    self.libadi.get("data/prefix").get(tibe) +
-                    gupo + "-gene.json"
-                )
-                socefi = open(socesi,"r")
-                soceso = json.load(socefi)
-
-                numein = 0
-                for id in list(soceso.keys()):
-                    somedi = soceso.get(id)
-                    remedi = self.baresudi.get(id,{})
-                    for colu in list(somedi.keys()):
-                        if self.batunodi.get(colu,False):
-                            remedi.update({ colu+"("+gupo+")" : somedi.get(colu) })
-                        elif remedi.get(colu,"") == "":
-                            remedi.update({ colu : somedi.get(colu) })
-                    self.baresudi.update({ id : remedi })
-
-        baresusi = (
+        Geniski.fusion()
+        Geniski.resusi = (
             self.libadi.get("result/st-result") + "/" +
             self.libadi.get("data/prefix").get(tibe) + "GeneExpression.json"
         )
-        with open(baresusi,"w") as baresufi:
-            json.dump(self.baresudi,baresufi,indent=4,sort_keys=True)
+        with open(Geniski.resusi,"w") as resufi:
+            json.dump(Geniski.resudi,resufi,indent=4,sort_keys=True)
+        Geniski.arrange()
 
         if refesi != "":
             self.frasi = "==========\nStage 4 : Combine Description from GFF3\n=========="
@@ -289,7 +185,7 @@ class stitieresult(librun.workflow):
             GeneID = libsnm.geneid()
             GeneID.dicodi = {
                 "description" : refesi ,
-                "basement" : adresusi ,
+                "basement" : Transki.resusi ,
                 "if" : "gene_id",
                 "key" : "gene:",
                 "from" : "gene_id",
@@ -301,7 +197,7 @@ class stitieresult(librun.workflow):
 
             GeneID.dicodi = {
                 "description" : refesi ,
-                "basement" : baresusi ,
+                "basement" : Geniski.resusi ,
                 "if" : "Gene ID",
                 "key" : "gene:",
                 "from" : "gene_id",
@@ -321,14 +217,14 @@ class stitieresult(librun.workflow):
         CoveTab.filasi = "libtab.json2tab"
         CoveTab.prelogi = self.libadi.get("result/log")+"/exp15-sr-covetab-"
         CoveTab.dicodi = {
-            "files" : [adresusi],
-            "column" : self.libadi.get("libtab/TranscriptExpression")
+            "files" : [Transki.resusi],
+            "column" : Transki.coluli
         }
         CoveTab.actor()
 
         CoveTab.dicodi = {
-            "files" : [baresusi],
-            "column" : self.libadi.get("libtab/GeneExpression")
+            "files" : [Geniski.resusi],
+            "column" : Geniski.coluli
         }
         CoveTab.actor()
 
