@@ -65,8 +65,8 @@ class stitieresult(librun.workflow):
             "result/st-result" : Confi.siget("result/st-result"),
             "data/prefix" : Confi.diget("data/prefix"),
             "result/log" : Confi.siget("result/log"),
-            "libtab/case1" : Confi.liget("libtab/case1"),
-            "libtab/case2" : Confi.liget("libtab/case2"),
+            "libtab/TranscriptExpression" : Confi.liget("libtab/TranscriptExpression"),
+            "libtab/GeneExpression" : Confi.liget("libtab/GeneExpression"),
         }
         self.prelogi = self.libadi.get("result/log")+"/exp15-sr-"
 
@@ -322,13 +322,13 @@ class stitieresult(librun.workflow):
         CoveTab.prelogi = self.libadi.get("result/log")+"/exp15-sr-covetab-"
         CoveTab.dicodi = {
             "files" : [adresusi],
-            "column" : self.libadi.get("libtab/case1")
+            "column" : self.libadi.get("libtab/TranscriptExpression")
         }
         CoveTab.actor()
 
         CoveTab.dicodi = {
             "files" : [baresusi],
-            "column" : self.libadi.get("libtab/case2")
+            "column" : self.libadi.get("libtab/GeneExpression")
         }
         CoveTab.actor()
 
