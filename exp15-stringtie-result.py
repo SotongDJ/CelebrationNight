@@ -143,7 +143,7 @@ class stitieresult(librun.workflow):
             "postfix" : "/t_data.json",
             "libtab"  : self.libadi.get("libtab/TranscriptExpression")
         }
-        Transki.prelogi = self.prelogi + "Transki-"
+        Transki.prelogi = self.prelogi + "sca-Transki-"
         Transki.scanning()
 
         Geniski = libmar.miksing()
@@ -154,12 +154,13 @@ class stitieresult(librun.workflow):
             "postfix" : "-gene.json",
             "libtab"  : self.libadi.get("libtab/GeneExpression")
         }
-        Geniski.prelogi = self.prelogi + "Geniski-"
+        Geniski.prelogi = self.prelogi + "sca-Geniski-"
         Geniski.scanning()
 
         self.frasi = "==========\nStage 3 : Merging\n=========="
         self.printe()
 
+        Transki.prelogi = self.prelogi + "fus-Transki-"
         Transki.fusion()
         Transki.resusi = (
             self.libadi.get("result/st-result") + "/" +
@@ -167,8 +168,10 @@ class stitieresult(librun.workflow):
         )
         with open(Transki.resusi,"w") as resufi:
             json.dump(Transki.resudi,resufi,indent=4,sort_keys=True)
+        Transki.prelogi = self.prelogi + "ara-Transki-"
         Transki.arrange()
 
+        Geniski.prelogi = self.prelogi + "fus-Geniski-"
         Geniski.fusion()
         Geniski.resusi = (
             self.libadi.get("result/st-result") + "/" +
@@ -176,6 +179,7 @@ class stitieresult(librun.workflow):
         )
         with open(Geniski.resusi,"w") as resufi:
             json.dump(Geniski.resudi,resufi,indent=4,sort_keys=True)
+        Geniski.prelogi = self.prelogi + "ara-Geniski-"
         Geniski.arrange()
 
         if refesi != "":
