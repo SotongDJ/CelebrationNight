@@ -81,6 +81,7 @@ class miksing(librun.workflow):
         self.tunodi = {}
         self.refedi = {}
         for tibe in tibeli:
+            keyoli = []
             for gupo in gupoli:
                 socesi = (
                     pifisi +
@@ -91,13 +92,18 @@ class miksing(librun.workflow):
                 soceso = json.load(socefi)
 
                 numein = 0
-                if len(list(soceso.keys())) >= 20:
-                    endain = 20
-                else:
-                    endain = len(list(soceso.keys()))
+                if keyoli == []:
+                    keyoli = list(soceso.keys())
+                """
+                if keyoli == []:
+                    if len(list(soceso.keys())) >= 20:
+                        keyoli = random.sample(list(soceso.keys()), 20)
+                    else:
+                        keyoli = list(soceso.keys())
+                """
 
                 if self.refedi == {}:
-                    for id in list(soceso.keys())[0:endain]:
+                    for id in keyoli:
                         admedi = soceso.get(id)
                         bamedi = {}
                         for colu in list(soceso.get(id).keys()):
@@ -105,13 +111,13 @@ class miksing(librun.workflow):
                             bamedi.update({ colu : basi})
                             self.refedi.update({ id : bamedi})
                 else:
-                    for id in list(soceso.keys())[0:endain]:
+                    for id in keyoli:
                         admedi = soceso.get(id)
                         bamedi = self.refedi.get(id)
                         for colu in list(soceso.get(id).keys()):
                             adsi = admedi.get(colu)
                             basi = bamedi.get(colu)
-                            if adsi == basi:
+                            if adsi == basi and not self.tunodi.get(colu,False):
                                 self.tunodi.update({ colu : False })
                             else:
                                 self.tunodi.update({ colu : True })
