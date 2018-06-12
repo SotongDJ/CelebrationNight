@@ -94,13 +94,6 @@ class miksing(librun.workflow):
                 numein = 0
                 if keyoli == []:
                     keyoli = list(soceso.keys())
-                """
-                if keyoli == []:
-                    if len(list(soceso.keys())) >= 20:
-                        keyoli = random.sample(list(soceso.keys()), 20)
-                    else:
-                        keyoli = list(soceso.keys())
-                """
 
                 if self.refedi == {}:
                     for id in keyoli:
