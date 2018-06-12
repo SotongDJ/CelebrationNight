@@ -68,7 +68,7 @@ class stitieresult(librun.workflow):
             "libtab/TranscriptExpression" : Confi.liget("libtab/TranscriptExpression"),
             "libtab/GeneExpression" : Confi.liget("libtab/GeneExpression"),
         }
-        self.prelogi = self.libadi.get("result/log")+"/exp15-sr-"
+        self.prelogi = self.libadi.get("result/log")+"/exp15-stire-"
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
@@ -106,7 +106,7 @@ class stitieresult(librun.workflow):
             CoveJos = libtab.tab2json()
             CoveJos.dicodi = { "files" : taboli ,"id" : "t_id" }
             CoveJos.filasi = "libtab.tab2json"
-            CoveJos.prelogi = self.libadi.get("result/log")+"/exp15-sr-covejos-"
+            CoveJos.prelogi = self.libadi.get("result/log")+"/exp15-stire-covejos-"
             CoveJos.actor()
 
         taboli = []
@@ -129,7 +129,7 @@ class stitieresult(librun.workflow):
             CoveJos = libtab.tab2json()
             CoveJos.dicodi = { "files" : taboli ,"id" : "Gene ID" }
             CoveJos.filasi = "libtab.tab2json"
-            CoveJos.prelogi = self.libadi.get("result/log")+"/exp15-sr-covejos-"
+            CoveJos.prelogi = self.libadi.get("result/log")+"/exp15-stire-covejos-"
             CoveJos.actor()
 
         self.frasi = "==========\nStage 2 : Scanning for Variable Parts\n=========="
@@ -192,7 +192,7 @@ class stitieresult(librun.workflow):
                 "to" : "Description",
             }
             GeneID.filasi = "libsnm.geneid"
-            GeneID.prelogi = self.libadi.get("result/log")+"/exp15-sr-geneid-"
+            GeneID.prelogi = self.libadi.get("result/log")+"/exp15-stire-geneid-"
             GeneID.actor()
 
             GeneID.dicodi = {
@@ -204,7 +204,7 @@ class stitieresult(librun.workflow):
                 "to" : "Description",
             }
             GeneID.filasi = "libsnm.geneid"
-            GeneID.prelogi = self.libadi.get("result/log")+"/exp15-sr-geneid-"
+            GeneID.prelogi = self.libadi.get("result/log")+"/exp15-stire-geneid-"
             GeneID.actor()
 
             self.frasi = "==========\nStage 5 : Convert JSON back to TSV/CTAB\n=========="
@@ -215,7 +215,7 @@ class stitieresult(librun.workflow):
 
         CoveTab = libtab.json2tab()
         CoveTab.filasi = "libtab.json2tab"
-        CoveTab.prelogi = self.libadi.get("result/log")+"/exp15-sr-covetab-"
+        CoveTab.prelogi = self.libadi.get("result/log")+"/exp15-stire-covetab-"
         CoveTab.dicodi = {
             "files" : [Transki.resusi],
             "column" : Transki.coluli
