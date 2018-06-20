@@ -4,6 +4,7 @@
     "bin/fastq2a": "bin/fastx-toolkit/fastq_to_fasta",
     "bin/fastqc": "bin/fastqc/fastqc",
     "bin/hisat2": "bin/hisat2/hisat2",
+    "bin/hisat2build": "bin/hisat2/hisat2-build",
     "bin/samtools": "bin/samtools/samtools",
     "bin/solexqa": "bin/solexqa/Linux_x64/SolexaQA++",
     "bin/stringtie": "bin/stringtie/stringtie",
