@@ -29,7 +29,7 @@ helber="""
 
  Original command:
   stringtie [gtf files] --merge -o [path for result] \\
-  -p [thread] -G [reference gff file]
+  -p [thread] -G [reference gff file] --refer=<CODENAME of reference>
 
  CAUTION:
   <GROUP> must separate with space
@@ -58,20 +58,21 @@ class marge(librun.workflow):
         # self.testing = True
 
         self.dicodi = {
-            "tribe"   : [],
-            "group"   : []
+            "tribe" : [],
+            "group" : [],
+            "refer" : ""
         }
         # self.sync()
 
         self.filasi = "library-stringtie-merge"
         self.libadi = {
-            "bin/stringtie" : Confi.siget("bin/stringtie"),
+            "bin/stringtie"    : Confi.siget("bin/stringtie"),
             "result/stringtie" : Confi.siget("result/stringtie"),
-            "result/hisat" : Confi.siget("result/hisat"),
-            "result/log" : Confi.siget("result/log"),
-            "run/thread" : Confi.siget("run/thread"),
-            "data/prefix" : Confi.diget("data/prefix"),
-            "refer/annotate" : Confi.siget("refer/annotate"),
+            "result/hisat"     : Confi.siget("result/hisat"),
+            "result/log"       : Confi.siget("result/log"),
+            "run/thread"       : Confi.siget("run/thread"),
+            "data/prefix"      : Confi.diget("data/prefix"),
+            "refer/annotate"   : Confi.diget("refer/annotate"),
         }
         self.prelogi = self.libadi.get("result/log")+"/exp13-stringtie-merge-"
 
@@ -82,11 +83,12 @@ class marge(librun.workflow):
         self.admgli = [ "--merge" ]
         self.adotli = [ "-o" ]
         self.adphli = [ "-p", self.libadi.get("run/thread")]
-        self.adrfli = [ "-G", self.libadi.get("refer/annotate") ]
+        self.adrfli = [ "-G" ]
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
         gupoli = self.dicodi.get("group",[])
+        refesi = self.dicodi.get("refer","")
 
         self.head()
 
@@ -113,7 +115,10 @@ class marge(librun.workflow):
             )
             self.comali.append(self.outusi)
             self.comali.extend(self.adphli)
+
             self.comali.extend(self.adrfli)
+            metasi = self.libadi.get("refer/annotate").get(refesi)
+            self.comali.append(metasi)
 
             self.runit()
         self.endin()

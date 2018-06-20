@@ -3,15 +3,15 @@ import librun, libconfig, libtab
 import time, json, pprint
 global helber
 helber="""
-   --- README of exp16-gff-extract.py ---
-  Title:
-    Batch Processing for StringTie
+  --- README of exp16-gff-extract.py ---
+ Title:
+  Batch Processing for StringTie
 
-  Usage:
-    python3 exp16-gff-extract.py -i <GFF files> -o <OUTPUT JSON file>
+ Usage:
+  python3 exp16-gff-extract.py -i <GFF file> -o <OUTPUT JSON file>
 
-  CAUTION:
-    Exp16 required libtab
+ CAUTION:
+  Exp16 required libtab
 
    --- README ---
 """

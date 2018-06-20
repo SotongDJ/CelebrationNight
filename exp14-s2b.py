@@ -8,7 +8,8 @@ helber="""
   Batch Processing for StringTie (Compare)
 
  Usage:
-  python exp14-s2b -t <TRIBE> --control=<Control Group> -g <GROUP,GROUP,GROUP...>
+  python exp14-s2b -t <TRIBE> --control=<Control Group> \\
+    -g <GROUP,GROUP,GROUP...> --refer=<CODENAME of reference>
 
  Data Structure:
   First : tribe,
@@ -54,7 +55,8 @@ class stititobago(librun.workflow):
         self.dicodi = {
             "tribe"   : [],
             "group"   : [],
-            "control" : ""
+            "control" : "",
+            "refer"   : ""
         }
         self.Synom.input(Confi.diget("synom"))
         self.sync()
@@ -83,6 +85,7 @@ class stititobago(librun.workflow):
         tibeli = self.dicodi.get("tribe",[])
         gupoli = self.dicodi.get("group",[])
         cotosi = self.dicodi.get("control","")
+        refesi = self.dicodi.get("refer","")
 
         self.head()
 
@@ -101,8 +104,9 @@ class stititobago(librun.workflow):
             metali.extend(gupoli)
             metali.append(cotosi)
             Marge.dicodi = {
-                "tribe"   : [tibe],
-                "group"   : metali
+                "tribe" : [tibe],
+                "group" : metali,
+                "refer" : refesi
             }
             Marge.actor()
             self.printbr()

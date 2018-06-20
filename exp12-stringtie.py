@@ -7,7 +7,8 @@ helber="""
     Batch Processing for StringTie (Assembly)
 
   Usage:
-    python exp12-stringtie-batch -t <TRIBE> -g <GROUP,GROUP,GROUP...>
+    python exp12-stringtie-batch -t <TRIBE> -g <GROUP,GROUP,GROUP...> \\
+        --refer=<CODENAME of gff reference>
 
   Data Structure:
     First : tribe,
@@ -50,14 +51,15 @@ class stringtie(librun.workflow):
 
         self.dicodi = {
             "tribe"   : [],
-            "group"   : []
+            "group"   : [],
+            "refer"   : ""
         }
         self.Synom.input(Confi.diget("synom"))
         self.libadi = {
             "bin/stringtie"    : Confi.siget("bin/stringtie"),
             "run/thread"       : Confi.siget("run/thread"),
             "data/prefix"      : Confi.diget("data/prefix"),
-            "refer/annotate"   : Confi.siget("refer/annotate"),
+            "refer/annotate"   : Confi.diget("refer/annotate"),
             "result/stringtie" : Confi.siget("result/stringtie"),
             "result/hisat"     : Confi.siget("result/hisat"),
             "result/log"       : Confi.siget("result/log"),
@@ -70,7 +72,7 @@ class stringtie(librun.workflow):
         self.adcoli = [ self.libadi.get("bin/stringtie") ]
         self.adotli = [ "-o" ]
         self.adphli = [ "-p", self.libadi.get("run/thread")]
-        self.adrfli = [ "-G", self.libadi.get("refer/annotate") ]
+        self.adrfli = [ "-G" ]
 
 
         self.filasi = "exp12-stringtie-batch"
@@ -79,6 +81,7 @@ class stringtie(librun.workflow):
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
         gupoli = self.dicodi.get("group",[])
+        refesi = self.dicodi.get("refer","")
 
         self.head()
 
@@ -102,7 +105,10 @@ class stringtie(librun.workflow):
                 )
                 self.comali.append(adotsi)
                 self.comali.extend(self.adphli)
+
                 self.comali.extend(self.adrfli)
+                metasi = self.libadi.get("refer/annotate").get(refesi)
+                self.comali.append(metasi)
 
                 self.runit()
 

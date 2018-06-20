@@ -8,7 +8,8 @@ helber="""
     Batch Processing for StringTie-CuffDiff workflow
 
   Usage:
-    python exp17-sticuf -t <TRIBE> -g <GROUP,GROUP,GROUP...>
+    python exp17-sticuf -t <TRIBE> -g <GROUP,GROUP,GROUP...> \\
+        --refer=<CODENAME of reference>
 
   Data Structure:
     First : tribe,
@@ -55,7 +56,8 @@ class stiticuffdiff(librun.workflow):
         self.dicodi = {
             "tribe"   : [],
             "group"   : [],
-            "control" : ""
+            "control" : "",
+            "refer"   : ""
         }
         self.Synom.input(Confi.diget("synom"))
         self.libadi = {
@@ -85,6 +87,7 @@ class stiticuffdiff(librun.workflow):
         tibeli = self.dicodi.get("tribe",[])
         gupoli = self.dicodi.get("group",[])
         cotosi = self.dicodi.get("control","")
+        refesi = self.dicodi.get("refer","")
 
         self.head()
 
@@ -99,8 +102,9 @@ class stiticuffdiff(librun.workflow):
             metali.extend(gupoli)
             metali.append(cotosi)
             Marge.dicodi = {
-                "tribe"   : [tibe],
-                "group"   : metali
+                "tribe" : [tibe],
+                "group" : metali,
+                "refer" : refesi
             }
             Marge.actor()
             self.printbr()
