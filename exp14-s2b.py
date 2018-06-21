@@ -9,7 +9,7 @@ helber="""
 
  Usage:
   python exp14-s2b -t <TRIBE> --control=<Control Group> \\
-    -g <GROUP,GROUP,GROUP...> --refer=<CODENAME of reference>
+    -g <GROUP,GROUP,GROUP...>
 
  Data Structure:
   First : tribe,
@@ -55,8 +55,7 @@ class stititobago(librun.workflow):
         self.dicodi = {
             "tribe"   : [],
             "group"   : [],
-            "control" : "",
-            "refer"   : ""
+            "control" : ""
         }
         self.Synom.input(Confi.diget("synom"))
         self.sync()
@@ -85,7 +84,6 @@ class stititobago(librun.workflow):
         tibeli = self.dicodi.get("tribe",[])
         gupoli = self.dicodi.get("group",[])
         cotosi = self.dicodi.get("control","")
-        refesi = self.dicodi.get("refer","")
 
         self.head()
 
@@ -105,8 +103,7 @@ class stititobago(librun.workflow):
             metali.append(cotosi)
             Marge.dicodi = {
                 "tribe" : [tibe],
-                "group" : metali,
-                "refer" : refesi
+                "group" : metali
             }
             Marge.actor()
             self.printbr()

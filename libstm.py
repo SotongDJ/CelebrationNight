@@ -59,8 +59,7 @@ class marge(librun.workflow):
 
         self.dicodi = {
             "tribe" : [],
-            "group" : [],
-            "refer" : ""
+            "group" : []
         }
         # self.sync()
 
@@ -88,7 +87,6 @@ class marge(librun.workflow):
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
         gupoli = self.dicodi.get("group",[])
-        refesi = self.dicodi.get("refer","")
 
         self.head()
 
@@ -117,7 +115,7 @@ class marge(librun.workflow):
             self.comali.extend(self.adphli)
 
             self.comali.extend(self.adrfli)
-            metasi = self.libadi.get("refer/annotate").get(refesi)
+            metasi = self.libadi.get("refer/annotate").get(tibe)
             self.comali.append(metasi)
 
             self.runit()

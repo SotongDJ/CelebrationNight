@@ -7,8 +7,7 @@ helber="""
     Batch Processing for StringTie (Assembly)
 
   Usage:
-    python exp12-stringtie-batch -t <TRIBE> -g <GROUP,GROUP,GROUP...> \\
-        --refer=<CODENAME of gff reference>
+    python exp12-stringtie-batch -t <TRIBE> -g <GROUP,GROUP,GROUP...>
 
   Data Structure:
     First : tribe,
@@ -52,7 +51,6 @@ class stringtie(librun.workflow):
         self.dicodi = {
             "tribe"   : [],
             "group"   : [],
-            "refer"   : ""
         }
         self.Synom.input(Confi.diget("synom"))
         self.libadi = {
@@ -81,7 +79,6 @@ class stringtie(librun.workflow):
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
         gupoli = self.dicodi.get("group",[])
-        refesi = self.dicodi.get("refer","")
 
         self.head()
 
@@ -107,7 +104,7 @@ class stringtie(librun.workflow):
                 self.comali.extend(self.adphli)
 
                 self.comali.extend(self.adrfli)
-                metasi = self.libadi.get("refer/annotate").get(refesi)
+                metasi = self.libadi.get("refer/annotate").get(tibe)
                 self.comali.append(metasi)
 
                 self.runit()
