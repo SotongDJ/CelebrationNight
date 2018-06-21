@@ -5,10 +5,10 @@ global helber
 helber="""
   --- README of exp16-gff-extract.py ---
  Title:
-  Batch Processing for StringTie
+  Batch Processing for GFF information extraction
 
  Usage:
-  python3 exp16-gff-extract.py -i <GFF file> -o <OUTPUT JSON file>
+  python3 exp16-gff-extract.py -i <GFF file> -o <OUTPUT JSON file name>
 
  CAUTION:
   Exp16 required libtab
@@ -35,8 +35,8 @@ class gffextract(librun.workflow):
         self.helb = helber
 
         self.dicodi = {
-            "input"   : [],
-            "output"   : "",
+            "input"  : [],
+            "output" : "",
         }
         self.Synom.input(Confi.diget("synom"))
         self.sync()
@@ -52,9 +52,6 @@ class gffextract(librun.workflow):
     def actor(self):
         self.inpuli = self.dicodi.get("input",[])
         self.oupusi = self.libadi.get("result/ge") + "/" +self.dicodi.get("output","")
-        self.refesi = self.oupusi.replace(".json","-refer.json")
-        self.valesi = self.oupusi.replace(".json","-value.json")
-        self.desisi = self.oupusi.replace(".json","-description.json")
 
         self.head()
 
@@ -159,16 +156,20 @@ class gffextract(librun.workflow):
             metali = self.oupusi.split(".")
             if metali[-1] == "json":
                 setosi = metali.pop(-1)
-            elif metali[-1] in ["ctab","tsv"]:
+            elif metali[-1] in ["ctab","tsv","diff","tab"]:
                 setosi = metali.pop(-1)
-                self.oupusi = setosi.replace("."+setosi,".json")
+                self.oupusi = ".".join(metali).replace("."+setosi,".json")
             else:
                 metasi = metali.pop(-1)
                 setosi = "json"
-                self.oupusi = setosi.replace("."+metasi,".json")
+                self.oupusi = ".".join(metali).replace("."+metasi,".json")
         else:
             setosi = "json"
-            self.oupusi = setosi+".json"
+            self.oupusi = self.oupusi +".json"
+
+        self.refesi = self.oupusi.replace(".json","-refer.json")
+        self.valesi = self.oupusi.replace(".json","-value.json")
+        self.desisi = self.oupusi.replace(".json","-description.json")
 
         with open(self.refesi,"w") as refefi:
             json.dump(self.refedi,refefi,indent=4,sort_keys=True)
