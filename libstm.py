@@ -83,7 +83,7 @@ class marge(librun.workflow):
         self.admgli = [ "--merge" ]
         self.adotli = [ "-o" ]
         self.adphli = [ "-p", self.libadi.get("run/thread")]
-        self.adrfli = [ "-G" ]
+        self.adrfli = [ "-eG" ]
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])

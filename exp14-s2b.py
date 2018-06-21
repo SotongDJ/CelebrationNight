@@ -75,7 +75,7 @@ class stititobago(librun.workflow):
 
         self.comali = []
         self.adcoli = [ self.libadi.get("bin/stringtie") ]
-        self.adrfli = [ "-G" ]
+        self.adrfli = [ "-eG" ]
         self.adphli = [ "-p", self.libadi.get("run/thread")]
         self.adfoli = [ "-b" ]
         self.adotli = [ "-o" ]

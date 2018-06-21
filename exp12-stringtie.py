@@ -72,7 +72,7 @@ class stringtie(librun.workflow):
         self.adcoli = [ self.libadi.get("bin/stringtie") ]
         self.adotli = [ "-o" ]
         self.adphli = [ "-p", self.libadi.get("run/thread")]
-        self.adrfli = [ "-G" ]
+        self.adrfli = [ "-eG" ]
 
 
         self.filasi = "exp12-stringtie-batch"
