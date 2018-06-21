@@ -7,7 +7,7 @@ helber="""
   Merge transcriptome for StringTie
 
  Usage:
-  import libstmerge
+  import libstm
   Marge = libstm.marge()
   Marge.testing = self.testing
   Marge.prelogi = < Log File Path>
