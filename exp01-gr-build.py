@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-import librun, libconfig, libtab, libsnm, libmar
-import time, json
+import librun, libconfig, libgext
 global helber
 helber="""
 --- README of exp01-Genome-Reference-build.py ---
@@ -8,8 +7,9 @@ helber="""
   Construct reference from Genome information for further analysis
 
  Usage:
-  python3 exp01-gr-build.py --genome=<Path and Name of GENOME File> \\
-    --refer=<CODENAME>
+  python3 exp01-gr-build.py -t <tribe>\\
+    --genome=<Path and Name of GENOME File>
+    --prefix=<Prefix for HISAT2 index and GFF Info file>
 
  CAUTION:
   Genome tag and Annotate tag must set with file name only.
@@ -40,7 +40,8 @@ class genomerefer(librun.workflow):
 
         self.dicodi = {
             "genome" : "",
-            "refer"  : ""
+            "prefix" : "",
+            "tribe"  : "",
         }
         self.Synom.input(Confi.diget("synom"))
         self.sync()
@@ -58,7 +59,8 @@ class genomerefer(librun.workflow):
 
     def actor(self):
         self.genosi = self.dicodi.get("genome","")
-        self.refesi = self.dicodi.get("refer" ,"")
+        self.pifisi = self.dicodi.get("prefix" ,"")
+        self.tibesi = self.dicodi.get("tribe" ,"")
 
         self.head()
 
@@ -67,7 +69,7 @@ class genomerefer(librun.workflow):
 
         self.binosi = self.libadi.get("bin/hisat2build")
         self.tereli = ["-p",self.libadi.get("run/thread")]
-        self.oputsi = self.libadi.get("index/hisat") + "/" + self.refesi
+        self.oputsi = self.libadi.get("index/hisat") + "/" + self.pifisi
 
         self.comali = []
         self.comali.append(self.binosi)
@@ -86,8 +88,14 @@ class genomerefer(librun.workflow):
         self.frasi = "==========\nStage 3 : Extract GFF Information\n=========="
         self.printe()
 
-        self.frasi = "   Sorry, still not available"
-        self.printe()
+        Gekta = libgext.gffextract()
+        Gekta.testing = self.testing
+        Gekta.prelogi = self.libadi.get("result/log")+"/exp01-grb-libgext-"
+        Gekta.dicodi = {
+            "input"  : [self.libadi.get("refer/annotate").get(self.tibesi)],
+            "output" : self.pifisi+"-gff-info.json"
+        }
+        Gekta.actor()
 
         self.printbr()
 
