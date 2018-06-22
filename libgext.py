@@ -136,21 +136,26 @@ class gffextract(librun.workflow):
         for nama in list(self.refedi.keys()):
             refesi = self.refedi.get(nama)
             refeli = refesi.replace("=",";").split(";")
-            keyosi = ""
-            valusi = ""
+            semadi = {}
             for n in range(len(refeli)):
-                if "_id" in refeli[n]:
-                    metadi = self.resudi.get(refeli[n],{})
-                    keyosi = refeli[n]
-                    valusi = refeli[n+1]
-                    metadi.update({  valusi : refesi })
-                    self.resudi.update({ keyosi : metadi })
+                keyosi = ""
+                valusi = ""
+                if n+1 != len(refeli):
+                    if "_id" in refeli[n] or refeli[n] in ["gene","transcript","protein"]:
+                        metadi = self.resudi.get(refeli[n],{})
+                        keyosi = refeli[n]
+                        valusi = refeli[n+1]
+                        semadi.update({ keyosi : valusi })
+                        metadi.update({  valusi : refesi })
+                        self.resudi.update({ keyosi : metadi })
 
             for n in range(len(refeli)):
-                if refeli[n] == "description" and keyosi != "" and valusi != "":
-                    metadi = self.desidi.get(keyosi,{})
-                    metadi.update({  valusi : refeli[n+1] })
-                    self.desidi.update({ keyosi : metadi })
+                if refeli[n] == self.colusi:
+                    for keyosi in list(semadi.keys()):
+                        valusi = semadi.get(keyosi)
+                        metadi = self.desidi.get(keyosi,{})
+                        metadi.update({  valusi : refeli[n+1] })
+                        self.desidi.update({ keyosi : metadi })
 
         self.frasi = pprint.pformat( list(self.resudi.keys()) )
         self.printimo()
