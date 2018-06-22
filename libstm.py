@@ -29,7 +29,7 @@ helber="""
 
  Original command:
   stringtie [gtf files] --merge -o [path for result] \\
-  -p [thread] -G [reference gff file] --refer=<CODENAME of reference>
+  -p [thread] -G [reference gff file]
 
  CAUTION:
   <GROUP> must separate with space
