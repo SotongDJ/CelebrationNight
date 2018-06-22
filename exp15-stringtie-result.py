@@ -23,7 +23,7 @@ helber="""
   Visualise graph: explanation01-dataStructure.svg
 
  CAUTION:
-  Exp15 required libtab
+  Exp15 required libtab, libsnm, libmar
   Exp15 required result from Exp16
   <GROUP> must separate with space
   <GROUP> don't allowed spacing
