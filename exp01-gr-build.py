@@ -93,6 +93,7 @@ class genomerefer(librun.workflow):
         Gekta.prelogi = self.libadi.get("result/log")+"/exp01-grb-libgext-"
         Gekta.dicodi = {
             "input"  : [self.libadi.get("refer/annotate").get(self.tibesi)],
+            "tribe"  : self.tibesi,
             "output" : self.pifisi+"-gff-info.json"
         }
         Gekta.actor()

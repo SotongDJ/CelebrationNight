@@ -14,6 +14,7 @@ helber="""
   Gekta.prelogi = < Log File Path>
   Gekta.dicodi = {
     "input"  : <GFF file>
+    "tribe"  : <tribe>
     "output" : <OUTPUT JSON file name>
   }
   Gekta.actor()
@@ -45,21 +46,24 @@ class gffextract(librun.workflow):
         self.helb = helber
 
         self.dicodi = {
-            "input"   : [],
-            "output"   : "",
+            "input"  : [],
+            "output" : "",
+            "tribe"  : "",
         }
 
         self.comali = []
         self.filasi = "library-gff-extract.py"
         self.libadi = {
             "result/stringtie" : Confi.siget("result/stringtie"),
-            "result/ge"        : Confi.siget("result/ge")
+            "result/ge"        : Confi.siget("result/ge"),
+            "target/extract"   : Confi.diget("target/extract")
         }
         self.prelogi = Confi.siget("result/log")+"/libgext-"
 
     def actor(self):
         self.inpuli = self.dicodi.get("input",[])
         self.oupusi = self.libadi.get("result/ge") + "/" +self.dicodi.get("output","")
+        self.colusi = self.libadi.get("target/extract").get(self.dicodi.get("tribe",""))
 
         self.head()
 
@@ -177,7 +181,7 @@ class gffextract(librun.workflow):
 
         self.refesi = self.oupusi.replace(".json","-refer.json")
         self.valesi = self.oupusi.replace(".json","-value.json")
-        self.desisi = self.oupusi.replace(".json","-description.json")
+        self.desisi = self.oupusi.replace(".json","-"+self.colusi+".json")
 
         with open(self.refesi,"w") as refefi:
             json.dump(self.refedi,refefi,indent=4,sort_keys=True)
