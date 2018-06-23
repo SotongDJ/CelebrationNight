@@ -18,6 +18,7 @@ helber="""
         "from" : [column name of gene id in gene description file],
         "to" : [column name of description],
     }
+    # GeneID.dicodi.update()
     GeneID.filasi = "libsnm.geneid"
     GeneID.actor()
 
@@ -81,7 +82,7 @@ class geneid(librun.workflow):
 
         blanbo = False
 
-        if ifasi != "" and keyosi != "" and tonsi != "":
+        if ifasi != "" and tonsi != "":
             for id in list(soceso.keys()):
                 metadi = soceso.get(id)
                 if keyosi in metadi.get(ifasi):

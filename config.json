@@ -38,9 +38,51 @@
         "t": "tribe",
         "x": "index"
     },
+    "target/libgext": {
+        "NCBI": "product",
+        "ensembl": "description"
+    },
+    "target/libsnm": {
+        "NCBI-foldchange": {
+            "from": "gene",
+            "if": "gene",
+            "key": "",
+            "to": "Description"
+        },
+        "NCBI-gene": {
+            "from": "gene",
+            "if": "Gene Name",
+            "key": "",
+            "to": "Description"
+        },
+        "NCBI-transcript": {
+            "from": "gene",
+            "if": "gene_name",
+            "key": "",
+            "to": "Description"
+        },
+        "ensembl-foldchange": {
+            "from": "gene_id",
+            "if": "gene_id",
+            "key": "gene:",
+            "to": "Description"
+        },
+        "ensembl-gene": {
+            "from": "gene_id",
+            "if": "Gene ID",
+            "key": "gene:",
+            "to": "Description"
+        },
+        "ensembl-transcript": {
+            "from": "gene_id",
+            "if": "gene_id",
+            "key": "gene:",
+            "to": "Description"
+        }
+    },
+    "trimmo/adapter": "ILLUMINACLIP:bin/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10",
     "trimmo/lead": "LEADING:25",
-    "trimmo/trail": "TRAILING:25",
-    "trimmo/slide": "SLIDINGWINDOW:4:25",
     "trimmo/length": "MINLEN:36",
-    "trimmo/adapter": "ILLUMINACLIP:bin/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10"
+    "trimmo/slide": "SLIDINGWINDOW:4:25",
+    "trimmo/trail": "TRAILING:25"
 }
