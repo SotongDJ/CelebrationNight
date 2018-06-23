@@ -56,14 +56,17 @@ class gffextract(librun.workflow):
         self.libadi = {
             "result/stringtie" : Confi.siget("result/stringtie"),
             "result/ge"        : Confi.siget("result/ge"),
-            "target/extract"   : Confi.diget("target/extract")
+            "type/database"   : Confi.diget("type/database"),
+            "target/libgext"   : Confi.diget("target/libgext")
         }
         self.prelogi = Confi.siget("result/log")+"/libgext-"
 
     def actor(self):
         self.inpuli = self.dicodi.get("input",[])
         self.oupusi = self.libadi.get("result/ge") + "/" +self.dicodi.get("output","")
-        self.colusi = self.libadi.get("target/extract").get(self.dicodi.get("tribe",""))
+        tibesi = self.dicodi.get("tribe","")
+        tiposi = self.libadi.get("type/database").get(tibesi)
+        self.colusi = self.libadi.get("target/libgext").get(tiposi)
 
         self.head()
 
