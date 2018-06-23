@@ -64,6 +64,8 @@ class stitieresult(librun.workflow):
             "result/ballgown" : Confi.siget("result/ballgown"),
             "result/st-result" : Confi.siget("result/st-result"),
             "data/prefix" : Confi.diget("data/prefix"),
+            "target/libsnm" : Confi.diget("target/libsnm"),
+            "type/database" : Confi.diget("type/database"),
             "result/log" : Confi.siget("result/log"),
             "libtab/TranscriptExpression" : Confi.liget("libtab/TranscriptExpression"),
             "libtab/GeneExpression" : Confi.liget("libtab/GeneExpression"),
@@ -160,41 +162,45 @@ class stitieresult(librun.workflow):
         self.frasi = "==========\nStage 3 : Merging\n=========="
         self.printe()
 
-        Transki.prelogi = self.prelogi + "fus-Transki-"
-        Transki.fusion()
-        Transki.resusi = (
-            self.libadi.get("result/st-result") + "/" +
-            self.libadi.get("data/prefix").get(tibe) + "TranscriptExpression.json"
-        )
-        with open(Transki.resusi,"w") as resufi:
-            json.dump(Transki.resudi,resufi,indent=4,sort_keys=True)
-        Transki.prelogi = self.prelogi + "ara-Transki-"
-        Transki.arrange()
+        if tibeli != []:
+            tibesi = tibeli[0]
 
-        Geniski.prelogi = self.prelogi + "fus-Geniski-"
-        Geniski.fusion()
-        Geniski.resusi = (
-            self.libadi.get("result/st-result") + "/" +
-            self.libadi.get("data/prefix").get(tibe) + "GeneExpression.json"
-        )
-        with open(Geniski.resusi,"w") as resufi:
-            json.dump(Geniski.resudi,resufi,indent=4,sort_keys=True)
-        Geniski.prelogi = self.prelogi + "ara-Geniski-"
-        Geniski.arrange()
+            Transki.prelogi = self.prelogi + "fus-Transki-"
+            Transki.fusion()
+            Transki.resusi = (
+                self.libadi.get("result/st-result") + "/" +
+                self.libadi.get("data/prefix").get(tibesi) + "TranscriptExpression.json"
+            )
+            with open(Transki.resusi,"w") as resufi:
+                json.dump(Transki.resudi,resufi,indent=4,sort_keys=True)
+            Transki.prelogi = self.prelogi + "ara-Transki-"
+            Transki.arrange()
 
-        if refesi != "":
+            Geniski.prelogi = self.prelogi + "fus-Geniski-"
+            Geniski.fusion()
+            Geniski.resusi = (
+                self.libadi.get("result/st-result") + "/" +
+                self.libadi.get("data/prefix").get(tibesi) + "GeneExpression.json"
+            )
+            with open(Geniski.resusi,"w") as resufi:
+                json.dump(Geniski.resudi,resufi,indent=4,sort_keys=True)
+            Geniski.prelogi = self.prelogi + "ara-Geniski-"
+            Geniski.arrange()
+
+        if refesi != "" and tibeli != []:
             self.frasi = "==========\nStage 4 : Combine Description from GFF3\n=========="
             self.printe()
+
+            tibesi = tibeli[0]
+            tiposi = self.libadi.get("type/database").get(tibesi)
 
             GeneID = libsnm.geneid()
             GeneID.dicodi = {
                 "description" : refesi ,
                 "basement" : Transki.resusi ,
-                "if" : "gene_id",
-                "key" : "gene:",
-                "from" : "gene_id",
-                "to" : "Description",
             }
+            tagadi = self.libadi.get("target/libsnm").get(tiposi+"-transcript")
+            GeneID.dicodi.update(tagadi)
             GeneID.filasi = "libsnm.geneid"
             GeneID.prelogi = self.libadi.get("result/log")+"/exp15-stire-geneid-"
             GeneID.actor()
@@ -202,11 +208,9 @@ class stitieresult(librun.workflow):
             GeneID.dicodi = {
                 "description" : refesi ,
                 "basement" : Geniski.resusi ,
-                "if" : "Gene ID",
-                "key" : "gene:",
-                "from" : "gene_id",
-                "to" : "Description",
             }
+            tagadi = self.libadi.get("target/libsnm").get(tiposi+"-gene")
+            GeneID.dicodi.update(tagadi)
             GeneID.filasi = "libsnm.geneid"
             GeneID.prelogi = self.libadi.get("result/log")+"/exp15-stire-geneid-"
             GeneID.actor()
