@@ -63,6 +63,8 @@ class cuffdiffresult(librun.workflow):
             "result/cuffdiff" : Confi.siget("result/cuffdiff"),
             "result/cd-result" : Confi.siget("result/cd-result"),
             "data/prefix" : Confi.diget("data/prefix"),
+            "target/libsnm" : Confi.diget("target/libsnm"),
+            "type/database" : Confi.diget("type/database"),
             "result/log" : Confi.siget("result/log"),
             "libtab/FoldChange" : Confi.liget("libtab/FoldChange"),
         }
@@ -122,30 +124,34 @@ class cuffdiffresult(librun.workflow):
         self.frasi = "==========\nStage 3 : Merging\n=========="
         self.printe()
 
-        Cudiski.prelogi = self.prelogi + "fus-Cudiski-"
-        Cudiski.fusion()
-        Cudiski.resusi = (
-            self.libadi.get("result/cd-result") + "/" +
-            self.libadi.get("data/prefix").get(tibe) + "FoldChange.json"
-        )
-        with open(Cudiski.resusi,"w") as resufi:
-            json.dump(Cudiski.resudi,resufi,indent=4,sort_keys=True)
-        Cudiski.prelogi = self.prelogi + "ara-Cudiski-"
-        Cudiski.arrange()
+        if tibeli != []:
+            tibesi = tibeli[0]
 
-        if refesi != "":
+            Cudiski.prelogi = self.prelogi + "fus-Cudiski-"
+            Cudiski.fusion()
+            Cudiski.resusi = (
+                self.libadi.get("result/cd-result") + "/" +
+                self.libadi.get("data/prefix").get(tibesi) + "FoldChange.json"
+            )
+            with open(Cudiski.resusi,"w") as resufi:
+                json.dump(Cudiski.resudi,resufi,indent=4,sort_keys=True)
+            Cudiski.prelogi = self.prelogi + "ara-Cudiski-"
+            Cudiski.arrange()
+
+        if refesi != "" and tibeli != []:
             self.frasi = "==========\nStage 4 : Combine Description from GFF3\n=========="
             self.printe()
+
+            tibesi = tibeli[0]
+            tiposi = self.libadi.get("type/database").get(tibesi)
 
             GeneID = libsnm.geneid()
             GeneID.dicodi = {
                 "description" : refesi ,
                 "basement" : Cudiski.resusi ,
-                "if" : "gene_id",
-                "key" : "gene:",
-                "from" : "gene_id",
-                "to" : "Description",
             }
+            tagadi = self.libadi.get("target/libsnm").get(tiposi+"-foldchange")
+            GeneID.dicodi.update(tagadi)
             GeneID.filasi = "libsnm.geneid"
             GeneID.prelogi = self.libadi.get("result/log")+"/exp18-cufre-geneid-"
             GeneID.actor()
