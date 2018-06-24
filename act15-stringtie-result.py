@@ -9,7 +9,11 @@ helber="""
 
  Usage:
   python3 act15-stringtie-result.py -t <TRIBE> \\
+<<<<<<< HEAD:act15-stringtie-result.py
     -r [Description JSON file (Act16)]\\
+=======
+    -r [Description JSON file (Exp16)]\\
+>>>>>>> cea885fa61915b43643c8a47a8922db9a5b6c201:act15-stringtie-result.py
     -g <GROUP,GROUP,GROUP...>
 
  Data Structure:
