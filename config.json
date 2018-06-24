@@ -11,6 +11,7 @@
     "bin/tmmadapter": "bin/trimmomatic",
     "bin/tophat2": "bin/tophat2/tophat2",
     "bin/trimmomatic": "bin/trimmomatic/trimmomatic-0.36.jar",
+    "bin/prepDE": "bin/prepDE/prepDE.py",
     "fql/row": [
         "Basic Statistics",
         "Per base sequence quality",

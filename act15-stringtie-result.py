@@ -63,6 +63,8 @@ class stitieresult(librun.workflow):
             "result/stringtie" : Confi.siget("result/stringtie"),
             "result/ballgown" : Confi.siget("result/ballgown"),
             "result/st-result" : Confi.siget("result/st-result"),
+            "result/DESeq2" : Confi.siget("result/DESeq2"),
+            "bin/prepDE" : Confi.siget("bin/prepDE"),
             "data/prefix" : Confi.diget("data/prefix"),
             "target/libsnm" : Confi.diget("target/libsnm"),
             "type/database" : Confi.diget("type/database"),
@@ -83,6 +85,7 @@ class stitieresult(librun.workflow):
         self.tageli.append(self.libadi.get("result/stringtie"))
         self.tageli.append(self.libadi.get("result/ballgown"))
         self.tageli.append(self.libadi.get("result/st-result"))
+        self.tageli.append(self.libadi.get("result/DESeq2"))
         self.chkpaf()
 
         self.frasi = "==========\nStage 1 : Convert TSV/CTAB to JSON\n=========="
@@ -159,11 +162,11 @@ class stitieresult(librun.workflow):
         Geniski.prelogi = self.prelogi + "sca-Geniski-"
         Geniski.scanning()
 
-        self.frasi = "==========\nStage 3 : Merging\n=========="
-        self.printe()
-
         if tibeli != []:
             tibesi = tibeli[0]
+
+            self.frasi = "==========\nStage 3 : Merging\n=========="
+            self.printe()
 
             Transki.prelogi = self.prelogi + "fus-Transki-"
             Transki.fusion()
@@ -187,8 +190,45 @@ class stitieresult(librun.workflow):
             Geniski.prelogi = self.prelogi + "ara-Geniski-"
             Geniski.arrange()
 
+        self.frasi = "==========\nStage 4 : Extract Data for DESeq\n=========="
+        self.printe()
+
+        filasi = self.libadi.get("result/DESeq2") + "/" + "stringtie-list.txt"
+        filafi = open(filasi,"w")
+        filafi.write("")
+        filafi.close()
+
+        for tibe in tibeli:
+            for gupo in gupoli:
+                linosi = (
+                    gupo + " " +
+                    self.libadi.get("result/ballgown") + "/" +
+                    self.libadi.get("data/prefix").get(tibe) +
+                    gupo + "-ballgown.gtf" +
+                    "\n"
+                )
+
+                with open(filasi,"a") as filafi:
+                    filafi.write(linosi)
+
+        self.comali = [
+            "python2", self.libadi.get("bin/prepDE"),
+            "-i", filasi
+        ]
+        self.runit()
+
+        self.comali = [
+            "mv", "gene_count_matrix.csv", self.libadi.get("result/DESeq2") + "/"
+        ]
+        self.runit()
+
+        self.comali = [
+            "mv", "transcript_count_matrix.csv", self.libadi.get("result/DESeq2") + "/"
+        ]
+        self.runit()
+
         if refesi != "" and tibeli != []:
-            self.frasi = "==========\nStage 4 : Combine Description from GFF3\n=========="
+            self.frasi = "==========\nStage 5 : Combine Description from GFF3\n=========="
             self.printe()
 
             tibesi = tibeli[0]
@@ -215,10 +255,10 @@ class stitieresult(librun.workflow):
             GeneID.prelogi = self.libadi.get("result/log")+"/act15-stire-geneid-"
             GeneID.actor()
 
-            self.frasi = "==========\nStage 5 : Convert JSON back to TSV/CTAB\n=========="
+            self.frasi = "==========\nStage 6 : Convert JSON back to TSV/CTAB\n=========="
             self.printe()
         else:
-            self.frasi = "==========\nStage 4 : Convert JSON back to TSV/CTAB\n=========="
+            self.frasi = "==========\nStage 5 : Convert JSON back to TSV/CTAB\n=========="
             self.printe()
 
         CoveTab = libtab.json2tab()
