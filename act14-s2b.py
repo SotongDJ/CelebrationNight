@@ -3,12 +3,12 @@ import librun, libconfig, libstm
 import time
 global helber
 helber="""
---- README of exp14-stringtie2ballgown ---
+--- README of act14-stringtie2ballgown ---
  Title:
   Batch Processing for StringTie (Compare)
 
  Usage:
-  python exp14-s2b -t <TRIBE> --control=<Control Group> \\
+  python act14-s2b -t <TRIBE> --control=<Control Group> \\
     -g <GROUP,GROUP,GROUP...>
 
  Data Structure:
@@ -26,7 +26,7 @@ helber="""
     -G [Merged GTF file] -p [thread] -b [Result PATH]
 
  CAUTION:
-  Exp14 required libstm
+  Act14 required libstm
   <GROUP> must separate with space
   <GROUP> don't allowed spacing
 
@@ -60,7 +60,7 @@ class stititobago(librun.workflow):
         self.Synom.input(Confi.diget("synom"))
         self.sync()
 
-        self.filasi = "exp14-stringtie2ballgown"
+        self.filasi = "act14-stringtie2ballgown"
         self.libadi = {
             "bin/stringtie" : Confi.siget("bin/stringtie"),
             "result/stringtie" : Confi.siget("result/stringtie"),
@@ -70,7 +70,7 @@ class stititobago(librun.workflow):
             "run/thread" : Confi.siget("run/thread"),
             "data/prefix" : Confi.diget("data/prefix"),
         }
-        self.prelogi = self.libadi.get("result/log")+"/exp14-s2b-"
+        self.prelogi = self.libadi.get("result/log")+"/act14-s2b-"
 
         self.comali = []
         self.adcoli = [ self.libadi.get("bin/stringtie") ]
@@ -96,7 +96,7 @@ class stititobago(librun.workflow):
         for tibe in tibeli:
             self.printbr()
             Marge.testing = self.testing
-            Marge.prelogi = self.libadi.get("result/log")+"/exp14-s2b-Merge-"
+            Marge.prelogi = self.libadi.get("result/log")+"/act14-s2b-Merge-"
 
             metali = []
             metali.extend(gupoli)

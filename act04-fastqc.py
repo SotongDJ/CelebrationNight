@@ -2,12 +2,12 @@
 import librun, libconfig, sys
 global helber
 helber="""
---- README of exp04-fastqc ---
+--- README of act04-fastqc ---
  Title:
   Batch Processing for FastQC
 
  Usage:
-  python exp04-fastqc -t <TRIBE> -g <GROUP> <GROUP> <GROUP>... \\
+  python act04-fastqc -t <TRIBE> -g <GROUP> <GROUP> <GROUP>... \\
     -s <SUBGROUP> <SUBGROUP> <SUBGROUP>...
 
  Data Structure:
@@ -58,7 +58,7 @@ class fasquacon(librun.workflow):
 
         self.tagesi = ""
 
-        self.filasi = "exp04-fastqc"
+        self.filasi = "act04-fastqc"
         self.libadi = {
             "bin/fastqc" : Confi.siget("bin/fastqc"),
             "result/raw" : Confi.siget("result/raw"),
@@ -67,7 +67,7 @@ class fasquacon(librun.workflow):
             "data/prefix" : Confi.diget("data/prefix"),
             "raw/type" : Confi.siget("raw/type"),
         }
-        self.prelogi = self.libadi.get("result/log")+"/exp04-fastqc-"
+        self.prelogi = self.libadi.get("result/log")+"/act04-fastqc-"
 
         self.comali = []
         self.adcoli = [

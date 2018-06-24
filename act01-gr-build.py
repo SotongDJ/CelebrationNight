@@ -2,12 +2,12 @@
 import librun, libconfig, libgext
 global helber
 helber="""
---- README of exp01-Genome-Reference-build.py ---
+--- README of act01-Genome-Reference-build.py ---
  Title:
   Construct reference from Genome information for further analysis
 
  Usage:
-  python3 exp01-gr-build.py -t <tribe>\\
+  python3 act01-gr-build.py -t <tribe>\\
     --genome=<Path and Name of GENOME File>
     --prefix=<Prefix for HISAT2 index and GFF Info file>
 
@@ -47,7 +47,7 @@ class genomerefer(librun.workflow):
         self.sync()
 
         self.comali = []
-        self.filasi = "exp01-Genome-Reference-build.py"
+        self.filasi = "act01-Genome-Reference-build.py"
         self.libadi = {
             "bin/hisat2build" : Confi.siget("bin/hisat2build"),
             "index/hisat"     : Confi.siget("index/hisat"),
@@ -55,7 +55,7 @@ class genomerefer(librun.workflow):
             "run/thread"      : Confi.siget("run/thread"),
             "refer/annotate"  : Confi.diget("refer/annotate"),
         }
-        self.prelogi = self.libadi.get("result/log")+"/exp01-gr-build-"
+        self.prelogi = self.libadi.get("result/log")+"/act01-gr-build-"
 
     def actor(self):
         self.genosi = self.dicodi.get("genome","")
@@ -90,7 +90,7 @@ class genomerefer(librun.workflow):
 
         Gekta = libgext.gffextract()
         Gekta.testing = self.testing
-        Gekta.prelogi = self.libadi.get("result/log")+"/exp01-grb-libgext-"
+        Gekta.prelogi = self.libadi.get("result/log")+"/act01-grb-libgext-"
         Gekta.dicodi = {
             "input"  : [self.libadi.get("refer/annotate").get(self.tibesi)],
             "tribe"  : self.tibesi,

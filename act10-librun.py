@@ -3,12 +3,12 @@ import sys, pprint
 import librun
 global helber
 helber="""
-   --- README of exp10-librun ---
+   --- README of act10-librun ---
  Title:
     Showcase of librun
 
  Usage:
-    python3 exp10-librun.py --hello=waha -h a ba -t ca -hello mow
+    python3 act10-librun.py --hello=waha -h a ba -t ca -hello mow
 
    --- README ---
 """

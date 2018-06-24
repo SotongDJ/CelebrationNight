@@ -2,12 +2,12 @@
 import librun, libconfig, sys
 global helber
 helber="""
-   --- README of exp09-hisat-batch ---
+   --- README of act09-hisat-batch ---
   Title:
     Batch Processing for HISAT2
 
   Usage:
-    python exp09-hisat-batch \\
+    python act09-hisat-batch \\
       [stringtie|cufflinks] -t <TRIBE> -g <GROUP,GROUP,GROUP...> \\
       -x <GENOME PREFIX that USE in HISAT2-BUILD>
 
@@ -94,11 +94,11 @@ class hisatbat(librun.workflow):
         self.rmcoli = ["rm", "-v"]
 
 
-        self.filasi = "exp09-hisat-batch.py"
+        self.filasi = "act09-hisat-batch.py"
 
         self.comali = []
 
-        self.prelogi = self.libadi.get("result/log")+"/exp09-hisat-batch-"
+        self.prelogi = self.libadi.get("result/log")+"/act09-hisat-batch-"
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])

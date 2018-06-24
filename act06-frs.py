@@ -3,12 +3,12 @@ import json, time
 import librun, libconfig
 global helber
 helber="""
---- README of exp06-fastqc-result-summary ---
+--- README of act06-fastqc-result-summary ---
  Title:
   FastQC result summary generator
 
  Usage:
-  python exp06-frs -t <TRIBE> -g <GROUP> <GROUP> <GROUP>... \\
+  python act06-frs -t <TRIBE> -g <GROUP> <GROUP> <GROUP>... \\
     -s <SUBGROUP> <SUBGROUP> <SUBGROUP>...
 
  Data Structure:
@@ -56,7 +56,7 @@ class fasresum(librun.workflow):
 
         self.tagesi = ""
 
-        self.filasi = "exp05-gfr"
+        self.filasi = "act05-gfr"
         self.libadi = {
             "result/fastqc" : Confi.siget("result/fastqc"),
             "result/gfr" : Confi.siget("result/gfr"),
@@ -65,11 +65,11 @@ class fasresum(librun.workflow):
             "raw/type" : Confi.diget("raw/type"),
             "fql/row" : Confi.liget("fql/row"),
         }
-        self.prelogi = self.libadi.get("result/log")+"/exp05-gfr-"
+        self.prelogi = self.libadi.get("result/log")+"/act05-gfr-"
 
         self.comali = []
 
-        pnglibfa = open('exp06-fsp-png-template.json','r')
+        pnglibfa = open('act06-fsp-png-template.json','r')
         self.pcondi = json.load(pnglibfa)
 
         self.headsi = """<!DOCTYPE html>

@@ -3,13 +3,13 @@ import librun, libconfig, libtab, libsnm, libmar
 import time, json
 global helber
 helber="""
---- README of exp18-cuffdiff-result.py ---
+--- README of act18-cuffdiff-result.py ---
  Title:
   Batch Processing for StringTie (Summarise)
 
  Usage:
-  python3 exp18-cuffdiff-result.py -t <TRIBE> \\
-    -r [Description JSON file (Exp16)]\\
+  python3 act18-cuffdiff-result.py -t <TRIBE> \\
+    -r [Description JSON file (Act16)]\\
     -g <GROUP,GROUP,GROUP...>
 
  Data Structure:
@@ -23,8 +23,8 @@ helber="""
   Visualise graph: explanation01-dataStructure.svg
 
  CAUTION:
-  exp18 required libtab, libsnm, libmar
-  exp18 required result from exp17
+  act18 required libtab, libsnm, libmar
+  act18 required result from act17
   <GROUP> must separate with space
   <GROUP> don't allowed spacing
 
@@ -58,7 +58,7 @@ class cuffdiffresult(librun.workflow):
         self.sync()
 
         self.comali = []
-        self.filasi = "exp18-cuffdiff-result.py"
+        self.filasi = "act18-cuffdiff-result.py"
         self.libadi = {
             "result/cuffdiff" : Confi.siget("result/cuffdiff"),
             "result/cd-result" : Confi.siget("result/cd-result"),
@@ -68,7 +68,7 @@ class cuffdiffresult(librun.workflow):
             "result/log" : Confi.siget("result/log"),
             "libtab/FoldChange" : Confi.liget("libtab/FoldChange"),
         }
-        self.prelogi = self.libadi.get("result/log")+"/exp18-cufre-"
+        self.prelogi = self.libadi.get("result/log")+"/act18-cufre-"
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
@@ -104,7 +104,7 @@ class cuffdiffresult(librun.workflow):
             CoveJos = libtab.tab2json()
             CoveJos.dicodi = { "files" : taboli ,"id" : "test_id" }
             CoveJos.filasi = "libtab.tab2json"
-            CoveJos.prelogi = self.libadi.get("result/log")+"/exp18-cufre-covejos-"
+            CoveJos.prelogi = self.libadi.get("result/log")+"/act18-cufre-covejos-"
             CoveJos.actor()
 
         self.frasi = "==========\nStage 2 : Scanning for Variable Parts\n=========="
@@ -153,7 +153,7 @@ class cuffdiffresult(librun.workflow):
             tagadi = self.libadi.get("target/libsnm").get(tiposi+"-foldchange")
             GeneID.dicodi.update(tagadi)
             GeneID.filasi = "libsnm.geneid"
-            GeneID.prelogi = self.libadi.get("result/log")+"/exp18-cufre-geneid-"
+            GeneID.prelogi = self.libadi.get("result/log")+"/act18-cufre-geneid-"
             GeneID.actor()
 
             self.frasi = "==========\nStage 5 : Convert JSON back to TSV/CTAB\n=========="
@@ -164,7 +164,7 @@ class cuffdiffresult(librun.workflow):
 
         CoveTab = libtab.json2tab()
         CoveTab.filasi = "libtab.json2tab"
-        CoveTab.prelogi = self.libadi.get("result/log")+"/exp18-cufre-covetab-"
+        CoveTab.prelogi = self.libadi.get("result/log")+"/act18-cufre-covetab-"
         CoveTab.dicodi = {
             "files" : [Cudiski.resusi],
             "column" : Cudiski.coluli

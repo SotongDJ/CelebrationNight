@@ -3,13 +3,13 @@ import librun, libconfig, libtab, libsnm, libmar
 import time, json
 global helber
 helber="""
---- README of exp15-stringtie-result.py ---
+--- README of act15-stringtie-result.py ---
  Title:
   Batch Processing for StringTie (Summarise)
 
  Usage:
-  python3 exp15-stringtie-result.py -t <TRIBE> \\
-    -r [Description JSON file (Exp16)]\\
+  python3 act15-stringtie-result.py -t <TRIBE> \\
+    -r [Description JSON file (Act16)]\\
     -g <GROUP,GROUP,GROUP...>
 
  Data Structure:
@@ -23,8 +23,8 @@ helber="""
   Visualise graph: explanation01-dataStructure.svg
 
  CAUTION:
-  Exp15 required libtab, libsnm, libmar
-  Exp15 required result from Exp16
+  Act15 required libtab, libsnm, libmar
+  Act15 required result from Act16
   <GROUP> must separate with space
   <GROUP> don't allowed spacing
 
@@ -58,7 +58,7 @@ class stitieresult(librun.workflow):
         self.sync()
 
         self.comali = []
-        self.filasi = "exp15-stringtie-result"
+        self.filasi = "act15-stringtie-result"
         self.libadi = {
             "result/stringtie" : Confi.siget("result/stringtie"),
             "result/ballgown" : Confi.siget("result/ballgown"),
@@ -70,7 +70,7 @@ class stitieresult(librun.workflow):
             "libtab/TranscriptExpression" : Confi.liget("libtab/TranscriptExpression"),
             "libtab/GeneExpression" : Confi.liget("libtab/GeneExpression"),
         }
-        self.prelogi = self.libadi.get("result/log")+"/exp15-stire-"
+        self.prelogi = self.libadi.get("result/log")+"/act15-stire-"
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
@@ -108,7 +108,7 @@ class stitieresult(librun.workflow):
             CoveJos = libtab.tab2json()
             CoveJos.dicodi = { "files" : taboli ,"id" : "t_id" }
             CoveJos.filasi = "libtab.tab2json"
-            CoveJos.prelogi = self.libadi.get("result/log")+"/exp15-stire-covejos-"
+            CoveJos.prelogi = self.libadi.get("result/log")+"/act15-stire-covejos-"
             CoveJos.actor()
 
         taboli = []
@@ -131,7 +131,7 @@ class stitieresult(librun.workflow):
             CoveJos = libtab.tab2json()
             CoveJos.dicodi = { "files" : taboli ,"id" : "Gene ID" }
             CoveJos.filasi = "libtab.tab2json"
-            CoveJos.prelogi = self.libadi.get("result/log")+"/exp15-stire-covejos-"
+            CoveJos.prelogi = self.libadi.get("result/log")+"/act15-stire-covejos-"
             CoveJos.actor()
 
         self.frasi = "==========\nStage 2 : Scanning for Variable Parts\n=========="
@@ -202,7 +202,7 @@ class stitieresult(librun.workflow):
             tagadi = self.libadi.get("target/libsnm").get(tiposi+"-transcript")
             GeneID.dicodi.update(tagadi)
             GeneID.filasi = "libsnm.geneid"
-            GeneID.prelogi = self.libadi.get("result/log")+"/exp15-stire-geneid-"
+            GeneID.prelogi = self.libadi.get("result/log")+"/act15-stire-geneid-"
             GeneID.actor()
 
             GeneID.dicodi = {
@@ -212,7 +212,7 @@ class stitieresult(librun.workflow):
             tagadi = self.libadi.get("target/libsnm").get(tiposi+"-gene")
             GeneID.dicodi.update(tagadi)
             GeneID.filasi = "libsnm.geneid"
-            GeneID.prelogi = self.libadi.get("result/log")+"/exp15-stire-geneid-"
+            GeneID.prelogi = self.libadi.get("result/log")+"/act15-stire-geneid-"
             GeneID.actor()
 
             self.frasi = "==========\nStage 5 : Convert JSON back to TSV/CTAB\n=========="
@@ -223,7 +223,7 @@ class stitieresult(librun.workflow):
 
         CoveTab = libtab.json2tab()
         CoveTab.filasi = "libtab.json2tab"
-        CoveTab.prelogi = self.libadi.get("result/log")+"/exp15-stire-covetab-"
+        CoveTab.prelogi = self.libadi.get("result/log")+"/act15-stire-covetab-"
         CoveTab.dicodi = {
             "files" : [Transki.resusi],
             "column" : Transki.coluli
