@@ -3,12 +3,12 @@ import librun, libconfig, libstm
 import time
 global helber
 helber="""
---- README of exp19-pipeline-fast ---
+--- README of act19-pipeline-fast ---
  Title:
   Batch Processing for StringTie (Compare)
 
  Usage:
-  python exp19-pipeline-fast -t <TRIBE> -g <GROUP,GROUP,GROUP...>
+  python act19-pipeline-fast -t <TRIBE> -g <GROUP,GROUP,GROUP...>
 
  Data Structure:
   First : tribe,
@@ -59,7 +59,7 @@ class stititobago(librun.workflow):
         self.Synom.input(Confi.diget("synom"))
         self.sync()
 
-        self.filasi = "exp19-pipeline-fast"
+        self.filasi = "act19-pipeline-fast"
         self.libadi = {
             "bin/stringtie" : Confi.siget("bin/stringtie"),
             "result/stringtie" : Confi.siget("result/stringtie"),
@@ -70,7 +70,7 @@ class stititobago(librun.workflow):
             "data/prefix" : Confi.diget("data/prefix"),
             "refer/annotate" : Confi.diget("refer/annotate"),
         }
-        self.prelogi = self.libadi.get("result/log")+"/exp19-pipeline-fast-"
+        self.prelogi = self.libadi.get("result/log")+"/act19-pipeline-fast-"
 
         self.comali = []
         self.adcoli = [ self.libadi.get("bin/stringtie") ]

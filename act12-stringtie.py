@@ -2,12 +2,12 @@
 import librun, libconfig, sys
 global helber
 helber="""
-   --- README of exp12-stringtie-batch ---
+   --- README of act12-stringtie-batch ---
   Title:
     Batch Processing for StringTie (Assembly)
 
   Usage:
-    python exp12-stringtie-batch -t <TRIBE> -g <GROUP,GROUP,GROUP...>
+    python act12-stringtie-batch -t <TRIBE> -g <GROUP,GROUP,GROUP...>
 
   Data Structure:
     First : tribe,
@@ -73,8 +73,8 @@ class stringtie(librun.workflow):
         self.adrfli = [ "-eG" ]
 
 
-        self.filasi = "exp12-stringtie-batch"
-        self.prelogi = self.libadi.get("result/log")+"/exp12-stringtie-batch-"
+        self.filasi = "act12-stringtie-batch"
+        self.prelogi = self.libadi.get("result/log")+"/act12-stringtie-batch-"
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])

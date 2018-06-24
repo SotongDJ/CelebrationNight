@@ -3,12 +3,12 @@ import librun, libconfig, libstm
 import sys
 global helber
 helber="""
-   --- README of exp17-stringtie-cuffdiff ---
+   --- README of act17-stringtie-cuffdiff ---
   Title:
     Batch Processing for StringTie-CuffDiff workflow
 
   Usage:
-    python exp17-sticuf -t <TRIBE> --control=<Control Group> \\
+    python act17-sticuf -t <TRIBE> --control=<Control Group> \\
       -g <GROUP,GROUP,GROUP...>
 
   Data Structure:
@@ -79,8 +79,8 @@ class stiticuffdiff(librun.workflow):
         self.adphli = [ "-p", self.libadi.get("run/thread")]
 
 
-        self.filasi = "exp17-sticuf"
-        self.prelogi = self.libadi.get("result/log")+"/exp17-sticuf-"
+        self.filasi = "act17-sticuf"
+        self.prelogi = self.libadi.get("result/log")+"/act17-sticuf-"
 
     def actor(self):
         tibeli = self.dicodi.get("tribe",[])
@@ -94,7 +94,7 @@ class stiticuffdiff(librun.workflow):
         for tibe in tibeli:
             self.printbr()
             Marge.testing = self.testing
-            Marge.prelogi = self.libadi.get("result/log")+"/exp17-StiCuf-Merge-"
+            Marge.prelogi = self.libadi.get("result/log")+"/act17-StiCuf-Merge-"
 
             metali = []
             metali.extend(gupoli)

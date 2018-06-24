@@ -4,12 +4,12 @@ import librun,libconfig
 from subprocess import call
 
 helber="""
-   --- README of exp07-trim ---
+   --- README of act07-trim ---
  Title:
     Batch Processing for Trimmomatic
 
  Usage:
-    python exp07-trim \\
+    python act07-trim \\
         --raw=<TRIBE of Sources> \\
         --pair=<TRIBE for paired seq> \\
         --unpair=<TRIBE for unpaired seq> \\
@@ -96,8 +96,8 @@ class trimmo(librun.workflow):
         self.adpali.append(self.libadi.get("trimmo/length"))
         self.adpali.append(self.libadi.get("trimmo/adapter"))
 
-        self.filasi = "exp07-trim"
-        self.prelogi = Confi.siget("result/log")+"/exp07-trim-"
+        self.filasi = "act07-trim"
+        self.prelogi = Confi.siget("result/log")+"/act07-trim-"
 
     def actor(self):
         self.gupoli = self.dicodi.get("group" ,[])
