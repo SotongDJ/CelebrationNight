@@ -9,11 +9,7 @@ helber="""
 
  Usage:
   python3 act18-cuffdiff-result.py -t <TRIBE> \\
-<<<<<<< HEAD:act18-cuffdiff-result.py
     -r [Description JSON file (Act16)]\\
-=======
-    -r [Description JSON file (Exp16)]\\
->>>>>>> cea885fa61915b43643c8a47a8922db9a5b6c201:act18-cuffdiff-result.py
     -g <GROUP,GROUP,GROUP...>
 
  Data Structure:
