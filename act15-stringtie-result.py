@@ -193,8 +193,8 @@ class stitieresult(librun.workflow):
         self.frasi = "==========\nStage 4 : Extract Data for DESeq\n=========="
         self.printe()
 
-        filasi = self.libadi.get("result/DESeq2") + "/" + "stringtie-list.txt"
-        filafi = open(filasi,"w")
+        filani = self.libadi.get("result/DESeq2") + "/" + "stringtie-list.txt"
+        filafi = open(filani,"w")
         filafi.write("")
         filafi.close()
 
@@ -208,12 +208,12 @@ class stitieresult(librun.workflow):
                     "\n"
                 )
 
-                with open(filasi,"a") as filafi:
+                with open(filani,"a") as filafi:
                     filafi.write(linosi)
 
         self.comali = [
             "python2", self.libadi.get("bin/prepDE"),
-            "-i", filasi
+            "-i", filani
         ]
         self.runit()
 
