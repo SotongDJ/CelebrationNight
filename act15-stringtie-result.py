@@ -227,6 +227,8 @@ class stitieresult(librun.workflow):
         ]
         self.runit()
 
+        self.comali = []
+
         if refesi != "" and tibeli != []:
             self.frasi = "==========\nStage 5 : Combine Description from GFF3\n=========="
             self.printe()
@@ -279,5 +281,8 @@ class stitieresult(librun.workflow):
         self.printbr()
 
         self.endin()
+
+        self.frasi = "\n\n"
+        self.printe()
 
 StiRes = stitieresult()
