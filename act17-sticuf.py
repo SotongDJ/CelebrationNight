@@ -78,7 +78,6 @@ class stiticuffdiff(librun.workflow):
         self.adotsi = "-o"
         self.adphli = [ "-p", self.libadi.get("run/thread")]
 
-
         self.filasi = "act17-sticuf"
         self.prelogi = self.libadi.get("result/log")+"/act17-sticuf-"
 
@@ -116,15 +115,18 @@ class stiticuffdiff(librun.workflow):
                     self.libadi.get("data/prefix").get(tibe) +
                     cotosi + "-cufflinks-sorted.bam"
                 )
+                adinli = []
+                adinli.append(self.cosasi)
                 for gupo in gupoli:
-                    adinli = []
-                    adinli.append(self.cosasi)
                     adinsi = (
                         self.libadi.get("result/hisat") + "/" +
                         self.libadi.get("data/prefix").get(tibe) +
                         gupo + "-cufflinks-sorted.bam"
                     )
                     adinli.append(adinsi)
+                    bainli = [
+                        self.cosasi, adinsi
+                    ]
 
                     self.comali = []
                     self.comali.append(self.adcosi)
@@ -138,9 +140,26 @@ class stiticuffdiff(librun.workflow):
                     self.comali.append(adotsi)
                     self.comali.extend(self.adphli)
                     self.comali.append(self.adrfsi)
-                    self.comali.extend(adinli)
+                    self.comali.extend(bainli)
 
                     self.runit()
+
+                self.comali = []
+
+                self.comali.append(self.adcosi)
+                self.comali.append(self.adlasi)
+                self.comali.append(cotosi+","+",".join(gupoli))
+                self.comali.append(self.adotsi)
+                adotsi = (
+                    self.libadi.get("result/cuffdiff") + "/" +
+                    self.libadi.get("data/prefix").get(tibe) + "Result"
+                )
+                self.comali.append(adotsi)
+                self.comali.extend(self.adphli)
+                self.comali.append(self.adrfsi)
+                self.comali.extend(adinli)
+
+                self.runit()
 
         self.endin()
 
