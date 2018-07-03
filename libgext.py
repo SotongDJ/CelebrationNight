@@ -85,7 +85,12 @@ class gffextract(librun.workflow):
         )
 
         CoveJos = libtab.tab2json()
-        CoveJos.dicodi = { "files" : self.inpuli ,"id" : "" ,"column":comusi}
+        CoveJos.dicodi = {
+            "files"  : self.inpuli ,
+            "id"     : ""          ,
+            "prefix" : "gff"       ,
+            "column" : comusi
+        }
         CoveJos.actor()
 
         self.printbr()
@@ -109,22 +114,40 @@ class gffextract(librun.workflow):
         self.frasi = "==========\nStage 3 : Extract Attributes into Dictionaries\n=========="
         self.printe()
 
-        self.refedi = {}
-        self.valedi = {}
-        for reco in list(self.socedi.keys()):
-            metali = []
-            metali = reco.split(";")
-            numeli = self.socedi.get(reco)
-            namasi = ""
-            for meta in metali:
-                if "ID=" in meta:
-                    namasi = meta.split("=")[1]
-                    self.refedi.update({ namasi : reco })
-                    self.valedi.update({ namasi : numeli })
-                elif "Name=" in meta:
-                    namasi = meta.split("=")[1]
-                    self.refedi.update({ namasi : reco })
-                    self.valedi.update({ namasi : numeli })
+        self.id_x_value_dict   = {}
+        self.name_x_value_dict = {}
+
+        for record in list(self.socedi.keys()):
+            ids_list   = []
+            value_list = []
+            value_dict = {}
+
+            value_list = record.split(";")
+            for value in value_list:
+                temp_list = []
+
+                temp_list = value.split("=")
+                if len(temp_list) == 2:
+                    value_dict.update({ temp_list[0] : temp_list[1] })
+
+            ids_list   = self.socedi.get(record)
+            for id in ids_list:
+                self.id_x_value_dict.update({ id : value_dict })
+
+        for id in list(self.id_x_value_dict.keys()):
+            temp_dict = {}
+            name_str  = ""
+
+            temp_dict = self.id_x_value_dict.get( id, {})
+            temp_dict.update({ "gff_id" : id })
+
+            if "ID" in temp_dict.keys():
+                name_string = temp_dict.get("ID")
+            elif "Name" in temp_dict.keys():
+                name_string = temp_dict.get("Name")
+
+            if name_str != "":
+                self.name_x_value_dict.update({ name_str : temp_dict })
 
         self.frasi = pprint.pformat(( len(self.refedi) , len(self.valedi) ))
         self.printimo()
