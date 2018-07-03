@@ -47,8 +47,9 @@ class tab2json(librun.workflow):
         # self.testing = True
 
         self.dicodi = {
-            "files" : [],
-            "id" : "",
+            "files"  : [],
+            "id"     : "",
+            "prefix" : "",
             "column" : ""
         }
         self.sync()
@@ -62,9 +63,10 @@ class tab2json(librun.workflow):
         self.prelogi = "temp/tmp-"
 
     def actor(self):
-        soceli = self.dicodi.get("files",[])
-        tagesi = self.dicodi.get("id","")
-        comusi = self.dicodi.get("column","")
+        soceli        = self.dicodi.get("files" ,[])
+        tagesi        = self.dicodi.get("id"    ,"")
+        prefix_string = self.dicodi.get("prefix","")
+        comusi        = self.dicodi.get("column","")
         self.head()
 
         self.frasi = pprint.pformat((soceli,tagesi,len(comusi)))
@@ -125,14 +127,14 @@ class tab2json(librun.workflow):
 
                         if not tagebo:
                             numein = numein + 1
-                            idisi = str(numein)
+                            idisi = prefix_string + str(numein)
 
                         for n in range(len(list(namedi.keys()))):
                             colusi = namedi.get(n)
                             metadi.update({ colusi : metali[n]})
 
                             if colusi == tagesi and tagebo:
-                                idisi = metali[n]
+                                idisi = prefix_string + metali[n]
 
                         resudi.update({ idisi : metadi })
 
