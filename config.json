@@ -40,43 +40,43 @@
         "x": "index"
     },
     "target/libgext": {
-        "NCBI": "product",
-        "ensembl": "description"
+        "NCBI": {
+            "from": "gene",
+            "to": "product"
+        },
+        "ensembl": {
+            "from": "gene_id",
+            "to": "description"
+        }
     },
     "target/libsnm": {
         "NCBI-foldchange": {
             "from": "gene",
-            "if": "gene",
             "key": "",
             "to": "Description"
         },
         "NCBI-gene": {
-            "from": "gene",
-            "if": "Gene Name",
+            "from": "Gene Name",
             "key": "",
             "to": "Description"
         },
         "NCBI-transcript": {
-            "from": "gene",
-            "if": "gene_name",
+            "from": "gene_name",
             "key": "",
             "to": "Description"
         },
         "ensembl-foldchange": {
             "from": "gene_id",
-            "if": "gene_id",
             "key": "gene:",
             "to": "Description"
         },
         "ensembl-gene": {
-            "from": "gene_id",
-            "if": "Gene ID",
+            "from": "Gene ID",
             "key": "gene:",
             "to": "Description"
         },
         "ensembl-transcript": {
             "from": "gene_id",
-            "if": "gene_id",
             "key": "gene:",
             "to": "Description"
         }
