@@ -365,9 +365,11 @@ class workflow:
         list_max_length_num = self.getMaxLengthValue()
         for subject_str in self.list_list:
             if len(subject_str) < list_max_length_num :
-                subject_str = subject_str + ' '*(list_max_length_num-len(subject_str))
+                subject_final_str = subject_str + ' '*(list_max_length_num-len(subject_str))
+            else:
+                subject_final_str = subject_str
 
-            argv_info_line.append("    " + subject_str + ": " +
+            argv_info_line.append("    " + subject_final_str + ": " +
                 pprint.pformat(self.log_argv_dict.get(subject_str),compact=True,width=150))
 
         if self.requested_config_dict != {}:
