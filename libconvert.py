@@ -10,20 +10,20 @@ helper_msg_block="""
   Usage:
     import libconvert
 
-    CoveJos = libconvert.tab2json()
-    CoveJos.requested_argv_dict = {
+    CvtoJSON = libconvert.cvtTABtoJSON()
+    CvtoJSON.requested_argv_dict = {
         "files" : [<INPUT>,<INPUT>......] ,
         "id" : "" ,
         "column": < Column separate by tab > # for headless file
     }
-    CoveJos.actor()
+    CvtoJSON.actor()
 
-    CoveTab = libconvert.json2tab()
-    CoveTab.requested_argv_dict = {
+    CvtoTAB = libconvert.cvtJSONtoTAB()
+    CvtoTAB.requested_argv_dict = {
         "files" : [<INPUT>,<INPUT>......] ,
         "column": [<NAME>,<NAME>......] # for sorting
     }
-    CoveTab.actor()
+    CvtoTAB.actor()
 
    --- README ---
 """
@@ -40,7 +40,7 @@ helper_msg_block="""
   -fa: File (with open())
   -so: JSON
 """
-class tab2json(libWorkFlow.workflow):
+class cvtTABtoJSON(libWorkFlow.workflow):
     def redirecting(self):
         """"""
     def personalize(self):
@@ -63,101 +63,103 @@ class tab2json(libWorkFlow.workflow):
         self.log_file_prefix_str = "temp/tmp-"
 
     def actor(self):
-        soceli        = self.requested_argv_dict.get("files" ,[])
-        target_file_path        = self.requested_argv_dict.get("id"    ,"")
+        source_files_list = self.requested_argv_dict.get("files" ,[])
+        column_id_name = self.requested_argv_dict.get("id"    ,"")
         prefix_str = self.requested_argv_dict.get("prefix","")
-        comusi        = self.requested_argv_dict.get("column","")
+        column_name_str = self.requested_argv_dict.get("column","")
         self.startLog()
 
-        self.phrase_str = pprint.pformat((soceli,target_file_path,len(comusi)))
+        self.phrase_str = pprint.pformat((
+            source_files_list,column_id_name,prefix_str,column_name_str
+        ))
         self.printTimeStamp()
 
-        for socesi in soceli:
-            self.phrase_str = pprint.pformat(socesi)
+        for source_file_name in source_files_list:
+            self.phrase_str = pprint.pformat(source_file_name)
             self.printTimeStamp()
 
-            metali = socesi.split(".")
-            metali[-1] = "json"
-            resusi = ".".join(metali)
-            remasi = resusi.replace(".json","-column.json")
+            name_temp_list = source_file_name.split(".")
+            name_temp_list[-1] = "json"
+            result_file_name = ".".join(name_temp_list)
+            column_file_name = result_file_name.replace(".json","-column.json")
 
-            self.target_file_path = resusi
-            resubo = self.check_file()
-            self.target_file_path = remasi
-            remabo = self.check_file()
+            self.target_file_path = result_file_name
+            result_file_boolean = self.check_file()
+            self.target_file_path = column_file_name
+            column_file_boolean = self.check_file()
 
-            if not resubo or not remabo :
-                lineli = open(socesi).read().splitlines()
+            if not result_file_boolean or not column_file_boolean :
+                lines_list = open(source_file_name).read().splitlines()
 
-                namedi = {}
+                name_dict = {}
 
-                resudi = {}
-                remadi = {}
+                id_x_value_dict = {}
+                column_x_value_dict = {}
 
-                if comusi != "":
-                    metali = comusi.split("	")
-                    for n in range(len(metali)):
-                        if metali[n] not in namedi.values():
-                            namedi.update({ n : metali[n] })
-                        if metali[n] not in remadi.keys():
-                            remadi.update({ metali[n] :{} })
-                    colubo = False
+                if column_name_str != "":
+                    column_temp_list = column_name_str.split("	")
+                    for number in range(len(metali)):
+                        if column_temp_list[number] not in name_dict.values():
+                            name_dict.update({ number : column_temp_list[number] })
+                        if column_temp_list[number] not in column_x_value_dict.keys():
+                            column_x_value_dict.update({ column_temp_list[number] :{} })
+                    header_boolean = False
                 else:
-                    colubo = True
+                    header_boolean = True
 
-                if target_file_path != "":
-                    tagebo = True
+                if column_id_name != "":
+                    column_id_exist_boolean = True
                 else:
-                    tagebo = False
+                    column_id_exist_boolean = False
 
-                numein = 0
-                for line in lineli:
-                    if colubo:
-                        metali = line.split("	")
-                        for n in range(len(metali)):
-                            if metali[n] not in namedi.values():
-                                namedi.update({ n : metali[n] })
-                            if metali[n] not in remadi.keys():
-                                remadi.update({ metali[n] :{} })
-                        colubo = False
-                    elif "#" not in line:
-                        metali = line.split("	")
-                        metadi = {}
-                        idisi = ""
+                line_id_num = 0
+                for line_str in lines_list:
+                    if header_boolean:
+                        column_temp_list = line_str.split("	")
+                        for column_num in range(len(column_temp_list)):
+                            if column_temp_list[column_num] not in name_dict.values():
+                                name_dict.update({ column_num : column_temp_list[column_num] })
+                            if column_temp_list[column_num] not in column_x_value_dict.keys():
+                                column_x_value_dict.update({ column_temp_list[column_num] :{} })
+                        header_boolean = False
+                    elif "#" not in line_str:
+                        value_temp_list = line_str.split("	")
+                        value_temp_dict = {}
+                        id_name_str = ""
 
-                        if not tagebo:
-                            numein = numein + 1
-                            idisi = prefix_str + str(numein)
+                        if not column_id_exist_boolean:
+                            line_id_num = line_id_num + 1
+                            id_name_str = prefix_str + str(line_id_num)
 
-                        for n in range(len(list(namedi.keys()))):
-                            colusi = namedi.get(n)
-                            metadi.update({ colusi : metali[n]})
+                        for number in range(len(list(name_dict.keys()))):
+                            column_name_str = name_dict.get(number)
+                            value_temp_dict.update({ column_name_str : value_temp_list[number]})
 
-                            if colusi == target_file_path and tagebo:
-                                idisi = prefix_str + metali[n]
+                            if column_name_str == column_id_name and column_id_exist_boolean:
+                                id_name_str = value_temp_list[number]
 
-                        resudi.update({ idisi : metadi })
+                        id_x_value_dict.update({ id_name_str : value_temp_dict })
 
-                        for n in range(len(list(namedi.keys()))):
-                            colusi = namedi.get(n)
+                        for number in range(len(list(name_dict.keys()))):
+                            column_name_str = name_dict.get(number)
 
-                            almedi = remadi.get(colusi,{})
-                            almeli = almedi.get(metali[n],[])
+                            column_temp_dict = column_x_value_dict.get(column_name_str,{})
+                            id_list = column_temp_dict.get(value_temp_list[number],[])
 
-                            almeli.append(idisi)
+                            id_list.append(id_name_str)
 
-                            almedi.update({ metali[n] : almeli })
-                            remadi.update({ colusi : almedi })
+                            column_temp_dict.update({ value_temp_list[number] : id_list })
+                            column_x_value_dict.update({ column_name_str : column_temp_dict })
 
 
-                with open(resusi,"w") as resufi:
-                    json.dump(resudi,resufi,indent=4,sort_keys=True)
+                with open(result_file_name,"w") as result_file_handle:
+                    json.dump(id_x_value_dict,result_file_handle,indent=4,sort_keys=True)
 
-                with open(remasi,"w") as remafi:
-                    json.dump(remadi,remafi,indent=4,sort_keys=True)
+                with open(column_file_name,"w") as column_file_handle:
+                    json.dump(column_x_value_dict,column_file_handle,indent=4,sort_keys=True)
         self.stopLog()
 
-class json2tab(libWorkFlow.workflow):
+class cvtJSONtoTAB(libWorkFlow.workflow):
     def redirecting(self):
         """"""
 
@@ -179,35 +181,35 @@ class json2tab(libWorkFlow.workflow):
         self.log_file_prefix_str = "temp/tmp-"
 
     def actor(self):
-        soceli = self.requested_argv_dict.get("files",[])
-        coluli = self.requested_argv_dict.get("column",[])
+        source_files_list = self.requested_argv_dict.get("files",[])
+        column_name_list = self.requested_argv_dict.get("column",[])
         self.startLog()
 
-        self.phrase_str = pprint.pformat(soceli)
+        self.phrase_str = pprint.pformat(source_files_list)
         self.printTimeStamp()
 
-        for socesi in soceli:
-            socefi = open(socesi,'r')
-            soceso = json.load(socefi)
+        for source_file_name in source_files_list:
+            source_file_handle = open(source_file_name,'r')
+            source_json_dict = json.load(source_file_handle)
 
-            if coluli == []:
-                coluse = set()
-                metadi = dict()
-                for id in list(soceso.keys()):
-                    metadi = soceso.get(id,{})
-                    coluse.update(set(metadi.keys()))
-                colutu = tuple(sorted(coluse))
+            if column_name_list == []:
+                column_name_set = set()
+                value_temp_dict = dict()
+                for id_name in list(source_json_dict.keys()):
+                    value_temp_dict = source_json_dict.get(id_name,{})
+                    column_name_set.update(set(value_temp_dict.keys()))
+                column_name_tuple = tuple(sorted(column_name_set))
             else:
-                colutu = tuple(coluli)
+                column_name_tuple = tuple(column_name_list)
 
-            with open(socesi.replace(".json",".tsv"),"w") as resufi:
-                resufi.write("id"+"	"+"	".join(colutu)+"\n")
-                for id in list(soceso.keys()):
-                    line = id
-                    metadi = dict()
-                    metadi = soceso.get(id,{})
-                    for meta in colutu:
-                        line = line + "	" + metadi.get(meta,"")
-                    resufi.write(line+"\n")
+            with open(source_file_name.replace(".json",".tsv"),"w") as result_file_handle:
+                result_file_handle.write("id"+"	"+"	".join(column_name_tuple)+"\n")
+                for id_name in list(source_json_dict.keys()):
+                    line_str = id_name
+                    value_temp_dict = dict()
+                    value_temp_dict = source_json_dict.get(id_name,{})
+                    for column_name in column_name_tuple:
+                        line_str = line_str + "	" + value_temp_dict.get(column_name,"")
+                    result_file_handle.write(line_str+"\n")
 
         self.stopLog()
