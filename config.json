@@ -12,6 +12,48 @@
     "bin/tmmadapter": "bin/trimmomatic",
     "bin/tophat2": "bin/tophat2/tophat2",
     "bin/trimmomatic": "bin/trimmomatic/trimmomatic-0.36.jar",
+    "database/annotation-source": {
+        "NCBI": {
+            "key": "gene",
+            "value": "product"
+        },
+        "ensembl": {
+            "key": "gene_id",
+            "value": "description"
+        }
+    },
+    "database/annotation-target": {
+        "foldchange-NCBI": {
+            "key": "gene",
+            "prefix": "",
+            "value": "Description"
+        },
+        "foldchange-ensembl": {
+            "key": "gene_id",
+            "prefix": "gene:",
+            "value": "Description"
+        },
+        "gene-NCBI": {
+            "key": "Gene Name",
+            "prefix": "",
+            "value": "Description"
+        },
+        "gene-ensembl": {
+            "key": "Gene ID",
+            "prefix": "gene:",
+            "value": "Description"
+        },
+        "transcript-NCBI": {
+            "key": "gene_name",
+            "prefix": "",
+            "value": "Description"
+        },
+        "transcript-ensembl": {
+            "key": "gene_id",
+            "prefix": "gene:",
+            "value": "Description"
+        }
+    },
     "fql/row": [
         "Basic Statistics",
         "Per base sequence quality",
@@ -38,48 +80,6 @@
         "s": "subgroup",
         "t": "tribe",
         "x": "index"
-    },
-    "target/libgext": {
-        "NCBI": {
-            "from": "gene",
-            "to": "product"
-        },
-        "ensembl": {
-            "from": "gene_id",
-            "to": "description"
-        }
-    },
-    "target/libsnm": {
-        "NCBI-foldchange": {
-            "from": "gene",
-            "key": "",
-            "to": "Description"
-        },
-        "NCBI-gene": {
-            "from": "Gene Name",
-            "key": "",
-            "to": "Description"
-        },
-        "NCBI-transcript": {
-            "from": "gene_name",
-            "key": "",
-            "to": "Description"
-        },
-        "ensembl-foldchange": {
-            "from": "gene_id",
-            "key": "gene:",
-            "to": "Description"
-        },
-        "ensembl-gene": {
-            "from": "Gene ID",
-            "key": "gene:",
-            "to": "Description"
-        },
-        "ensembl-transcript": {
-            "from": "gene_id",
-            "key": "gene:",
-            "to": "Description"
-        }
     },
     "trimmo/adapter": "ILLUMINACLIP:bin/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10",
     "trimmo/lead": "LEADING:25",
