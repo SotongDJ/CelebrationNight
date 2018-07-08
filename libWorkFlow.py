@@ -276,7 +276,7 @@ class workflow:
                 independed_argv_list.extend(self.system_argv_list[1:position_num])
                 no_option_boolean = False
 
-            if argument_position_list.index(position_num) == len(argument_list)-1:
+            if argument_position_list.index(position_num) == len(argument_position_list)-1:
                 end_position_num = len(self.system_argv_list)
             else:
                 end_position_num = argument_position_list[argument_position_list.index(position_num)+1]
@@ -310,8 +310,8 @@ class workflow:
 
         for requested_argv in tuple(self.requested_argv_dict.keys()):
             if requested_argv in tuple(self.arranged_argv_dict.keys()):
-                requested_argv_type = type(self.requested_argv_dict.get(dico))
-                arranged_argv_type = type(self.arranged_argv_dict.get(dico))
+                requested_argv_type = type(self.requested_argv_dict.get(requested_argv))
+                arranged_argv_type = type(self.arranged_argv_dict.get(requested_argv))
 
                 str_type = type(str())
                 list_type = type(list())
@@ -321,18 +321,18 @@ class workflow:
 
                 if requested_argv_type == arranged_argv_type: # if type(a) == type(b)
                     self.requested_argv_dict.update({
-                        requested_argv : self.arranged_argv_dict.get(arranged_argv_type)
+                        requested_argv : self.arranged_argv_dict.get(requested_argv)
                     })
                 elif arranged_argv_type == str_type and requested_argv_type == list_type:
                     self.requested_argv_dict.update({
-                        requested_argv : [self.arranged_argv_dict.get(arranged_argv_type)]
+                        requested_argv : [self.arranged_argv_dict.get(requested_argv)]
                     })
                 elif (
                     arranged_argv_type == list_type
                     and requested_argv_type == str_type
                     and list_count_boolean
                 ):
-                    value_temp_list = sorted(self.arranged_argv_dict.get(arranged_argv_type))
+                    value_temp_list = sorted(self.arranged_argv_dict.get(requested_argv))
                     self.requested_argv_dict.update({
                         requested_argv : value_temp_list[0]
                     })
