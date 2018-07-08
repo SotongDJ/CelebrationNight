@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import libWorkFlow, libconfig, libtab
+import libWorkFlow, libconfig, libconvert
 import time, json, pprint
 global helper_msg_block
 helper_msg_block="""
@@ -20,7 +20,7 @@ helper_msg_block="""
   Gekta.actor()
 
  CAUTION:
-  libgext required libtab
+  libgext required libconvert
 
    --- README ---
 """
@@ -86,14 +86,14 @@ class gffextract(libWorkFlow.workflow):
             + "score	srefed	phase	Attributes"
         )
 
-        CoveJos = libtab.tab2json()
-        CoveJos.requested_argv_dict = {
+        CvtoJSON = libconvert.cvtTABtoJSON()
+        CvtoJSON.requested_argv_dict = {
             "files"  : self.input_list,
             "id"     : "",
             "prefix" : "gff",
             "column" : comusi
         }
-        CoveJos.actor()
+        CvtoJSON.actor()
 
         self.printBlankLine()
         self.phrase_str = "==========\nStage 2 : Grab Attributes from JSON\n=========="
@@ -236,8 +236,8 @@ class gffextract(libWorkFlow.workflow):
             self.phrase_str = "==========\nStage 6 : Convert JSON back to TSV/CTAB\n=========="
             self.printPhrase()
 
-            CoveTab = libtab.json2tab()
-            CoveTab.requested_argv_dict = { "files" : [self.output_filename] }
-            CoveTab.actor()
+            CvtoTAB = libconvert.cvtJSONtoTAB()
+            CvtoTAB.requested_argv_dict = { "files" : [self.output_filename] }
+            CvtoTAB.actor()
 
         self.stopLog()
