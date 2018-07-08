@@ -1,70 +1,69 @@
 #!/usr/bin/env python3
 import json
-class confi:
+class config:
+    def __init__(self):
+        self.load_json()
 
-    def loadso(self):
-        primoconfigfi = "config.json"
-        primoconfigfa = open(primoconfigfi,'a+')
-        primoconfigfa.close()
+    def load_json(self):
+        global_config_file_str = "config.json"
+        global_config_file_handle = open(global_config_file_str,'a+')
+        global_config_file_handle.close()
 
-        if open(primoconfigfi).read() == "":
-            self.confi = {}
-            with open(primoconfigfi,'w') as primoconfigfa:
-                primoconfigfa.write("{}")
+        if open(global_config_file_str).read() == "":
+            self.content_dict = {}
+            with open(global_config_file_str,'w') as global_config_file_handle:
+                global_config_file_handle.write("{}")
         else:
-            primoconfigfa = open(primoconfigfi,'r')
-            self.confi = json.load(primoconfigfa)
+            global_config_file_handle = open(global_config_file_str,'r')
+            self.content_dict = json.load(global_config_file_handle)
 
-        seconconfigfi = "data/config.json"
-        seconconfigfa = open(seconconfigfi,'a+')
-        seconconfigfa.close()
+        local_config_file_str = "data/config.json"
+        local_config_file_handle = open(local_config_file_str,'a+')
+        local_config_file_handle.close()
 
-        if open(seconconfigfi).read() == "":
-            with open(seconconfigfi,'w') as seconconfigfa:
-                seconconfigfa.write("{}")
+        if open(local_config_file_str).read() == "":
+            with open(local_config_file_str,'w') as local_config_file_handle:
+                local_config_file_handle.write("{}")
         else:
-            seconconfigfa = open(seconconfigfi,'r')
-            self.confi.update(json.load(seconconfigfa))
+            local_config_file_handle = open(local_config_file_str,'r')
+            self.content_dict.update(json.load(local_config_file_handle))
 
-    def refes(self):
-        self.loadso()
+    def refresh(self):
+        self.load_json()
 
-        primoconfigfi = "config.json"
-        primoconfigfa = open(primoconfigfi,'r')
-        metaso = json.load(primoconfigfa)
-        with open(primoconfigfi,'w') as configfa:
+        global_config_file_str = "config.json"
+        global_config_file_handle = open(global_config_file_str,'r')
+        metaso = json.load(global_config_file_handle)
+        with open(global_config_file_str,'w') as configfa:
             json.dump(metaso,configfa,indent=4,sort_keys=True)
 
-        seconconfigfi = "data/config.json"
-        seconconfigfa = open(seconconfigfi,'r')
-        metaso = json.load(seconconfigfa)
-        with open(seconconfigfi,'w') as configfa:
+        local_config_file_str = "data/config.json"
+        local_config_file_handle = open(local_config_file_str,'r')
+        metaso = json.load(local_config_file_handle)
+        with open(local_config_file_str,'w') as configfa:
             json.dump(metaso,configfa,indent=4,sort_keys=True)
 
-    def siget(self,wodsi):
-        resut = self.confi.get(wodsi)
+    def get_str(self,keyword_str):
+        resut = self.content_dict.get(keyword_str)
         return resut
 
-    def liget(self,wodsi):
-        resut = self.confi.get(wodsi,[])
+    def get_list(self,keyword_str):
+        resut = self.content_dict.get(keyword_str,[])
         return resut
 
-    def diget(self,wodsi):
-        resut = self.confi.get(wodsi,{})
+    def get_dict(self,keyword_str):
+        resut = self.content_dict.get(keyword_str,{})
         return resut
 
-    def hoget(self,wodli):
+    def get_path(self,keyword_list):
         resut = []
-        for wodsi in wodli:
-            resut.append(self.confi.get(wodsi,""))
+        for keyword_str in keyword_list:
+            resut.append(self.content_dict.get(keyword_str,""))
         return "/".join(resut)
 
-    def check(self,wodsi):
+    def check(self,keyword_str):
         resut = False
-        metali = list(self.confi.keys())
-        if wodsi in metali:
+        metali = list(self.content_dict.keys())
+        if keyword_str in metali:
             resut = True
         return resut
-
-    def __init__(self):
-        self.loadso()
