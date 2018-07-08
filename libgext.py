@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-import librun, libconfig, libtab
+import libWorkFlow, libconfig, libtab
 import time, json, pprint
-global helber
-helber="""
+global helper_msg_block
+helper_msg_block="""
   --- README of library-gff-extract.py ---
  Title:
   Library for GFF information extraction
@@ -11,8 +11,8 @@ helber="""
   import libgext
   Gekta = libgext.gffextract()
   Gekta.testing = self.testing
-  Gekta.prelogi = < Log File Path>
-  Gekta.dicodi = {
+  Gekta.log_file_prefix_str = < Log File Path>
+  Gekta.requested_argv_dict = {
     "input"  : <GFF file>
     "tribe"  : <tribe>
     "output" : <OUTPUT JSON file name>
@@ -37,78 +37,80 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-Confi = libconfig.confi()
-class gffextract(librun.workflow):
-    def redirek(self):
+ConfigDict = libconfig.config()
+class gffextract(libWorkFlow.workflow):
+    def redirecting(self):
         """"""
-    def pesonai(self):
+    def personalize(self):
         # self.testing = True
-        self.helb = helber
+        self.helper_msg_str = helper_msg_block
 
-        self.dicodi = {
+        self.requested_argv_dict = {
             "input"  : [],
             "output" : "",
             "tribe"  : "",
         }
 
-        self.comali = []
-        self.filasi = "library-gff-extract.py"
-        self.libadi = {
-            "result/stringtie" : Confi.siget("result/stringtie"),
-            "result/ge"        : Confi.siget("result/ge"),
-            "type/database"   : Confi.diget("type/database"),
-            "target/libgext"   : Confi.diget("target/libgext")
+        self.comand_line_list = []
+        self.script_name_str = "library-gff-extract.py"
+        self.requested_config_dict = {
+            "result/stringtie" : ConfigDict.get_str("result/stringtie"),
+            "result/ge"        : ConfigDict.get_str("result/ge"),
+            "type/database"   : ConfigDict.get_dict("type/database"),
+            "target/libgext"   : ConfigDict.get_dict("target/libgext")
         }
-        self.prelogi = Confi.siget("result/log")+"/libgext-"
+        self.log_file_prefix_str = ConfigDict.get_str("result/log")+"/libgext-"
 
     def actor(self):
-        self.inpuli = self.dicodi.get("input",[])
-        self.oupusi = self.libadi.get("result/ge") + "/" +self.dicodi.get("output","")
-        tibesi = self.dicodi.get("tribe","")
-        tiposi = self.libadi.get("type/database").get(tibesi)
-        self.colusi = self.libadi.get("target/libgext").get(tiposi)
+        self.input_list      = self.requested_argv_dict.get("input",[])
+        self.output_filename = (
+            self.requested_config_dict.get("result/ge") + "/" + self.requested_argv_dict.get("output","")
+        )
+        tribe_name = self.requested_argv_dict.get("tribe","")
+        type_name  = self.requested_config_dict.get("type/database").get(tribe_name)
+        self.column_name = self.requested_config_dict.get("target/libgext").get(type_name)
 
-        self.head()
+        self.startLog()
 
-        self.tageli = []
-        self.tageli.append(self.libadi.get("result/stringtie"))
-        self.tageli.append(self.libadi.get("result/ge"))
-        self.chkpaf()
+        self.target_file_list = []
+        self.target_file_list.append(self.requested_config_dict.get("result/stringtie"))
+        self.target_file_list.append(self.requested_config_dict.get("result/ge"))
+        self.checkPath()
 
-        self.printbr()
-        self.frasi = "==========\nStage 1 : Convert GFF(v3) to JSON\n=========="
-        self.printe()
+        self.printBlankLine()
+        self.phrase_str = "==========\nStage 1 : Convert GFF(v3) to JSON\n=========="
+        self.printPhrase()
 
         comusi = (
-            "sequence	source	feature	start	end	"+
-            "score	srefed	phase	Attributes"
+            "sequence	source	feature	start	end	"
+            + "score	srefed	phase	Attributes"
         )
 
         CoveJos = libtab.tab2json()
-        CoveJos.dicodi = {
-            "files"  : self.inpuli ,
-            "id"     : ""          ,
-            "prefix" : "gff"       ,
+        CoveJos.requested_argv_dict = {
+            "files"  : self.input_list,
+            "id"     : "",
+            "prefix" : "gff",
             "column" : comusi
         }
         CoveJos.actor()
 
-        self.printbr()
-        self.frasi = "==========\nStage 2 : Grab Attributes from JSON\n=========="
-        self.printe()
+        self.printBlankLine()
+        self.phrase_str = "==========\nStage 2 : Grab Attributes from JSON\n=========="
+        self.printPhrase()
 
-        self.socedi = dict()
-        for inpu in self.inpuli:
+        self.source_s_dict = dict()
+        for inpu in self.input_list:
             metali = inpu.split(".")
             metali[-1] = "json"
             resusi = ".".join(metali)
             remasi = resusi.replace(".json","-column.json")
             filafi = open(remasi,"r")
             filaso = json.load(filafi)
-            self.socedi.update(filaso.get("Attributes",{}))
+            self.source_s_dict.update(filaso.get("Attributes",{}))
 
-        self.frasi = pprint.pformat(( len(self.socedi)))
-        self.printimo()
+        self.phrase_str = pprint.pformat(( len(self.source_s_dict)))
+        self.printTimeStamp()
 
         self.printbr()
         self.frasi = "==========\nStage 3 : Extract Attributes into Dictionaries\n=========="
@@ -152,9 +154,9 @@ class gffextract(librun.workflow):
         self.frasi = pprint.pformat(( len(self.refedi) , len(self.valedi) ))
         self.printimo()
 
-        self.printbr()
-        self.frasi = "==========\nStage 4 : Generate Refer. Dictionary for Result\n=========="
-        self.printe()
+        self.printBlankLine()
+        self.phrase_str = "==========\nStage 4 : Generate Refer. Dictionary for Result\n=========="
+        self.printPhrase()
 
         self.resudi = {}
         self.desidi = {}
@@ -176,43 +178,43 @@ class gffextract(librun.workflow):
                         self.resudi.update({ keyosi : metadi })
 
             for n in range(len(refeli)):
-                if refeli[n] == self.colusi:
+                if refeli[n] == self.column_name:
                     for keyosi in list(semadi.keys()):
                         valusi = semadi.get(keyosi)
                         metadi = self.desidi.get(keyosi,{})
                         metadi.update({  valusi : refeli[n+1] })
                         self.desidi.update({ keyosi : metadi })
 
-        self.frasi = pprint.pformat( list(self.resudi.keys()) )
-        self.printimo()
+        self.phrase_str = pprint.pformat( list(self.resudi.keys()) )
+        self.printTimeStamp()
 
-        self.frasi = pprint.pformat( list(self.desidi.keys()) )
-        self.printimo()
+        self.phrase_str = pprint.pformat( list(self.desidi.keys()) )
+        self.printTimeStamp()
 
-        self.printbr()
-        self.frasi = "==========\nStage 5 : Export Dictionaries into JSON\n=========="
-        self.printe()
+        self.printBlankLine()
+        self.phrase_str = "==========\nStage 5 : Export Dictionaries into JSON\n=========="
+        self.printPhrase()
 
         setosi = "json"
-        if "." in self.oupusi:
+        if "." in self.output_filename:
             metali = []
-            metali = self.oupusi.split(".")
+            metali = self.output_filename.split(".")
             if metali[-1] == "json":
                 setosi = metali.pop(-1)
             elif metali[-1] in ["ctab","tsv","diff","tab"]:
                 setosi = metali.pop(-1)
-                self.oupusi = ".".join(metali).replace("."+setosi,".json")
+                self.output_filename = ".".join(metali).replace("."+setosi,".json")
             else:
                 metasi = metali.pop(-1)
                 setosi = "json"
-                self.oupusi = ".".join(metali).replace("."+metasi,".json")
+                self.output_filename = ".".join(metali).replace("."+metasi,".json")
         else:
             setosi = "json"
-            self.oupusi = self.oupusi +".json"
+            self.output_filename = self.output_filename +".json"
 
-        self.refesi = self.oupusi.replace(".json","-refer.json")
-        self.valesi = self.oupusi.replace(".json","-value.json")
-        self.desisi = self.oupusi.replace(".json","-"+self.colusi+".json")
+        self.refesi = self.output_filename.replace(".json","-refer.json")
+        self.valesi = self.output_filename.replace(".json","-value.json")
+        self.desisi = self.output_filename.replace(".json","-"+self.column_name+".json")
 
         with open(self.refesi,"w") as refefi:
             json.dump(self.refedi,refefi,indent=4,sort_keys=True)
@@ -223,16 +225,16 @@ class gffextract(librun.workflow):
         with open(self.desisi,"w") as desifi:
             json.dump(self.desidi,desifi,indent=4,sort_keys=True)
 
-        with open(self.oupusi,"w") as oupufi:
+        with open(self.output_filename,"w") as oupufi:
             json.dump(self.resudi,oupufi,indent=4,sort_keys=True)
 
         if setosi != "json":
-            self.printbr()
-            self.frasi = "==========\nStage 6 : Convert JSON back to TSV/CTAB\n=========="
-            self.printe()
+            self.printBlankLine()
+            self.phrase_str = "==========\nStage 6 : Convert JSON back to TSV/CTAB\n=========="
+            self.printPhrase()
 
             CoveTab = libtab.json2tab()
-            CoveTab.dicodi = { "files" : [self.oupusi] }
+            CoveTab.requested_argv_dict = { "files" : [self.output_filename] }
             CoveTab.actor()
 
-        self.endin()
+        self.stopLog()
