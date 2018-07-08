@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-import librun, libconfig, libgext
-global helber
-helber="""
+import libWorkFlow, libconfig, libgext
+global helper_msg_block
+helper_msg_block="""
 --- README of act01-Genome-Reference-build.py ---
  Title:
   Construct reference from Genome information for further analysis
@@ -19,87 +19,73 @@ helber="""
     <OUTPUT FOLDER for HISAT2>/<codename>
 --- README ---
 """
-"""
- Postfix of variables:
-  -si: String
-   -ni: alternative/second string for same Usage
-   -fi: string for open()
-  -ho: String(that store dir path)
-  -ti: Intiger/Float
-  -li: List
-  -tu: Tuple
-  -di: Dictionary
-  -fa: File (with open())
-  -so: JSON
-"""
-Confi = libconfig.confi()
-class genomerefer(librun.workflow):
-    def pesonai(self):
+ConfigDict = libconfig.config()
+class genomerefer(libWorkFlow.workflow):
+    def personalize(self):
         # self.testing = True
-        self.helb = helber
+        self.helper_msg_str = helper_msg_block
 
-        self.dicodi = {
+        self.requested_argv_dict = {
             "genome" : "",
             "prefix" : "",
             "tribe"  : "",
         }
-        self.Synom.input(Confi.diget("synom"))
-        self.sync()
+        self.SynonymDict.input(ConfigDict.get_dict("synom"))
+        self.synchornize()
 
-        self.comali = []
-        self.filasi = "act01-Genome-Reference-build.py"
-        self.libadi = {
-            "bin/hisat2build" : Confi.siget("bin/hisat2build"),
-            "index/hisat"     : Confi.siget("index/hisat"),
-            "result/log"      : Confi.siget("result/log"),
-            "run/thread"      : Confi.siget("run/thread"),
-            "refer/annotate"  : Confi.diget("refer/annotate"),
+        self.comand_line_list = []
+        self.script_name_str = "act01-Genome-Reference-build.py"
+        self.requested_config_dict = {
+            "bin/hisat2build" : ConfigDict.get_str("bin/hisat2build"),
+            "index/hisat"     : ConfigDict.get_str("index/hisat"),
+            "result/log"      : ConfigDict.get_str("result/log"),
+            "run/thread"      : ConfigDict.get_str("run/thread"),
+            "refer/annotate"  : ConfigDict.get_dict("refer/annotate"),
         }
-        self.prelogi = self.libadi.get("result/log")+"/act01-gr-build-"
+        self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act01-gr-build-"
 
     def actor(self):
-        self.genosi = self.dicodi.get("genome","")
-        self.pifisi = self.dicodi.get("prefix" ,"")
-        self.tibesi = self.dicodi.get("tribe" ,"")
+        self.genome_file_path = self.requested_argv_dict.get("genome","")
+        self.prefix_str = self.requested_argv_dict.get("prefix" ,"")
+        self.tribe_str = self.requested_argv_dict.get("tribe" ,"")
 
-        self.head()
+        self.startLog()
 
-        self.frasi = "==========\nStage 1 : Build HISAT2 Index\n=========="
-        self.printe()
+        self.phrase_str = "==========\nStage 1 : Build HISAT2 Index\n=========="
+        self.printPhrase()
 
-        self.binosi = self.libadi.get("bin/hisat2build")
-        self.tereli = ["-p",self.libadi.get("run/thread")]
-        self.oputsi = self.libadi.get("index/hisat") + "/" + self.pifisi
+        self.binary_path = self.requested_config_dict.get("bin/hisat2build")
+        self.thread_argv_list = ["-p",self.requested_config_dict.get("run/thread")]
+        self.output_path = self.requested_config_dict.get("index/hisat") + "/" + self.prefix_str
 
-        self.comali = []
-        self.comali.append(self.binosi)
-        self.comali.extend(self.tereli)
-        self.comali.append(self.genosi)
-        self.comali.append(self.oputsi)
+        self.comand_line_list = []
+        self.comand_line_list.append(self.binary_path)
+        self.comand_line_list.extend(self.thread_argv_list)
+        self.comand_line_list.append(self.genome_file_path)
+        self.comand_line_list.append(self.output_path)
+        self.runCommand()
 
-        self.runit()
+        self.phrase_str = "==========\nStage 2 : Copy Genome FASTA to HISAT2 Index folder\n=========="
+        self.printPhrase()
 
-        self.frasi = "==========\nStage 2 : Copy Genome FASTA to HISAT2 Index folder\n=========="
-        self.printe()
-        self.comali = ["cp",self.genosi,self.oputsi+".fa"]
+        self.comand_line_list = ["cp",self.genome_file_path,self.output_path+".fa"]
+        self.runCommand()
 
-        self.runit()
-
-        self.frasi = "==========\nStage 3 : Extract GFF Information\n=========="
-        self.printe()
+        self.phrase_str = "==========\nStage 3 : Extract GFF Information\n=========="
+        self.printPhrase()
 
         Gekta = libgext.gffextract()
         Gekta.testing = self.testing
-        Gekta.prelogi = self.libadi.get("result/log")+"/act01-grb-libgext-"
-        Gekta.dicodi = {
-            "input"  : [self.libadi.get("refer/annotate").get(self.tibesi)],
-            "tribe"  : self.tibesi,
-            "output" : self.pifisi+"-gff-info.json"
+        Gekta.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act01-grb-libgext-"
+        Gekta.requested_argv_dict = {
+            "input"  : [self.requested_config_dict.get("refer/annotate").get(self.tribe_str)],
+            "tribe"  : self.tribe_str,
+            "output" : self.prefix_str+"-gff-info.json"
         }
         Gekta.actor()
 
-        self.printbr()
+        self.printBlankLine()
 
-        self.endin()
+        self.stopLog()
 
 GeRef = genomerefer()
