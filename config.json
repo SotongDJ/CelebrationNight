@@ -70,13 +70,14 @@
     "run/phred": "33",
     "run/thread": "4",
     "synom": {
+        "a": "refer",
+        "b": "branch",
         "c": "control",
         "g": "group",
         "i": "input",
         "m": "method",
         "o": "output",
         "p": "thread",
-        "r": "refer",
         "s": "subgroup",
         "t": "tribe",
         "x": "index"
