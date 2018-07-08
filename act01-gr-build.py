@@ -73,7 +73,8 @@ class genomerefer(libWorkFlow.workflow):
 
         self.phrase_str = "==========\nStage 3 : Extract GFF Information\n=========="
         self.printPhrase()
-
+        # under construction
+        """
         Gekta = libgext.gffextract()
         Gekta.testing = self.testing
         Gekta.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act01-grb-libgext-"
@@ -83,7 +84,7 @@ class genomerefer(libWorkFlow.workflow):
             "output" : self.prefix_str+"-gff-info.json"
         }
         Gekta.actor()
-
+        """
         self.printBlankLine()
 
         self.stopLog()
