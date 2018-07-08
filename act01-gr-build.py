@@ -7,9 +7,9 @@ helper_msg_block="""
   Construct reference from Genome information for further analysis
 
  Usage:
-  python3 act01-gr-build.py -t <tribe>\\
-    --genome=<Path and Name of GENOME File>
-    --prefix=<Prefix for HISAT2 index and GFF Info file>
+  python3 act01-gr-build.py -a <codename for reference>\\
+    --genome=<Path and Name of GENOME SEQUENCE File>
+    --annotation=<Path and Name of GENOME ANNOTATION File>
 
  CAUTION:
   Genome tag and Annotate tag must set with file name only.
@@ -26,9 +26,7 @@ class genomerefer(libWorkFlow.workflow):
         self.helper_msg_str = helper_msg_block
 
         self.requested_argv_dict = {
-            "genome" : "",
-            "prefix" : "",
-            "tribe"  : "",
+            "refer" : "",
         }
         self.SynonymDict.input(ConfigDict.get_dict("synom"))
         self.synchornize()

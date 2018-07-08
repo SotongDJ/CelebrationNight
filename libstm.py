@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-import librun, libconfig
-global helber
-helber="""
+import libWorkFlow, libconfig
+global helper_msg_block
+helper_msg_block="""
 --- README of library-stringtie-merge ---
  Title:
   Merge transcriptome for StringTie
@@ -10,8 +10,8 @@ helber="""
   import libstm
   Marge = libstm.marge()
   Marge.testing = self.testing
-  Marge.prelogi = < Log File Path>
-  Marge.dicodi = {
+  Marge.log_file_prefix_str = < Log File Path>
+  Marge.requested_argv_dict = {
     "tribe"   : <TRIBE>,
     "group"   : [<GROUP>,<GROUP>......]
   }
@@ -50,73 +50,73 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-Confi = libconfig.confi()
-class marge(librun.workflow):
-    def redirek(self):
+ConfigDict = libconfig.config()
+class marge(libWorkFlow.workflow):
+    def redirecting(self):
         """"""
-    def pesonai(self):
+    def personalize(self):
         # self.testing = True
 
-        self.dicodi = {
+        self.requested_argv_dict = {
             "tribe" : [],
             "group" : []
         }
-        # self.sync()
+        # self.synchornize()
 
-        self.filasi = "library-stringtie-merge"
-        self.libadi = {
-            "bin/stringtie"    : Confi.siget("bin/stringtie"),
-            "result/stringtie" : Confi.siget("result/stringtie"),
-            "result/hisat"     : Confi.siget("result/hisat"),
-            "result/log"       : Confi.siget("result/log"),
-            "run/thread"       : Confi.siget("run/thread"),
-            "data/prefix"      : Confi.diget("data/prefix"),
-            "refer/annotate"   : Confi.diget("refer/annotate"),
+        self.script_name_str = "library-stringtie-merge"
+        self.requested_config_dict = {
+            "bin/stringtie"    : ConfigDict.get_str("bin/stringtie"),
+            "result/stringtie" : ConfigDict.get_str("result/stringtie"),
+            "result/hisat"     : ConfigDict.get_str("result/hisat"),
+            "result/log"       : ConfigDict.get_str("result/log"),
+            "run/thread"       : ConfigDict.get_str("run/thread"),
+            "data/prefix"      : ConfigDict.get_dict("data/prefix"),
+            "refer/annotate"   : ConfigDict.get_dict("refer/annotate"),
         }
-        self.prelogi = self.libadi.get("result/log")+"/exp13-stringtie-merge-"
+        self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/exp13-stringtie-merge-"
 
-        self.tagesi = ""
+        self.target_file_path = ""
 
-        self.comali = []
-        self.adcoli = [ self.libadi.get("bin/stringtie") ]
+        self.comand_line_list = []
+        self.adcoli = [ self.requested_config_dict.get("bin/stringtie") ]
         self.admgli = [ "--merge" ]
         self.adotli = [ "-o" ]
-        self.adphli = [ "-p", self.libadi.get("run/thread")]
+        self.adphli = [ "-p", self.requested_config_dict.get("run/thread")]
         self.adrfli = [ "-eG" ]
 
     def actor(self):
-        tibeli = self.dicodi.get("tribe",[])
-        gupoli = self.dicodi.get("group",[])
+        tribe_list = self.requested_argv_dict.get("tribe",[])
+        group_list = self.requested_argv_dict.get("group",[])
 
-        self.head()
+        self.startLog()
 
-        self.tagesi = self.libadi.get("result/stringtie")
-        self.chkpaf()
-        for tibe in tibeli:
-            self.comali = []
-            self.comali.extend(self.adcoli)
+        self.target_file_path = self.requested_config_dict.get("result/stringtie")
+        self.checkPath()
+        for tribe_name in tribe_list:
+            self.comand_line_list = []
+            self.comand_line_list.extend(self.adcoli)
 
-            for gupo in gupoli:
-                guposi = ""
-                guposi = (
-                    self.libadi.get("result/stringtie") + "/" +
-                    self.libadi.get("data/prefix").get(tibe) + gupo +
+            for gupo in group_list:
+                group_str = ""
+                group_str = (
+                    self.requested_config_dict.get("result/stringtie") + "/" +
+                    self.requested_config_dict.get("data/prefix").get(tribe_name) + gupo +
                     "-stringtie.gtf"
                 )
-                self.comali.append(guposi)
+                self.comand_line_list.append(group_str)
 
-            self.comali.extend(self.admgli)
-            self.comali.extend(self.adotli)
+            self.comand_line_list.extend(self.admgli)
+            self.comand_line_list.extend(self.adotli)
             self.outusi = (
-                self.libadi.get("result/stringtie") + "/" +
-                self.libadi.get("data/prefix").get(tibe) + "-".join(sorted(gupoli)) +"-stringtie-merged.gtf"
+                self.requested_config_dict.get("result/stringtie") + "/" +
+                self.requested_config_dict.get("data/prefix").get(tribe_name) + "-".join(sorted(group_list)) +"-stringtie-merged.gtf"
             )
-            self.comali.append(self.outusi)
-            self.comali.extend(self.adphli)
+            self.comand_line_list.append(self.outusi)
+            self.comand_line_list.extend(self.adphli)
 
-            self.comali.extend(self.adrfli)
-            metasi = self.libadi.get("refer/annotate").get(tibe)
-            self.comali.append(metasi)
+            self.comand_line_list.extend(self.adrfli)
+            metasi = self.requested_config_dict.get("refer/annotate").get(tribe_name)
+            self.comand_line_list.append(metasi)
 
-            self.runit()
-        self.endin()
+            self.runCommand()
+        self.stopLog()

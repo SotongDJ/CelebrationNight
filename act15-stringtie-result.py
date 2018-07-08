@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-import librun, libconfig, libtab, libsnm, libmar
+import libWorkFlow, libconfig, libconvert, libsnm, libmar
 import time, json
-global helber
-helber="""
+global helper_msg_block
+helper_msg_block="""
 --- README of act15-stringtie-result.py ---
  Title:
   Batch Processing for StringTie (Summarise)
@@ -23,7 +23,7 @@ helber="""
   Visualise graph: explanation01-dataStructure.svg
 
  CAUTION:
-  Act15 required libtab, libsnm, libmar
+  Act15 required libconvert, libsnm, libmar
   Act15 required result from Act16
   <GROUP> must separate with space
   <GROUP> don't allowed spacing
@@ -43,167 +43,167 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-Confi = libconfig.confi()
-class stitieresult(librun.workflow):
-    def pesonai(self):
+ConfigDict = libconfig.config()
+class stitieresult(libWorkFlow.workflow):
+    def personalize(self):
         # self.testing = True
-        self.helb = helber
+        self.helper_msg_str = helper_msg_block
 
-        self.dicodi = {
+        self.requested_argv_dict = {
             "tribe" : [],
             "group" : [],
             "refer" : ""
         }
-        self.Synom.input(Confi.diget("synom"))
-        self.sync()
+        self.SynonymDict.input(ConfigDict.get_dict("synom"))
+        self.synchornize()
 
-        self.comali = []
-        self.filasi = "act15-stringtie-result"
-        self.libadi = {
-            "result/stringtie" : Confi.siget("result/stringtie"),
-            "result/ballgown" : Confi.siget("result/ballgown"),
-            "result/st-result" : Confi.siget("result/st-result"),
-            "result/DESeq2" : Confi.siget("result/DESeq2"),
-            "bin/prepDE" : Confi.siget("bin/prepDE"),
-            "data/prefix" : Confi.diget("data/prefix"),
-            "target/libsnm" : Confi.diget("target/libsnm"),
-            "type/database" : Confi.diget("type/database"),
-            "result/log" : Confi.siget("result/log"),
-            "libtab/TranscriptExpression" : Confi.liget("libtab/TranscriptExpression"),
-            "libtab/GeneExpression" : Confi.liget("libtab/GeneExpression"),
+        self.comand_line_list = []
+        self.script_name_str = "act15-stringtie-result"
+        self.requested_config_dict = {
+            "result/stringtie" : ConfigDict.get_str("result/stringtie"),
+            "result/ballgown" : ConfigDict.get_str("result/ballgown"),
+            "result/st-result" : ConfigDict.get_str("result/st-result"),
+            "result/DESeq2" : ConfigDict.get_str("result/DESeq2"),
+            "bin/prepDE" : ConfigDict.get_str("bin/prepDE"),
+            "data/prefix" : ConfigDict.get_dict("data/prefix"),
+            "target/libsnm" : ConfigDict.get_dict("target/libsnm"),
+            "type/database" : ConfigDict.get_dict("type/database"),
+            "result/log" : ConfigDict.get_str("result/log"),
+            "libconvert/TranscriptExpression" : ConfigDict.get_list("libconvert/TranscriptExpression"),
+            "libconvert/GeneExpression" : ConfigDict.get_list("libconvert/GeneExpression"),
         }
-        self.prelogi = self.libadi.get("result/log")+"/act15-stire-"
+        self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-"
 
     def actor(self):
-        tibeli = self.dicodi.get("tribe",[])
-        gupoli = self.dicodi.get("group",[])
-        refesi = self.dicodi.get("refer",[])
+        tribe_list = self.requested_argv_dict.get("tribe",[])
+        group_list = self.requested_argv_dict.get("group",[])
+        refesi = self.requested_argv_dict.get("refer",[])
 
-        self.head()
+        self.startLog()
 
-        self.tageli = []
-        self.tageli.append(self.libadi.get("result/stringtie"))
-        self.tageli.append(self.libadi.get("result/ballgown"))
-        self.tageli.append(self.libadi.get("result/st-result"))
-        self.tageli.append(self.libadi.get("result/DESeq2"))
-        self.chkpaf()
+        self.target_file_list = []
+        self.target_file_list.append(self.requested_config_dict.get("result/stringtie"))
+        self.target_file_list.append(self.requested_config_dict.get("result/ballgown"))
+        self.target_file_list.append(self.requested_config_dict.get("result/st-result"))
+        self.target_file_list.append(self.requested_config_dict.get("result/DESeq2"))
+        self.checkPath()
 
-        self.frasi = "==========\nStage 1 : Convert TSV/CTAB to JSON\n=========="
-        self.printe()
+        self.phrase_str = "==========\nStage 1 : Convert TSV/CTAB to JSON\n=========="
+        self.printPhrase()
 
         taboli = []
-        for tibe in tibeli:
-            for gupo in gupoli:
+        for tribe_name in tribe_list:
+            for gupo in group_list:
                 socesi = (
-                    self.libadi.get("result/ballgown") + "/" +
-                    self.libadi.get("data/prefix").get(tibe) +
+                    self.requested_config_dict.get("result/ballgown") + "/" +
+                    self.requested_config_dict.get("data/prefix").get(tribe_name) +
                     gupo + "/t_data.ctab"
                 )
-                self.tagesi = socesi
-                cetabo = self.chkfal()
-                self.tagesi = socesi.replace(".ctab",".json")
-                jasobo = self.chkfal()
+                self.target_file_path = socesi
+                cetabo = self.check_file()
+                self.target_file_path = socesi.replace(".ctab",".json")
+                jasobo = self.check_file()
 
                 if cetabo and not jasobo:
                     taboli.append(socesi)
 
         if taboli != []:
-            CoveJos = libtab.tab2json()
-            CoveJos.dicodi = { "files" : taboli ,"id" : "t_id" }
-            CoveJos.filasi = "libtab.tab2json"
-            CoveJos.prelogi = self.libadi.get("result/log")+"/act15-stire-covejos-"
-            CoveJos.actor()
+            CvtoJSON = libconvert.cvtTABtoJSON()
+            CvtoJSON.requested_argv_dict = { "files" : taboli ,"id" : "t_id" }
+            CvtoJSON.filasi = "libconvert.cvtTABtoJSON"
+            CvtoJSON.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-covejos-"
+            CvtoJSON.actor()
 
         taboli = []
-        for tibe in tibeli:
-            for gupo in gupoli:
+        for tribe_name in tribe_list:
+            for gupo in group_list:
                 socesi = (
-                    self.libadi.get("result/stringtie") + "/" +
-                    self.libadi.get("data/prefix").get(tibe) +
+                    self.requested_config_dict.get("result/stringtie") + "/" +
+                    self.requested_config_dict.get("data/prefix").get(tribe_name) +
                     gupo + "-gene.tsv"
                 )
-                self.tagesi = socesi
-                cetabo = self.chkfal()
-                self.tagesi = socesi.replace(".tsv",".json")
-                jasobo = self.chkfal()
+                self.target_file_path = socesi
+                cetabo = self.check_file()
+                self.target_file_path = socesi.replace(".tsv",".json")
+                jasobo = self.check_file()
 
                 if cetabo and not jasobo:
                     taboli.append(socesi)
 
         if taboli != []:
-            CoveJos = libtab.tab2json()
-            CoveJos.dicodi = { "files" : taboli ,"id" : "Gene ID" }
-            CoveJos.filasi = "libtab.tab2json"
-            CoveJos.prelogi = self.libadi.get("result/log")+"/act15-stire-covejos-"
-            CoveJos.actor()
+            CvtoJSON = libconvert.cvtTABtoJSON()
+            CvtoJSON.requested_argv_dict = { "files" : taboli ,"id" : "Gene ID" }
+            CvtoJSON.filasi = "libconvert.cvtTABtoJSON"
+            CvtoJSON.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-covejos-"
+            CvtoJSON.actor()
 
-        self.frasi = "==========\nStage 2 : Scanning for Variable Parts\n=========="
-        self.printe()
+        self.phrase_str = "==========\nStage 2 : Scanning for Variable Parts\n=========="
+        self.printPhrase()
 
         Transki = libmar.miksing()
-        Transki.dicodi = {
-            "tribe"   : tibeli,
-            "group"   : gupoli,
-            "prefix"  : self.libadi.get("result/ballgown") + "/",
+        Transki.requested_argv_dict = {
+            "tribe"   : tribe_list,
+            "group"   : group_list,
+            "prefix"  : self.requested_config_dict.get("result/ballgown") + "/",
             "postfix" : "/t_data.json",
-            "libtab"  : self.libadi.get("libtab/TranscriptExpression")
+            "libconvert"  : self.requested_config_dict.get("libconvert/TranscriptExpression")
         }
-        Transki.prelogi = self.prelogi + "sca-Transki-"
+        Transki.log_file_prefix_str = self.log_file_prefix_str + "sca-Transki-"
         Transki.scanning()
 
         Geniski = libmar.miksing()
-        Geniski.dicodi = {
-            "tribe"   : tibeli,
-            "group"   : gupoli,
-            "prefix"  : self.libadi.get("result/stringtie") + "/",
+        Geniski.requested_argv_dict = {
+            "tribe"   : tribe_list,
+            "group"   : group_list,
+            "prefix"  : self.requested_config_dict.get("result/stringtie") + "/",
             "postfix" : "-gene.json",
-            "libtab"  : self.libadi.get("libtab/GeneExpression")
+            "libconvert"  : self.requested_config_dict.get("libconvert/GeneExpression")
         }
-        Geniski.prelogi = self.prelogi + "sca-Geniski-"
+        Geniski.log_file_prefix_str = self.log_file_prefix_str + "sca-Geniski-"
         Geniski.scanning()
 
-        if tibeli != []:
-            tibesi = tibeli[0]
+        if tribe_list != []:
+            tribe_str = tribe_list[0]
 
-            self.frasi = "==========\nStage 3 : Merging\n=========="
-            self.printe()
+            self.phrase_str = "==========\nStage 3 : Merging\n=========="
+            self.printPhrase()
 
-            Transki.prelogi = self.prelogi + "fus-Transki-"
+            Transki.log_file_prefix_str = self.log_file_prefix_str + "fus-Transki-"
             Transki.fusion()
             Transki.resusi = (
-                self.libadi.get("result/st-result") + "/" +
-                self.libadi.get("data/prefix").get(tibesi) + "TranscriptExpression.json"
+                self.requested_config_dict.get("result/st-result") + "/" +
+                self.requested_config_dict.get("data/prefix").get(tribe_str) + "TranscriptExpression.json"
             )
             with open(Transki.resusi,"w") as resufi:
                 json.dump(Transki.resudi,resufi,indent=4,sort_keys=True)
-            Transki.prelogi = self.prelogi + "ara-Transki-"
+            Transki.log_file_prefix_str = self.log_file_prefix_str + "ara-Transki-"
             Transki.arrange()
 
-            Geniski.prelogi = self.prelogi + "fus-Geniski-"
+            Geniski.log_file_prefix_str = self.log_file_prefix_str + "fus-Geniski-"
             Geniski.fusion()
             Geniski.resusi = (
-                self.libadi.get("result/st-result") + "/" +
-                self.libadi.get("data/prefix").get(tibesi) + "GeneExpression.json"
+                self.requested_config_dict.get("result/st-result") + "/" +
+                self.requested_config_dict.get("data/prefix").get(tribe_str) + "GeneExpression.json"
             )
             with open(Geniski.resusi,"w") as resufi:
                 json.dump(Geniski.resudi,resufi,indent=4,sort_keys=True)
-            Geniski.prelogi = self.prelogi + "ara-Geniski-"
+            Geniski.log_file_prefix_str = self.log_file_prefix_str + "ara-Geniski-"
             Geniski.arrange()
 
-        self.frasi = "==========\nStage 4 : Extract Data for DESeq\n=========="
-        self.printe()
+        self.phrase_str = "==========\nStage 4 : Extract Data for DESeq\n=========="
+        self.printPhrase()
 
-        filani = self.libadi.get("result/DESeq2") + "/" + "stringtie-list.txt"
+        filani = self.requested_config_dict.get("result/DESeq2") + "/" + "stringtie-list.txt"
         filafi = open(filani,"w")
         filafi.write("")
         filafi.close()
 
-        for tibe in tibeli:
-            for gupo in gupoli:
+        for tribe_name in tribe_list:
+            for gupo in group_list:
                 linosi = (
                     gupo + " " +
-                    self.libadi.get("result/ballgown") + "/" +
-                    self.libadi.get("data/prefix").get(tibe) +
+                    self.requested_config_dict.get("result/ballgown") + "/" +
+                    self.requested_config_dict.get("data/prefix").get(tribe_name) +
                     gupo + "-ballgown.gtf" +
                     "\n"
                 )
@@ -211,78 +211,78 @@ class stitieresult(librun.workflow):
                 with open(filani,"a") as filafi:
                     filafi.write(linosi)
 
-        self.comali = [
-            "python2", self.libadi.get("bin/prepDE"),
+        self.comand_line_list = [
+            "python2", self.requested_config_dict.get("bin/prepDE"),
             "-i", filani
         ]
-        self.runit()
+        self.runCommand()
 
-        self.comali = [
-            "mv", "gene_count_matrix.csv", self.libadi.get("result/DESeq2") + "/"
+        self.comand_line_list = [
+            "mv", "gene_count_matrix.csv", self.requested_config_dict.get("result/DESeq2") + "/"
         ]
-        self.runit()
+        self.runCommand()
 
-        self.comali = [
-            "mv", "transcript_count_matrix.csv", self.libadi.get("result/DESeq2") + "/"
+        self.comand_line_list = [
+            "mv", "transcript_count_matrix.csv", self.requested_config_dict.get("result/DESeq2") + "/"
         ]
-        self.runit()
+        self.runCommand()
 
-        self.comali = []
+        self.comand_line_list = []
 
-        if refesi != "" and tibeli != []:
-            self.frasi = "==========\nStage 5 : Combine Description from GFF3\n=========="
-            self.printe()
+        if refesi != "" and tribe_list != []:
+            self.phrase_str = "==========\nStage 5 : Combine Description from GFF3\n=========="
+            self.printPhrase()
 
-            tibesi = tibeli[0]
-            tiposi = self.libadi.get("type/database").get(tibesi)
+            tribe_str = tribe_list[0]
+            tiposi = self.requested_config_dict.get("type/database").get(tribe_str)
 
             GeneID = libsnm.geneid()
-            GeneID.dicodi = {
+            GeneID.requested_argv_dict = {
                 "description" : refesi ,
                 "basement" : Transki.resusi ,
             }
-            tagadi = self.libadi.get("target/libsnm").get(tiposi+"-transcript")
-            GeneID.dicodi.update(tagadi)
+            tagadi = self.requested_config_dict.get("target/libsnm").get(tiposi+"-transcript")
+            GeneID.requested_argv_dict.update(tagadi)
             GeneID.filasi = "libsnm.geneid"
-            GeneID.prelogi = self.libadi.get("result/log")+"/act15-stire-geneid-"
+            GeneID.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-geneid-"
             GeneID.actor()
 
-            GeneID.dicodi = {
+            GeneID.requested_argv_dict = {
                 "description" : refesi ,
                 "basement" : Geniski.resusi ,
             }
-            tagadi = self.libadi.get("target/libsnm").get(tiposi+"-gene")
-            GeneID.dicodi.update(tagadi)
+            tagadi = self.requested_config_dict.get("target/libsnm").get(tiposi+"-gene")
+            GeneID.requested_argv_dict.update(tagadi)
             GeneID.filasi = "libsnm.geneid"
-            GeneID.prelogi = self.libadi.get("result/log")+"/act15-stire-geneid-"
+            GeneID.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-geneid-"
             GeneID.actor()
 
-            self.frasi = "==========\nStage 6 : Convert JSON back to TSV/CTAB\n=========="
-            self.printe()
+            self.phrase_str = "==========\nStage 6 : Convert JSON back to TSV/CTAB\n=========="
+            self.printPhrase()
         else:
-            self.frasi = "==========\nStage 5 : Convert JSON back to TSV/CTAB\n=========="
-            self.printe()
+            self.phrase_str = "==========\nStage 5 : Convert JSON back to TSV/CTAB\n=========="
+            self.printPhrase()
 
-        CoveTab = libtab.json2tab()
-        CoveTab.filasi = "libtab.json2tab"
-        CoveTab.prelogi = self.libadi.get("result/log")+"/act15-stire-covetab-"
-        CoveTab.dicodi = {
+        CvtoTAB = libconvert.cvtJSONtoTAB()
+        CvtoTAB.filasi = "libconvert.cvtJSONtoTAB"
+        CvtoTAB.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-covetab-"
+        CvtoTAB.requested_argv_dict = {
             "files" : [Transki.resusi],
             "column" : Transki.coluli
         }
-        CoveTab.actor()
+        CvtoTAB.actor()
 
-        CoveTab.dicodi = {
+        CvtoTAB.requested_argv_dict = {
             "files" : [Geniski.resusi],
             "column" : Geniski.coluli
         }
-        CoveTab.actor()
+        CvtoTAB.actor()
 
-        self.printbr()
+        self.printBlankLine()
 
-        self.endin()
+        self.stopLog()
 
-        self.frasi = "\n\n"
-        self.printe()
+        self.phrase_str = "\n\n"
+        self.printPhrase()
 
 StiRes = stitieresult()

@@ -1,28 +1,28 @@
 #!/usr/bin/env python3
-import librun, libconfig
+import libWorkFlow, libconfig
 import time, json, random
-global helber
-helber="""
+global helper_msg_block
+helper_msg_block="""
 --- README of library-mix-analysis-result.py ---
  Title:
   Library for Mixing analysis result
 
  Usage: # Replace * with related string
     Miski = libmar.miksing()
-    Miski.dicodi = {
-      "tribe"   : tibeli,
-      "group"   : gupoli,
-      "prefix"  : self.libadi.get("result/*") + "/",
+    Miski.requested_argv_dict = {
+      "tribe"   : tribe_list,
+      "group"   : group_list,
+      "prefix"  : self.requested_config_dict.get("result/*") + "/",
       "postfix" : "/*.json", OR "postfix" : "-*.json",
-      "libtab"  : self.libadi.get("libtab/*")
+      "libconvert"  : self.requested_config_dict.get("libconvert/*")
     }
-    Miski.prelogi = self.prelogi + "Miski-"
+    Miski.log_file_prefix_str = self.log_file_prefix_str + "Miski-"
     Miski.scanning()
 
     Miski.fusion()
     Miski.resusi = (
-        self.libadi.get("result/*") + "/" +
-        self.libadi.get("data/prefix").get(tibe) + "*.json"
+        self.requested_config_dict.get("result/*") + "/" +
+        self.requested_config_dict.get("data/prefix").get(tribe_name) + "*.json"
     )
     with open(Miski.resusi,"w") as resufi:
         json.dump(Miski.resudi,resufi,indent=4,sort_keys=True)
@@ -43,49 +43,49 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-Confi = libconfig.confi()
-class miksing(librun.workflow):
-    def redirek(self):
+ConfigDict = libconfig.config()
+class miksing(libWorkFlow.workflow):
+    def redirecting(self):
         """"""
-    def pesonai(self):
+    def personalize(self):
         # self.testing = True
-        self.helb = helber
+        self.helper_msg_str = helper_msg_block
 
-        self.dicodi = {
+        self.requested_argv_dict = {
             "tribe"   : [],
             "group"   : [],
             "prefix"  : "",
             "postfix" : "",
-            "libtab"  : []
+            "libconvert"  : []
         }
 
-        self.comali = []
-        self.libadi = {
-            "data/prefix" : Confi.diget("data/prefix"),
-            "result/log" : Confi.siget("result/log"),
+        self.comand_line_list = []
+        self.requested_config_dict = {
+            "data/prefix" : ConfigDict.get_dict("data/prefix"),
+            "result/log" : ConfigDict.get_str("result/log"),
         }
-        self.filasi = "libmar"
-        self.prelogi = Confi.siget("result/log")+"/libmar-"
+        self.script_name_str = "libmar"
+        self.log_file_prefix_str = ConfigDict.get_str("result/log")+"/libmar-"
 
         self.resusi = ""
 
     def scanning(self):
-        tibeli = self.dicodi.get("tribe",[])
-        gupoli = self.dicodi.get("group",[])
-        pifisi = self.dicodi.get("prefix",[])
-        pofisi = self.dicodi.get("postfix",[])
+        tribe_list = self.requested_argv_dict.get("tribe",[])
+        group_list = self.requested_argv_dict.get("group",[])
+        pifisi = self.requested_argv_dict.get("prefix",[])
+        pofisi = self.requested_argv_dict.get("postfix",[])
 
-        self.filasi = "scanning from libmar"
-        self.head()
+        self.script_name_str = "scanning from libmar"
+        self.startLog()
 
         self.tunodi = {}
         self.refedi = {}
-        for tibe in tibeli:
+        for tribe_name in tribe_list:
             keyoli = []
-            for gupo in gupoli:
+            for gupo in group_list:
                 socesi = (
                     pifisi +
-                    self.libadi.get("data/prefix").get(tibe) + gupo +
+                    self.requested_config_dict.get("data/prefix").get(tribe_name) + gupo +
                     pofisi
                 )
                 socefi = open(socesi,"r")
@@ -114,24 +114,24 @@ class miksing(librun.workflow):
                                 self.tunodi.update({ colu : False })
                             else:
                                 self.tunodi.update({ colu : True })
-        self.endin()
+        self.stopLog()
 
     def fusion(self):
-        tibeli = self.dicodi.get("tribe",[])
-        gupoli = self.dicodi.get("group",[])
-        pifisi = self.dicodi.get("prefix",[])
-        pofisi = self.dicodi.get("postfix",[])
+        tribe_list = self.requested_argv_dict.get("tribe",[])
+        group_list = self.requested_argv_dict.get("group",[])
+        pifisi = self.requested_argv_dict.get("prefix",[])
+        pofisi = self.requested_argv_dict.get("postfix",[])
 
-        self.filasi = "fusion from libmar"
-        self.head()
+        self.script_name_str = "fusion from libmar"
+        self.startLog()
 
         self.coludi = {}
         self.resudi = {}
-        for tibe in tibeli:
-            for gupo in gupoli:
+        for tribe_name in tribe_list:
+            for gupo in group_list:
                 socesi = (
                     pifisi +
-                    self.libadi.get("data/prefix").get(tibe) + gupo +
+                    self.requested_config_dict.get("data/prefix").get(tribe_name) + gupo +
                     pofisi
                 )
                 socefi = open(socesi,"r")
@@ -153,14 +153,14 @@ class miksing(librun.workflow):
                         elif remedi.get(colu,"") == "":
                             remedi.update({ colu : somedi.get(colu) })
                     self.resudi.update({ id : remedi })
-        self.endin()
+        self.stopLog()
 
     def arrange(self):
-        self.filasi = "arrange from libmar"
-        self.head()
+        self.script_name_str = "arrange from libmar"
+        self.startLog()
 
         self.coluli = []
-        litali = self.dicodi.get("libtab",[])
+        litali = self.requested_argv_dict.get("libconvert",[])
         if litali == []:
             litali = list(self.tunodi.keys())
         litasi = "*@*"+"*@*".join(litali)+"*@*"
@@ -173,4 +173,4 @@ class miksing(librun.workflow):
         print(list(self.tunodi.keys()))
         print(list(self.coludi.keys()))
         print(self.coluli)
-        self.endin()
+        self.stopLog()

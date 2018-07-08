@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-import librun, libconfig, libstm
+import libWorkFlow, libconfig, libstm
 import time
-global helber
-helber="""
+global helper_msg_block
+helper_msg_block="""
 --- README of act14-stringtie2ballgown ---
  Title:
   Batch Processing for StringTie (Compare)
@@ -46,116 +46,116 @@ helber="""
   -so: JSON
 """
 Marge = libstm.marge()
-Confi = libconfig.confi()
-class stititobago(librun.workflow):
-    def pesonai(self):
+ConfigDict = libconfig.config()
+class stititobago(libWorkFlow.workflow):
+    def personalize(self):
         # self.testing = True
-        self.helb = helber
+        self.helper_msg_str = helper_msg_block
 
-        self.dicodi = {
+        self.requested_argv_dict = {
             "tribe"   : [],
             "group"   : [],
             "control" : ""
         }
-        self.Synom.input(Confi.diget("synom"))
-        self.sync()
+        self.SynonymDict.input(ConfigDict.get_dict("synom"))
+        self.synchornize()
 
-        self.filasi = "act14-stringtie2ballgown"
-        self.libadi = {
-            "bin/stringtie" : Confi.siget("bin/stringtie"),
-            "result/stringtie" : Confi.siget("result/stringtie"),
-            "result/ballgown" : Confi.siget("result/ballgown"),
-            "result/hisat" : Confi.siget("result/hisat"),
-            "result/log" : Confi.siget("result/log"),
-            "run/thread" : Confi.siget("run/thread"),
-            "data/prefix" : Confi.diget("data/prefix"),
+        self.script_name_str = "act14-stringtie2ballgown"
+        self.requested_config_dict = {
+            "bin/stringtie" : ConfigDict.get_str("bin/stringtie"),
+            "result/stringtie" : ConfigDict.get_str("result/stringtie"),
+            "result/ballgown" : ConfigDict.get_str("result/ballgown"),
+            "result/hisat" : ConfigDict.get_str("result/hisat"),
+            "result/log" : ConfigDict.get_str("result/log"),
+            "run/thread" : ConfigDict.get_str("run/thread"),
+            "data/prefix" : ConfigDict.get_dict("data/prefix"),
         }
-        self.prelogi = self.libadi.get("result/log")+"/act14-s2b-"
+        self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act14-s2b-"
 
-        self.comali = []
-        self.adcoli = [ self.libadi.get("bin/stringtie") ]
+        self.comand_line_list = []
+        self.adcoli = [ self.requested_config_dict.get("bin/stringtie") ]
         self.adrfli = [ "-eG" ]
-        self.adphli = [ "-p", self.libadi.get("run/thread")]
+        self.adphli = [ "-p", self.requested_config_dict.get("run/thread")]
         self.adfoli = [ "-b" ]
         self.adotli = [ "-o" ]
         self.adagli = [ "-eA" ]
 
     def actor(self):
-        tibeli = self.dicodi.get("tribe",[])
-        gupoli = self.dicodi.get("group",[])
-        cotosi = self.dicodi.get("control","")
+        tribe_list = self.requested_argv_dict.get("tribe",[])
+        group_list = self.requested_argv_dict.get("group",[])
+        cotosi = self.requested_argv_dict.get("control","")
 
-        self.head()
+        self.startLog()
 
-        self.tageli = []
-        self.tageli.append(self.libadi.get("result/stringtie"))
-        self.tageli.append(self.libadi.get("result/hisat"))
-        self.tageli.append(self.libadi.get("result/ballgown"))
-        self.chkpaf()
+        self.target_file_list = []
+        self.target_file_list.append(self.requested_config_dict.get("result/stringtie"))
+        self.target_file_list.append(self.requested_config_dict.get("result/hisat"))
+        self.target_file_list.append(self.requested_config_dict.get("result/ballgown"))
+        self.checkPath()
 
-        for tibe in tibeli:
-            self.printbr()
+        for tribe_name in tribe_list:
+            self.printBlankLine()
             Marge.testing = self.testing
-            Marge.prelogi = self.libadi.get("result/log")+"/act14-s2b-Merge-"
+            Marge.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act14-s2b-Merge-"
 
             metali = []
-            metali.extend(gupoli)
+            metali.extend(group_list)
             metali.append(cotosi)
-            Marge.dicodi = {
-                "tribe" : [tibe],
+            Marge.requested_argv_dict = {
+                "tribe" : [tribe_name],
                 "group" : metali
             }
             Marge.actor()
-            self.printbr()
+            self.printBlankLine()
 
             self.adinsi = Marge.outusi
-            self.tagesi = self.adinsi
-            self.chkfal()
+            self.target_file_path = self.adinsi
+            self.check_file()
 
             for gupo in metali:
 
                 if cotosi != "":
-                    self.comali = []
-                    self.comali.extend(self.adcoli)
+                    self.comand_line_list = []
+                    self.comand_line_list.extend(self.adcoli)
 
                     adsbsi = (
-                        self.libadi.get("result/hisat") + "/" +
-                        self.libadi.get("data/prefix").get(tibe) +
+                        self.requested_config_dict.get("result/hisat") + "/" +
+                        self.requested_config_dict.get("data/prefix").get(tribe_name) +
                         gupo + "-stringtie-sorted.bam"
                     )
-                    self.comali.append(adsbsi)
+                    self.comand_line_list.append(adsbsi)
 
-                    self.comali.extend(self.adrfli)
-                    self.comali.append(self.adinsi)
+                    self.comand_line_list.extend(self.adrfli)
+                    self.comand_line_list.append(self.adinsi)
 
-                    self.comali.extend(self.adphli)
+                    self.comand_line_list.extend(self.adphli)
 
-                    self.comali.extend(self.adfoli)
+                    self.comand_line_list.extend(self.adfoli)
                     adresi = (
-                        self.libadi.get("result/ballgown") + "/" +
-                        self.libadi.get("data/prefix").get(tibe) +
+                        self.requested_config_dict.get("result/ballgown") + "/" +
+                        self.requested_config_dict.get("data/prefix").get(tribe_name) +
                         gupo
                     )
-                    self.comali.append(adresi)
+                    self.comand_line_list.append(adresi)
 
-                    self.comali.extend(self.adotli)
+                    self.comand_line_list.extend(self.adotli)
                     adresi = (
-                        self.libadi.get("result/ballgown") + "/" +
-                        self.libadi.get("data/prefix").get(tibe) +
+                        self.requested_config_dict.get("result/ballgown") + "/" +
+                        self.requested_config_dict.get("data/prefix").get(tribe_name) +
                         gupo + "-ballgown.gtf"
                     )
-                    self.comali.append(adresi)
+                    self.comand_line_list.append(adresi)
 
-                    self.comali.extend(self.adagli)
+                    self.comand_line_list.extend(self.adagli)
                     adgesi = (
-                        self.libadi.get("result/stringtie") + "/" +
-                        self.libadi.get("data/prefix").get(tibe) +
+                        self.requested_config_dict.get("result/stringtie") + "/" +
+                        self.requested_config_dict.get("data/prefix").get(tribe_name) +
                         gupo + "-gene.tsv"
                     )
-                    self.comali.append(adgesi)
+                    self.comand_line_list.append(adgesi)
 
-                    self.runit()
+                    self.runCommand()
 
-        self.endin()
+        self.stopLog()
 
 StiToB = stititobago()

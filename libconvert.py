@@ -213,3 +213,24 @@ class cvtJSONtoTAB(libWorkFlow.workflow):
                     result_file_handle.write(line_str+"\n")
 
         self.stopLog()
+
+class attributionExtractor(libWorkFlow.workflow):
+    def redirecting(self):
+        """"""
+
+    def personalize(self):
+        # self.testing = True
+        self.helper_msg_str = helper_msg_block
+
+        self.requested_argv_dict = {
+            "input"  : [],
+            "output" : "",
+            "tribe"  : "",
+        }
+
+        self.comand_line_list = []
+        self.script_name_str = "libconvert.py"
+        self.requested_config_dict = {}
+        self.log_file_prefix_str = "temp/tmp-"
+
+    

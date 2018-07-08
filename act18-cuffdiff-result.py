@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-import librun, libconfig, libtab, libsnm, libmar
+import libWorkFlow, libconfig, libconvert, libsnm, libmar
 import time, json
-global helber
-helber="""
+global helper_msg_block
+helper_msg_block="""
 --- README of act18-cuffdiff-result.py ---
  Title:
   Batch Processing for StringTie (Summarise)
@@ -23,7 +23,7 @@ helber="""
   Visualise graph: explanation01-dataStructure.svg
 
  CAUTION:
-  act18 required libtab, libsnm, libmar
+  act18 required libconvert, libsnm, libmar
   act18 required result from act17
   <GROUP> must separate with space
   <GROUP> don't allowed spacing
@@ -43,136 +43,136 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-Confi = libconfig.confi()
-class cuffdiffresult(librun.workflow):
-    def pesonai(self):
+ConfigDict = libconfig.config()
+class cuffdiffresult(libWorkFlow.workflow):
+    def personalize(self):
         # self.testing = True
-        self.helb = helber
+        self.helper_msg_str = helper_msg_block
 
-        self.dicodi = {
+        self.requested_argv_dict = {
             "tribe" : [],
             "group" : [],
             "refer" : ""
         }
-        self.Synom.input(Confi.diget("synom"))
-        self.sync()
+        self.SynonymDict.input(ConfigDict.get_dict("synom"))
+        self.synchornize()
 
-        self.comali = []
-        self.filasi = "act18-cuffdiff-result.py"
-        self.libadi = {
-            "result/cuffdiff" : Confi.siget("result/cuffdiff"),
-            "result/cd-result" : Confi.siget("result/cd-result"),
-            "data/prefix" : Confi.diget("data/prefix"),
-            "target/libsnm" : Confi.diget("target/libsnm"),
-            "type/database" : Confi.diget("type/database"),
-            "result/log" : Confi.siget("result/log"),
-            "libtab/FoldChange" : Confi.liget("libtab/FoldChange"),
+        self.comand_line_list = []
+        self.script_name_str = "act18-cuffdiff-result.py"
+        self.requested_config_dict = {
+            "result/cuffdiff" : ConfigDict.get_str("result/cuffdiff"),
+            "result/cd-result" : ConfigDict.get_str("result/cd-result"),
+            "data/prefix" : ConfigDict.get_dict("data/prefix"),
+            "target/libsnm" : ConfigDict.get_dict("target/libsnm"),
+            "type/database" : ConfigDict.get_dict("type/database"),
+            "result/log" : ConfigDict.get_str("result/log"),
+            "libconvert/FoldChange" : ConfigDict.get_list("libconvert/FoldChange"),
         }
-        self.prelogi = self.libadi.get("result/log")+"/act18-cufre-"
+        self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act18-cufre-"
 
     def actor(self):
-        tibeli = self.dicodi.get("tribe",[])
-        gupoli = self.dicodi.get("group",[])
-        refesi = self.dicodi.get("refer",[])
+        tribe_list = self.requested_argv_dict.get("tribe",[])
+        group_list = self.requested_argv_dict.get("group",[])
+        refesi = self.requested_argv_dict.get("refer",[])
 
-        self.head()
+        self.startLog()
 
-        self.tageli = []
-        self.tageli.append(self.libadi.get("result/cd-result"))
-        self.chkpaf()
+        self.target_file_list = []
+        self.target_file_list.append(self.requested_config_dict.get("result/cd-result"))
+        self.checkPath()
 
-        self.frasi = "==========\nStage 1 : Convert TSV/DIFF to JSON\n=========="
-        self.printe()
+        self.phrase_str = "==========\nStage 1 : Convert TSV/DIFF to JSON\n=========="
+        self.printPhrase()
 
         taboli = []
-        for tibe in tibeli:
-            for gupo in gupoli:
+        for tribe_name in tribe_list:
+            for gupo in group_list:
                 socesi = (
-                    self.libadi.get("result/cuffdiff") + "/" +
-                    self.libadi.get("data/prefix").get(tibe) +
+                    self.requested_config_dict.get("result/cuffdiff") + "/" +
+                    self.requested_config_dict.get("data/prefix").get(tribe_name) +
                     gupo + "-Result/gene_exp.diff"
                 )
-                self.tagesi = socesi
-                cetabo = self.chkfal()
-                self.tagesi = socesi.replace(".diff",".json")
-                jasobo = self.chkfal()
+                self.target_file_path = socesi
+                cetabo = self.check_file()
+                self.target_file_path = socesi.replace(".diff",".json")
+                jasobo = self.check_file()
 
                 if cetabo and not jasobo:
                     taboli.append(socesi)
 
         if taboli != []:
-            CoveJos = libtab.tab2json()
-            CoveJos.dicodi = { "files" : taboli ,"id" : "test_id" }
-            CoveJos.filasi = "libtab.tab2json"
-            CoveJos.prelogi = self.libadi.get("result/log")+"/act18-cufre-covejos-"
-            CoveJos.actor()
+            CvtoJSON = libconvert.cvtTABtoJSON()
+            CvtoJSON.requested_argv_dict = { "files" : taboli ,"id" : "test_id" }
+            CvtoJSON.filasi = "libconvert.cvtTABtoJSON"
+            CvtoJSON.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act18-cufre-covejos-"
+            CvtoJSON.actor()
 
-        self.frasi = "==========\nStage 2 : Scanning for Variable Parts\n=========="
-        self.printe()
+        self.phrase_str = "==========\nStage 2 : Scanning for Variable Parts\n=========="
+        self.printPhrase()
 
         Cudiski = libmar.miksing()
-        Cudiski.dicodi = {
-            "tribe"   : tibeli,
-            "group"   : gupoli,
-            "prefix"  : self.libadi.get("result/cuffdiff") + "/",
+        Cudiski.requested_argv_dict = {
+            "tribe"   : tribe_list,
+            "group"   : group_list,
+            "prefix"  : self.requested_config_dict.get("result/cuffdiff") + "/",
             "postfix" : "-Result/gene_exp.json",
-            "libtab"  : self.libadi.get("libtab/FoldChange")
+            "libconvert"  : self.requested_config_dict.get("libconvert/FoldChange")
         }
-        Cudiski.prelogi = self.prelogi + "sca-Cudiski-"
+        Cudiski.log_file_prefix_str = self.log_file_prefix_str + "sca-Cudiski-"
         Cudiski.scanning()
 
-        self.frasi = "==========\nStage 3 : Merging\n=========="
-        self.printe()
+        self.phrase_str = "==========\nStage 3 : Merging\n=========="
+        self.printPhrase()
 
-        if tibeli != []:
-            tibesi = tibeli[0]
+        if tribe_list != []:
+            tribe_str = tribe_list[0]
 
-            Cudiski.prelogi = self.prelogi + "fus-Cudiski-"
+            Cudiski.log_file_prefix_str = self.log_file_prefix_str + "fus-Cudiski-"
             Cudiski.fusion()
             Cudiski.resusi = (
-                self.libadi.get("result/cd-result") + "/" +
-                self.libadi.get("data/prefix").get(tibesi) + "FoldChange.json"
+                self.requested_config_dict.get("result/cd-result") + "/" +
+                self.requested_config_dict.get("data/prefix").get(tribe_str) + "FoldChange.json"
             )
             with open(Cudiski.resusi,"w") as resufi:
                 json.dump(Cudiski.resudi,resufi,indent=4,sort_keys=True)
-            Cudiski.prelogi = self.prelogi + "ara-Cudiski-"
+            Cudiski.log_file_prefix_str = self.log_file_prefix_str + "ara-Cudiski-"
             Cudiski.arrange()
 
-        if refesi != "" and tibeli != []:
-            self.frasi = "==========\nStage 4 : Combine Description from GFF3\n=========="
-            self.printe()
+        if refesi != "" and tribe_list != []:
+            self.phrase_str = "==========\nStage 4 : Combine Description from GFF3\n=========="
+            self.printPhrase()
 
-            tibesi = tibeli[0]
-            tiposi = self.libadi.get("type/database").get(tibesi)
+            tribe_str = tribe_list[0]
+            tiposi = self.requested_config_dict.get("type/database").get(tribe_str)
 
             GeneID = libsnm.geneid()
-            GeneID.dicodi = {
+            GeneID.requested_argv_dict = {
                 "description" : refesi ,
                 "basement" : Cudiski.resusi ,
             }
-            tagadi = self.libadi.get("target/libsnm").get(tiposi+"-foldchange")
-            GeneID.dicodi.update(tagadi)
+            tagadi = self.requested_config_dict.get("target/libsnm").get(tiposi+"-foldchange")
+            GeneID.requested_argv_dict.update(tagadi)
             GeneID.filasi = "libsnm.geneid"
-            GeneID.prelogi = self.libadi.get("result/log")+"/act18-cufre-geneid-"
+            GeneID.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act18-cufre-geneid-"
             GeneID.actor()
 
-            self.frasi = "==========\nStage 5 : Convert JSON back to TSV/CTAB\n=========="
-            self.printe()
+            self.phrase_str = "==========\nStage 5 : Convert JSON back to TSV/CTAB\n=========="
+            self.printPhrase()
         else:
-            self.frasi = "==========\nStage 4 : Convert JSON back to TSV/CTAB\n=========="
-            self.printe()
+            self.phrase_str = "==========\nStage 4 : Convert JSON back to TSV/CTAB\n=========="
+            self.printPhrase()
 
-        CoveTab = libtab.json2tab()
-        CoveTab.filasi = "libtab.json2tab"
-        CoveTab.prelogi = self.libadi.get("result/log")+"/act18-cufre-covetab-"
-        CoveTab.dicodi = {
+        CvtoTAB = libconvert.cvtJSONtoTAB()
+        CvtoTAB.filasi = "libconvert.cvtJSONtoTAB"
+        CvtoTAB.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act18-cufre-covetab-"
+        CvtoTAB.requested_argv_dict = {
             "files" : [Cudiski.resusi],
             "column" : Cudiski.coluli
         }
-        CoveTab.actor()
+        CvtoTAB.actor()
 
-        self.printbr()
+        self.printBlankLine()
 
-        self.endin()
+        self.stopLog()
 
 CufRe = cuffdiffresult()

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 import sys, pprint
-import librun
-global helber
-helber="""
-   --- README of act10-librun ---
+import libWorkFlow
+global helper_msg_block
+helper_msg_block="""
+   --- README of act10-libWorkFlow ---
  Title:
-    Showcase of librun
+    Showcase of libWorkFlow
 
  Usage:
-    python3 act10-librun.py --hello=waha -h a ba -t ca -hello mow
+    python3 act10-libWorkFlow.py --hello=waha -h a ba -t ca -hello mow
 
    --- README ---
 """
@@ -25,42 +25,42 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-class runno(librun.workflow):
+class runno(libWorkFlow.workflow):
 
-    def pesonai(self):
+    def personalize(self):
         # self.testing = True
-        self.helb = helber
+        self.helper_msg_str = helper_msg_block
         
-        self.dicodi = {
+        self.requested_argv_dict = {
             "hello" : ""
         }
-        self.Synom.input({"h":"hello"})
-        self.sync()
+        self.SynonymDict.input({"h":"hello"})
+        self.synchornize()
 
-        self.tagesi = ""
+        self.target_file_path = ""
 
-        self.comali=['echo','wahaha']
+        self.comand_line_list=['echo','wahaha']
 
-        self.filasi = "librun.py"
-        self.libadi = {
+        self.script_name_str = "libWorkFlow.py"
+        self.requested_config_dict = {
             "prefix/wawa" : "haha/wulala"
         }
-        self.prelogi = "temp/temp-"
+        self.log_file_prefix_str = "temp/temp-"
 
     def actor(self):
-        self.head()
+        self.startLog()
 
-        self.tagesi = "temp"
-        self.chkpaf()
+        self.target_file_path = "temp"
+        self.checkPath()
 
-        self.runit()
+        self.runCommand()
 
-        self.frasi = "Ano.dicodi:\n"+pprint.pformat(self.dicodi,compact=True)
-        self.printe()
-        self.frasi = "Ano.locadi:\n"+pprint.pformat(self.locadi,compact=True)
-        self.printe()
-        self.frasi = "Ano.libadi:\n"+pprint.pformat(self.libadi,compact=True)
-        self.printe()
+        self.phrase_str = "Ano.requested_argv_dict:\n"+pprint.pformat(self.requested_argv_dict,compact=True)
+        self.printPhrase()
+        self.phrase_str = "Ano.locadi:\n"+pprint.pformat(self.locadi,compact=True)
+        self.printPhrase()
+        self.phrase_str = "Ano.requested_config_dict:\n"+pprint.pformat(self.requested_config_dict,compact=True)
+        self.printPhrase()
 
-        self.endin()
+        self.stopLog()
 Ano = runno()

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import sys, pprint, json
-import librun
-global helber
-helber="""
+import libWorkFlow
+global helper_msg_block
+helper_msg_block="""
    --- README of library-search-and-merge ---
   Title:
     Searching and Pairing Tool for Transcript Info. and StringTie Result
@@ -10,7 +10,7 @@ helber="""
   Usage:
     import libsnm
     GeneID = libsnm.geneid()
-    GeneID.dicodi = {
+    GeneID.requested_argv_dict = {
         "description" : [file of gene description] ,
         "basement" : [result file] ,
         "if" : [column name of gene id in result file],
@@ -18,7 +18,7 @@ helber="""
         "from" : [column name of gene id in gene description file],
         "to" : [column name of description],
     }
-    # GeneID.dicodi.update()
+    # GeneID.requested_argv_dict.update()
     GeneID.filasi = "libsnm.geneid"
     GeneID.actor()
 
@@ -37,13 +37,13 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-class geneid(librun.workflow):
-    def redirek(self):
+class geneid(libWorkFlow.workflow):
+    def redirecting(self):
         """"""
-    def pesonai(self):
+    def personalize(self):
         # self.testing = True
 
-        self.dicodi = {
+        self.requested_argv_dict = {
             "description" : "" ,
             "basement" : "" ,
             "if" : "",
@@ -51,28 +51,28 @@ class geneid(librun.workflow):
             "from" : "",
             "to" : "",
         }
-        self.sync()
+        self.synchornize()
 
-        self.tagesi = ""
+        self.target_file_path = ""
 
-        self.comali=[]
+        self.comand_line_list=[]
 
-        self.filasi = "library-search-and-merge"
-        self.libadi = {}
-        self.prelogi = "temp/tmp-"
+        self.script_name_str = "library-search-and-merge"
+        self.requested_config_dict = {}
+        self.log_file_prefix_str = "temp/tmp-"
 
     def actor(self):
-        addasi = self.dicodi.get("description","")
-        socesi = self.dicodi.get("basement","")
-        ifasi = self.dicodi.get("if","")
-        keyosi = self.dicodi.get("key","")
-        frosi = self.dicodi.get("from","")
-        tonsi = self.dicodi.get("to","")
+        addasi = self.requested_argv_dict.get("description","")
+        socesi = self.requested_argv_dict.get("basement","")
+        ifasi = self.requested_argv_dict.get("if","")
+        keyosi = self.requested_argv_dict.get("key","")
+        frosi = self.requested_argv_dict.get("from","")
+        tonsi = self.requested_argv_dict.get("to","")
 
-        self.head()
+        self.startLog()
 
         self.frase = pprint.pformat((addasi, socesi, ifasi, keyosi, tonsi))
-        self.printimo()
+        self.printTimeStamp()
 
         addafi = open(addasi,"r")
         addaso = json.load(addafi)
@@ -96,4 +96,4 @@ class geneid(librun.workflow):
             with open(socesi,"w") as socefi:
                 json.dump(soceso,socefi,indent=4,sort_keys=True)
 
-        self.endin()
+        self.stopLog()
