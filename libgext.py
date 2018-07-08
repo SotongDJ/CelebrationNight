@@ -112,14 +112,14 @@ class gffextract(libWorkFlow.workflow):
         self.phrase_str = pprint.pformat(( len(self.source_s_dict)))
         self.printTimeStamp()
 
-        self.printbr()
-        self.frasi = "==========\nStage 3 : Extract Attributes into Dictionaries\n=========="
-        self.printe()
+        self.printBlankLine()
+        self.phrase_str = "==========\nStage 3 : Extract Attributes into Dictionaries\n=========="
+        self.printPhrase()
 
-        self.id_x_value_dict   = {}
+        self.gffid_x_value_dict   = {}
         self.name_x_value_dict = {}
 
-        for record in list(self.socedi.keys()):
+        for record in list(self.source_s_dict.keys()):
             ids_list   = []
             value_list = []
             value_dict = {}
@@ -132,27 +132,30 @@ class gffextract(libWorkFlow.workflow):
                 if len(temp_list) == 2:
                     value_dict.update({ temp_list[0] : temp_list[1] })
 
-            ids_list   = self.socedi.get(record)
+            ids_list   = self.source_s_dict.get(record)
             for id in ids_list:
-                self.id_x_value_dict.update({ id : value_dict })
+                self.gffid_x_value_dict.update({ id : value_dict })
 
-        for id in list(self.id_x_value_dict.keys()):
+        for id in list(self.gffid_x_value_dict.keys()):
             temp_dict = {}
             name_str  = ""
 
-            temp_dict = self.id_x_value_dict.get( id, {})
+            temp_dict = self.gffid_x_value_dict.get( id, {})
             temp_dict.update({ "gff_id" : id })
 
             if "ID" in temp_dict.keys():
-                name_string = temp_dict.get("ID")
+                name_str = temp_dict.get("ID")
             elif "Name" in temp_dict.keys():
-                name_string = temp_dict.get("Name")
+                name_str = temp_dict.get("Name")
 
             if name_str != "":
                 self.name_x_value_dict.update({ name_str : temp_dict })
 
-        self.frasi = pprint.pformat(( len(self.refedi) , len(self.valedi) ))
-        self.printimo()
+        self.phrase_str = pprint.pformat((
+            len(self.gffid_x_value_dict),
+            len(self.name_x_value_dict)
+        ))
+        self.printTimeStamp()
 
         self.printBlankLine()
         self.phrase_str = "==========\nStage 4 : Generate Refer. Dictionary for Result\n=========="
