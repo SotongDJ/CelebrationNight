@@ -9,6 +9,12 @@ class heading:
             file_handle = open(self.input_file,'r')
             self.content_dict = json.load(file_handle)
 
+        if self.input_file == "":
+            print("required the string \'input_file\'")
+
+        if ".json" not in self.input_file:
+            print("\'input_file\' must be JSON file")
+
     def generate(self):
         self.content_str = "<First Layer>,"
         first_key_list = list(self.content_dict.keys())
