@@ -58,7 +58,7 @@ class fasquacon(libWorkFlow.workflow):
 
         self.target_file_path = ""
 
-        self.script_name_str = "act04-fastqc"
+        self.script_name = "act04-fastqc"
         self.requested_config_dict = {
             "bin/fastqc" : ConfigDict.get_str("bin/fastqc"),
             "result/raw" : ConfigDict.get_str("result/raw"),

@@ -57,7 +57,7 @@ class geneid(libWorkFlow.workflow):
 
         self.comand_line_list=[]
 
-        self.script_name_str = "library-search-and-merge"
+        self.script_name = "library-search-and-merge"
         self.requested_config_dict = {}
         self.log_file_prefix_str = "temp/tmp-"
 

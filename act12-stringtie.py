@@ -73,7 +73,7 @@ class stringtie(libWorkFlow.workflow):
         self.adrfli = [ "-eG" ]
 
 
-        self.script_name_str = "act12-stringtie-batch"
+        self.script_name = "act12-stringtie-batch"
         self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act12-stringtie-batch-"
 
     def actor(self):

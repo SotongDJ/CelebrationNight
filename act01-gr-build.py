@@ -34,7 +34,7 @@ class genomerefer(libWorkFlow.workflow):
         self.synchornize()
 
         self.comand_line_list = []
-        self.script_name_str = "act01-Genome-Reference-build.py"
+        self.script_name = "act01-Genome-Reference-build.py"
         ConfigDict.requested_dict = {}
         ConfigDict.requested_dict = {
             "bin/hisat2build": "",

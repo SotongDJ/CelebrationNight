@@ -59,7 +59,7 @@ class stititobago(libWorkFlow.workflow):
         self.SynonymDict.input(ConfigDict.get_dict("synom"))
         self.synchornize()
 
-        self.script_name_str = "act19-pipeline-fast"
+        self.script_name = "act19-pipeline-fast"
         self.requested_config_dict = {
             "bin/stringtie" : ConfigDict.get_str("bin/stringtie"),
             "result/stringtie" : ConfigDict.get_str("result/stringtie"),

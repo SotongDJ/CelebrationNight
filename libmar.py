@@ -64,7 +64,7 @@ class miksing(libWorkFlow.workflow):
             "data/prefix" : ConfigDict.get_dict("data/prefix"),
             "result/log" : ConfigDict.get_str("result/log"),
         }
-        self.script_name_str = "libmar"
+        self.script_name = "libmar"
         self.log_file_prefix_str = ConfigDict.get_str("result/log")+"/libmar-"
 
         self.resusi = ""
@@ -75,7 +75,7 @@ class miksing(libWorkFlow.workflow):
         pifisi = self.requested_argv_dict.get("prefix",[])
         pofisi = self.requested_argv_dict.get("postfix",[])
 
-        self.script_name_str = "scanning from libmar"
+        self.script_name = "scanning from libmar"
         self.startLog()
 
         self.tunodi = {}
@@ -122,7 +122,7 @@ class miksing(libWorkFlow.workflow):
         pifisi = self.requested_argv_dict.get("prefix",[])
         pofisi = self.requested_argv_dict.get("postfix",[])
 
-        self.script_name_str = "fusion from libmar"
+        self.script_name = "fusion from libmar"
         self.startLog()
 
         self.coludi = {}
@@ -156,7 +156,7 @@ class miksing(libWorkFlow.workflow):
         self.stopLog()
 
     def arrange(self):
-        self.script_name_str = "arrange from libmar"
+        self.script_name = "arrange from libmar"
         self.startLog()
 
         self.coluli = []

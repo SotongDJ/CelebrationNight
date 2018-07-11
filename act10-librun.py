@@ -41,7 +41,7 @@ class runno(libWorkFlow.workflow):
 
         self.comand_line_list=['echo','wahaha']
 
-        self.script_name_str = "libWorkFlow.py"
+        self.script_name = "libWorkFlow.py"
         self.requested_config_dict = {
             "prefix/wawa" : "haha/wulala"
         }

@@ -183,7 +183,7 @@ class workflow:
         self.phrase_str = ""
         self.delimiter_str = ""
 
-    def check_file(self):
+    def checkFile(self):
         result_boolean = False
 
         self.current_time_str = time.strftime("%Y%m%d%H%M%S")

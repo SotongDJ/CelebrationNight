@@ -63,7 +63,7 @@ class marge(libWorkFlow.workflow):
         }
         # self.synchornize()
 
-        self.script_name_str = "library-stringtie-merge"
+        self.script_name = "library-stringtie-merge"
         self.requested_config_dict = {
             "bin/stringtie"    : ConfigDict.get_str("bin/stringtie"),
             "result/stringtie" : ConfigDict.get_str("result/stringtie"),

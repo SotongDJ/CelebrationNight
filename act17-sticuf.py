@@ -78,7 +78,7 @@ class stiticuffdiff(libWorkFlow.workflow):
         self.adotsi = "-o"
         self.adphli = [ "-p", self.requested_config_dict.get("run/thread")]
 
-        self.script_name_str = "act17-sticuf"
+        self.script_name = "act17-sticuf"
         self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act17-sticuf-"
 
     def actor(self):
@@ -107,7 +107,7 @@ class stiticuffdiff(libWorkFlow.workflow):
 
             self.adrfsi = Marge.outusi
             self.target_file_path = self.adrfsi
-            self.check_file()
+            self.checkFile()
 
             if cotosi != "":
                 self.cosasi = (

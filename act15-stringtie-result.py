@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import libWorkFlow, libconfig, libconvert, libsnm, libmar
+import libWorkFlow, libconfig, libConvert, libsnm, libmar
 import time, json
 global helper_msg_block
 helper_msg_block="""
@@ -23,7 +23,7 @@ helper_msg_block="""
   Visualise graph: explanation01-dataStructure.svg
 
  CAUTION:
-  Act15 required libconvert, libsnm, libmar
+  Act15 required libConvert, libsnm, libmar
   Act15 required result from Act16
   <GROUP> must separate with space
   <GROUP> don't allowed spacing
@@ -58,7 +58,7 @@ class stitieresult(libWorkFlow.workflow):
         self.synchornize()
 
         self.comand_line_list = []
-        self.script_name_str = "act15-stringtie-result"
+        self.script_name = "act15-stringtie-result"
         self.requested_config_dict = {
             "result/stringtie" : ConfigDict.get_str("result/stringtie"),
             "result/ballgown" : ConfigDict.get_str("result/ballgown"),
@@ -100,17 +100,17 @@ class stitieresult(libWorkFlow.workflow):
                     gupo + "/t_data.ctab"
                 )
                 self.target_file_path = socesi
-                cetabo = self.check_file()
+                cetabo = self.checkFile()
                 self.target_file_path = socesi.replace(".ctab",".json")
-                jasobo = self.check_file()
+                jasobo = self.checkFile()
 
                 if cetabo and not jasobo:
                     taboli.append(socesi)
 
         if taboli != []:
-            CvtoJSON = libconvert.cvtTABtoJSON()
+            CvtoJSON = libConvert.cvtDSVtoJSON()
             CvtoJSON.requested_argv_dict = { "files" : taboli ,"id" : "t_id" }
-            CvtoJSON.filasi = "libconvert.cvtTABtoJSON"
+            CvtoJSON.filasi = "libConvert.cvtDSVtoJSON"
             CvtoJSON.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-covejos-"
             CvtoJSON.actor()
 
@@ -123,17 +123,17 @@ class stitieresult(libWorkFlow.workflow):
                     gupo + "-gene.tsv"
                 )
                 self.target_file_path = socesi
-                cetabo = self.check_file()
+                cetabo = self.checkFile()
                 self.target_file_path = socesi.replace(".tsv",".json")
-                jasobo = self.check_file()
+                jasobo = self.checkFile()
 
                 if cetabo and not jasobo:
                     taboli.append(socesi)
 
         if taboli != []:
-            CvtoJSON = libconvert.cvtTABtoJSON()
+            CvtoJSON = libConvert.cvtDSVtoJSON()
             CvtoJSON.requested_argv_dict = { "files" : taboli ,"id" : "Gene ID" }
-            CvtoJSON.filasi = "libconvert.cvtTABtoJSON"
+            CvtoJSON.filasi = "libConvert.cvtDSVtoJSON"
             CvtoJSON.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-covejos-"
             CvtoJSON.actor()
 
@@ -263,8 +263,8 @@ class stitieresult(libWorkFlow.workflow):
             self.phrase_str = "==========\nStage 5 : Convert JSON back to TSV/CTAB\n=========="
             self.printPhrase()
 
-        CvtoTAB = libconvert.cvtJSONtoTAB()
-        CvtoTAB.filasi = "libconvert.cvtJSONtoTAB"
+        CvtoTAB = libConvert.cvtJSONtoDSV()
+        CvtoTAB.filasi = "libConvert.cvtJSONtoDSV"
         CvtoTAB.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-covetab-"
         CvtoTAB.requested_argv_dict = {
             "files" : [Transki.resusi],

@@ -60,7 +60,7 @@ class stititobago(libWorkFlow.workflow):
         self.SynonymDict.input(ConfigDict.get_dict("synom"))
         self.synchornize()
 
-        self.script_name_str = "act14-stringtie2ballgown"
+        self.script_name = "act14-stringtie2ballgown"
         self.requested_config_dict = {
             "bin/stringtie" : ConfigDict.get_str("bin/stringtie"),
             "result/stringtie" : ConfigDict.get_str("result/stringtie"),
@@ -110,7 +110,7 @@ class stititobago(libWorkFlow.workflow):
 
             self.adinsi = Marge.outusi
             self.target_file_path = self.adinsi
-            self.check_file()
+            self.checkFile()
 
             for gupo in metali:
 

@@ -52,7 +52,7 @@ class gffextract(libWorkFlow.workflow):
         }
 
         self.comand_line_list = []
-        self.script_name_str = "library-gff-extract.py"
+        self.script_name = "library-gff-extract.py"
         self.requested_config_dict = {
             "result/stringtie" : ConfigDict.get_str("result/stringtie"),
             "result/ge"        : ConfigDict.get_str("result/ge"),
@@ -236,7 +236,7 @@ class gffextract(libWorkFlow.workflow):
             self.phrase_str = "==========\nStage 6 : Convert JSON back to TSV/CTAB\n=========="
             self.printPhrase()
 
-            CvtoTAB = libconvert.cvtJSONtoTAB()
+            CvtoTAB = libConvert.cvtJSONtoDSV()
             CvtoTAB.requested_argv_dict = { "files" : [self.output_filename] }
             CvtoTAB.actor()
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import libWorkFlow, libconfig, libconvert, libsnm, libmar
+import libWorkFlow, libconfig, libConvert, libsnm, libmar
 import time, json
 global helper_msg_block
 helper_msg_block="""
@@ -23,7 +23,7 @@ helper_msg_block="""
   Visualise graph: explanation01-dataStructure.svg
 
  CAUTION:
-  act18 required libconvert, libsnm, libmar
+  act18 required libConvert, libsnm, libmar
   act18 required result from act17
   <GROUP> must separate with space
   <GROUP> don't allowed spacing
@@ -58,7 +58,7 @@ class cuffdiffresult(libWorkFlow.workflow):
         self.synchornize()
 
         self.comand_line_list = []
-        self.script_name_str = "act18-cuffdiff-result.py"
+        self.script_name = "act18-cuffdiff-result.py"
         self.requested_config_dict = {
             "result/cuffdiff" : ConfigDict.get_str("result/cuffdiff"),
             "result/cd-result" : ConfigDict.get_str("result/cd-result"),
@@ -93,17 +93,17 @@ class cuffdiffresult(libWorkFlow.workflow):
                     gupo + "-Result/gene_exp.diff"
                 )
                 self.target_file_path = socesi
-                cetabo = self.check_file()
+                cetabo = self.checkFile()
                 self.target_file_path = socesi.replace(".diff",".json")
-                jasobo = self.check_file()
+                jasobo = self.checkFile()
 
                 if cetabo and not jasobo:
                     taboli.append(socesi)
 
         if taboli != []:
-            CvtoJSON = libconvert.cvtTABtoJSON()
+            CvtoJSON = libConvert.cvtDSVtoJSON()
             CvtoJSON.requested_argv_dict = { "files" : taboli ,"id" : "test_id" }
-            CvtoJSON.filasi = "libconvert.cvtTABtoJSON"
+            CvtoJSON.filasi = "libConvert.cvtDSVtoJSON"
             CvtoJSON.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act18-cufre-covejos-"
             CvtoJSON.actor()
 
@@ -162,8 +162,8 @@ class cuffdiffresult(libWorkFlow.workflow):
             self.phrase_str = "==========\nStage 4 : Convert JSON back to TSV/CTAB\n=========="
             self.printPhrase()
 
-        CvtoTAB = libconvert.cvtJSONtoTAB()
-        CvtoTAB.filasi = "libconvert.cvtJSONtoTAB"
+        CvtoTAB = libConvert.cvtJSONtoDSV()
+        CvtoTAB.filasi = "libConvert.cvtJSONtoDSV"
         CvtoTAB.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act18-cufre-covetab-"
         CvtoTAB.requested_argv_dict = {
             "files" : [Cudiski.resusi],

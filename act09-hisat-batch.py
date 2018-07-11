@@ -94,7 +94,7 @@ class hisatbat(libWorkFlow.workflow):
         self.rmcoli = ["rm", "-v"]
 
 
-        self.script_name_str = "act09-hisat-batch.py"
+        self.script_name = "act09-hisat-batch.py"
 
         self.comand_line_list = []
 
@@ -186,9 +186,9 @@ class hisatbat(libWorkFlow.workflow):
                         self.comand_line_list.append( self.jecosi + argvsi + ".sam" )
 
                         self.target_file_path = self.jecosi + argvsi + ".sam"
-                        abanbo = self.check_file()
+                        abanbo = self.checkFile()
                         self.target_file_path = self.jecosi + argvsi + "-sorted.bam"
-                        bababo = self.check_file()
+                        bababo = self.checkFile()
                         """
                            sam bam hisat samtool
                             0   0   1     1

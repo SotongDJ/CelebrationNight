@@ -56,7 +56,7 @@ class fasresum(libWorkFlow.workflow):
 
         self.target_file_path = ""
 
-        self.script_name_str = "act05-gfr"
+        self.script_name = "act05-gfr"
         self.requested_config_dict = {
             "result/fastqc" : ConfigDict.get_str("result/fastqc"),
             "result/gfr" : ConfigDict.get_str("result/gfr"),
@@ -121,7 +121,7 @@ class fasresum(libWorkFlow.workflow):
                         gupo + "-" + sugu + "_fastqc/summary.txt"
                     )
                     self.target_file_path = socesi
-                    if self.check_file():
+                    if self.checkFile():
                         for lino in open(socesi).read().splitlines():
                             metali = []
                             metali = lino.split("	")

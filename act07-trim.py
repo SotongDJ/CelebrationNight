@@ -96,7 +96,7 @@ class trimmo(libWorkFlow.workflow):
         self.adpali.append(self.requested_config_dict.get("trimmo/length"))
         self.adpali.append(self.requested_config_dict.get("trimmo/adapter"))
 
-        self.script_name_str = "act07-trim"
+        self.script_name = "act07-trim"
         self.log_file_prefix_str = ConfigDict.get_str("result/log")+"/act07-trim-"
 
     def actor(self):
