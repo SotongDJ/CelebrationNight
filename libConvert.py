@@ -80,21 +80,24 @@ class cvtDSVtoJSON(libWorkFlow.workflow):
             name_temp_list = source_file_name.split(".")
             name_temp_list[-1] = "json"
             result_file_name = ".".join(name_temp_list)
-            column_file_name = result_file_name.replace(".json","-column.json")
+            relation_file_name = result_file_name.replace(".json","-related.json")
 
             self.target_file_path = result_file_name
             result_file_boolean = self.checkFile()
-            self.target_file_path = column_file_name
-            column_file_boolean = self.checkFile()
+            self.target_file_path = relation_file_name
+            relation_file_boolean = self.checkFile()
 
-            if not result_file_boolean or not column_file_boolean :
+            if not result_file_boolean or not relation_file_boolean :
                 lines_list = open(source_file_name).read().splitlines()
                 first_line_str = lines_list[0]
 
-                position_x_column_dict = {}
+                position_dict = {} # {numbering:key}
 
-                id_x_value_dict = {}
-                column_x_value_dict = {}
+                id_dict = {} # {id:{key:value}}
+                relation_dict = {
+                    "{key:{value:[id]}}" : {},
+                    "{key:{id:value}}" : {}
+                }
 
                 if not headless_boolean:
                     if header_list == []:
@@ -114,10 +117,12 @@ class cvtDSVtoJSON(libWorkFlow.workflow):
                         )
 
                 for number in range(len(header_list)):
-                    if header_list[number] not in position_x_column_dict.values():
-                        position_x_column_dict.update({ number : header_list[number] })
-                    if header_list[number] not in column_x_value_dict.keys():
-                        column_x_value_dict.update({ header_list[number] :{} })
+                    if header_list[number] not in position_dict.values():
+                        position_dict.update({ number : header_list[number] })
+                    if header_list[number] not in relation_dict.get("{key:{value:[id]}}").keys():
+                        relation_dict.get("{key:{value:[id]}}").update({ header_list[number] :{} })
+                    if header_list[number] not in relation_dict.get("{key:{id:value}}").keys():
+                        relation_dict.get("{key:{id:value}}").update({ header_list[number] :{} })
 
                 refer_column_exist_boolean = False
                 if refer_column_name != "":
@@ -134,32 +139,40 @@ class cvtDSVtoJSON(libWorkFlow.workflow):
                             line_id_num = line_id_num + 1
                             id_name = prefix_str + str(line_id_num)
 
-                        for number in range(len(list(position_x_column_dict.keys()))):
-                            header_list_str = position_x_column_dict.get(number)
+                        for number in range(len(list(position_dict.keys()))):
+                            header_list_str = position_dict.get(number)
                             value_temp_dict.update({ header_list_str : value_temp_list[number]})
 
                             if header_list_str == refer_column_name and refer_column_exist_boolean:
                                 id_name = value_temp_list[number]
 
-                        id_x_value_dict.update({ id_name : value_temp_dict })
+                        id_dict.update({ id_name : value_temp_dict })
 
-                        for number in range(len(list(position_x_column_dict.keys()))):
-                            header_list_str = position_x_column_dict.get(number)
+                        value_temp_dict = {} # {key:{value:[id]}}
+                        id_temp_dict = {} # {key:{id:value}}
 
-                            column_temp_dict = column_x_value_dict.get(header_list_str,{})
-                            id_list = column_temp_dict.get(value_temp_list[number],[])
+                        for number in range(len(list(position_dict.keys()))):
+                            header_list_str = position_dict.get(number) # key
+                            value_str = value_temp_list[number] # value
 
+                            value_temp_dict = relation_dict.get("{key:{value:[id]}}").get(header_list_str,{})
+                            id_temp_dict = relation_dict.get("{key:{id:value}}").get(header_list_str,{})
+
+                            id_list = value_temp_dict.get(value_temp_list[number],[])
                             id_list.append(id_name)
 
-                            column_temp_dict.update({ value_temp_list[number] : id_list })
-                            column_x_value_dict.update({ header_list_str : column_temp_dict })
+                            value_temp_dict.update({ value_temp_list[number] : id_list })
+                            id_temp_dict.update({ id_name : value_str })
+
+                            relation_dict.get("{key:{value:[id]}}").update({ header_list_str : value_temp_dict })
+                            relation_dict.get("{key:{id:value}}").update({ header_list_str : id_temp_dict })
 
 
                 with open(result_file_name,"w") as result_file_handle:
                     json.dump(id_x_value_dict,result_file_handle,indent=4,sort_keys=True)
 
-                with open(column_file_name,"w") as column_file_handle:
-                    json.dump(column_x_value_dict,column_file_handle,indent=4,sort_keys=True)
+                with open(relation_file_name,"w") as relation_file_handle:
+                    json.dump(relation_dict,relation_file_handle,indent=4,sort_keys=True)
 
         self.stopLog()
 
@@ -239,8 +252,8 @@ class attributionExtractor(libWorkFlow.workflow):
         self.startLog()
 
         for source_file_name in source_files_list:
-            target_file_name = source_file_name.replace("-column.json",".json")
-            target_file_name = target_file_name.replace(".json","-column.json")
+            target_file_name = source_file_name.replace("-related.json",".json")
+            target_file_name = target_file_name.replace(".json","-related.json")
 
             self.target_file_path = target_file_name
             target_file_boolean = self.checkFile()
@@ -253,10 +266,10 @@ class attributionExtractor(libWorkFlow.workflow):
                 target_json_dict = json.load(target_file_handle)
 
                 raw_temp_dict = target_json_dict.get('Attributes')
-                result_dict = {
-                    "gffid=[key:value]" : {},
-                    "key=[value:gffid]" : {},
-                    "key=[gffid:value]" : {}
+                result_dict = {} # id=[key:value]
+                relation_dict = {
+                    "{key:{value:[id]}}" : {},
+                    "{key:{id:value}}" : {}
                 }
 
                 for attribution_str in list(raw_temp_dict.keys()):
@@ -269,32 +282,37 @@ class attributionExtractor(libWorkFlow.workflow):
                         value_str = paired_set_list[1]
                         attribution_temp_dict.update({ key_str : value_str })
 
-                        value_temp_dict = result_dict.get("key=[value:gffid]").get(key_str,{})
+                        value_temp_dict = relation_dict.get("{key:{value:[id]}}").get(key_str,{})
                         value_temp_dict.update({ value_str : gffid_name })
-                        result_dict.get("key=[value:gffid]").update({ key_str : value_temp_dict })
+                        relation_dict.get("{key:{value:[id]}}").update({ key_str : value_temp_dict })
 
-                        gffid_temp_dict = result_dict.get("key=[gffid:value]").get(key_str,{})
+                        gffid_temp_dict = relation_dict.get("{key:{id:value}}").get(key_str,{})
                         gffid_temp_dict.update({ gffid_name : value_str })
-                        result_dict.get("key=[gffid:value]").update({ key_str : gffid_temp_dict })
+                        relation_dict.get("{key:{id:value}}").update({ key_str : gffid_temp_dict })
 
-                    result_dict.get("gffid=[key:value]").update({ gffid_name : attribution_temp_dict })
+                    result_dict.update({ gffid_name : attribution_temp_dict })
 
 
-                result_file_name = target_file_name.replace("-column.json","-attribution.json")
+                result_file_name = target_file_name.replace("-related.json","-attribution.json")
                 with open(result_file_name,"w") as result_file_handle:
                     json.dump(result_dict,result_file_handle)
+
+                relation_file_name = target_file_name.replace("-related.json","-attribution-related.json")
+                with open(relation_file_name,"w") as relation_file_handle:
+                    json.dump(relation_dict,relation_file_handle)
+
                 """
-                attribution_file_name = target_file_name.replace("-column.json","-atr-gffid[key-value].json")
+                attribution_file_name = target_file_name.replace("-related.json","-atr-gffid[key-value].json")
                 with open(attribution_file_name,"w") as attribution_file_handle:
-                    json.dump(result_dict.get("gffid=[key:value]"),attribution_file_handle)
+                    json.dump(result_dict.get("id=[key:value]"),attribution_file_handle)
 
-                value_file_name = target_file_name.replace("-column.json","-atr-key[value-gffid].json")
+                value_file_name = target_file_name.replace("-related.json","-atr-key[value-gffid].json")
                 with open(value_file_name,"w") as value_file_handle:
-                    json.dump(result_dict.get("key=[value:gffid]"),value_file_handle)
+                    json.dump(result_dict.get("{key:{value:[id]}}"),value_file_handle)
 
-                gffid_file_name = target_file_name.replace("-column.json","-atr-key[gffid-value].json")
+                gffid_file_name = target_file_name.replace("-related.json","-atr-key[gffid-value].json")
                 with open(gffid_file_name,"w") as gffid_file_handle:
-                    json.dump(result_dict.get("key=[gffid:value]"),gffid_file_handle)
+                    json.dump(result_dict.get("{key:{id:value}}"),gffid_file_handle)
                 """
-                
+
         self.stopLog()
