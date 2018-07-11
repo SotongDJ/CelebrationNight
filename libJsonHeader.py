@@ -1,6 +1,30 @@
 import pprint,json
-class heading:
-    def __init__(self):
+import libWorkFlow
+class heading(libWorkFlow.workflow):
+    def redirecting(self):
+        """"""
+    def actor(self):
+        """"""
+    def personalize(self):
+        # self.testing = True
+        self.helper_msg_str = "libJsonHeader.heading"
+
+        self.requested_argv_dict = {}
+
+        self.target_file_path = ""
+
+        self.comand_line_list=[]
+
+        self.script_name = "libJsonHeader.heading"
+        self.requested_config_dict = {}
+        self.log_file_prefix_str = "temp/temp-"
+
+        self.initiation()
+
+    def set(self,file_name):
+        self.input_file = file_name
+
+    def initiation(self):
         self.content_dict = {}
         self.input_file = ""
         self.output_file = ""
@@ -152,20 +176,37 @@ class heading:
         )
 
     def view(self):
+        self.phrase_str = "Start loading"
+        self.printTimeStamp()
         self.load()
+
+        self.phrase_str = "Start generating"
+        self.printTimeStamp()
         self.generate()
+
         print(self.content_str)
+        self.stopLog()
 
     def output(self):
+        self.startLog()
         if self.output_file == "" and self.input_file != "":
             self.output_file = self.input_file.replace(".json",".py")
 
-        if self.output_file != "":
+        if self.input_file != "":
+
+            self.phrase_str = "Start loading"
+            self.printTimeStamp()
             self.load()
+
+            self.phrase_str = "Start generating"
+            self.printTimeStamp()
             self.generate()
 
+            self.phrase_str = "Start outputing"
+            self.printTimeStamp()
             with open(self.output_file,"w") as output_file_handle:
                 output_file_handle.write(self.content_str)
 
         self.input_file = ""
         self.output_file = ""
+        self.stopLog()
