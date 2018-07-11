@@ -55,7 +55,7 @@ class gffextract(libWorkFlow.workflow):
         self.script_name = "library-gff-extract.py"
         self.requested_config_dict = {
             "result/stringtie" : ConfigDict.get_str("result/stringtie"),
-            "result/ge"        : ConfigDict.get_str("result/ge"),
+            "result/gff-json"        : ConfigDict.get_str("result/gff-json"),
             "type/database"   : ConfigDict.get_dict("type/database"),
             "target/libgext"   : ConfigDict.get_dict("target/libgext")
         }
@@ -64,7 +64,7 @@ class gffextract(libWorkFlow.workflow):
     def actor(self):
         self.input_list      = self.requested_argv_dict.get("input",[])
         self.output_filename = (
-            self.requested_config_dict.get("result/ge") + "/" + self.requested_argv_dict.get("output","")
+            self.requested_config_dict.get("result/gff-json") + "/" + self.requested_argv_dict.get("output","")
         )
         tribe_name = self.requested_argv_dict.get("tribe","")
         type_name  = self.requested_config_dict.get("type/database").get(tribe_name)
@@ -74,7 +74,7 @@ class gffextract(libWorkFlow.workflow):
 
         self.target_file_list = []
         self.target_file_list.append(self.requested_config_dict.get("result/stringtie"))
-        self.target_file_list.append(self.requested_config_dict.get("result/ge"))
+        self.target_file_list.append(self.requested_config_dict.get("result/gff-json"))
         self.checkPath()
 
         self.printBlankLine()
