@@ -81,17 +81,19 @@ class gffextract(libWorkFlow.workflow):
         self.phrase_str = "==========\nStage 1 : Convert GFF(v3) to JSON\n=========="
         self.printPhrase()
 
-        comusi = (
-            "sequence	source	feature	start	end	"
-            + "score	srefed	phase	Attributes"
-        )
+        header_list = [
+            "sequence", "source", "feature", "start", "end",
+            "score", "srefed", "phase", "Attributes"
+        ]
 
-        CvtoJSON = libconvert.cvtTABtoJSON()
+        CvtoJSON = libConvert.cvtDSVtoJSON()
         CvtoJSON.requested_argv_dict = {
-            "files"  : self.input_list,
-            "id"     : "",
-            "prefix" : "gff",
-            "column" : comusi
+            "files": self.input_list,
+            "refer_column": "",
+            "prefix": "gff",
+            "header": header_list,
+            "headless": False
+            "delimiter": "\t"
         }
         CvtoJSON.actor()
 
