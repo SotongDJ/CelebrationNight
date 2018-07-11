@@ -25,7 +25,7 @@ helper_msg_block="""
 
             self.comand_line_list=[]
 
-            self.script_name_str = < Library Name >
+            self.script_name = < Library Name >
             self.requested_config_dict = {}
             self.log_file_prefix_str = < Path of Log Files >
 
@@ -48,19 +48,6 @@ helper_msg_block="""
     Ano.actor()
 
    --- README ---
-"""
-"""
- Postfix of variables:
-  -si: String
-   -ni: alternative/second string for same Usage
-   -fi: string for open()
-  -ho: String(that store dir path)
-  -ti: Intiger/Float
-  -li: List
-  -tu: Tuple
-  -di: Dictionary
-  -fa: File (with open())
-  -so: JSON
 """
 class refined_dict:
     def input(self,socedi):
@@ -87,8 +74,8 @@ class workflow:
     def __init__(self):
         self.system_argv_list = sys.argv
         self.arranged_argv_dict = {}
-        self.begin_time_str=""
-        self.log_file_name_str=""
+        self.begin_time_str = ""
+        self.log_file_name = ""
 
         self.current_time_str = ""
         self.phrase_str = ""
@@ -117,7 +104,7 @@ class workflow:
 
         self.comand_line_list = ['echo','wahaha']
 
-        self.script_name_str = "libWorkFlow.py"
+        self.script_name = "libWorkFlow.py"
         self.requested_config_dict = {
             "prefix/wawa" : "haha/wulala"
         }
@@ -142,17 +129,17 @@ class workflow:
         self.delimiter_str = "- :" # for convertTime()
         time_str = "[" + self.convertTime() + "] "
         print( time_str+self.phrase_str )
-        with open( self.log_file_name_str, 'a' ) as log_file:
+        with open( self.log_file_name, 'a' ) as log_file:
             log_file.write( time_str+self.phrase_str+"\n" )
 
     def printPhrase(self):
         print(self.phrase_str)
-        with open(self.log_file_name_str,'a') as log_file:
+        with open(self.log_file_name,'a') as log_file:
             log_file.write(self.phrase_str+"\n")
 
     def printBlankLine(self):
         print("  ")
-        with open(self.log_file_name_str,'a') as log_file:
+        with open(self.log_file_name,'a') as log_file:
             log_file.write("  \n")
 
     def getMaxLengthValue(self):
@@ -188,7 +175,7 @@ class workflow:
             self.phrase_str= "\n checkPath: " + " ".join(comand_line_list)
             self.printTimeStamp()
 
-            call(comand_line_list, stdout=open(self.log_file_name_str, 'a'))
+            call(comand_line_list, stdout=open(self.log_file_name, 'a'))
 
         self.target_file_path = ""
         self.target_file_list = []
@@ -350,7 +337,7 @@ class workflow:
         self.delimiter_str = "- :" # for convertTime()
         run_info_line = (
             "==========\n"
-            +"RUN "+self.script_name_str+", begin at ["+self.convertTime()+"]"
+            +"RUN "+self.script_name+", begin at ["+self.convertTime()+"]"
             +"\n=========="
         )
         self.log_argv_dict = {
@@ -393,7 +380,7 @@ class workflow:
             config_info_line = []
 
         self.delimiter_str = "-_-"  # for convertTime()
-        self.log_file_name_str = self.log_file_prefix_str + self.convertTime() + '.log'
+        self.log_file_name = self.log_file_prefix_str + self.convertTime() + '.log'
 
         result_list = [run_info_line]
         result_list.extend(argv_info_line)
@@ -415,7 +402,7 @@ class workflow:
         self.printPhrase()
 
         if not self.testing:
-            call(self.comand_line_list, stdout=open(self.log_file_name_str, 'a'))
+            call(self.comand_line_list, stdout=open(self.log_file_name, 'a'))
 
         self.current_time_str = ""
         self.phrase_str = ""
@@ -454,7 +441,7 @@ class workflow:
         self.delimiter_str = "- :" #for convertTime()
         run_info_line = (
             "==========\n"
-            +self.script_name_str+", finished on ["+self.convertTime() +"]\n"
+            +self.script_name+", finished on ["+self.convertTime() +"]\n"
             +"     Total time: "+result_info_str+"\n"
             +"=========="
         )
