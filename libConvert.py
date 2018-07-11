@@ -60,7 +60,7 @@ class cvtDSVtoJSON(libWorkFlow.workflow):
 
         self.comand_line_list=[]
 
-        self.script_name = "libConvert.py"
+        self.script_name = "libConvert.cvtDSVtoJSON"
         self.requested_config_dict = {}
         self.log_file_prefix_str = "temp/tmp-"
 
@@ -83,9 +83,9 @@ class cvtDSVtoJSON(libWorkFlow.workflow):
             column_file_name = result_file_name.replace(".json","-column.json")
 
             self.target_file_path = result_file_name
-            result_file_boolean = self.check_file()
+            result_file_boolean = self.checkFile()
             self.target_file_path = column_file_name
-            column_file_boolean = self.check_file()
+            column_file_boolean = self.checkFile()
 
             if not result_file_boolean or not column_file_boolean :
                 lines_list = open(source_file_name).read().splitlines()
@@ -181,7 +181,7 @@ class cvtJSONtoDSV(libWorkFlow.workflow):
 
         self.comand_line_list=[]
 
-        self.script_name = "libConvert.py"
+        self.script_name = "libConvert.cvtJSONtoDSV"
         self.requested_config_dict = {}
         self.log_file_prefix_str = "temp/tmp-"
 
@@ -205,7 +205,7 @@ class cvtJSONtoDSV(libWorkFlow.workflow):
             else:
                 header_tuple = tuple(header_list)
 
-            with open(source_file_name.replace(".json",".tsv"),"w") as result_file_handle:
+            with open(source_file_name.replace(".json",".dsv"),"w") as result_file_handle:
                 result_file_handle.write("id"+delimiter_str+delimiter_str.join(header_tuple)+"\n")
                 for id_name in list(source_json_dict.keys()):
                     line_str = id_name
@@ -227,13 +227,74 @@ class attributionExtractor(libWorkFlow.workflow):
 
         self.requested_argv_dict = {
             "gff.json": [],
-            "refer": "",
         }
 
         self.comand_line_list = []
-        self.script_name = "libConvert.py"
+        self.script_name = "libConvert.attributionExtractor"
         self.requested_config_dict = {}
         self.log_file_prefix_str = "temp/tmp-"
 
     def actor(self):
-        """"""
+        source_files_list = self.requested_argv_dict.get("gff.json",[])
+        self.startLog()
+
+        for source_file_name in source_files_list:
+            target_file_name = source_file_name.replace("-column.json",".json")
+            target_file_name = target_file_name.replace(".json","-column.json")
+
+            self.target_file_path = target_file_name
+            target_file_boolean = self.checkFile()
+
+            if target_file_boolean:
+                self.phrase_str = "Extracting "+target_file_name
+                self.printTimeStamp()
+
+                target_file_handle = open(target_file_name,'r')
+                target_json_dict = json.load(target_file_handle)
+
+                raw_temp_dict = target_json_dict.get('Attributes')
+                result_dict = {
+                    "gffid=[key:value]" : {},
+                    "key=[value:gffid]" : {},
+                    "key=[gffid:value]" : {}
+                }
+
+                for attribution_str in list(raw_temp_dict.keys()):
+                    gffid_name = raw_temp_dict.get(attribution_str)[0]
+                    attribution_temp_dict = {}
+
+                    for paired_set_str in attribution_str.split(";"):
+                        paired_set_list = paired_set_str.split("=")
+                        key_str = paired_set_list[0]
+                        value_str = paired_set_list[1]
+                        attribution_temp_dict.update({ key_str : value_str })
+
+                        value_temp_dict = result_dict.get("key=[value:gffid]").get(key_str,{})
+                        value_temp_dict.update({ value_str : gffid_name })
+                        result_dict.get("key=[value:gffid]").update({ key_str : value_temp_dict })
+
+                        gffid_temp_dict = result_dict.get("key=[gffid:value]").get(key_str,{})
+                        gffid_temp_dict.update({ gffid_name : value_str })
+                        result_dict.get("key=[gffid:value]").update({ key_str : gffid_temp_dict })
+
+                    result_dict.get("gffid=[key:value]").update({ gffid_name : attribution_temp_dict })
+
+
+                result_file_name = target_file_name.replace("-column.json","-attribution.json")
+                with open(result_file_name,"w") as result_file_handle:
+                    json.dump(result_dict,result_file_handle)
+                """
+                attribution_file_name = target_file_name.replace("-column.json","-atr-gffid[key-value].json")
+                with open(attribution_file_name,"w") as attribution_file_handle:
+                    json.dump(result_dict.get("gffid=[key:value]"),attribution_file_handle)
+
+                value_file_name = target_file_name.replace("-column.json","-atr-key[value-gffid].json")
+                with open(value_file_name,"w") as value_file_handle:
+                    json.dump(result_dict.get("key=[value:gffid]"),value_file_handle)
+
+                gffid_file_name = target_file_name.replace("-column.json","-atr-key[gffid-value].json")
+                with open(gffid_file_name,"w") as gffid_file_handle:
+                    json.dump(result_dict.get("key=[gffid:value]"),gffid_file_handle)
+                """
+                
+        self.stopLog()
