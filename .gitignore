@@ -1,14 +1,10 @@
 # something need to be exclude
 bin/
 data/
-index/
-large/
-
-png/
-temp/
-.fuse*
 ar-priv/
-.Rhistory
+temp/
+
+.fuse*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
