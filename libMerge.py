@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import libWorkFlow, libconfig
+import libWorkFlow, libConfig
 import time, json, random
 global helper_msg_block
 helper_msg_block="""
@@ -43,7 +43,7 @@ helper_msg_block="""
   -fa: File (with open())
   -so: JSON
 """
-ConfigDict = libconfig.config()
+ConfigDict = libConfig.config()
 class miksing(libWorkFlow.workflow):
     def redirecting(self):
         """"""
