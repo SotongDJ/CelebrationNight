@@ -3,7 +3,7 @@ import pprint, time, json, sys
 from subprocess import call
 global helper_msg_block
 helper_msg_block="""
-   --- README of library-run ---
+   --- README of WorkFlow Framework v2.3 ---
  Title:
     General class for bio-info-misc project
 
