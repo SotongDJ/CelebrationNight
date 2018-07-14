@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import libWorkFlow, libconfig, libgext
+import libWorkFlow, libConfig, libConvert
 global helper_msg_block
 helper_msg_block="""
 --- README of act01-Genome-Reference-build.py ---
@@ -19,7 +19,7 @@ helper_msg_block="""
     <OUTPUT FOLDER for HISAT2>/<codename>
 --- README ---
 """
-ConfigDict = libconfig.config()
+ConfigDict = libConfig.config()
 class genomerefer(libWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
@@ -39,10 +39,12 @@ class genomerefer(libWorkFlow.workflow):
         ConfigDict.requested_dict = {
             "bin/hisat2build": "",
             "result/log": "",
+            "result/gff-json": "",
             "index/hisat": "",
             "run/thread": "",
             "refer/annotate": {},
             "refer/genome": {},
+            "head/gff": {},
         }
         self.requested_config_dict = ConfigDict.get_batchly()
         self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act01-gr-build-"
@@ -78,7 +80,7 @@ class genomerefer(libWorkFlow.workflow):
                 annotation_boolean = True
 
         if self.refer_codename_str != "" and genome_boolean and annotation_boolean:
-            self.phrase_str = "==========\nStage 1 : Build HISAT2 Index\n=========="
+            self.phrase_str = "==========\nStage: Build HISAT2 Index\n=========="
             self.printPhrase()
 
             self.binary_path = self.requested_config_dict.get("bin/hisat2build")
@@ -92,7 +94,7 @@ class genomerefer(libWorkFlow.workflow):
             self.comand_line_list.append(self.output_path)
             self.runCommand()
 
-            self.phrase_str = "==========\nStage 2 : Copy Genome FASTA to HISAT2 Index folder\n=========="
+            self.phrase_str = "==========\nStage: Copy Genome FASTA to HISAT2 Index folder\n=========="
             self.printPhrase()
 
             self.comand_line_list = ["cp",self.genome_path,self.output_path+".fa"]
@@ -105,22 +107,42 @@ class genomerefer(libWorkFlow.workflow):
             )
             self.printPhrase()
 
-        self.phrase_str = "==========\nStage 3 : Extract GFF Information\n=========="
+        self.phrase_str = "==========\nStage: Copy Refer annotation to Result folder\n=========="
+        self.printPhrase()
+
+        path_name = self.annotation_path.replace("\\","/")
+        file_str = path_name.split('/')[-1]
+        file_name = file_str.split('.')[0]
+        self.extraction_path = self.requested_config_dict.get("result/gff-json")+"/"+file_name
+        self.comand_line_list = ["cp", self.annotation_path, self.extraction_path+".gff"]
+        self.runCommand()
+
+        self.phrase_str = "==========\nStage: Convert GFF to JSON\n=========="
+        self.printPhrase()
+
+        header_list = self.requested_config_dict.get("head/gff")
+        CvtoJSON = libConvert.cvtDSVtoJSON()
+        CvtoJSON.requested_argv_dict = {
+            "files": [self.extraction_path+".gff"],
+            "refer_column": "",
+            "prefix": "gff",
+            "header": header_list,
+            "headless": False,
+            "delimiter": "\t"
+        }
+        CvtoJSON.actor()
+
+        self.phrase_str = "==========\nStage: Extract GFF Information\n=========="
         self.printPhrase()
         # under construction
-        """
-        Gekta = libgext.gffextract()
-        Gekta.testing = self.testing
-        Gekta.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act01-grb-libgext-"
-        Gekta.requested_argv_dict = {
-            "input"  : [annotation_path],
-            "tribe"  : self.tribe_str,
-            "output" : self.refer_codename_str+"-gff-info.json"
-        }
-        Gekta.actor()
-        """
-        self.printBlankLine()
 
+        Extract = libConvert.attributionExtractor()
+        Extract.requested_argv_dict = {
+            "gff.json"  : [self.extraction_path+".json"],
+        }
+        Extract.actor()
+
+        self.printBlankLine()
 
         self.stopLog()
 
