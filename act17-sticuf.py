@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import libWorkFlow, libconfig, libstm
+import libWorkFlow, libConfig, libstm
 import sys
 global helper_msg_block
 helper_msg_block="""
@@ -47,7 +47,7 @@ helper_msg_block="""
   -so: JSON
 """
 Marge = libstm.marge()
-ConfigDict = libconfig.config()
+ConfigDict = libConfig.config()
 class stiticuffdiff(libWorkFlow.workflow):
     def personalize(self):
         # self.testing = True

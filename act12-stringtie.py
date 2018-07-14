@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import libWorkFlow, libconfig, sys
+import libWorkFlow, libConfig, sys
 global helper_msg_block
 helper_msg_block="""
    --- README of act12-stringtie-batch ---
@@ -42,7 +42,7 @@ helper_msg_block="""
   -fa: File (with open())
   -so: JSON
 """
-ConfigDict = libconfig.config()
+ConfigDict = libConfig.config()
 class stringtie(libWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
