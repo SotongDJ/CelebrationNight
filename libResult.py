@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import libWorkFlow, libconfig
+import libWorkFlow, libConfig
 global helper_msg_block
 helper_msg_block="""
 --- README of library-stringtie-merge ---
@@ -50,7 +50,7 @@ helper_msg_block="""
   -fa: File (with open())
   -so: JSON
 """
-ConfigDict = libconfig.config()
+ConfigDict = libConfig.config()
 class marge(libWorkFlow.workflow):
     def redirecting(self):
         """"""
