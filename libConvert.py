@@ -27,19 +27,6 @@ helper_msg_block="""
 
    --- README ---
 """
-"""
- Postfix of variables:
-  -si: String
-   -ni: alternative/second string for same Usage
-   -fi: string for open()
-  -ho: String(that store dir path)
-  -ti: Intiger/Float
-  -li: List
-  -tu: Tuple
-  -di: Dictionary
-  -fa: File (with open())
-  -so: JSON
-"""
 class cvtDSVtoJSON(libWorkFlow.workflow):
     def redirecting(self):
         """"""
