@@ -23,25 +23,12 @@ helper_msg_block="""
   Visualise graph: explanation01-dataStructure.svg
 
  CAUTION:
-  Act15 required libConvert, libsnm, libmar
+  Act15 required libConvert, libResult, libMerge
   Act15 required result from Act16
   <GROUP> must separate with space
   <GROUP> don't allowed spacing
 
 --- README ---
-"""
-"""
- Postfix of variables:
-  -si: String
-   -ni: alternative/second string for same Usage
-   -fi: string for open()
-  -ho: String(that store dir path)
-  -ti: Intiger/Float
-  -li: List
-  -tu: Tuple
-  -di: Dictionary
-  -fa: File (with open())
-  -so: JSON
 """
 ConfigDict = libConfig.config()
 class stitieresult(pyWorkFlow.workflow):
