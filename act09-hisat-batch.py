@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import libWorkFlow, libConfig, sys
+import pyWorkFlow, libConfig, sys
 global helper_msg_block
 helper_msg_block="""
    --- README of act09-hisat-batch ---
@@ -49,7 +49,7 @@ helper_msg_block="""
   -so: JSON
 """
 ConfigDict = libConfig.config()
-class hisatbat(libWorkFlow.workflow):
+class hisatbat(pyWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
         self.helper_msg_str = helper_msg_block

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import json, time
-import libWorkFlow, libConfig
+import pyWorkFlow, libConfig
 global helper_msg_block
 helper_msg_block="""
 --- README of act06-fastqc-result-summary ---
@@ -41,7 +41,7 @@ helper_msg_block="""
   -so: JSON
 """
 ConfigDict = libConfig.config()
-class fasresum(libWorkFlow.workflow):
+class fasresum(pyWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
         self.helper_msg_str = helper_msg_block

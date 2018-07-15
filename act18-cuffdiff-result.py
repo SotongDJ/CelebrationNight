@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import libWorkFlow, libConfig, libConvert, libsnm, libmar
+import pyWorkFlow, libConfig, libConvert, libsnm, libmar
 import time, json
 global helper_msg_block
 helper_msg_block="""
@@ -44,7 +44,7 @@ helper_msg_block="""
   -so: JSON
 """
 ConfigDict = libConfig.config()
-class cuffdiffresult(libWorkFlow.workflow):
+class cuffdiffresult(pyWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
         self.helper_msg_str = helper_msg_block

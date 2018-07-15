@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import libWorkFlow, libConfig, libConvert
+import pyWorkFlow, libConfig, libConvert
 global helper_msg_block
 helper_msg_block="""
 --- README of act01-Genome-Reference-build.py ---
@@ -20,7 +20,7 @@ helper_msg_block="""
 --- README ---
 """
 ConfigDict = libConfig.config()
-class genomerefer(libWorkFlow.workflow):
+class genomerefer(pyWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
         self.helper_msg_str = helper_msg_block

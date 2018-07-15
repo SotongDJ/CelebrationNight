@@ -1,36 +1,23 @@
 #!/usr/bin/env python3
 import sys, pprint
-import libWorkFlow
+import pyWorkFlow
 global helper_msg_block
 helper_msg_block="""
-   --- README of act10-libWorkFlow ---
+   --- README of act10-pyWorkFlow ---
  Title:
-    Showcase of libWorkFlow
+    Showcase of pyWorkFlow
 
  Usage:
-    python3 act10-libWorkFlow.py --hello=waha -h a ba -t ca -hello mow
+    python3 act10-librun.py --hello=waha -h a ba -t ca -hello mow
 
    --- README ---
 """
-"""
- Postfix of variables:
-  -si: String
-   -ni: alternative/second string for same Usage
-   -fi: string for open()
-  -ho: String(that store dir path)
-  -ti: Intiger/Float
-  -li: List
-  -tu: Tuple
-  -di: Dictionary
-  -fa: File (with open())
-  -so: JSON
-"""
-class runno(libWorkFlow.workflow):
+class runno(pyWorkFlow.workflow):
 
     def personalize(self):
         # self.testing = True
         self.helper_msg_str = helper_msg_block
-        
+
         self.requested_argv_dict = {
             "hello" : ""
         }
@@ -41,7 +28,7 @@ class runno(libWorkFlow.workflow):
 
         self.comand_line_list=['echo','wahaha']
 
-        self.script_name = "libWorkFlow.py"
+        self.script_name = "pyWorkFlow.py"
         self.requested_config_dict = {
             "prefix/wawa" : "haha/wulala"
         }

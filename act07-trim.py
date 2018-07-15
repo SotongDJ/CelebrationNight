@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys, json, pprint, time
-import libWorkFlow,libConfig
+import pyWorkFlow,libConfig
 from subprocess import call
 
 helper_msg_block="""
@@ -53,7 +53,7 @@ helper_msg_block="""
 """
 
 ConfigDict = libConfig.config()
-class trimmo(libWorkFlow.workflow):
+class trimmo(pyWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
         self.helper_msg_str = helper_msg_block
