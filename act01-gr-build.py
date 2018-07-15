@@ -19,8 +19,6 @@ helper_msg_block="""
     <OUTPUT FOLDER for HISAT2>/<codename>
 --- README ---
 """
-
-
 ConfigDict = libConfig.config()
 class genomerefer(pyWorkFlow.workflow):
     def personalize(self):
@@ -121,6 +119,7 @@ class genomerefer(pyWorkFlow.workflow):
 
         header_list = self.requested_config_dict.get("head/gff")
         CvtoJSON = libConvert.cvtDSVtoJSON()
+        CvtoJSON.log_file_name = self.log_file_name
         CvtoJSON.requested_argv_dict = {
             "files": [self.extraction_path+".gff"],
             "refer_column": "",
@@ -136,6 +135,7 @@ class genomerefer(pyWorkFlow.workflow):
         # under construction
 
         Extract = libConvert.attributionExtractor()
+        Extract.log_file_name = self.log_file_name
         Extract.requested_argv_dict = {
             "gff.json"  : [self.extraction_path+".json"],
         }
