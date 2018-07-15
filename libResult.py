@@ -1,39 +1,32 @@
 #!/usr/bin/env python3
 import pyWorkFlow, libConfig
+import time, json, random
 global helper_msg_block
 helper_msg_block="""
---- README of library-stringtie-merge ---
+--- README of library-mix-analysis-result.py ---
  Title:
-  Merge transcriptome for StringTie
+  Library for Mixing analysis result
 
- Usage:
-  import libstm
-  Marge = libstm.marge()
-  Marge.testing = self.testing
-  Marge.log_file_prefix_str = < Log File Path>
-  Marge.requested_argv_dict = {
-    "tribe"   : <TRIBE>,
-    "group"   : [<GROUP>,<GROUP>......]
-  }
-  Marge.actor()
+ Usage: # Replace * with related string
+    Miski = libmar.miksing()
+    Miski.requested_argv_dict = {
+      "tribe"   : tribe_list,
+      "group"   : group_list,
+      "prefix"  : self.requested_config_dict.get("result/*") + "/",
+      "postfix" : "/*.json", OR "postfix" : "-*.json",
+      "libConvert"  : self.requested_config_dict.get("libConvert/*")
+    }
+    Miski.log_file_prefix_str = self.log_file_prefix_str + "Miski-"
+    Miski.scanning()
 
- Data Structure:
-  First : tribe,
-    e.g. raw, untrim, trimmed...
-  Second: group,
-    e.g. control, A, B, 1, 2...
-  Third : subgroup/files,
-    e.g. foward, reverse, pair, unpair
-
-  Visualise graph: explanation01-dataStructure.svg
-
- Original command:
-  stringtie [gtf files] --merge -o [path for result] \\
-  -p [thread] -G [reference gff file]
-
- CAUTION:
-  <GROUP> must separate with space
-  <GROUP> don't allowed spacing
+    Miski.fusion()
+    Miski.resusi = (
+        self.requested_config_dict.get("result/*") + "/" +
+        self.requested_config_dict.get("data/prefix").get(tribe_name) + "*.json"
+    )
+    with open(Miski.resusi,"w") as resufi:
+        json.dump(Miski.resudi,resufi,indent=4,sort_keys=True)
+    Miski.arrange()
 
 --- README ---
 """
@@ -51,72 +44,133 @@ helper_msg_block="""
   -so: JSON
 """
 ConfigDict = libConfig.config()
-class marge(pyWorkFlow.workflow):
+class miksing(pyWorkFlow.workflow):
     def redirecting(self):
         """"""
     def personalize(self):
         # self.testing = True
+        self.helper_msg_str = helper_msg_block
 
         self.requested_argv_dict = {
-            "tribe" : [],
-            "group" : []
+            "tribe"   : [],
+            "group"   : [],
+            "prefix"  : "",
+            "postfix" : "",
+            "libConvert"  : []
         }
-        # self.synchornize()
-
-        self.script_name = "library-stringtie-merge"
-        self.requested_config_dict = {
-            "bin/stringtie"    : ConfigDict.get_str("bin/stringtie"),
-            "result/stringtie" : ConfigDict.get_str("result/stringtie"),
-            "result/hisat"     : ConfigDict.get_str("result/hisat"),
-            "result/log"       : ConfigDict.get_str("result/log"),
-            "run/thread"       : ConfigDict.get_str("run/thread"),
-            "data/prefix"      : ConfigDict.get_dict("data/prefix"),
-            "refer/annotate"   : ConfigDict.get_dict("refer/annotate"),
-        }
-        self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/exp13-stringtie-merge-"
-
-        self.target_file_path = ""
 
         self.comand_line_list = []
-        self.adcoli = [ self.requested_config_dict.get("bin/stringtie") ]
-        self.admgli = [ "--merge" ]
-        self.adotli = [ "-o" ]
-        self.adphli = [ "-p", self.requested_config_dict.get("run/thread")]
-        self.adrfli = [ "-eG" ]
+        self.requested_config_dict = {
+            "data/prefix" : ConfigDict.get_dict("data/prefix"),
+            "result/log" : ConfigDict.get_str("result/log"),
+        }
+        self.script_name = "libmar"
+        self.log_file_prefix_str = ConfigDict.get_str("result/log")+"/libmar-"
 
-    def actor(self):
+        self.resusi = ""
+
+    def scanning(self):
         tribe_list = self.requested_argv_dict.get("tribe",[])
         group_list = self.requested_argv_dict.get("group",[])
+        pifisi = self.requested_argv_dict.get("prefix",[])
+        pofisi = self.requested_argv_dict.get("postfix",[])
 
+        self.script_name = "scanning from libmar"
         self.startLog()
 
-        self.target_file_path = self.requested_config_dict.get("result/stringtie")
-        self.checkPath()
+        self.tunodi = {}
+        self.refedi = {}
         for tribe_name in tribe_list:
-            self.comand_line_list = []
-            self.comand_line_list.extend(self.adcoli)
-
+            keyoli = []
             for gupo in group_list:
-                group_str = ""
-                group_str = (
-                    self.requested_config_dict.get("result/stringtie") + "/" +
+                socesi = (
+                    pifisi +
                     self.requested_config_dict.get("data/prefix").get(tribe_name) + gupo +
-                    "-stringtie.gtf"
+                    pofisi
                 )
-                self.comand_line_list.append(group_str)
+                socefi = open(socesi,"r")
+                soceso = json.load(socefi)
 
-            self.comand_line_list.extend(self.admgli)
-            self.comand_line_list.extend(self.adotli)
-            self.outusi = (
-                self.requested_config_dict.get("result/stringtie") + "/" +
-                self.requested_config_dict.get("data/prefix").get(tribe_name) + "-".join(sorted(group_list)) +"-stringtie-merged.gtf"
-            )
-            self.comand_line_list.append(self.outusi)
-            self.comand_line_list.extend(self.adphli)
+                numein = 0
+                if keyoli == []:
+                    keyoli = list(soceso.keys())
 
-            self.comand_line_list.extend(self.adrfli)
-            metasi = self.requested_config_dict.get("refer/annotate").get(tribe_name)
-            self.comand_line_list.append(metasi)
+                if self.refedi == {}:
+                    for id in keyoli:
+                        admedi = soceso.get(id)
+                        bamedi = {}
+                        for colu in list(soceso.get(id).keys()):
+                            basi = admedi.get(colu)
+                            bamedi.update({ colu : basi})
+                            self.refedi.update({ id : bamedi})
+                else:
+                    for id in keyoli:
+                        admedi = soceso.get(id)
+                        bamedi = self.refedi.get(id)
+                        for colu in list(soceso.get(id).keys()):
+                            adsi = admedi.get(colu)
+                            basi = bamedi.get(colu)
+                            if adsi == basi and not self.tunodi.get(colu,False):
+                                self.tunodi.update({ colu : False })
+                            else:
+                                self.tunodi.update({ colu : True })
+        self.stopLog()
 
-            self.runCommand()
+    def fusion(self):
+        tribe_list = self.requested_argv_dict.get("tribe",[])
+        group_list = self.requested_argv_dict.get("group",[])
+        pifisi = self.requested_argv_dict.get("prefix",[])
+        pofisi = self.requested_argv_dict.get("postfix",[])
+
+        self.script_name = "fusion from libmar"
+        self.startLog()
+
+        self.coludi = {}
+        self.resudi = {}
+        for tribe_name in tribe_list:
+            for gupo in group_list:
+                socesi = (
+                    pifisi +
+                    self.requested_config_dict.get("data/prefix").get(tribe_name) + gupo +
+                    pofisi
+                )
+                socefi = open(socesi,"r")
+                soceso = json.load(socefi)
+
+                for id in list(soceso.keys()):
+                    somedi = soceso.get(id)
+                    remedi = self.resudi.get(id,{})
+                    for colu in list(somedi.keys()):
+                        if self.tunodi.get(colu,False):
+                            remedi.update({ colu+"("+gupo+")" : somedi.get(colu) })
+
+                            comeli = self.coludi.get(colu,[])
+                            if colu+"("+gupo+")" not in comeli:
+                                comeli.append(colu+"("+gupo+")")
+                                self.coludi.update({ colu : comeli })
+                            comeli = []
+
+                        elif remedi.get(colu,"") == "":
+                            remedi.update({ colu : somedi.get(colu) })
+                    self.resudi.update({ id : remedi })
+        self.stopLog()
+
+    def arrange(self):
+        self.script_name = "arrange from libmar"
+        self.startLog()
+
+        self.coluli = []
+        litali = self.requested_argv_dict.get("libConvert",[])
+        if litali == []:
+            litali = list(self.tunodi.keys())
+        litasi = "*@*"+"*@*".join(litali)+"*@*"
+        for colu in list(self.coludi.keys()):
+            if "*@*"+colu+"*@*" in litasi:
+                metasi = "*@*".join(self.coludi.get(colu))
+                litasi = litasi.replace("*@*"+colu+"*@*","*@*"+metasi+"*@*")
+        litasi = litasi[3:len(litasi)-3]
+        self.coluli = litasi.split("*@*")
+        print(list(self.tunodi.keys()))
+        print(list(self.coludi.keys()))
+        print(self.coluli)
         self.stopLog()
