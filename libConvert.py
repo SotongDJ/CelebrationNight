@@ -257,7 +257,7 @@ class attributionExtractor(pyWorkFlow.workflow):
                 }
 
                 for gffid_name in list(raw_temp_dict.keys()):
-                    attribution_str = raw_temp_dict.get(gffid_name)[0]
+                    attribution_str = raw_temp_dict.get(gffid_name)
                     attribution_temp_dict = {}
 
                     for paired_set_str in attribution_str.split(";"):
