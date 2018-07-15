@@ -174,6 +174,7 @@ class heading(pyWorkFlow.workflow):
         )
 
     def view(self):
+        self.startLog()
         self.phrase_str = "Start loading"
         self.printTimeStamp()
         self.load()
