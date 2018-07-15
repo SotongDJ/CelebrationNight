@@ -110,10 +110,7 @@ class genomerefer(libWorkFlow.workflow):
         self.phrase_str = "==========\nStage: Copy Refer annotation to Result folder\n=========="
         self.printPhrase()
 
-        path_name = self.annotation_path.replace("\\","/")
-        file_str = path_name.split('/')[-1]
-        file_name = file_str.split('.')[0]
-        self.extraction_path = self.requested_config_dict.get("result/gff-json")+"/"+file_name
+        self.extraction_path = self.requested_config_dict.get("result/gff-json")+"/"+self.refer_codename_str
         self.comand_line_list = ["cp", self.annotation_path, self.extraction_path+".gff"]
         self.runCommand()
 
