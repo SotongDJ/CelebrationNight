@@ -19,6 +19,8 @@ helper_msg_block="""
     <OUTPUT FOLDER for HISAT2>/<codename>
 --- README ---
 """
+
+
 ConfigDict = libConfig.config()
 class genomerefer(pyWorkFlow.workflow):
     def personalize(self):
@@ -79,7 +81,6 @@ class genomerefer(pyWorkFlow.workflow):
                 ConfigDict.update({ "refer/annotate" : annotation_temp_dict })
                 annotation_boolean = True
 
-        """
         if self.refer_codename_str != "" and genome_boolean and annotation_boolean:
             self.phrase_str = "==========\nStage: Build HISAT2 Index\n=========="
             self.printPhrase()
@@ -107,7 +108,7 @@ class genomerefer(pyWorkFlow.workflow):
                 +"use \"--help\" argument for further info."
             )
             self.printPhrase()
-        """
+
         self.phrase_str = "==========\nStage: Copy Refer annotation to Result folder\n=========="
         self.printPhrase()
 
