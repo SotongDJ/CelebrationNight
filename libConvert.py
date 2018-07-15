@@ -3,12 +3,12 @@ import sys, pprint, json
 import pyWorkFlow
 global helper_msg_block
 helper_msg_block="""
-   --- README of library-tab ---
+   --- README of Conversion Library ---
   Title:
     Conversion tool for JSON and TSV/CTAB
 
   Usage:
-    import libconvert
+    import libConvert
 
     CvtoJSON = libConvert.cvtDSVtoJSON()
     CvtoJSON.requested_argv_dict = {

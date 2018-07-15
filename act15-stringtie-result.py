@@ -69,8 +69,8 @@ class stitieresult(pyWorkFlow.workflow):
             "target/libsnm" : ConfigDict.get_dict("target/libsnm"),
             "type/database" : ConfigDict.get_dict("type/database"),
             "result/log" : ConfigDict.get_str("result/log"),
-            "libconvert/TranscriptExpression" : ConfigDict.get_list("libconvert/TranscriptExpression"),
-            "libconvert/GeneExpression" : ConfigDict.get_list("libconvert/GeneExpression"),
+            "libConvert/TranscriptExpression" : ConfigDict.get_list("libConvert/TranscriptExpression"),
+            "libConvert/GeneExpression" : ConfigDict.get_list("libConvert/GeneExpression"),
         }
         self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-"
 
@@ -146,7 +146,7 @@ class stitieresult(pyWorkFlow.workflow):
             "group"   : group_list,
             "prefix"  : self.requested_config_dict.get("result/ballgown") + "/",
             "postfix" : "/t_data.json",
-            "libconvert"  : self.requested_config_dict.get("libconvert/TranscriptExpression")
+            "libConvert"  : self.requested_config_dict.get("libConvert/TranscriptExpression")
         }
         Transki.log_file_prefix_str = self.log_file_prefix_str + "sca-Transki-"
         Transki.scanning()
@@ -157,7 +157,7 @@ class stitieresult(pyWorkFlow.workflow):
             "group"   : group_list,
             "prefix"  : self.requested_config_dict.get("result/stringtie") + "/",
             "postfix" : "-gene.json",
-            "libconvert"  : self.requested_config_dict.get("libconvert/GeneExpression")
+            "libConvert"  : self.requested_config_dict.get("libConvert/GeneExpression")
         }
         Geniski.log_file_prefix_str = self.log_file_prefix_str + "sca-Geniski-"
         Geniski.scanning()

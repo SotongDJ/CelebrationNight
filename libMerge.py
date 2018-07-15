@@ -14,7 +14,7 @@ helper_msg_block="""
       "group"   : group_list,
       "prefix"  : self.requested_config_dict.get("result/*") + "/",
       "postfix" : "/*.json", OR "postfix" : "-*.json",
-      "libconvert"  : self.requested_config_dict.get("libconvert/*")
+      "libConvert"  : self.requested_config_dict.get("libConvert/*")
     }
     Miski.log_file_prefix_str = self.log_file_prefix_str + "Miski-"
     Miski.scanning()
@@ -56,7 +56,7 @@ class miksing(pyWorkFlow.workflow):
             "group"   : [],
             "prefix"  : "",
             "postfix" : "",
-            "libconvert"  : []
+            "libConvert"  : []
         }
 
         self.comand_line_list = []
@@ -160,7 +160,7 @@ class miksing(pyWorkFlow.workflow):
         self.startLog()
 
         self.coluli = []
-        litali = self.requested_argv_dict.get("libconvert",[])
+        litali = self.requested_argv_dict.get("libConvert",[])
         if litali == []:
             litali = list(self.tunodi.keys())
         litasi = "*@*"+"*@*".join(litali)+"*@*"

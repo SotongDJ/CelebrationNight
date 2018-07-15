@@ -66,7 +66,7 @@ class cuffdiffresult(pyWorkFlow.workflow):
             "target/libsnm" : ConfigDict.get_dict("target/libsnm"),
             "type/database" : ConfigDict.get_dict("type/database"),
             "result/log" : ConfigDict.get_str("result/log"),
-            "libconvert/FoldChange" : ConfigDict.get_list("libconvert/FoldChange"),
+            "libConvert/FoldChange" : ConfigDict.get_list("libConvert/FoldChange"),
         }
         self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act18-cufre-"
 
@@ -116,7 +116,7 @@ class cuffdiffresult(pyWorkFlow.workflow):
             "group"   : group_list,
             "prefix"  : self.requested_config_dict.get("result/cuffdiff") + "/",
             "postfix" : "-Result/gene_exp.json",
-            "libconvert"  : self.requested_config_dict.get("libconvert/FoldChange")
+            "libConvert"  : self.requested_config_dict.get("libConvert/FoldChange")
         }
         Cudiski.log_file_prefix_str = self.log_file_prefix_str + "sca-Cudiski-"
         Cudiski.scanning()
