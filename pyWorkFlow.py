@@ -388,7 +388,8 @@ class workflow:
             config_info_line = []
 
         self.delimiter_str = "-_-"  # for convertTime()
-        self.log_file_name = self.log_file_prefix_str + self.convertTime() + '.log'
+        if self.log_file_name == "":
+            self.log_file_name = self.log_file_prefix_str + self.convertTime() + '.log'
 
         result_list = [run_info_line]
         result_list.extend(argv_info_line)
