@@ -79,6 +79,7 @@ class genomerefer(libWorkFlow.workflow):
                 ConfigDict.update({ "refer/annotate" : annotation_temp_dict })
                 annotation_boolean = True
 
+        """
         if self.refer_codename_str != "" and genome_boolean and annotation_boolean:
             self.phrase_str = "==========\nStage: Build HISAT2 Index\n=========="
             self.printPhrase()
@@ -106,7 +107,7 @@ class genomerefer(libWorkFlow.workflow):
                 +"use \"--help\" argument for further info."
             )
             self.printPhrase()
-
+        """
         self.phrase_str = "==========\nStage: Copy Refer annotation to Result folder\n=========="
         self.printPhrase()
 
