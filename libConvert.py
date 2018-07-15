@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys, pprint, json
-import libWorkFlow
+import pyWorkFlow
 global helper_msg_block
 helper_msg_block="""
    --- README of library-tab ---
@@ -27,11 +27,10 @@ helper_msg_block="""
 
    --- README ---
 """
-class cvtDSVtoJSON(libWorkFlow.workflow):
-    def redirecting(self):
-        """"""
+class cvtDSVtoJSON(pyWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
+        self.type = "library"
 
         self.requested_argv_dict = {
             "files": [],
@@ -156,19 +155,17 @@ class cvtDSVtoJSON(libWorkFlow.workflow):
 
 
                 with open(result_file_name,"w") as result_file_handle:
-                    json.dump(id_x_value_dict,result_file_handle,indent=4,sort_keys=True)
+                    json.dump(id_dict,result_file_handle,indent=4,sort_keys=True)
 
                 with open(relation_file_name,"w") as relation_file_handle:
                     json.dump(relation_dict,relation_file_handle,indent=4,sort_keys=True)
 
         self.stopLog()
 
-class cvtJSONtoDSV(libWorkFlow.workflow):
-    def redirecting(self):
-        """"""
-
+class cvtJSONtoDSV(pyWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
+        self.type = "library"
 
         self.requested_argv_dict = {
             "files" : [],
@@ -217,12 +214,11 @@ class cvtJSONtoDSV(libWorkFlow.workflow):
 
         self.stopLog()
 
-class attributionExtractor(libWorkFlow.workflow):
-    def redirecting(self):
-        """"""
-
+class attributionExtractor(pyWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
+        self.type = "library"
+
         self.helper_msg_str = helper_msg_block
 
         self.requested_argv_dict = {

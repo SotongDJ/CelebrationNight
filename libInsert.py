@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys, pprint, json
-import libWorkFlow
+import pyWorkFlow
 global helper_msg_block
 helper_msg_block="""
    --- README of library-search-and-merge ---
@@ -37,7 +37,7 @@ helper_msg_block="""
   -fa: File (with open())
   -so: JSON
 """
-class geneid(libWorkFlow.workflow):
+class geneid(pyWorkFlow.workflow):
     def redirecting(self):
         """"""
     def personalize(self):

@@ -5,11 +5,11 @@ global helper_msg_block
 helper_msg_block="""
    --- README of WorkFlow Framework v2.3 ---
  Title:
-    General class for bio-info-misc project
+    WorkFlow is a framework to package some basic function into python class
 
  Usage:
-    import libWorkFlow
-    class <CLASS_NAME>(libWorkFlow.workflow):
+    import pyWorkFlow
+    class <CLASS_NAME>(pyWorkFlow.workflow):
 
         def personalize(self):
             # self.testing = True
@@ -77,6 +77,12 @@ class workflow:
         self.begin_time_str = ""
         self.log_file_name = ""
 
+        self.type = "script"
+        self.head_bar_dict = {
+            "script" : "==========",
+            "library" : "----------"
+        }
+
         self.current_time_str = ""
         self.phrase_str = ""
         self.delimiter_str = ""
@@ -95,6 +101,7 @@ class workflow:
 
     def personalize(self):
         # self.testing = True
+        self.type = "library"
         self.helper_msg_str = helper_msg_block
 
         self.requested_argv_dict = {
@@ -104,7 +111,7 @@ class workflow:
 
         self.comand_line_list = ['echo','wahaha']
 
-        self.script_name = "libWorkFlow.py"
+        self.script_name = "pyWorkFlow.py"
         self.requested_config_dict = {
             "prefix/wawa" : "haha/wulala"
         }
@@ -327,18 +334,19 @@ class workflow:
     def redirecting(self):
         if 'help' in self.arranged_argv_dict.get('INDEPENDED',[]):
             print(self.helper_msg_str)
-        else:
+        elif self.type == "script":
             self.actor()
 
     def startLog(self):
         self.begin_time_str = time.strftime("%Y%m%d%H%M%S")
         self.current_time_str = time.strftime("%Y%m%d%H%M%S")
 
+        head_bar_str = self.head_bar_dict.get(self.type)
         self.delimiter_str = "- :" # for convertTime()
         run_info_line = (
-            "==========\n"
+            head_bar_str+"\n"
             +"RUN "+self.script_name+", begin at ["+self.convertTime()+"]"
-            +"\n=========="
+            +"\n"+head_bar_str
         )
         self.log_argv_dict = {
             'Input_Argv' : self.system_argv_list,
@@ -438,12 +446,13 @@ class workflow:
                 str(second_diff_num) + " s "
             )
 
+        head_bar_str = self.head_bar_dict.get(self.type)
         self.delimiter_str = "- :" #for convertTime()
         run_info_line = (
-            "==========\n"
+            head_bar_str+"\n"
             +self.script_name+", finished on ["+self.convertTime() +"]\n"
             +"     Total time: "+result_info_str+"\n"
-            +"=========="
+            +head_bar_str
         )
 
         self.phrase_str = run_info_line
