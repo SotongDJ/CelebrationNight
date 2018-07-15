@@ -1,8 +1,6 @@
 import pprint,json
 import pyWorkFlow
 class heading(pyWorkFlow.workflow):
-    def actor(self):
-        """"""
     def personalize(self):
         # self.testing = True
         self.type = "library"
