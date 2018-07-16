@@ -59,49 +59,48 @@ class summary(pyWorkFlow.workflow):
         self.no_repeat_boolean_dict = {}
 
     def scanning(self):
+        branch_list = self.requested_argv_dict.get("branch",[])
         group_list = self.requested_argv_dict.get("group",[])
-        pifisi = self.requested_argv_dict.get("prefix",[])
-        pofisi = self.requested_argv_dict.get("postfix",[])
+        prefix_path = self.requested_argv_dict.get("prefix","")
+        postfix_path = self.requested_argv_dict.get("postfix","")
+        head_list = self.requested_argv_dict.get("head",[])
 
-        self.script_name = "scanning from libmar"
+        self.script_name = "Scanning of libSummarise"
         self.startLog()
 
-        self.tunodi = {}
-        self.refedi = {}
-        for tribe_name in tribe_list:
-            keyoli = []
-            for gupo in group_list:
-                socesi = (
-                    pifisi +
-                    self.requested_config_dict.get("data/prefix").get(tribe_name) + gupo +
-                    pofisi
+        self.no_repeat_boolean_dict = {}
+        first_dict = {}
+        for branch_name in branch_list:
+            id_list = []
+            for group_name in group_list:
+                source_file_name = (
+                    prefix_path + branch_name + group_name + postfix_path
                 )
-                socefi = open(socesi,"r")
-                soceso = json.load(socefi)
+                source_file_handle = open(source_file_name,"r")
+                source_file_dict = json.load(source_file_handle)
 
-                numein = 0
-                if keyoli == []:
-                    keyoli = list(soceso.keys())
+                if id_list == []:
+                    id_list = list(source_file_dict.keys())
 
-                if self.refedi == {}:
-                    for id in keyoli:
-                        admedi = soceso.get(id)
-                        bamedi = {}
-                        for colu in list(soceso.get(id).keys()):
-                            basi = admedi.get(colu)
-                            bamedi.update({ colu : basi})
-                            self.refedi.update({ id : bamedi})
+                if first_dict == {}:
+                    for id in id_list:
+                        key_value_dict = source_file_dict.get(id)
+                        first_temp_dict = {}
+                        for first_column_name in list(key_value_dict.keys()):
+                            first_value_name = key_value_dict.get(first_column_name)
+                            first_temp_dict.update({ first_column_name : first_value_name})
+                            first_dict.update({ id : first_temp_dict})
                 else:
-                    for id in keyoli:
-                        admedi = soceso.get(id)
-                        bamedi = self.refedi.get(id)
-                        for colu in list(soceso.get(id).keys()):
-                            adsi = admedi.get(colu)
-                            basi = bamedi.get(colu)
-                            if adsi == basi and not self.tunodi.get(colu,False):
-                                self.tunodi.update({ colu : False })
+                    for id in id_list:
+                        key_value_dict = source_file_dict.get(id)
+                        first_temp_dict = first_dict.get(id)
+                        for column_name in list(source_file_dict.get(id).keys()):
+                            query_value_name = key_value_dict.get(column_name)
+                            first_value_name = first_temp_dict.get(column_name)
+                            if query_value_name == first_value_name and not self.no_repeat_boolean_dict.get(column_name,False):
+                                self.no_repeat_boolean_dict.update({ column_name : False })
                             else:
-                                self.tunodi.update({ colu : True })
+                                self.no_repeat_boolean_dict.update({ column_name : True })
         self.stopLog()
 
     def fusion(self):
