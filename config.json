@@ -82,6 +82,7 @@
         "m": "method",
         "o": "output",
         "p": "thread",
+        "r": "replication",
         "s": "subgroup",
         "t": "tribe",
         "x": "index"
