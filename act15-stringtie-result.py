@@ -8,7 +8,7 @@ helper_msg_block="""
   Summarizer of StringTie
 
  Usage:
-  python3 act15-stringtie-result.py -b <BRANCH> \\
+  python3 act15-stringtie-result.py -b <BRANCH BRANCH BRANCH ... > \\
     -g <GROUP GROUP GROUP ... >
 
  CAUTION:
@@ -41,12 +41,13 @@ class stingtieResult(pyWorkFlow.workflow):
             "result/ballgown" : "",
             "result/st-result" : "",
             "result/stringtie" : "",
+            "result/gff-json": "",
             "result/log" : "",
             "bin/prepDE" : "",
             "data/refer" : {},
             "data/replication" : {},
-            "head/TranscriptExpression" : [],
-            "head/GeneExpression" : [],
+            "header/TranscriptExpression" : [],
+            "header/GeneExpression" : [],
         }
         self.requested_config_dict = ConfigDict.get_batchly()
         self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-"
