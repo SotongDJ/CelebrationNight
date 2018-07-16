@@ -64,53 +64,76 @@ class stingtieResult(pyWorkFlow.workflow):
         self.target_file_list.append(self.requested_config_dict.get("result/DESeq2"))
         self.checkPath()
 
-        self.phrase_str = "==========\nStage 1 : Convert TSV/CTAB to JSON\n=========="
+        self.phrase_str = "==========\nStage: Convert TSV/CTAB to JSON\n=========="
         self.printPhrase()
 
-        taboli = []
-        for tribe_name in tribe_list:
-            for gupo in group_list:
-                socesi = (
-                    self.requested_config_dict.get("result/ballgown") + "/" +
-                    self.requested_config_dict.get("data/prefix").get(tribe_name) +
-                    gupo + "/t_data.ctab"
-                )
-                self.target_file_path = socesi
-                cetabo = self.checkFile()
-                self.target_file_path = socesi.replace(".ctab",".json")
-                jasobo = self.checkFile()
+        source_file_list = []
+        for branch_name in branch_list:
+            for group_name in group_list:
+                replication_list = self.requested_config_dict.get("data/replication").get(group_name)
+                for replication_name in replication_list:
+                    if replication_name != "":
+                        replication_name = "-"+replication_name
 
-                if cetabo and not jasobo:
-                    taboli.append(socesi)
+                    souce_file_temp_name = (
+                        self.requested_config_dict.get("result/ballgown")
+                        +"/"+branch_name+"-"+group_name+replication_name
+                        +"/t_data.ctab"
+                    )
+                    self.target_file_path = souce_file_temp_name
+                    souce_file_temp_boolean = self.checkFile()
+                    self.target_file_path = souce_file_temp_name.replace(".ctab",".json")
+                    json_file_temp_boolean = self.checkFile()
 
-        if taboli != []:
+                    if souce_file_temp_boolean and not json_file_temp_boolean:
+                        source_file_list.append(souce_file_temp_name)
+
+        if source_file_list != []:
             CvtoJSON = libConvert.cvtDSVtoJSON()
-            CvtoJSON.requested_argv_dict = { "files" : taboli ,"id" : "t_id" }
+            CvtoJSON.log_file_name = self.log_file_name
+            CvtoJSON.requested_argv_dict = {
+                "files": source_file_list,
+                "refer_column": "t_id",
+                "prefix": "",
+                "header": [],
+                "headless": False,
+                "delimiter": "\t"
+            }
             CvtoJSON.filasi = "libConvert.cvtDSVtoJSON"
-            CvtoJSON.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-covejos-"
             CvtoJSON.actor()
 
-        taboli = []
-        for tribe_name in tribe_list:
-            for gupo in group_list:
-                socesi = (
-                    self.requested_config_dict.get("result/stringtie") + "/" +
-                    self.requested_config_dict.get("data/prefix").get(tribe_name) +
-                    gupo + "-gene.tsv"
-                )
-                self.target_file_path = socesi
-                cetabo = self.checkFile()
-                self.target_file_path = socesi.replace(".tsv",".json")
-                jasobo = self.checkFile()
+        source_file_list = []
+        for branch_name in branch_list:
+            for group_name in group_list:
+                replication_list = self.requested_config_dict.get("data/replication").get(group_name)
+                for replication_name in replication_list:
+                    if replication_name != "":
+                        replication_name = "-"+replication_name
 
-                if cetabo and not jasobo:
-                    taboli.append(socesi)
+                    souce_file_temp_name = (
+                        self.requested_config_dict.get("result/stringtie")
+                        +"/"+branch_name+"-"+group_name+replication_name+"-gene.tsv"
+                    )
+                    self.target_file_path = souce_file_temp_name
+                    souce_file_temp_boolean = self.checkFile()
+                    self.target_file_path = souce_file_temp_name.replace(".tsv",".json")
+                    json_file_temp_boolean = self.checkFile()
 
-        if taboli != []:
+                    if souce_file_temp_boolean and not json_file_temp_boolean:
+                        source_file_list.append(souce_file_temp_name)
+
+        if source_file_list != []:
             CvtoJSON = libConvert.cvtDSVtoJSON()
-            CvtoJSON.requested_argv_dict = { "files" : taboli ,"id" : "Gene ID" }
+            CvtoJSON.log_file_name = self.log_file_name
+            CvtoJSON.requested_argv_dict = {
+                "files": source_file_list,
+                "refer_column": "Gene ID",
+                "prefix": "",
+                "header": [],
+                "headless": False,
+                "delimiter": "\t"
+            }
             CvtoJSON.filasi = "libConvert.cvtDSVtoJSON"
-            CvtoJSON.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-covejos-"
             CvtoJSON.actor()
 
         self.phrase_str = "==========\nStage 2 : Scanning for Variable Parts\n=========="
