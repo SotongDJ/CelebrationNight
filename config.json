@@ -54,7 +54,7 @@
             "value": "Description"
         }
     },
-    "head/FoldChange": [
+    "header/FoldChange": [
         "test_id",
         "gene_id",
         "gene",
@@ -71,7 +71,7 @@
         "q_value",
         "significant"
     ],
-    "head/GeneExpression": [
+    "header/GeneExpression": [
         "Gene ID",
         "Gene Name",
         "Description",
@@ -83,7 +83,7 @@
         "FPKM",
         "TPM"
     ],
-    "head/TranscriptExpression": [
+    "header/TranscriptExpression": [
         "t_id",
         "t_name",
         "gene_id",
@@ -98,7 +98,7 @@
         "cov",
         "FPKM"
     ],
-    "head/fastqc": [
+    "header/fastqc": [
         "Basic Statistics",
         "Per base sequence quality",
         "Per tile sequence quality",
@@ -111,7 +111,7 @@
         "Overrepresented sequences",
         "Adapter Content"
     ],
-    "head/gff": [
+    "header/gff": [
         "sequence",
         "source",
         "feature",

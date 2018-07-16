@@ -63,7 +63,7 @@ class fasresum(pyWorkFlow.workflow):
             "result/log" : ConfigDict.get_str("result/log"),
             "data/prefix" : ConfigDict.get_dict("data/prefix"),
             "raw/type" : ConfigDict.get_dict("raw/type"),
-            "head/fastqc" : ConfigDict.get_list("head/fastqc"),
+            "header/fastqc" : ConfigDict.get_list("header/fastqc"),
         }
         self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act05-gfr-"
 
@@ -155,7 +155,7 @@ class fasresum(pyWorkFlow.workflow):
         with open(self.resusi+"html","w") as resufi:
             resufi.write(self.headsi)
 
-            rowlitu = tuple(self.requested_config_dict.get("head/fastqc"))
+            rowlitu = tuple(self.requested_config_dict.get("header/fastqc"))
             for gupo in group_list:
                 tribetu = tuple(tribe_list)
                 metasi = ""

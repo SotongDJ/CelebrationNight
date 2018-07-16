@@ -14,7 +14,7 @@ helper_msg_block="""
       "group" : group_list,
       "prefix" : self.requested_config_dict.get("result/*") + "/",
       "postfix" : "/*.json", OR "postfix" : "-*.json",
-      "head" : [<sorted column name list>]
+      "header" : [<sorted column name list>]
     }
     Miski.log_file_prefix_str = self.log_file_prefix_str + "Miski-"
     Miski.scanning()
@@ -41,7 +41,7 @@ class summary(pyWorkFlow.workflow):
             "group" : [],
             "prefix" : "",
             "postfix" : "",
-            "head" : []
+            "header" : []
         }
 
         self.comand_line_list = []
@@ -63,7 +63,7 @@ class summary(pyWorkFlow.workflow):
         group_list = self.requested_argv_dict.get("group",[])
         prefix_path = self.requested_argv_dict.get("prefix","")
         postfix_path = self.requested_argv_dict.get("postfix","")
-        head_list = self.requested_argv_dict.get("head",[])
+        head_list = self.requested_argv_dict.get("header",[])
 
         self.script_name = "Scanning of libSummarise"
         self.startLog()
@@ -147,7 +147,7 @@ class summary(pyWorkFlow.workflow):
         self.startLog()
 
         self.column_name_list = []
-        sorted_header_list = self.requested_argv_dict.get("head",[])
+        sorted_header_list = self.requested_argv_dict.get("header",[])
         if sorted_header_list == []:
             sorted_header_list = list(self.no_repeat_boolean_dict.keys())
 
