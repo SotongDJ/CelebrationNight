@@ -1,37 +1,26 @@
 #!/usr/bin/env python3
-import pyWorkFlow, libConfig, libConvert, libsnm, libmar
+import pyWorkFlow, libConfig, libConvert, libInsert, libSummarise
 import time, json
 global helper_msg_block
 helper_msg_block="""
---- README of act15-stringtie-result.py ---
+--- README of act15-stringtie-summary.py ---
  Title:
-  Batch Processing for StringTie (Summarise)
+  Summarizer of StringTie
 
  Usage:
-  python3 act15-stringtie-result.py -t <TRIBE> \\
-    -r [Description JSON file (Act16)]\\
-    -g <GROUP,GROUP,GROUP...>
-
- Data Structure:
-  First : tribe,
-    e.g. raw, untrim, trimmed...
-  Second: group,
-    e.g. control, A, B, 1, 2...
-  Third : subgroup/files,
-    e.g. foward, reverse, pair, unpair
-
-  Visualise graph: explanation01-dataStructure.svg
+  python3 act15-stringtie-result.py -b <BRANCH> \\
+    -g <GROUP GROUP GROUP ... >
 
  CAUTION:
-  Act15 required libConvert, libResult, libMerge
-  Act15 required result from Act16
-  <GROUP> must separate with space
-  <GROUP> don't allowed spacing
+  Act15 required libConvert, libInsert, libSummarise
+  Act15 required result from Act01
+  Each GROUP must separate with space
+  Don't allowed spacing in GROUP name
 
 --- README ---
 """
 ConfigDict = libConfig.config()
-class stitieresult(pyWorkFlow.workflow):
+class stingtieResult(pyWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
         self.helper_msg_str = helper_msg_block
@@ -272,4 +261,4 @@ class stitieresult(pyWorkFlow.workflow):
         self.phrase_str = "\n\n"
         self.printPhrase()
 
-StiRes = stitieresult()
+StingtieResult = stingtieResult()
