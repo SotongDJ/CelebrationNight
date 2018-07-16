@@ -74,7 +74,7 @@ class summary(pyWorkFlow.workflow):
             id_list = []
             for group_name in group_list:
                 source_file_name = (
-                    prefix_path + branch_name + group_name + postfix_path
+                    prefix_path + branch_name + "-" + group_name + postfix_path
                 )
                 source_file_handle = open(source_file_name,"r")
                 source_file_dict = json.load(source_file_handle)
@@ -117,7 +117,7 @@ class summary(pyWorkFlow.workflow):
         for branch_name in branch_list:
             for group_name in group_list:
                 source_file_name = (
-                    prefix_path + branch_name + group_name + postfix_path
+                    prefix_path + branch_name + "-" + group_name + postfix_path
                 )
                 source_file_handle = open(source_file_name,"r")
                 source_file_dict = json.load(source_file_handle)
@@ -143,7 +143,7 @@ class summary(pyWorkFlow.workflow):
         self.stopLog()
 
     def arrange(self):
-        self.script_name = "arrange from libSummarise"
+        self.script_name = "Arrange of libSummarise"
         self.startLog()
 
         self.column_name_list = []

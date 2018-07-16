@@ -53,8 +53,17 @@ class stingtieResult(pyWorkFlow.workflow):
         self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-"
 
     def actor(self):
-        branch_list = self.requested_argv_dict.get("tribe",[])
+        branch_list = self.requested_argv_dict.get("branch",[])
         group_list = self.requested_argv_dict.get("group",[])
+
+        refer_dict = {}
+        for branch_name in branch_list:
+            refer_temp_dict = self.requested_config_dict.get("data/refer",{})
+            if branch_name in list(refer_temp_dict.keys()):
+                refer_temp_str = refer_temp_dict.get(branch_name)
+                gff_json_path = self.requested_config_dict.get("result/gff-json")
+                refer_file_name = gff_json_path + "/" + refer_temp_str + "-attribution-related.json"
+                refer_dict.update({ refer_temp_str : refer_file_name })
 
         self.startLog()
 
@@ -141,79 +150,78 @@ class stingtieResult(pyWorkFlow.workflow):
         self.printPhrase()
 
         Transki = libSummarise.summary()
+        Transki.log_file_name = self.log_file_name
         Transki.requested_argv_dict = {
-            "tribe"   : tribe_list,
-            "group"   : group_list,
-            "prefix"  : self.requested_config_dict.get("result/ballgown") + "/",
+            "branch" : branch_list,
+            "group" : group_list,
+            "prefix" : self.requested_config_dict.get("result/ballgown") + "/",
             "postfix" : "/t_data.json",
-            "libConvert"  : self.requested_config_dict.get("libConvert/TranscriptExpression")
+            "header" : self.requested_config_dict.get("libConvert/TranscriptExpression")
         }
         Transki.log_file_prefix_str = self.log_file_prefix_str + "sca-Transki-"
         Transki.scanning()
 
         Geniski = libSummarise.summary()
+        Geniski.log_file_name = self.log_file_name
         Geniski.requested_argv_dict = {
-            "tribe"   : tribe_list,
-            "group"   : group_list,
+            "branch" : branch_list,
+            "group" : group_list,
             "prefix"  : self.requested_config_dict.get("result/stringtie") + "/",
             "postfix" : "-gene.json",
-            "libConvert"  : self.requested_config_dict.get("libConvert/GeneExpression")
+            "header"  : self.requested_config_dict.get("libConvert/GeneExpression")
         }
         Geniski.log_file_prefix_str = self.log_file_prefix_str + "sca-Geniski-"
         Geniski.scanning()
 
-        if tribe_list != []:
-            tribe_str = tribe_list[0]
+        if branch_list != []:
+            for branch_name in branch_list:
+                self.phrase_str = "==========\nStage: Merging\n=========="
+                self.printPhrase()
 
-            self.phrase_str = "==========\nStage 3 : Merging\n=========="
-            self.printPhrase()
+                Transki.log_file_prefix_str = self.log_file_prefix_str + "fus-Transki-"
+                Transki.fusion()
+                result_file_name = (
+                    self.requested_config_dict.get("result/st-result") + "/"
+                    + branch_name + "-" + "TranscriptExpression.json"
+                )
+                with open(result_file_name,"w") as result_file_handle:
+                    json.dump(Transki.result_dict,result_file_handle,indent=4,sort_keys=True)
+                Transki.log_file_prefix_str = self.log_file_prefix_str + "ara-Transki-"
+                Transki.arrange()
 
-            Transki.log_file_prefix_str = self.log_file_prefix_str + "fus-Transki-"
-            Transki.fusion()
-            Transki.resusi = (
-                self.requested_config_dict.get("result/st-result") + "/" +
-                self.requested_config_dict.get("data/prefix").get(tribe_str) + "TranscriptExpression.json"
-            )
-            with open(Transki.resusi,"w") as resufi:
-                json.dump(Transki.resudi,resufi,indent=4,sort_keys=True)
-            Transki.log_file_prefix_str = self.log_file_prefix_str + "ara-Transki-"
-            Transki.arrange()
+                Geniski.log_file_prefix_str = self.log_file_prefix_str + "fus-Geniski-"
+                Geniski.fusion()
+                result_file_name = (
+                    self.requested_config_dict.get("result/st-result") + "/"
+                    + branch_name + "-" + "GeneExpression.json"
+                )
+                with open(result_file_name,"w") as result_file_handle:
+                    json.dump(Geniski.result_dict,result_file_handle,indent=4,sort_keys=True)
+                Geniski.log_file_prefix_str = self.log_file_prefix_str + "ara-Geniski-"
+                Geniski.arrange()
 
-            Geniski.log_file_prefix_str = self.log_file_prefix_str + "fus-Geniski-"
-            Geniski.fusion()
-            Geniski.resusi = (
-                self.requested_config_dict.get("result/st-result") + "/" +
-                self.requested_config_dict.get("data/prefix").get(tribe_str) + "GeneExpression.json"
-            )
-            with open(Geniski.resusi,"w") as resufi:
-                json.dump(Geniski.resudi,resufi,indent=4,sort_keys=True)
-            Geniski.log_file_prefix_str = self.log_file_prefix_str + "ara-Geniski-"
-            Geniski.arrange()
-
-        self.phrase_str = "==========\nStage 4 : Extract Data for DESeq\n=========="
+        self.phrase_str = "==========\nStage: Extract Data for DESeq\n=========="
         self.printPhrase()
 
-        filani = self.requested_config_dict.get("result/DESeq2") + "/" + "stringtie-list.txt"
-        filafi = open(filani,"w")
-        filafi.write("")
-        filafi.close()
+        deseg_file_name = self.requested_config_dict.get("result/DESeq2") + "/stringtie-list.txt"
+        deseg_file_handle = open(deseg_file_name,"w")
+        deseg_file_handle.write("")
+        deseg_file_handle.close()
 
-        for tribe_name in tribe_list:
-            for gupo in group_list:
-                linosi = (
-                    gupo + " " +
-                    self.requested_config_dict.get("result/ballgown") + "/" +
-                    self.requested_config_dict.get("data/prefix").get(tribe_name) +
-                    gupo + "-ballgown.gtf" +
-                    "\n"
+        for branch_name in branch_list:
+            for group_name in group_list:
+                ballgown_line_str = (
+                    group_name + " "
+                    + self.requested_config_dict.get("result/ballgown") + "/"
+                    + branch_name + "-" + group_name + "-ballgown.gtf" + "\n"
                 )
 
-                with open(filani,"a") as filafi:
-                    filafi.write(linosi)
+                with open(deseg_file_name,"a") as deseg_file_handle:
+                    deseg_file_handle.write(ballgown_line_str)
 
         self.comand_line_list = [
             "python2", self.requested_config_dict.get("bin/prepDE"),
-            "-i", filani
+            "-i", deseg_file_name
         ]
         self.runCommand()
 
