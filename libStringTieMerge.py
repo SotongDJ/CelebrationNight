@@ -7,15 +7,15 @@ helper_msg_block="""
   Merge transcriptome for StringTie
 
  Usage:
-  import libstm
-  Marge = libstm.marge()
-  Marge.testing = self.testing
-  Marge.log_file_prefix_str = < Log File Path>
-  Marge.requested_argv_dict = {
+  import libStringTieMerge
+  merging = libStringTieMerge.merging()
+  merging.testing = self.testing
+  merging.log_file_prefix_str = < Log File Path>
+  merging.requested_argv_dict = {
     "tribe"   : <TRIBE>,
     "group"   : [<GROUP>,<GROUP>......]
   }
-  Marge.actor()
+  merging.actor()
 
  Data Structure:
   First : tribe,
@@ -38,11 +38,12 @@ helper_msg_block="""
 --- README ---
 """
 ConfigDict = libConfig.config()
-class marge(pyWorkFlow.workflow):
+class merging(pyWorkFlow.workflow):
     def redirecting(self):
         """"""
     def personalize(self):
         # self.testing = True
+        self.type = "library"
 
         self.requested_argv_dict = {
             "tribe" : [],
