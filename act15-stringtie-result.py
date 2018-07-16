@@ -139,7 +139,7 @@ class stingtieResult(pyWorkFlow.workflow):
         self.phrase_str = "==========\nStage: Scanning for Variable Parts\n=========="
         self.printPhrase()
 
-        Transki = libmar.miksing()
+        Transki = libSummarise.summary()
         Transki.requested_argv_dict = {
             "tribe"   : tribe_list,
             "group"   : group_list,
@@ -150,7 +150,7 @@ class stingtieResult(pyWorkFlow.workflow):
         Transki.log_file_prefix_str = self.log_file_prefix_str + "sca-Transki-"
         Transki.scanning()
 
-        Geniski = libmar.miksing()
+        Geniski = libSummarise.summary()
         Geniski.requested_argv_dict = {
             "tribe"   : tribe_list,
             "group"   : group_list,

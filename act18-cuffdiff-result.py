@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import pyWorkFlow, libConfig, libConvert, libsnm, libmar
+import pyWorkFlow, libConfig, libConvert, libsnm, libSummarise
 import time, json
 global helper_msg_block
 helper_msg_block="""
@@ -23,7 +23,7 @@ helper_msg_block="""
   Visualise graph: explanation01-dataStructure.svg
 
  CAUTION:
-  act18 required libConvert, libsnm, libmar
+  act18 required libConvert, libsnm, libSummarise
   act18 required result from act17
   <GROUP> must separate with space
   <GROUP> don't allowed spacing
@@ -110,7 +110,7 @@ class cuffdiffresult(pyWorkFlow.workflow):
         self.phrase_str = "==========\nStage 2 : Scanning for Variable Parts\n=========="
         self.printPhrase()
 
-        Cudiski = libmar.miksing()
+        Cudiski = libSummarise.summary()
         Cudiski.requested_argv_dict = {
             "tribe"   : tribe_list,
             "group"   : group_list,
