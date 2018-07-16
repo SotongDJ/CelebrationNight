@@ -143,21 +143,23 @@ class summary(pyWorkFlow.workflow):
         self.stopLog()
 
     def arrange(self):
-        self.script_name = "arrange from libmar"
+        self.script_name = "arrange from libSummarise"
         self.startLog()
 
-        self.coluli = []
-        litali = self.requested_argv_dict.get("libConvert",[])
-        if litali == []:
-            litali = list(self.tunodi.keys())
-        litasi = "*@*"+"*@*".join(litali)+"*@*"
-        for colu in list(self.coludi.keys()):
-            if "*@*"+colu+"*@*" in litasi:
-                metasi = "*@*".join(self.coludi.get(colu))
-                litasi = litasi.replace("*@*"+colu+"*@*","*@*"+metasi+"*@*")
-        litasi = litasi[3:len(litasi)-3]
-        self.coluli = litasi.split("*@*")
-        print(list(self.tunodi.keys()))
-        print(list(self.coludi.keys()))
-        print(self.coluli)
+        self.column_name_list = []
+        sorted_header_list = self.requested_argv_dict.get("head",[])
+        if sorted_header_list == []:
+            sorted_header_list = list(self.no_repeat_boolean_dict.keys())
+
+        sorted_header_str = "*@*"+"*@*".join(sorted_header_list)+"*@*"
+        for column_name in list(self.column_dict.keys()):
+            if "*@*"+column_name+"*@*" in sorted_header_str:
+                temp_str = "*@*".join(self.column_dict.get(column_name))
+                sorted_header_str = sorted_header_str.replace("*@*"+column_name+"*@*","*@*"+temp_str+"*@*")
+
+        sorted_header_str = sorted_header_str[3:len(sorted_header_str)-3]
+        self.column_name_list = sorted_header_str.split("*@*")
+        print(list(self.no_repeat_boolean_dict.keys()))
+        print(list(self.column_dict.keys()))
+        print(self.column_name_list)
         self.stopLog()
