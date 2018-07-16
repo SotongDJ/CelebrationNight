@@ -54,7 +54,51 @@
             "value": "Description"
         }
     },
-    "fql/row": [
+    "head/FoldChange": [
+        "test_id",
+        "gene_id",
+        "gene",
+        "Description",
+        "locus",
+        "sample_1",
+        "sample_2",
+        "status",
+        "value_1",
+        "value_2",
+        "log2(fold_change)",
+        "test_stat",
+        "p_value",
+        "q_value",
+        "significant"
+    ],
+    "head/GeneExpression": [
+        "Gene ID",
+        "Gene Name",
+        "Description",
+        "Reference",
+        "Strand",
+        "Start",
+        "End",
+        "Coverage",
+        "FPKM",
+        "TPM"
+    ],
+    "head/TranscriptExpression": [
+        "t_id",
+        "t_name",
+        "gene_id",
+        "gene_name",
+        "Description",
+        "chr",
+        "length",
+        "num_exons",
+        "strand",
+        "start",
+        "end",
+        "cov",
+        "FPKM"
+    ],
+    "head/fastqc": [
         "Basic Statistics",
         "Per base sequence quality",
         "Per tile sequence quality",
@@ -67,9 +111,16 @@
         "Overrepresented sequences",
         "Adapter Content"
     ],
-    "head/gff":[
-        "sequence", "source", "feature", "start", "end",
-        "score", "srefed", "phase", "Attributes"
+    "head/gff": [
+        "sequence",
+        "source",
+        "feature",
+        "start",
+        "end",
+        "score",
+        "srefed",
+        "phase",
+        "Attributes"
     ],
     "run/phred": "33",
     "run/thread": "4",
