@@ -59,7 +59,6 @@ class summary(pyWorkFlow.workflow):
         self.no_repeat_boolean_dict = {}
 
     def scanning(self):
-        tribe_list = self.requested_argv_dict.get("tribe",[])
         group_list = self.requested_argv_dict.get("group",[])
         pifisi = self.requested_argv_dict.get("prefix",[])
         pofisi = self.requested_argv_dict.get("postfix",[])
