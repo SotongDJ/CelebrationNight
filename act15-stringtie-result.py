@@ -136,7 +136,7 @@ class stingtieResult(pyWorkFlow.workflow):
             CvtoJSON.filasi = "libConvert.cvtDSVtoJSON"
             CvtoJSON.actor()
 
-        self.phrase_str = "==========\nStage 2 : Scanning for Variable Parts\n=========="
+        self.phrase_str = "==========\nStage: Scanning for Variable Parts\n=========="
         self.printPhrase()
 
         Transki = libmar.miksing()
