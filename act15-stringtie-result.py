@@ -23,37 +23,37 @@ ConfigDict = libConfig.config()
 class stingtieResult(pyWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
+        self.type = "script"
         self.helper_msg_str = helper_msg_block
 
         self.requested_argv_dict = {
-            "tribe" : [],
-            "group" : [],
-            "refer" : ""
+            "branch" : [],
+            "group" : []
         }
         self.SynonymDict.input(ConfigDict.get_dict("synom"))
         self.synchornize()
 
         self.comand_line_list = []
         self.script_name = "act15-stringtie-result"
-        self.requested_config_dict = {
-            "result/stringtie" : ConfigDict.get_str("result/stringtie"),
-            "result/ballgown" : ConfigDict.get_str("result/ballgown"),
-            "result/st-result" : ConfigDict.get_str("result/st-result"),
-            "result/DESeq2" : ConfigDict.get_str("result/DESeq2"),
-            "bin/prepDE" : ConfigDict.get_str("bin/prepDE"),
-            "data/prefix" : ConfigDict.get_dict("data/prefix"),
-            "target/libsnm" : ConfigDict.get_dict("target/libsnm"),
-            "type/database" : ConfigDict.get_dict("type/database"),
-            "result/log" : ConfigDict.get_str("result/log"),
-            "libConvert/TranscriptExpression" : ConfigDict.get_list("libConvert/TranscriptExpression"),
-            "libConvert/GeneExpression" : ConfigDict.get_list("libConvert/GeneExpression"),
+        ConfigDict.requested_dict = {}
+        ConfigDict.requested_dict = {
+            "result/DESeq2" : "",
+            "result/ballgown" : "",
+            "result/st-result" : "",
+            "result/stringtie" : "",
+            "result/log" : "",
+            "bin/prepDE" : "",
+            "data/refer" : {},
+            "data/replication" : {},
+            "libConvert/TranscriptExpression" : [],
+            "libConvert/GeneExpression" : [],
         }
+        self.requested_config_dict = ConfigDict.get_batchly()
         self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-"
 
     def actor(self):
-        tribe_list = self.requested_argv_dict.get("tribe",[])
+        branch_list = self.requested_argv_dict.get("tribe",[])
         group_list = self.requested_argv_dict.get("group",[])
-        refesi = self.requested_argv_dict.get("refer",[])
 
         self.startLog()
 
