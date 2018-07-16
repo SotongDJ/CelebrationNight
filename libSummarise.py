@@ -104,42 +104,42 @@ class summary(pyWorkFlow.workflow):
         self.stopLog()
 
     def fusion(self):
-        tribe_list = self.requested_argv_dict.get("tribe",[])
+        branch_list = self.requested_argv_dict.get("branch",[])
         group_list = self.requested_argv_dict.get("group",[])
-        pifisi = self.requested_argv_dict.get("prefix",[])
-        pofisi = self.requested_argv_dict.get("postfix",[])
+        prefix_path = self.requested_argv_dict.get("prefix","")
+        postfix_path = self.requested_argv_dict.get("postfix","")
 
-        self.script_name = "fusion from libmar"
+        self.script_name = "Fusion of libSummarise"
         self.startLog()
 
-        self.coludi = {}
-        self.resudi = {}
-        for tribe_name in tribe_list:
-            for gupo in group_list:
-                socesi = (
-                    pifisi +
-                    self.requested_config_dict.get("data/prefix").get(tribe_name) + gupo +
-                    pofisi
+        self.column_dict = {}
+        self.result_dict = {}
+        for branch_name in branch_list:
+            for group_name in group_list:
+                source_file_name = (
+                    prefix_path + branch_name + group_name + postfix_path
                 )
-                socefi = open(socesi,"r")
-                soceso = json.load(socefi)
+                source_file_handle = open(source_file_name,"r")
+                source_file_dict = json.load(source_file_handle)
 
-                for id in list(soceso.keys()):
-                    somedi = soceso.get(id)
-                    remedi = self.resudi.get(id,{})
-                    for colu in list(somedi.keys()):
-                        if self.tunodi.get(colu,False):
-                            remedi.update({ colu+"("+gupo+")" : somedi.get(colu) })
+                for id in list(source_file_dict.keys()):
+                    source_temp_dict = source_file_dict.get(id)
+                    result_temp_dict = self.result_dict.get(id,{})
+                    for column_name in list(source_temp_dict.keys()):
+                        if self.no_repeat_boolean_dict.get(column_name,False):
+                            result_temp_dict.update(
+                                { column_name+"("+group_name+")" : source_temp_dict.get(column_name) }
+                            )
 
-                            comeli = self.coludi.get(colu,[])
-                            if colu+"("+gupo+")" not in comeli:
-                                comeli.append(colu+"("+gupo+")")
-                                self.coludi.update({ colu : comeli })
-                            comeli = []
+                            column_temp_list = self.column_dict.get(column_name,[])
+                            if column_name+"("+gupo+")" not in column_temp_list:
+                                column_temp_list.append(column_name+"("+gupo+")")
+                                self.column_dict.update({ column_name : column_temp_list })
+                            column_temp_list = []
 
-                        elif remedi.get(colu,"") == "":
-                            remedi.update({ colu : somedi.get(colu) })
-                    self.resudi.update({ id : remedi })
+                        elif result_temp_dict.get(column_name,"") == "":
+                            result_temp_dict.update({ column_name : source_temp_dict.get(column_name) })
+                    self.result_dict.update({ id : result_temp_dict })
         self.stopLog()
 
     def arrange(self):
