@@ -31,30 +31,32 @@ helper_msg_block="""
 --- README ---
 """
 ConfigDict = libConfig.config()
-class miksing(pyWorkFlow.workflow):
-    def redirecting(self):
-        """"""
+class summary(pyWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
         self.helper_msg_str = helper_msg_block
 
         self.requested_argv_dict = {
-            "tribe"   : [],
-            "group"   : [],
-            "prefix"  : "",
+            "branch" : [],
+            "group" : [],
+            "prefix" : "",
             "postfix" : "",
-            "libConvert"  : []
+            "head" : []
         }
 
         self.comand_line_list = []
-        self.requested_config_dict = {
-            "data/prefix" : ConfigDict.get_dict("data/prefix"),
-            "result/log" : ConfigDict.get_str("result/log"),
+        ConfigDict.requested_dict = {}
+        ConfigDict.requested_dict = {
+            "result/log" : "",
+            "data/replication" : {},
         }
-        self.script_name = "libmar"
-        self.log_file_prefix_str = ConfigDict.get_str("result/log")+"/libmar-"
+        self.requested_config_dict = ConfigDict.get_batchly()
+        self.script_name = "libSummarise"
+        self.log_file_prefix_str = ConfigDict.get_str("result/log")+"/libSummarise-"
 
         self.resusi = ""
+
+        self.no_repeat_boolean_dict = {}
 
     def scanning(self):
         tribe_list = self.requested_argv_dict.get("tribe",[])
