@@ -10,11 +10,11 @@ helper_msg_block="""
  Usage: # Replace * with related string
     Miski = libmar.miksing()
     Miski.requested_argv_dict = {
-      "tribe"   : tribe_list,
-      "group"   : group_list,
-      "prefix"  : self.requested_config_dict.get("result/*") + "/",
+      "tribe" : tribe_list,
+      "group" : group_list,
+      "prefix" : self.requested_config_dict.get("result/*") + "/",
       "postfix" : "/*.json", OR "postfix" : "-*.json",
-      "libConvert"  : self.requested_config_dict.get("libConvert/*")
+      "head" : [<sorted column name list>]
     }
     Miski.log_file_prefix_str = self.log_file_prefix_str + "Miski-"
     Miski.scanning()
