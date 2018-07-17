@@ -8,7 +8,7 @@ helper_msg_block="""
   Library for Mixing analysis result
 
  Usage: # Replace * with related string
-    Miski = libmar.miksing()
+    Miski = libSummarise.miksing()
     Miski.requested_argv_dict = {
       "tribe" : tribe_list,
       "group" : group_list,
@@ -20,12 +20,11 @@ helper_msg_block="""
     Miski.scanning()
 
     Miski.fusion()
-    Miski.resusi = (
-        self.requested_config_dict.get("result/*") + "/" +
-        self.requested_config_dict.get("data/prefix").get(tribe_name) + "*.json"
+    result_file_name = (
+        self.requested_config_dict.get("result/*") + "/" + branch_name + "-*.json"
     )
-    with open(Miski.resusi,"w") as resufi:
-        json.dump(Miski.resudi,resufi,indent=4,sort_keys=True)
+    with open(result_file_name,"w") as result_file_handle:
+        json.dump(Miski.result_dict,result_file_handle,indent=4,sort_keys=True)
     Miski.arrange()
 
 --- README ---
@@ -34,10 +33,11 @@ ConfigDict = libConfig.config()
 class summary(pyWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
+        self.type = "library"
         self.helper_msg_str = helper_msg_block
 
         self.requested_argv_dict = {
-            "branch" : [],
+            "branch" : "",
             "group" : [],
             "prefix" : "",
             "postfix" : "",
@@ -54,12 +54,10 @@ class summary(pyWorkFlow.workflow):
         self.script_name = "libSummarise"
         self.log_file_prefix_str = ConfigDict.get_str("result/log")+"/libSummarise-"
 
-        self.resusi = ""
-
         self.no_repeat_boolean_dict = {}
 
     def scanning(self):
-        branch_list = self.requested_argv_dict.get("branch",[])
+        branch_name = self.requested_argv_dict.get("branch","")
         group_list = self.requested_argv_dict.get("group",[])
         prefix_path = self.requested_argv_dict.get("prefix","")
         postfix_path = self.requested_argv_dict.get("postfix","")
@@ -70,11 +68,16 @@ class summary(pyWorkFlow.workflow):
 
         self.no_repeat_boolean_dict = {}
         first_dict = {}
-        for branch_name in branch_list:
+        for group_name in group_list:
             id_list = []
-            for group_name in group_list:
+            replication_list = self.requested_config_dict.get("data/replication").get(group_name)
+            for replication_name in replication_list:
+                if replication_name != "":
+                    replication_name = "-" + replication_name
+
                 source_file_name = (
-                    prefix_path + branch_name + "-" + group_name + postfix_path
+                    prefix_path + branch_name + "-"
+                    + group_name + replication_name + postfix_path
                 )
                 source_file_handle = open(source_file_name,"r")
                 source_file_dict = json.load(source_file_handle)
@@ -94,7 +97,7 @@ class summary(pyWorkFlow.workflow):
                     for id in id_list:
                         key_value_dict = source_file_dict.get(id)
                         first_temp_dict = first_dict.get(id)
-                        for column_name in list(source_file_dict.get(id).keys()):
+                        for column_name in list(key_value_dict.keys()):
                             query_value_name = key_value_dict.get(column_name)
                             first_value_name = first_temp_dict.get(column_name)
                             if query_value_name == first_value_name and not self.no_repeat_boolean_dict.get(column_name,False):
@@ -104,7 +107,7 @@ class summary(pyWorkFlow.workflow):
         self.stopLog()
 
     def fusion(self):
-        branch_list = self.requested_argv_dict.get("branch",[])
+        branch_name = self.requested_argv_dict.get("branch","")
         group_list = self.requested_argv_dict.get("group",[])
         prefix_path = self.requested_argv_dict.get("prefix","")
         postfix_path = self.requested_argv_dict.get("postfix","")
@@ -114,10 +117,15 @@ class summary(pyWorkFlow.workflow):
 
         self.column_dict = {}
         self.result_dict = {}
-        for branch_name in branch_list:
-            for group_name in group_list:
+        for group_name in group_list:
+            replication_list = self.requested_config_dict.get("data/replication").get(group_name)
+            for replication_name in replication_list:
+                if replication_name != "":
+                    replication_name = "-" + replication_name
+
                 source_file_name = (
-                    prefix_path + branch_name + "-" + group_name + postfix_path
+                    prefix_path + branch_name + "-"
+                    + group_name + replication_name + postfix_path
                 )
                 source_file_handle = open(source_file_name,"r")
                 source_file_dict = json.load(source_file_handle)
@@ -132,8 +140,8 @@ class summary(pyWorkFlow.workflow):
                             )
 
                             column_temp_list = self.column_dict.get(column_name,[])
-                            if column_name+"("+gupo+")" not in column_temp_list:
-                                column_temp_list.append(column_name+"("+gupo+")")
+                            if column_name+"("+group_name+")" not in column_temp_list:
+                                column_temp_list.append(column_name+"("+group_name+")")
                                 self.column_dict.update({ column_name : column_temp_list })
                             column_temp_list = []
 
