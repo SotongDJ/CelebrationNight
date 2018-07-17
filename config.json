@@ -25,32 +25,32 @@
     "database/annotation-target": {
         "foldchange-NCBI": {
             "key": "gene",
-            "prefix": "",
+            "replace": "",
             "value": "Description"
         },
         "foldchange-ensembl": {
             "key": "gene_id",
-            "prefix": "gene:",
+            "replace": "gene:",
             "value": "Description"
         },
         "gene-NCBI": {
             "key": "Gene Name",
-            "prefix": "",
+            "replace": "",
             "value": "Description"
         },
         "gene-ensembl": {
             "key": "Gene ID",
-            "prefix": "gene:",
+            "replace": "gene:",
             "value": "Description"
         },
         "transcript-NCBI": {
             "key": "gene_name",
-            "prefix": "",
+            "replace": "",
             "value": "Description"
         },
         "transcript-ensembl": {
             "key": "gene_id",
-            "prefix": "gene:",
+            "replace": "gene:",
             "value": "Description"
         }
     },
