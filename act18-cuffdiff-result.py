@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import pyWorkFlow, libConfig, libConvert, libsnm, libSummarise
+import pyWorkFlow, libConfig, libConvert, libInsert, libSummarise
 import time, json
 global helper_msg_block
 helper_msg_block="""
@@ -23,7 +23,7 @@ helper_msg_block="""
   Visualise graph: explanation01-dataStructure.svg
 
  CAUTION:
-  act18 required libConvert, libsnm, libSummarise
+  act18 required libConvert, libInsert, libSummarise
   act18 required result from act17
   <GROUP> must separate with space
   <GROUP> don't allowed spacing
@@ -63,7 +63,7 @@ class cuffdiffresult(pyWorkFlow.workflow):
             "result/cuffdiff" : ConfigDict.get_str("result/cuffdiff"),
             "result/cd-result" : ConfigDict.get_str("result/cd-result"),
             "data/prefix" : ConfigDict.get_dict("data/prefix"),
-            "target/libsnm" : ConfigDict.get_dict("target/libsnm"),
+            "target/libInsert" : ConfigDict.get_dict("target/libInsert"),
             "type/database" : ConfigDict.get_dict("type/database"),
             "result/log" : ConfigDict.get_str("result/log"),
             "libConvert/FoldChange" : ConfigDict.get_list("libConvert/FoldChange"),
@@ -145,14 +145,14 @@ class cuffdiffresult(pyWorkFlow.workflow):
             tribe_str = tribe_list[0]
             tiposi = self.requested_config_dict.get("type/database").get(tribe_str)
 
-            GeneID = libsnm.geneid()
+            GeneID = libInsert.inserting()
             GeneID.requested_argv_dict = {
                 "description" : refesi ,
                 "basement" : Cudiski.resusi ,
             }
-            tagadi = self.requested_config_dict.get("target/libsnm").get(tiposi+"-foldchange")
+            tagadi = self.requested_config_dict.get("target/libInsert").get(tiposi+"-foldchange")
             GeneID.requested_argv_dict.update(tagadi)
-            GeneID.filasi = "libsnm.geneid"
+            GeneID.filasi = "libInsert.geneid"
             GeneID.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act18-cufre-geneid-"
             GeneID.actor()
 
