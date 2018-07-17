@@ -9,19 +9,16 @@ helper_msg_block="""
 
   Usage:
     import libInsert
-    GeneID = libInsert.geneid()
-    GeneID.requested_argv_dict = {
-        "description" : [file of gene description] ,
-        "basement" : [result file] ,
-        "if" : [column name of gene id in result file],
-        "key" : [header of gene id, "gene:"],
-        "from" : [column name of gene id in gene description file],
-        "to" : [column name of description],
+    Insert = libInsert.inserting()
+    Insert.log_file_name = self.log_file_name # follow host
+    Insert.requested_argv_dict = {
+        "branch" : < BRANCH >,
+        "target" : < PATTERN >,
+        # "database/annotation-target" in global config.json
+        "refer" : < PATH of REFERENCE >
     }
-    # GeneID.requested_argv_dict.update()
-    GeneID.filasi = "libInsert.geneid"
-    GeneID.actor()
-
+    Insert.input_dict = < INPUT DICTIONARY >
+    Insert.actor()
    --- README ---
 """
 class inserting(pyWorkFlow.workflow):
