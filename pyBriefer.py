@@ -21,6 +21,8 @@ class heading(pyWorkFlow.workflow):
 
     def set(self,file_name):
         self.input_file = file_name
+        print("Start loading")
+        self.load()
 
     def initiation(self):
         self.content_dict = {}
@@ -175,9 +177,6 @@ class heading(pyWorkFlow.workflow):
 
     def view(self):
         self.startLog()
-        self.phrase_str = "Start loading"
-        self.printTimeStamp()
-        self.load()
 
         self.phrase_str = "Start generating"
         self.printTimeStamp()
@@ -192,10 +191,6 @@ class heading(pyWorkFlow.workflow):
             self.output_file = self.input_file.replace(".json",".py")
 
         if self.input_file != "":
-
-            self.phrase_str = "Start loading"
-            self.printTimeStamp()
-            self.load()
 
             self.phrase_str = "Start generating"
             self.printTimeStamp()
