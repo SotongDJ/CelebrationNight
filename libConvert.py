@@ -75,7 +75,19 @@ class cvtDSVtoJSON(pyWorkFlow.workflow):
 
             if not result_file_boolean or not relation_file_boolean :
                 lines_list = open(source_file_name).read().splitlines()
-                first_line_str = lines_list[0]
+                first_line_boolean = True
+                max_digit_num = len(lines_list)
+                garbage_str = ""
+                line_num = 0
+                while first_line_boolean and line_num < max_digit_num:
+                    line_str = lines_list[line_num]
+                    if line_str[0] == "#":
+                        garbage_str = lines_list.pop(line_num)
+                    else:
+                        first_line_str = lines_list.pop(line_num)
+                        first_line_boolean = False
+
+                    line_num = line_num + 1
 
                 position_dict = {} # {numbering:key}
 
@@ -116,7 +128,7 @@ class cvtDSVtoJSON(pyWorkFlow.workflow):
 
                 line_id_num = 0
                 for line_str in lines_list:
-                    if "#" not in line_str:
+                    if line_str[0] != "#":
                         value_temp_list = line_str.split(delimiter_str)
                         value_temp_dict = {}
                         id_name = ""
