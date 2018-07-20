@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import pyWorkFlow, libConfig
+import pyBriefer
 import sys, pprint, json
 global helper_msg_block
 helper_msg_block="""
@@ -81,18 +82,23 @@ class inserting(pyWorkFlow.workflow):
 
         value_temp_dict = refer_file_dict.get("{key:{value:[id]}}").get(source_key_str)
         id_temp_dict = refer_file_dict.get("{key:{id:value}}").get(source_value_str)
-
+        """
+        debugger = pyBriefer.heading()
+        debugger.content_dict = self.input_dict
+        debugger.view()
+        """
         if branch_name != "" and target_name != "":
             for id in list(self.input_dict.keys()): # {id:{key:value}}
                 key_value_dict = self.input_dict.get(id)
-                value_temp_str = key_value_dict.get(target_key_str)
-                value_temp_str = value_temp_str.replace(target_replace_str,"")
+                if target_key_str in list(key_value_dict.keys()):
+                    value_temp_str = key_value_dict.get(target_key_str)
+                    value_temp_str = value_temp_str.replace(target_replace_str,"")
 
-                convert_id_name = value_temp_dict.get(value_temp_str,"")
-                final_str = id_temp_dict.get(convert_id_name,"N/A")
+                    convert_id_name = value_temp_dict.get(value_temp_str,"")
+                    final_str = id_temp_dict.get(convert_id_name,"N/A")
 
-                key_value_dict.update({ target_value_str : final_str })
-                self.input_dict.update({ id : key_value_dict })
+                    key_value_dict.update({ target_value_str : final_str })
+                    self.input_dict.update({ id : key_value_dict })
 
         self.output_dict = self.input_dict
         self.stopLog()
