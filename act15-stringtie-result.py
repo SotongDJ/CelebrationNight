@@ -48,6 +48,7 @@ class stingtieResult(pyWorkFlow.workflow):
             "data/replication" : {},
             "header/TranscriptExpression" : [],
             "header/GeneExpression" : [],
+            "header/gff3" : [],
         }
         self.requested_config_dict = ConfigDict.get_batchly()
         self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-"
