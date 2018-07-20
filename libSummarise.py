@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import pyWorkFlow, libConfig
+import pyBriefer
 import time, json, random
 global helper_msg_block
 helper_msg_block="""
@@ -54,7 +55,7 @@ class summary(pyWorkFlow.workflow):
         self.script_name = "libSummarise"
         self.log_file_prefix_str = ConfigDict.get_str("result/log")+"/libSummarise-"
 
-        self.no_repeat_boolean_dict = {}
+        self.repeat_boolean_dict = {}
 
     def scanning(self):
         branch_name = self.requested_argv_dict.get("branch","")
@@ -66,11 +67,12 @@ class summary(pyWorkFlow.workflow):
         self.script_name = "Scanning of libSummarise"
         self.startLog()
 
-        self.no_repeat_boolean_dict = {}
+        self.repeat_boolean_dict = {}
         first_dict = {}
+        first_group_boolean = True
         for group_name in group_list:
-            id_list = []
             replication_list = self.requested_config_dict.get("data/replication").get(group_name)
+            id_list = []
             for replication_name in replication_list:
                 if replication_name != "":
                     replication_name = "-" + replication_name
@@ -85,7 +87,7 @@ class summary(pyWorkFlow.workflow):
                 if id_list == []:
                     id_list = list(source_file_dict.keys())
 
-                if first_dict == {}:
+                if first_group_boolean:
                     for id in id_list:
                         key_value_dict = source_file_dict.get(id)
                         first_temp_dict = {}
@@ -93,17 +95,23 @@ class summary(pyWorkFlow.workflow):
                             first_value_name = key_value_dict.get(first_column_name)
                             first_temp_dict.update({ first_column_name : first_value_name})
                             first_dict.update({ id : first_temp_dict})
+                    first_group_boolean = False
                 else:
                     for id in id_list:
                         key_value_dict = source_file_dict.get(id)
-                        first_temp_dict = first_dict.get(id)
+                        first_temp_dict = first_dict.get(id,{})
                         for column_name in list(key_value_dict.keys()):
                             query_value_name = key_value_dict.get(column_name)
                             first_value_name = first_temp_dict.get(column_name)
-                            if query_value_name == first_value_name and not self.no_repeat_boolean_dict.get(column_name,False):
-                                self.no_repeat_boolean_dict.update({ column_name : False })
+                            if query_value_name == first_value_name and self.repeat_boolean_dict.get(column_name, True):
+                                    self.repeat_boolean_dict.update({ column_name : True })
                             else:
-                                self.no_repeat_boolean_dict.update({ column_name : True })
+                                self.repeat_boolean_dict.update({ column_name : False })
+                    """
+                    debugger = pyBriefer.heading()
+                    debugger.content_dict = self.repeat_boolean_dict
+                    debugger.view()
+                    """
         self.stopLog()
 
     def fusion(self):
@@ -115,7 +123,7 @@ class summary(pyWorkFlow.workflow):
         self.script_name = "Fusion of libSummarise"
         self.startLog()
 
-        self.column_dict = {}
+        self.column_list_dict = {}
         self.result_dict = {}
         for group_name in group_list:
             replication_list = self.requested_config_dict.get("data/replication").get(group_name)
@@ -134,15 +142,15 @@ class summary(pyWorkFlow.workflow):
                     source_temp_dict = source_file_dict.get(id)
                     result_temp_dict = self.result_dict.get(id,{})
                     for column_name in list(source_temp_dict.keys()):
-                        if self.no_repeat_boolean_dict.get(column_name,False):
+                        if not self.repeat_boolean_dict.get(column_name,False):
                             result_temp_dict.update(
                                 { column_name+"("+group_name+")" : source_temp_dict.get(column_name) }
                             )
 
-                            column_temp_list = self.column_dict.get(column_name,[])
+                            column_temp_list = self.column_list_dict.get(column_name,[])
                             if column_name+"("+group_name+")" not in column_temp_list:
                                 column_temp_list.append(column_name+"("+group_name+")")
-                                self.column_dict.update({ column_name : column_temp_list })
+                                self.column_list_dict.update({ column_name : column_temp_list })
                             column_temp_list = []
 
                         elif result_temp_dict.get(column_name,"") == "":
@@ -157,17 +165,17 @@ class summary(pyWorkFlow.workflow):
         self.column_name_list = []
         sorted_header_list = self.requested_argv_dict.get("header",[])
         if sorted_header_list == []:
-            sorted_header_list = list(self.no_repeat_boolean_dict.keys())
+            sorted_header_list = list(self.repeat_boolean_dict.keys())
 
         sorted_header_str = "*@*"+"*@*".join(sorted_header_list)+"*@*"
-        for column_name in list(self.column_dict.keys()):
+        for column_name in list(self.column_list_dict.keys()):
             if "*@*"+column_name+"*@*" in sorted_header_str:
-                temp_str = "*@*".join(self.column_dict.get(column_name))
+                temp_str = "*@*".join(self.column_list_dict.get(column_name))
                 sorted_header_str = sorted_header_str.replace("*@*"+column_name+"*@*","*@*"+temp_str+"*@*")
 
         sorted_header_str = sorted_header_str[3:len(sorted_header_str)-3]
         self.column_name_list = sorted_header_str.split("*@*")
-        print(list(self.no_repeat_boolean_dict.keys()))
-        print(list(self.column_dict.keys()))
+        print(list(self.repeat_boolean_dict.keys()))
+        print(list(self.column_list_dict.keys()))
         print(self.column_name_list)
         self.stopLog()
