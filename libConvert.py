@@ -249,7 +249,7 @@ class attributionExtractor(pyWorkFlow.workflow):
                 target_json_dict = json.load(target_file_handle)
 
                 key_id_value_dict = target_json_dict.get('{key:{id:value}}')
-                raw_temp_dict = key_id_value_dict.get('Attributes')
+                raw_temp_dict = key_id_value_dict.get('attribute')
                 result_dict = {} # id=[key:value]
                 relation_dict = {
                     "{key:{value:[id]}}" : {},

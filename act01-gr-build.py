@@ -44,7 +44,7 @@ class genomerefer(pyWorkFlow.workflow):
             "run/thread": "",
             "refer/annotate": {},
             "refer/genome": {},
-            "header/gff": {},
+            "header/gff3": {},
         }
         self.requested_config_dict = ConfigDict.get_batchly()
         self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act01-gr-build-"
@@ -117,7 +117,7 @@ class genomerefer(pyWorkFlow.workflow):
         self.phrase_str = "==========\nStage: Convert GFF to JSON\n=========="
         self.printPhrase()
 
-        header_list = self.requested_config_dict.get("header/gff")
+        header_list = self.requested_config_dict.get("header/gff3")
         CvtoJSON = libConvert.cvtDSVtoJSON()
         CvtoJSON.log_file_name = self.log_file_name
         CvtoJSON.requested_argv_dict = {

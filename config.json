@@ -111,7 +111,7 @@
         "Overrepresented sequences",
         "Adapter Content"
     ],
-    "header/gff": [
+    "header/gff3": [
         "sequence",
         "source",
         "feature",
@@ -120,7 +120,18 @@
         "score",
         "srefed",
         "phase",
-        "Attributes"
+        "attribute"
+    ],
+    "header/gtf": [
+        "seqname",
+        "source",
+        "feature",
+        "start",
+        "end",
+        "score",
+        "srefed",
+        "frame",
+        "attribute"
     ],
     "run/phred": "33",
     "run/thread": "4",
