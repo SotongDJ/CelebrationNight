@@ -149,6 +149,11 @@ class workflow:
         with open(self.log_file_name,'a') as log_file:
             log_file.write("  \n")
 
+    def printDashLine(self):
+        print("----------")
+        with open(self.log_file_name,'a') as log_file:
+            log_file.write("----------\n")
+
     def getMaxLengthValue(self):
         temp_list = []
         for name_str in self.list_list:
@@ -353,36 +358,12 @@ class workflow:
             'Arranged_Argv' : self.arranged_argv_dict,
             'Requested_Argv' : self.requested_argv_dict
         }
-        argv_info_line = ["[ARGV: Arguments]"]
-
-        self.list_list = []
-        self.list_list = list(self.log_argv_dict.keys())
-        list_max_length_num = self.getMaxLengthValue()
-        for subject_str in self.list_list:
-            if len(subject_str) < list_max_length_num :
-                subject_final_str = subject_str + ' '*(list_max_length_num-len(subject_str))
-            else:
-                subject_final_str = subject_str
-
-            argv_info_line.append("    " + subject_final_str + ": " +
-                pprint.pformat(self.log_argv_dict.get(subject_str),compact=True,width=150))
+        argv_info_line = ["[ARGV: Arguments]\n"]
+        argv_info_line.append(pprint.pformat(self.log_argv_dict,compact=True,width=80))
 
         if self.requested_config_dict != {}:
-            config_info_line = ["\n[CONFIG: From config.json]"]
-
-            self.list_list = []
-            self.list_list = list(self.requested_config_dict.keys())
-            list_max_length_num = self.getMaxLengthValue()
-            for config_str in self.list_list:
-                if len(config_str) < list_max_length_num :
-                    space_count_num = list_max_length_num-len(config_str)
-                else:
-                    space_count_num = 0
-
-                config_info_line.append(
-                    "    \"" + config_str + "\""+ (" "*space_count_num) +": "
-                    +pprint.pformat(self.requested_config_dict.get(config_str),compact=True,width=150)
-                )
+            config_info_line = ["\n[CONFIG: From config.json]\n"]
+            config_info_line.append(pprint.pformat(self.requested_config_dict,compact=True,width=80))
 
         else:
             config_info_line = []
@@ -396,6 +377,7 @@ class workflow:
         result_list.extend(config_info_line)
         self.phrase_str = "\n".join(result_list)+"\n"
         self.printPhrase()
+        self.printDashLine()
 
         self.current_time_str = ""
         self.phrase_str = ""
