@@ -40,7 +40,6 @@ class cvtDSVtoJSON(pyWorkFlow.workflow):
             "headless": True,
             "delimiter": "\t"
         }
-        self.synchornize()
 
         self.target_file_path = ""
 
@@ -174,6 +173,52 @@ class cvtDSVtoJSON(pyWorkFlow.workflow):
 
         self.stopLog()
 
+class makingRelation(pyWorkFlow.workflow):
+    def personalize(self):
+        # self.testing = True
+        self.type = "library"
+
+        self.requested_argv_dict = {}
+        self.input_dict = {}
+        self.output_dict = {}
+
+        self.target_file_path = ""
+
+        self.comand_line_list=[]
+
+        self.script_name = "libConvert.makingRelation"
+        self.requested_config_dict = {}
+        self.log_file_prefix_str = "temp/tmp-"
+
+    def actor(self):
+        self.startLog()
+        self.output_dict = {
+            "{key:{value:[id]}}" : {},
+            "{key:{id:value}}" : {}
+        }
+
+        for id_str in list(self.input_dict.keys()):
+            key_value_dict = self.input_dict.get(id_str)
+
+            for key_str in list(key_value_dict.keys()):
+                value_str = key_value_dict.get(key_str)
+
+                # {key:{value:[id]}}
+                value_temp_dict = self.output_dict.get("{key:{value:[id]}}").get(key_str,{})
+                # {key:{id:value}}
+                id_temp_dict = self.output_dict.get("{key:{id:value}}").get(key_str,{})
+
+                id_list = value_temp_dict.get(value_str,[])
+                id_list.append(id_str)
+
+                value_temp_dict.update({ value_str : id_list })
+                id_temp_dict.update({ id_str : value_str })
+
+                self.output_dict.get("{key:{value:[id]}}").update({ key_str : value_temp_dict })
+                self.output_dict.get("{key:{id:value}}").update({ key_str : id_temp_dict })
+
+        self.stopLog()
+
 class cvtJSONtoDSV(pyWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
@@ -184,7 +229,6 @@ class cvtJSONtoDSV(pyWorkFlow.workflow):
             "header" : [],
             "delimiter": "\t"
         }
-        self.synchornize()
 
         self.target_file_path = ""
 
