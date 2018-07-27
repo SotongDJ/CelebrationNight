@@ -31,7 +31,7 @@ class inserting(pyWorkFlow.workflow):
         self.requested_argv_dict = {
             "branch" : "",
             "target" : "",
-            "refer" : ""
+            "source" : ""
         }
 
         ConfigDict = libConfig.config()
@@ -51,6 +51,7 @@ class inserting(pyWorkFlow.workflow):
         self.log_file_prefix_str = "temp/tmp-"
 
         self.input_dict = {} # {id:{key:value}}
+        self.refer_dict = {}
         self.output_dict = {}
 
     def actor(self):
@@ -58,7 +59,7 @@ class inserting(pyWorkFlow.workflow):
 
         branch_name = self.requested_argv_dict.get("branch")
         target_name = self.requested_argv_dict.get("target")
-        refer_file_path = self.requested_argv_dict.get("refer")
+        source_name = self.requested_argv_dict.get("source")
 
         refer_name_dict = self.requested_config_dict.get("data/refer")
         refer_name = refer_name_dict.get(branch_name)
@@ -67,38 +68,90 @@ class inserting(pyWorkFlow.workflow):
         db_type_name = database_dict.get(refer_name)
 
         annotate_source_dict = self.requested_config_dict.get("database/annotation-source")
-        source_pair_dict = annotate_source_dict.get(db_type_name)
+        source_pair_dict = annotate_source_dict.get(source_name+"-"+db_type_name)
         source_key_str = source_pair_dict.get("key")
         source_value_str = source_pair_dict.get("value")
+        source_replace_list = source_pair_dict.get("replace")
+        source_remove_front_list = source_pair_dict.get("delimiter(front-remove)")
+        source_remove_back_list = source_pair_dict.get("delimiter(back-remove)")
 
         annotate_target_dict = self.requested_config_dict.get("database/annotation-target")
-        target_set_dict = annotate_target_dict.get(target_name+"-"+db_type_name)
-        target_key_str = target_set_dict.get("key")
-        target_value_str = target_set_dict.get("value")
-        target_replace_str = target_set_dict.get("replace")
+        target_pair_dict = annotate_target_dict.get(target_name+"-"+db_type_name)
+        target_key_str = target_pair_dict.get("key")
+        target_value_str = target_pair_dict.get("value")
+        target_replace_list = target_pair_dict.get("replace")
+        target_remove_front_list = target_pair_dict.get("delimiter(front-remove)")
+        target_remove_back_list = target_pair_dict.get("delimiter(back-remove)")
 
-        refer_file_handle = open(refer_file_path,"r")
-        refer_file_dict = json.load(refer_file_handle)
-
-        value_temp_dict = refer_file_dict.get("{key:{value:[id]}}").get(source_key_str)
-        id_temp_dict = refer_file_dict.get("{key:{id:value}}").get(source_value_str)
+        source_value_dict = self.refer_dict.get("{key:{value:[id]}}").get(source_key_str,{})
+        source_id_dict = self.refer_dict.get("{key:{id:value}}").get(source_value_str,{})
         """
         debugger = pyBriefer.heading()
         debugger.content_dict = self.input_dict
         debugger.view()
+
+        debugger.content_dict = self.refer_dict
+        debugger.view()
         """
-        if branch_name != "" and target_name != "":
-            for id in list(self.input_dict.keys()): # {id:{key:value}}
-                key_value_dict = self.input_dict.get(id)
-                if target_key_str in list(key_value_dict.keys()):
-                    value_temp_str = key_value_dict.get(target_key_str)
-                    value_temp_str = value_temp_str.replace(target_replace_str,"")
+        if branch_name != "" and target_name != "" and source_name !="":
+            for id_str in list(self.input_dict.keys()): # {id:{key:value}}
+                target_key_value_dict = self.input_dict.get(id_str)
 
-                    convert_id_name = value_temp_dict.get(value_temp_str,"")
-                    final_str = id_temp_dict.get(convert_id_name,"N/A")
+                if target_key_str in list(target_key_value_dict.keys()):
+                    query_str = target_key_value_dict.get(target_key_str)
 
-                    key_value_dict.update({ target_value_str : final_str })
-                    self.input_dict.update({ id : key_value_dict })
+                    if target_replace_list != []:
+                        for replace_str in target_replace_list:
+                            query_str = query_str.replace(replace_str,"")
+
+                    if target_remove_front_list != []:
+                        for remove_front_str in target_remove_front_list:
+                            if remove_front_str in query_str:
+                                query_list = query_str.split(remove_front_str)
+                                garbage_str = query_list.pop(0)
+                                query_str = remove_front_str.join(query_list)
+
+                    if target_remove_back_list != []:
+                        for remove_back_str in target_remove_back_list:
+                            if remove_back_str in query_str:
+                                query_list = query_str.split(remove_back_str)
+                                garbage_str = query_list.pop(-1)
+                                query_str = remove_back_str.join(query_list)
+
+                    if source_key_str == source_value_str:
+                        result_str = query_str
+                    else:
+                        intermediate_id_name = source_value_dict.get(query_str,[""])[0]
+                        result_str = source_id_dict.get(intermediate_id_name,"N/A")
+
+                    write_boolean = False
+                    if result_str == "N/A":
+                        if len(target_key_value_dict.get(target_value_str,"")) < 3:
+                            write_boolean = True
+                    else:
+                        write_boolean = True
+
+                    if write_boolean:
+                        if source_replace_list != []:
+                            for replace_str in source_replace_list:
+                                result_str = result_str.replace(replace_str,"")
+
+                        if source_remove_front_list != []:
+                            for remove_front_str in source_remove_front_list:
+                                if remove_front_str in result_str:
+                                    result_list = result_str.split(remove_front_str)
+                                    garbage_str = result_list.pop(0)
+                                    result_str = remove_front_str.join(result_list)
+
+                        if source_remove_back_list != []:
+                            for remove_back_str in source_remove_back_list:
+                                if remove_back_str in result_str:
+                                    result_list = result_str.split(remove_back_str)
+                                    garbage_str = result_list.pop(-1)
+                                    result_str = remove_back_str.join(result_list)
+
+                        target_key_value_dict.update({ target_value_str : result_str })
+                        self.input_dict.update({ id_str : target_key_value_dict })
 
         self.output_dict = self.input_dict
         self.stopLog()

@@ -13,45 +13,91 @@
     "bin/tophat2": "bin/tophat2/tophat2",
     "bin/trimmomatic": "bin/trimmomatic/trimmomatic-0.36.jar",
     "database/annotation-source": {
-        "NCBI": {
+        "attribute-NCBI": {
             "key": "gene",
+            "replace": [],
+            "delimiter(front-remove)": [],
+            "delimiter(back-remove)": [],
             "value": "product"
         },
-        "ensembl": {
+        "attribute-ensembl": {
             "key": "gene_id",
+            "replace": [],
+            "delimiter(front-remove)": [],
+            "delimiter(back-remove)": [],
             "value": "description"
+        },
+        "transcript2gene-NCBI": {
+            "key": "t_name",
+            "replace": ["transcript:"],
+            "delimiter(front-remove)": [],
+            "delimiter(back-remove)": ["-","."],
+            "value": "t_name"
+        },
+        "transcript2gene-ensembl": {
+            "key": "gene_name",
+            "replace": [],
+            "delimiter(front-remove)": [],
+            "delimiter(back-remove)": [],
+            "value": "gene_name"
         }
     },
     "database/annotation-target": {
         "foldchange-NCBI": {
             "key": "gene",
-            "replace": "",
+            "replace": [],
+            "delimiter(front-remove)": [],
+            "delimiter(back-remove)": [],
             "value": "Description"
         },
         "foldchange-ensembl": {
             "key": "gene_id",
-            "replace": "gene:",
+            "replace": ["gene:"],
+            "delimiter(front-remove)": [],
+            "delimiter(back-remove)": [],
             "value": "Description"
         },
         "gene-NCBI": {
             "key": "Gene Name",
-            "replace": "",
+            "replace": [],
+            "delimiter(front-remove)": [],
+            "delimiter(back-remove)": [],
             "value": "Description"
         },
         "gene-ensembl": {
             "key": "Gene ID",
-            "replace": "gene:",
+            "replace": ["gene:"],
+            "delimiter(front-remove)": [],
+            "delimiter(back-remove)": [],
             "value": "Description"
         },
         "transcript-NCBI": {
             "key": "gene_name",
-            "replace": "",
+            "replace": [],
+            "delimiter(front-remove)": [],
+            "delimiter(back-remove)": [],
             "value": "Description"
         },
         "transcript-ensembl": {
             "key": "gene_id",
-            "replace": "gene:",
+            "replace": ["gene:"],
+            "delimiter(front-remove)": [],
+            "delimiter(back-remove)": [],
             "value": "Description"
+        },
+        "transcript2gene-NCBI": {
+            "key": "gene_name",
+            "replace": [],
+            "delimiter(front-remove)": [],
+            "delimiter(back-remove)": [],
+            "value": "gene_name"
+        },
+        "transcript2gene-ensembl": {
+            "key": "t_name",
+            "replace": [],
+            "delimiter(front-remove)": [],
+            "delimiter(back-remove)": [],
+            "value": "gene_id"
         }
     },
     "header/FoldChange": [
