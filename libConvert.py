@@ -290,6 +290,8 @@ class attributionExtractor(pyWorkFlow.workflow):
         source_files_list = self.requested_argv_dict.get("gff.json",[])
         self.startLog()
 
+        WordProc = wordProcess()
+
         for source_file_name in source_files_list:
             target_file_name = source_file_name.replace("-related.json",".json")
             target_file_name = target_file_name.replace(".json","-related.json")
@@ -320,10 +322,11 @@ class attributionExtractor(pyWorkFlow.workflow):
                         paired_set_list = paired_set_str.split("=")
                         key_str = paired_set_list[0]
                         value_str = paired_set_list[1]
+                        # value_str = WordProc.changeESC(value_str)
                         attribution_temp_dict.update({ key_str : value_str })
 
                         value_temp_dict = relation_dict.get("{key:{value:[id]}}").get(key_str,{})
-                        value_temp_dict.update({ value_str : gffid_name })
+                        value_temp_dict.update({ value_str : [gffid_name] })
                         relation_dict.get("{key:{value:[id]}}").update({ key_str : value_temp_dict })
 
                         gffid_temp_dict = relation_dict.get("{key:{id:value}}").get(key_str,{})
@@ -341,18 +344,16 @@ class attributionExtractor(pyWorkFlow.workflow):
                 with open(relation_file_name,"w") as relation_file_handle:
                     json.dump(relation_dict,relation_file_handle)
 
-                """
-                attribution_file_name = target_file_name.replace("-related.json","-atr-gffid[key-value].json")
-                with open(attribution_file_name,"w") as attribution_file_handle:
-                    json.dump(result_dict.get("id=[key:value]"),attribution_file_handle)
-
-                value_file_name = target_file_name.replace("-related.json","-atr-key[value-gffid].json")
-                with open(value_file_name,"w") as value_file_handle:
-                    json.dump(result_dict.get("{key:{value:[id]}}"),value_file_handle)
-
-                gffid_file_name = target_file_name.replace("-related.json","-atr-key[gffid-value].json")
-                with open(gffid_file_name,"w") as gffid_file_handle:
-                    json.dump(result_dict.get("{key:{id:value}}"),gffid_file_handle)
-                """
-
         self.stopLog()
+class wordProcess:
+    def changeESC(self,word_str):
+        library_file_name = 'esc.json'
+        library_file_handle = open(library_file_name,'r')
+        library_dict = json.load(library_file_handle)
+
+        if "%" in word_str:
+            for key_str in list(library_dict.keys()):
+                value_str = library_dict.get(key_str)
+                word_str = word_str.replace(key_str,value_str)
+
+        return word_str
