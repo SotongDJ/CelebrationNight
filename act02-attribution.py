@@ -2,21 +2,18 @@
 import pyWorkFlow, libConfig, libConvert
 global helper_msg_block
 helper_msg_block="""
---- README of act01-Genome-Reference-build.py ---
+--- README of act02-Attribution.py ---
  Title:
   Construct reference from Genome information for further analysis
 
  Usage:
-  python3 act01-gr-build.py -a <codename for reference>\\
+  python3 act02-attribution.py -a <codename for reference>\\
     --genome=<Path and Name of GENOME SEQUENCE File>
     --annotation=<Path and Name of GENOME ANNOTATION File>
 
  CAUTION:
   Genome tag and Annotate tag must set with file name only.
 
- Original Command of Stage 1 (Build HISAT2 Index):
-  hisat2-build -p [THREAD] <Path and Name of GENOME File> \\
-    <OUTPUT FOLDER for HISAT2>/<codename>
 --- README ---
 """
 ConfigDict = libConfig.config()
@@ -34,7 +31,7 @@ class genomerefer(pyWorkFlow.workflow):
         self.synchornize()
 
         self.comand_line_list = []
-        self.script_name = "act01-Genome-Reference-build.py"
+        self.script_name = "act02-attribution.py"
         ConfigDict.requested_dict = {}
         ConfigDict.requested_dict = {
             "bin/hisat2build": "",
@@ -47,7 +44,7 @@ class genomerefer(pyWorkFlow.workflow):
             "header/gff3": {},
         }
         self.requested_config_dict = ConfigDict.get_batchly()
-        self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act01-gr-build-"
+        self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act02-attribution-"
 
     def actor(self):
         self.refer_codename_str = self.requested_argv_dict.get("refer","")
@@ -79,33 +76,41 @@ class genomerefer(pyWorkFlow.workflow):
                 ConfigDict.update({ "refer/annotate" : annotation_temp_dict })
                 annotation_boolean = True
 
-        if self.refer_codename_str != "" and genome_boolean and annotation_boolean:
-            self.phrase_str = "==========\nStage: Build HISAT2 Index\n=========="
-            self.printPhrase()
+        self.phrase_str = "==========\nStage: Copy Refer annotation to Result folder\n=========="
+        self.printPhrase()
 
-            self.binary_path = self.requested_config_dict.get("bin/hisat2build")
-            self.thread_argv_list = ["-p",self.requested_config_dict.get("run/thread")]
-            self.output_path = self.requested_config_dict.get("index/hisat") + "/" + self.refer_codename_str
+        self.extraction_path = self.requested_config_dict.get("result/gff-json")+"/"+self.refer_codename_str
+        self.comand_line_list = ["cp", self.annotation_path, self.extraction_path+".gff"]
+        self.runCommand()
 
-            self.comand_line_list = []
-            self.comand_line_list.append(self.binary_path)
-            self.comand_line_list.extend(self.thread_argv_list)
-            self.comand_line_list.append(self.genome_path)
-            self.comand_line_list.append(self.output_path)
-            self.runCommand()
+        self.phrase_str = "==========\nStage: Convert GFF to JSON\n=========="
+        self.printPhrase()
 
-            self.phrase_str = "==========\nStage: Copy Genome FASTA to HISAT2 Index folder\n=========="
-            self.printPhrase()
+        header_list = self.requested_config_dict.get("header/gff3")
+        CvtoJSON = libConvert.cvtDSVtoJSON()
+        CvtoJSON.log_file_name = self.log_file_name
+        CvtoJSON.requested_argv_dict = {
+            "files": [self.extraction_path+".gff"],
+            "refer_column": "",
+            "prefix": "gff",
+            "header": header_list,
+            "headless": False,
+            "delimiter": "\t"
+        }
+        CvtoJSON.actor()
 
-            self.comand_line_list = ["cp",self.genome_path,self.output_path+".fa"]
-            self.runCommand()
+        self.phrase_str = "==========\nStage: Extract GFF Information\n=========="
+        self.printPhrase()
+        # under construction
 
-        else:
-            self.phrase_str = (
-                "Required codename of [refer], \n"
-                +"use \"--help\" argument for further info."
-            )
-            self.printPhrase()
+        Extract = libConvert.attributionExtractor()
+        Extract.log_file_name = self.log_file_name
+        Extract.requested_argv_dict = {
+            "gff.json"  : [self.extraction_path+".json"],
+        }
+        Extract.actor()
+
+        self.printBlankLine()
 
         self.stopLog()
 
