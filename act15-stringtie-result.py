@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import pyWorkFlow, libConfig, libConvert, libInsert, libSummarise
+import pyBriefer
 import time, json
 global helper_msg_block
 helper_msg_block="""
@@ -142,31 +143,31 @@ class stingtieResult(pyWorkFlow.workflow):
         self.printPhrase()
 
         for branch_name in branch_list:
-            Transki = libSummarise.summary()
-            Transki.log_file_name = self.log_file_name
-            Transki.requested_argv_dict = {
+            TranscriptSummary = libSummarise.summary()
+            TranscriptSummary.log_file_name = self.log_file_name
+            TranscriptSummary.requested_argv_dict = {
                 "branch" : branch_name,
                 "group" : group_list,
                 "prefix" : self.requested_config_dict.get("result/ballgown") + "/",
                 "postfix" : "/t_data.json",
                 "header" : self.requested_config_dict.get("header/TranscriptExpression")
             }
-            Transki.log_file_prefix_str = self.log_file_prefix_str + "sca-Transki-"
-            Transki.scanning()
+            TranscriptSummary.log_file_prefix_str = self.log_file_prefix_str + "sca-TranscriptSummary-"
+            TranscriptSummary.scanning()
 
-            Geniski = libSummarise.summary()
-            Geniski.log_file_name = self.log_file_name
-            Geniski.requested_argv_dict = {
+            GeneSummary = libSummarise.summary()
+            GeneSummary.log_file_name = self.log_file_name
+            GeneSummary.requested_argv_dict = {
                 "branch" : branch_name,
                 "group" : group_list,
                 "prefix"  : self.requested_config_dict.get("result/stringtie") + "/",
                 "postfix" : "-gene.json",
                 "header"  : self.requested_config_dict.get("header/GeneExpression")
             }
-            Geniski.log_file_prefix_str = self.log_file_prefix_str + "sca-Geniski-"
-            Geniski.scanning()
+            GeneSummary.log_file_prefix_str = self.log_file_prefix_str + "sca-GeneSummary-"
+            GeneSummary.scanning()
 
-            self.phrase_str = "==========\nStage: Merging\n=========="
+            self.phrase_str = "==========\nStage: Import Reference\n=========="
             self.printPhrase()
 
             refer_name_dict = self.requested_config_dict.get("data/refer")
@@ -175,73 +176,103 @@ class stingtieResult(pyWorkFlow.workflow):
                 self.requested_config_dict.get("result/gff-json") + "/"
                 + refer_name + "-attribution-related.json"
             )
+            refer_file_handle = open(refer_file_path,"r")
+            refer_file_dict = json.load(refer_file_handle)
 
-            TranInsert = libInsert.inserting()
-            TranInsert.log_file_name = self.log_file_name
-            TranInsert.requested_argv_dict = {
+            self.phrase_str = "==========\nStage: Merging\n=========="
+            self.printPhrase()
+
+            TranscriptAddition = libInsert.inserting()
+            TranscriptAddition.log_file_name = self.log_file_name
+            TranscriptAddition.requested_argv_dict = {
                 "branch" : branch_name,
                 "target" : "transcript",
-                "refer" : refer_file_path
+                "source" : "attribute",
             }
-            TranInsert.log_file_prefix_str = self.log_file_prefix_str + "sca-Geniski-"
+            TranscriptAddition.refer_dict = refer_file_dict
 
-            Transki.log_file_prefix_str = self.log_file_prefix_str + "fus-Transki-"
-            Transki.fusion()
+            TranscriptSummary.fusion()
 
-            TranInsert.input_dict = Transki.result_dict
-            TranInsert.actor()
+            MakingRelation = libConvert.makingRelation()
+            MakingRelation.log_file_name = self.log_file_name
+            MakingRelation.input_dict = {}
+            MakingRelation.input_dict.update(TranscriptSummary.result_dict)
+            MakingRelation.actor()
+            """
+            debugger = pyBriefer.heading()
+            debugger.content_dict = MakingRelation.output_dict.get("{key:{value:[id]}}").get("t_name")
+            debugger.view()
+            debugger.content_dict = MakingRelation.output_dict.get("{key:{id:value}}").get("t_name")
+            debugger.view()
+            """
+            TranscriptReplace = libInsert.inserting()
+            TranscriptReplace.log_file_name = self.log_file_name
+            TranscriptReplace.requested_argv_dict = {
+                "branch" : branch_name,
+                "target" : "transcript2gene",
+                "source" : "transcript2gene"
+            }
+            TranscriptReplace.refer_dict = MakingRelation.output_dict
 
-            Transki.result_file_name = (
+            TranscriptReplace.input_dict = TranscriptSummary.result_dict
+            TranscriptReplace.actor()
+
+            TranscriptAddition.input_dict = TranscriptReplace.output_dict
+            TranscriptAddition.actor()
+
+            TranscriptSummary.result_file_name = (
                 self.requested_config_dict.get("result/st-result") + "/"
                 + branch_name + "-TranscriptExpression.json"
             )
 
-            with open(Transki.result_file_name,"w") as result_file_handle:
-                json.dump(TranInsert.output_dict,result_file_handle,indent=4,sort_keys=True)
-            Transki.log_file_prefix_str = self.log_file_prefix_str + "ara-Transki-"
+            with open(TranscriptSummary.result_file_name,"w") as result_file_handle:
+                json.dump(TranscriptAddition.output_dict,result_file_handle,indent=4,sort_keys=True)
+            TranscriptSummary.log_file_prefix_str = self.log_file_prefix_str + "ara-TranscriptSummary-"
 
-            GenInsert = libInsert.inserting()
-            GenInsert.log_file_name = self.log_file_name
-            GenInsert.requested_argv_dict = {
+            GeneAddition = libInsert.inserting()
+            GeneAddition.log_file_name = self.log_file_name
+            GeneAddition.requested_argv_dict = {
                 "branch" : branch_name,
                 "target" : "gene",
-                "refer" : refer_file_path
+                "source" : "attribute",
             }
-            GenInsert.log_file_prefix_str = self.log_file_prefix_str + "sca-Geniski-"
+            GeneAddition.refer_dict = refer_file_dict
+            GeneAddition.log_file_prefix_str = self.log_file_prefix_str + "sca-GeneSummary-"
 
-            Geniski.log_file_prefix_str = self.log_file_prefix_str + "fus-Geniski-"
-            Geniski.fusion()
+            GeneSummary.log_file_prefix_str = self.log_file_prefix_str + "fus-GeneSummary-"
+            GeneSummary.fusion()
 
-            GenInsert.input_dict = Geniski.result_dict
-            GenInsert.actor()
+            GeneAddition.input_dict = GeneSummary.result_dict
+            GeneAddition.actor()
 
-            Geniski.result_file_name = (
+            GeneSummary.result_file_name = (
                 self.requested_config_dict.get("result/st-result") + "/"
                 + branch_name + "-GeneExpression.json"
             )
 
-            with open(Geniski.result_file_name,"w") as result_file_handle:
-                json.dump(GenInsert.output_dict,result_file_handle,indent=4,sort_keys=True)
-            Geniski.log_file_prefix_str = self.log_file_prefix_str + "ara-Geniski-"
+            with open(GeneSummary.result_file_name,"w") as result_file_handle:
+                json.dump(GeneAddition.output_dict,result_file_handle,indent=4,sort_keys=True)
+            GeneSummary.log_file_prefix_str = self.log_file_prefix_str + "ara-GeneSummary-"
 
             self.phrase_str = "==========\nStage: Convert JSON back to TSV/CTAB\n=========="
             self.printPhrase()
 
             CvtoTAB = libConvert.cvtJSONtoDSV()
+            CvtoTAB.log_file_name = self.log_file_name
             CvtoTAB.filasi = "libConvert.cvtJSONtoDSV"
             CvtoTAB.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-covetab-"
 
-            Transki.arrange()
+            TranscriptSummary.arrange()
             CvtoTAB.requested_argv_dict = {
-                "files" : [Transki.result_file_name],
-                "header" : Transki.column_name_list
+                "files" : [TranscriptSummary.result_file_name],
+                "header" : TranscriptSummary.column_name_list
             }
             CvtoTAB.actor()
 
-            Geniski.arrange()
+            GeneSummary.arrange()
             CvtoTAB.requested_argv_dict = {
-                "files" : [Geniski.result_file_name],
-                "header" : Geniski.column_name_list
+                "files" : [GeneSummary.result_file_name],
+                "header" : GeneSummary.column_name_list
             }
             CvtoTAB.actor()
 
