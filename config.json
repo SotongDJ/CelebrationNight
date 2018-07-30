@@ -27,19 +27,33 @@
             "delimiter(back-remove)": [],
             "value": "description"
         },
-        "transcript2gene-NCBI": {
+        "transcript2transcript-NCBI": {
+            "key": "gene_name",
+            "replace": [],
+            "delimiter(front-remove)": [],
+            "delimiter(back-remove)": [],
+            "value": "gene_name"
+        },
+        "transcript2transcript-ensembl": {
             "key": "t_name",
             "replace": ["transcript:"],
             "delimiter(front-remove)": [],
             "delimiter(back-remove)": ["-","."],
             "value": "t_name"
         },
-        "transcript2gene-ensembl": {
+        "transcript2gene-NCBI": {
             "key": "gene_name",
             "replace": [],
             "delimiter(front-remove)": [],
             "delimiter(back-remove)": [],
             "value": "gene_name"
+        },
+        "transcript2gene-ensembl": {
+            "key": "gene_id",
+            "replace": ["transcript:"],
+            "delimiter(front-remove)": [],
+            "delimiter(back-remove)": ["-","."],
+            "value": "t_name"
         }
     },
     "database/annotation-target": {
@@ -58,46 +72,60 @@
             "value": "Description"
         },
         "gene-NCBI": {
-            "key": "Gene Name",
+            "key": "Index Name",
             "replace": [],
             "delimiter(front-remove)": [],
             "delimiter(back-remove)": [],
             "value": "Description"
         },
         "gene-ensembl": {
-            "key": "Gene ID",
-            "replace": ["gene:"],
+            "key": "Index Name",
+            "replace": [],
             "delimiter(front-remove)": [],
             "delimiter(back-remove)": [],
             "value": "Description"
         },
         "transcript-NCBI": {
-            "key": "gene_name",
+            "key": "Index Name",
             "replace": [],
             "delimiter(front-remove)": [],
             "delimiter(back-remove)": [],
             "value": "Description"
         },
         "transcript-ensembl": {
-            "key": "gene_id",
+            "key": "Index Name",
             "replace": ["gene:"],
             "delimiter(front-remove)": [],
             "delimiter(back-remove)": [],
             "value": "Description"
         },
-        "transcript2gene-NCBI": {
+        "transcript2transcript-NCBI": {
             "key": "gene_name",
             "replace": [],
             "delimiter(front-remove)": [],
             "delimiter(back-remove)": [],
-            "value": "gene_name"
+            "value": "Index Name"
         },
-        "transcript2gene-ensembl": {
+        "transcript2transcript-ensembl": {
             "key": "t_name",
             "replace": [],
             "delimiter(front-remove)": [],
             "delimiter(back-remove)": [],
-            "value": "gene_id"
+            "value": "Index Name"
+        },
+        "transcript2gene-NCBI": {
+            "key": "Gene Name",
+            "replace": [],
+            "delimiter(front-remove)": [],
+            "delimiter(back-remove)": [],
+            "value": "Index Name"
+        },
+        "transcript2gene-ensembl": {
+            "key": "Gene ID",
+            "replace": [],
+            "delimiter(front-remove)": [],
+            "delimiter(back-remove)": [],
+            "value": "Index Name"
         }
     },
     "header/FoldChange": [
@@ -120,6 +148,7 @@
     "header/GeneExpression": [
         "Gene ID",
         "Gene Name",
+        "Index Name",
         "Description",
         "Reference",
         "Strand",
@@ -134,6 +163,7 @@
         "t_name",
         "gene_id",
         "gene_name",
+        "Index Name",
         "Description",
         "chr",
         "length",

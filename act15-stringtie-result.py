@@ -172,6 +172,7 @@ class stingtieResult(pyWorkFlow.workflow):
 
             refer_name_dict = self.requested_config_dict.get("data/refer")
             refer_name = refer_name_dict.get(branch_name)
+            refer_file_dict = {}
             refer_file_path = (
                 self.requested_config_dict.get("result/gff-json") + "/"
                 + refer_name + "-attribution-related.json"
@@ -209,7 +210,6 @@ class stingtieResult(pyWorkFlow.workflow):
             TranscriptReplace.log_file_name = self.log_file_name
             TranscriptReplace.requested_argv_dict = {
                 "branch" : branch_name,
-                "target" : "transcript2gene",
                 "source" : "transcript2gene"
             }
             TranscriptReplace.refer_dict = MakingRelation.output_dict
@@ -237,12 +237,21 @@ class stingtieResult(pyWorkFlow.workflow):
                 "source" : "attribute",
             }
             GeneAddition.refer_dict = refer_file_dict
-            GeneAddition.log_file_prefix_str = self.log_file_prefix_str + "sca-GeneSummary-"
 
-            GeneSummary.log_file_prefix_str = self.log_file_prefix_str + "fus-GeneSummary-"
             GeneSummary.fusion()
 
-            GeneAddition.input_dict = GeneSummary.result_dict
+            TranscriptReplace.requested_argv_dict = {
+                "branch" : branch_name,
+                "target" : "transcript2gene",
+                "source" : "transcript2gene"
+            }
+            TranscriptReplace.refer_dict = MakingRelation.output_dict
+
+            TranscriptReplace.input_dict = GeneSummary.result_dict
+            TranscriptReplace.output_dict = {}
+            TranscriptReplace.actor()
+
+            GeneAddition.input_dict = TranscriptReplace.output_dict
             GeneAddition.actor()
 
             GeneSummary.result_file_name = (
