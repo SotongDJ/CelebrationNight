@@ -338,22 +338,43 @@ class attributionExtractor(pyWorkFlow.workflow):
 
                 result_file_name = target_file_name.replace("-related.json","-attribution.json")
                 with open(result_file_name,"w") as result_file_handle:
-                    json.dump(result_dict,result_file_handle)
+                    json.dump(result_dict,result_file_handle,indent=4,sort_keys=True)
 
                 relation_file_name = target_file_name.replace("-related.json","-attribution-related.json")
                 with open(relation_file_name,"w") as relation_file_handle:
-                    json.dump(relation_dict,relation_file_handle)
+                    json.dump(relation_dict,relation_file_handle,indent=4,sort_keys=True)
 
         self.stopLog()
 class wordProcess:
-    def changeESC(self,word_str):
+    def __init__(self):
+        self.input_file_name = ""
+
+    def changeESC(self):
         library_file_name = 'esc.json'
         library_file_handle = open(library_file_name,'r')
         library_dict = json.load(library_file_handle)
 
-        if "%" in word_str:
-            for key_str in list(library_dict.keys()):
-                value_str = library_dict.get(key_str)
-                word_str = word_str.replace(key_str,value_str)
+        self.input_lines = open(self.input_file_name).read().splitlines()
+        self.output_lines = []
 
-        return word_str
+        for line_str in self.input_lines:
+            if "%" in line_str:
+                for key_str in list(library_dict.keys()):
+                    value_str = library_dict.get(key_str)
+                    line_str = line_str.replace(key_str,value_str)
+                self.output_lines.append(line_str)
+            else:
+                self.output_lines.append(line_str)
+
+    def replaceTAB(self):
+        self.input_lines = open(self.input_file_name).read().splitlines()
+        self.output_lines = []
+
+        for line_str in self.input_lines:
+            line_str = line_str.replace("\t","")
+            self.output_lines.append(line_str)
+
+    def save(self):
+        with open(self.input_file_name,'w') as output_file_handle:
+            for line_str in self.output_lines:
+                output_file_handle.write(line_str+"\n")
