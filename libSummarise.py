@@ -56,7 +56,7 @@ class summary(pyWorkFlow.workflow):
         self.log_file_prefix_str = ConfigDict.get_str("result/log")+"/libSummarise-"
 
         self.repeat_boolean_dict = {}
-
+    """
     def scanning(self):
         branch_name = self.requested_argv_dict.get("branch","")
         group_list = self.requested_argv_dict.get("group",[])
@@ -107,13 +107,13 @@ class summary(pyWorkFlow.workflow):
                                     self.repeat_boolean_dict.update({ column_name : True })
                             else:
                                 self.repeat_boolean_dict.update({ column_name : False })
-                    """
+                    """"""
                     debugger = pyBriefer.heading()
                     debugger.content_dict = self.repeat_boolean_dict
                     debugger.view()
-                    """
+                    """"""
         self.stopLog()
-
+    """
     def fusion(self):
         branch_name = self.requested_argv_dict.get("branch","")
         group_list = self.requested_argv_dict.get("group",[])

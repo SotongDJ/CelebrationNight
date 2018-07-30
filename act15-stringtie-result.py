@@ -49,6 +49,8 @@ class stingtieResult(pyWorkFlow.workflow):
             "data/replication" : {},
             "header/TranscriptExpression" : [],
             "header/GeneExpression" : [],
+            "header/TranscriptExpression-repeat" : {},
+            "header/GeneExpression-repeat" : {},
             "header/gff3" : [],
         }
         self.requested_config_dict = ConfigDict.get_batchly()
@@ -152,8 +154,8 @@ class stingtieResult(pyWorkFlow.workflow):
                 "postfix" : "/t_data.json",
                 "header" : self.requested_config_dict.get("header/TranscriptExpression")
             }
-            TranscriptSummary.log_file_prefix_str = self.log_file_prefix_str + "sca-TranscriptSummary-"
-            TranscriptSummary.scanning()
+            TranscriptSummary.repeat_boolean_dict = self.requested_config_dict.get("header/TranscriptExpression-repeat")
+            # TranscriptSummary.scanning()
 
             GeneSummary = libSummarise.summary()
             GeneSummary.log_file_name = self.log_file_name
@@ -164,8 +166,8 @@ class stingtieResult(pyWorkFlow.workflow):
                 "postfix" : "-gene.json",
                 "header"  : self.requested_config_dict.get("header/GeneExpression")
             }
-            GeneSummary.log_file_prefix_str = self.log_file_prefix_str + "sca-GeneSummary-"
-            GeneSummary.scanning()
+            GeneSummary.repeat_boolean_dict = self.requested_config_dict.get("header/GeneExpression-repeat")
+            # GeneSummary.scanning()
 
             self.phrase_str = "==========\nStage: Import Reference\n=========="
             self.printPhrase()
@@ -210,7 +212,8 @@ class stingtieResult(pyWorkFlow.workflow):
             TranscriptReplace.log_file_name = self.log_file_name
             TranscriptReplace.requested_argv_dict = {
                 "branch" : branch_name,
-                "source" : "transcript2gene"
+                "target" : "transcript2transcript",
+                "source" : "transcript2transcript"
             }
             TranscriptReplace.refer_dict = MakingRelation.output_dict
 
