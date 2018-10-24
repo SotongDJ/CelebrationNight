@@ -2,17 +2,17 @@
 import pyWorkFlow, libConfig, libConvert
 global helper_msg_block
 helper_msg_block="""
---- README of act01-Genome-Reference-build.py ---
+--- README of Step1-GenomeReferenceBuiling ---
  Title:
   Construct reference from Genome information for further analysis
 
  Usage:
-  python3 act01-gr-build.py -a <codename for reference>\\
+  python3 Step1-GenomeReferenceBuiling.py -a <codename for reference>\\
     --genome=<Path and Name of GENOME SEQUENCE File>
     --annotation=<Path and Name of GENOME ANNOTATION File>
 
  CAUTION:
-  Genome tag and Annotate tag must set with file name only.
+  Genome tag and Annotate tag must set with file name and without file extension.
 
  Original Command of Stage 1 (Build HISAT2 Index):
   hisat2-build -p [THREAD] <Path and Name of GENOME File> \\
