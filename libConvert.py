@@ -12,16 +12,20 @@ helper_msg_block="""
 
     CvtoJSON = libConvert.cvtDSVtoJSON()
     CvtoJSON.requested_argv_dict = {
-        "files" : [<INPUT>,<INPUT>......] ,
-        "id" : "" ,
-        "column": < Column separate by tab > # for headless file
-    }
+		"files": [],
+		"refer_column": "",
+		"prefix": "",
+		"header": [],
+		"headless": True,
+		"delimiter": "\t"
+	}
     CvtoJSON.actor()
 
     CvtoTAB = libConvert.cvtJSONtoDSV()
     CvtoTAB.requested_argv_dict = {
         "files" : [<INPUT>,<INPUT>......] ,
-        "column": [<NAME>,<NAME>......] # for sorting
+        "header": [<NAME>,<NAME>......] # for sorting
+        "delimiter": "\t"
     }
     CvtoTAB.actor()
 
@@ -372,6 +376,15 @@ class wordProcess:
 
         for line_str in self.input_lines:
             line_str = line_str.replace("\t","")
+            self.output_lines.append(line_str)
+
+    def replaceQuotation(self):
+        self.input_lines = open(self.input_file_name).read().splitlines()
+        self.output_lines = []
+
+        for line_str in self.input_lines:
+            line_str = line_str.replace("\"","")
+            line_str = line_str.replace("\'","")
             self.output_lines.append(line_str)
 
     def save(self):
