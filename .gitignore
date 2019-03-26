@@ -1,7 +1,7 @@
 # something need to be exclude
 bin/
 data/
-ar-priv/
+archive/
 temp/
 
 .fuse*
