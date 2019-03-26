@@ -36,7 +36,6 @@ class stingtieResult(pyWorkFlow.workflow):
 
         self.comand_line_list = []
         self.script_name = "act20-CuffTie-result"
-        ConfigDict.requested_dict = {}
         ConfigDict.requested_dict = {
             "result/DESeq2" : "",
             "result/ballgown" : "",
@@ -58,7 +57,8 @@ class stingtieResult(pyWorkFlow.workflow):
         self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-"
 
     def actor(self):
-        branch_list = self.requested_argv_dict.get("branch",[])
+        branch_list = []
+        branch_list.extend(self.requested_argv_dict.get("branch",[]))
         group_list = self.requested_argv_dict.get("group",[])
 
         self.startLog()
@@ -79,11 +79,13 @@ class stingtieResult(pyWorkFlow.workflow):
                 replication_list = self.requested_config_dict.get("data/replication").get(group_name)
                 for replication_name in replication_list:
                     if replication_name != "":
-                        replication_name = "-"+replication_name
+                        post_replication_name = "-"+replication_name
+                    else:
+                        post_replication_name = replication_name
 
                     souce_file_temp_name = (
                         self.requested_config_dict.get("result/ballgown")
-                        +"/"+branch_name+"-"+group_name+replication_name
+                        +"/"+branch_name+"-"+group_name+post_replication_name
                         +"/t_data.ctab"
                     )
                     self.target_file_path = souce_file_temp_name
@@ -105,7 +107,7 @@ class stingtieResult(pyWorkFlow.workflow):
                 "headless": False,
                 "delimiter": "\t"
             }
-            CvtoJSON.filasi = "libConvert.cvtDSVtoJSON"
+            CvtoJSON.script_name = "libConvert.cvtDSVtoJSON"
             CvtoJSON.actor()
 
         source_file_list = []
@@ -114,11 +116,13 @@ class stingtieResult(pyWorkFlow.workflow):
                 replication_list = self.requested_config_dict.get("data/replication").get(group_name)
                 for replication_name in replication_list:
                     if replication_name != "":
-                        replication_name = "-"+replication_name
+                        post_replication_name = "-"+replication_name
+                    else:
+                        post_replication_name = replication_name
 
                     souce_file_temp_name = (
                         self.requested_config_dict.get("result/stringtie")
-                        +"/"+branch_name+"-"+group_name+replication_name+"-gene.tsv"
+                        +"/"+branch_name+"-"+group_name+post_replication_name+"-gene.tsv"
                     )
                     self.target_file_path = souce_file_temp_name
                     souce_file_temp_boolean = self.checkFile()
