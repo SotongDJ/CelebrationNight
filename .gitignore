@@ -1,8 +1,5 @@
 # something need to be exclude
-bin/
-data/
-ar-priv/
-temp/
+*/*
 
 .fuse*
 testing*.py
