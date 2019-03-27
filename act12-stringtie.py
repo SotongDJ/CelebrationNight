@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-import librun, libconfig, sys
-global helber
-helber="""
+import pyWorkFlow, libConfig, sys
+global helper_msg_block
+helper_msg_block="""
    --- README of act12-stringtie-batch ---
   Title:
     Batch Processing for StringTie (Assembly)
@@ -42,73 +42,73 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-Confi = libconfig.confi()
-class stringtie(librun.workflow):
-    def pesonai(self):
+ConfigDict = libConfig.config()
+class stringtie(pyWorkFlow.workflow):
+    def personalize(self):
         # self.testing = True
-        self.helb = helber
+        self.helper_msg_str = helper_msg_block
 
-        self.dicodi = {
+        self.requested_argv_dict = {
             "tribe"   : [],
             "group"   : [],
         }
-        self.Synom.input(Confi.diget("synom"))
-        self.libadi = {
-            "bin/stringtie"    : Confi.siget("bin/stringtie"),
-            "run/thread"       : Confi.siget("run/thread"),
-            "data/prefix"      : Confi.diget("data/prefix"),
-            "refer/annotate"   : Confi.diget("refer/annotate"),
-            "result/stringtie" : Confi.siget("result/stringtie"),
-            "result/hisat"     : Confi.siget("result/hisat"),
-            "result/log"       : Confi.siget("result/log"),
+        self.SynonymDict.input(ConfigDict.get_dict("synom"))
+        self.requested_config_dict = {
+            "bin/stringtie"    : ConfigDict.get_str("bin/stringtie"),
+            "run/thread"       : ConfigDict.get_str("run/thread"),
+            "data/prefix"      : ConfigDict.get_dict("data/prefix"),
+            "refer/annotate"   : ConfigDict.get_dict("refer/annotate"),
+            "result/stringtie" : ConfigDict.get_str("result/stringtie"),
+            "result/hisat"     : ConfigDict.get_str("result/hisat"),
+            "result/log"       : ConfigDict.get_str("result/log"),
         }
-        self.sync()
+        self.synchornize()
 
-        self.tagesi = ""
+        self.target_file_path = ""
 
-        self.comali = []
-        self.adcoli = [ self.libadi.get("bin/stringtie") ]
+        self.comand_line_list = []
+        self.adcoli = [ self.requested_config_dict.get("bin/stringtie") ]
         self.adotli = [ "-o" ]
-        self.adphli = [ "-p", self.libadi.get("run/thread")]
+        self.adphli = [ "-p", self.requested_config_dict.get("run/thread")]
         self.adrfli = [ "-eG" ]
 
 
-        self.filasi = "act12-stringtie-batch"
-        self.prelogi = self.libadi.get("result/log")+"/act12-stringtie-batch-"
+        self.script_name = "act12-stringtie-batch"
+        self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act12-stringtie-batch-"
 
     def actor(self):
-        tibeli = self.dicodi.get("tribe",[])
-        gupoli = self.dicodi.get("group",[])
+        tribe_list = self.requested_argv_dict.get("tribe",[])
+        group_list = self.requested_argv_dict.get("group",[])
 
-        self.head()
+        self.startLog()
 
-        self.tagesi = self.libadi.get("result/stringtie")
-        self.chkpaf()
-        for tibe in tibeli:
-            for gupo in gupoli:
-                self.comali = []
-                self.comali.extend(self.adcoli)
+        self.target_file_path = self.requested_config_dict.get("result/stringtie")
+        self.checkPath()
+        for tribe_name in tribe_list:
+            for gupo in group_list:
+                self.comand_line_list = []
+                self.comand_line_list.extend(self.adcoli)
                 adinsi = (
-                    self.libadi.get("result/hisat") + "/" +
-                    self.libadi.get("data/prefix").get(tibe) + gupo +
+                    self.requested_config_dict.get("result/hisat") + "/" +
+                    self.requested_config_dict.get("data/prefix").get(tribe_name) + gupo +
                     "-stringtie-sorted.bam"
                 )
-                self.comali.append(adinsi)
-                self.comali.extend(self.adotli)
+                self.comand_line_list.append(adinsi)
+                self.comand_line_list.extend(self.adotli)
                 adotsi = (
-                    self.libadi.get("result/stringtie") + "/" +
-                    self.libadi.get("data/prefix").get(tibe) + gupo +
+                    self.requested_config_dict.get("result/stringtie") + "/" +
+                    self.requested_config_dict.get("data/prefix").get(tribe_name) + gupo +
                     "-stringtie.gtf"
                 )
-                self.comali.append(adotsi)
-                self.comali.extend(self.adphli)
+                self.comand_line_list.append(adotsi)
+                self.comand_line_list.extend(self.adphli)
 
-                self.comali.extend(self.adrfli)
-                metasi = self.libadi.get("refer/annotate").get(tibe)
-                self.comali.append(metasi)
+                self.comand_line_list.extend(self.adrfli)
+                metasi = self.requested_config_dict.get("refer/annotate").get(tribe_name)
+                self.comand_line_list.append(metasi)
 
-                self.runit()
+                self.runCommand()
 
-        self.endin()
+        self.stopLog()
 
 StiTie = stringtie()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-import librun, libconfig, sys
-global helber
-helber="""
+import pyWorkFlow, libConfig, sys
+global helper_msg_block
+helper_msg_block="""
    --- README of act09-hisat-batch ---
   Title:
     Batch Processing for HISAT2
@@ -48,38 +48,38 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-Confi = libconfig.confi()
-class hisatbat(librun.workflow):
-    def pesonai(self):
+ConfigDict = libConfig.config()
+class hisatbat(pyWorkFlow.workflow):
+    def personalize(self):
         # self.testing = True
-        self.helb = helber
+        self.helper_msg_str = helper_msg_block
 
-        self.dicodi = {
+        self.requested_argv_dict = {
             "tribe" : [],
             "group" : [],
             "index" : "",
-            "argv"  : []
+            "INDEPENDED"  : []
         }
-        self.Synom.input(Confi.diget("synom"))
-        self.sync()
-        self.libadi = {
-            "bin/hisat2"     : Confi.siget("bin/hisat2")     ,
-            "run/phred"      : Confi.siget("run/phred")      ,
-            "run/thread"     : Confi.siget("run/thread")     ,
-            "index/hisat"    : Confi.siget("index/hisat")    ,
-            "result/log"     : Confi.siget("result/log")     ,
-            "result/hisat"   : Confi.siget("result/hisat")   ,
-            "result/raw"     : Confi.siget("result/raw")     ,
-            "data/prefix"    : Confi.diget("data/prefix")    ,
-            "postfix/forward": Confi.siget("postfix/forward"),
-            "postfix/reverse": Confi.siget("postfix/reverse"),
+        self.SynonymDict.input(ConfigDict.get_dict("synom"))
+        self.synchornize()
+        self.requested_config_dict = {
+            "bin/hisat2"     : ConfigDict.get_str("bin/hisat2")     ,
+            "run/phred"      : ConfigDict.get_str("run/phred")      ,
+            "run/thread"     : ConfigDict.get_str("run/thread")     ,
+            "index/hisat"    : ConfigDict.get_str("index/hisat")    ,
+            "result/log"     : ConfigDict.get_str("result/log")     ,
+            "result/hisat"   : ConfigDict.get_str("result/hisat")   ,
+            "result/raw"     : ConfigDict.get_str("result/raw")     ,
+            "data/prefix"    : ConfigDict.get_dict("data/prefix")    ,
+            "postfix/forward": ConfigDict.get_str("postfix/forward"),
+            "postfix/reverse": ConfigDict.get_str("postfix/reverse"),
         }
 
-        self.tagesi = ""
+        self.target_file_path = ""
 
-        self.adcoli = [self.libadi.get("bin/hisat2"),"-q"]
-        self.adphli = ["--phred"+self.libadi.get("run/phred")]
-        self.adthli = ["-p",self.libadi.get("run/thread")]
+        self.adcoli = [self.requested_config_dict.get("bin/hisat2"),"-q"]
+        self.adphli = ["--phred"+self.requested_config_dict.get("run/phred")]
+        self.adthli = ["-p",self.requested_config_dict.get("run/thread")]
         self.adgnli = ["-x"]
         self.adh1li = ["-1"]
         self.adh2li = ["-2"]
@@ -94,19 +94,19 @@ class hisatbat(librun.workflow):
         self.rmcoli = ["rm", "-v"]
 
 
-        self.filasi = "act09-hisat-batch.py"
+        self.script_name = "act09-hisat-batch.py"
 
-        self.comali = []
+        self.comand_line_list = []
 
-        self.prelogi = self.libadi.get("result/log")+"/act09-hisat-batch-"
+        self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act09-hisat-batch-"
 
     def actor(self):
-        tibeli = self.dicodi.get("tribe",[])
-        gupoli = self.dicodi.get("group",[])
-        indesi = self.dicodi.get("index","")
-        argvli = self.dicodi.get("argv",[])
+        tribe_list = self.requested_argv_dict.get("tribe",[])
+        group_list = self.requested_argv_dict.get("group",[])
+        indesi = self.requested_argv_dict.get("index","")
+        argvli = self.requested_argv_dict.get("INDEPENDED",[])
 
-        self.head()
+        self.startLog()
 
         self.stinli = [ 0 , False ]
         self.pofidi = {0:[]}
@@ -116,7 +116,7 @@ class hisatbat(librun.workflow):
         self.jecosi = ""
 
         if indesi != "" and argvli != []:
-            self.indesi =  self.libadi.get("index/hisat") + "/" + indesi
+            self.indesi =  self.requested_config_dict.get("index/hisat") + "/" + indesi
             for argv in argvli:
 
                 if argv == "stringtie":
@@ -138,57 +138,57 @@ class hisatbat(librun.workflow):
                 if argv == "testing":
                     self.testing = True
 
-            self.tagesi = self.libadi.get("result/hisat")
-            self.chkpaf()
-            for tibe in tibeli:
-                for gupo in gupoli:
+            self.target_file_path = self.requested_config_dict.get("result/hisat")
+            self.checkPath()
+            for tribe_name in tribe_list:
+                for gupo in group_list:
                     for timo in self.timoli:
-                        self.comali = []
-                        self.comali.extend(self.adcoli)
+                        self.comand_line_list = []
+                        self.comand_line_list.extend(self.adcoli)
 
                         pofili = self.pofidi.get(timo)
-                        self.comali.extend(pofili)
+                        self.comand_line_list.extend(pofili)
 
-                        self.comali.extend(self.adphli)
-                        self.comali.extend(self.adthli)
-                        self.comali.extend(self.adgnli)
-                        self.comali.append(self.indesi)
-                        self.comali.extend(self.adh1li)
+                        self.comand_line_list.extend(self.adphli)
+                        self.comand_line_list.extend(self.adthli)
+                        self.comand_line_list.extend(self.adgnli)
+                        self.comand_line_list.append(self.indesi)
+                        self.comand_line_list.extend(self.adh1li)
 
                         fecosi = (
-                            self.libadi.get("result/raw") + "/" +
-                            tibe + "/" +
-                            self.libadi.get("data/prefix").get(tibe) +
+                            self.requested_config_dict.get("result/raw") + "/" +
+                            tribe_name + "/" +
+                            self.requested_config_dict.get("data/prefix").get(tribe_name) +
                             gupo + "-" +
-                            self.libadi.get("postfix/forward") + ".fastq"
+                            self.requested_config_dict.get("postfix/forward") + ".fastq"
                         )
-                        self.comali.append(fecosi)
+                        self.comand_line_list.append(fecosi)
 
-                        self.comali.extend(self.adh2li)
+                        self.comand_line_list.extend(self.adh2li)
 
                         hecosi = (
-                            self.libadi.get("result/raw") + "/" +
-                            tibe + "/" +
-                            self.libadi.get("data/prefix").get(tibe) +
+                            self.requested_config_dict.get("result/raw") + "/" +
+                            tribe_name + "/" +
+                            self.requested_config_dict.get("data/prefix").get(tribe_name) +
                             gupo + "-" +
-                            self.libadi.get("postfix/reverse") + ".fastq"
+                            self.requested_config_dict.get("postfix/reverse") + ".fastq"
                         )
-                        self.comali.append(hecosi)
+                        self.comand_line_list.append(hecosi)
 
-                        self.comali.extend(self.adrsli)
+                        self.comand_line_list.extend(self.adrsli)
 
                         argvsi = self.argvdi.get(timo)
                         self.jecosi = (
-                            self.libadi.get("result/hisat") + "/" +
-                            self.libadi.get("data/prefix").get(tibe) +
+                            self.requested_config_dict.get("result/hisat") + "/" +
+                            self.requested_config_dict.get("data/prefix").get(tribe_name) +
                             gupo
                         )
-                        self.comali.append( self.jecosi + argvsi + ".sam" )
+                        self.comand_line_list.append( self.jecosi + argvsi + ".sam" )
 
-                        self.tagesi = self.jecosi + argvsi + ".sam"
-                        abanbo = self.chkfal()
-                        self.tagesi = self.jecosi + argvsi + "-sorted.bam"
-                        bababo = self.chkfal()
+                        self.target_file_path = self.jecosi + argvsi + ".sam"
+                        abanbo = self.checkFile()
+                        self.target_file_path = self.jecosi + argvsi + "-sorted.bam"
+                        bababo = self.checkFile()
                         """
                            sam bam hisat samtool
                             0   0   1     1
@@ -197,44 +197,44 @@ class hisatbat(librun.workflow):
                             1   1   0     1
                         """
                         if not abanbo and not bababo:
-                            self.runit()
+                            self.runCommand()
 
                         if timo == self.stinli[0] and self.stinli[1] and not bababo:
-                            self.comali = []
-                            self.comali.extend( self.rmcoli )
-                            self.comali.append( self.jecosi + argvsi + ".bam" )
+                            self.comand_line_list = []
+                            self.comand_line_list.extend( self.rmcoli )
+                            self.comand_line_list.append( self.jecosi + argvsi + ".bam" )
 
-                            self.runit()
+                            self.runCommand()
 
-                            self.comali = []
-                            self.comali.extend( self.becoli )
-                            self.comali.append( self.jecosi + argvsi + ".bam" )
-                            self.comali.extend( self.beinli )
-                            self.comali.append( self.jecosi + argvsi + ".sam" )
+                            self.comand_line_list = []
+                            self.comand_line_list.extend( self.becoli )
+                            self.comand_line_list.append( self.jecosi + argvsi + ".bam" )
+                            self.comand_line_list.extend( self.beinli )
+                            self.comand_line_list.append( self.jecosi + argvsi + ".sam" )
 
-                            self.runit()
+                            self.runCommand()
 
-                            self.comali = []
-                            self.comali.extend( self.cecoli )
-                            self.comali.append( self.jecosi + argvsi + "-sorted" + ".bam" )
-                            self.comali.append( self.jecosi + argvsi + ".bam" )
+                            self.comand_line_list = []
+                            self.comand_line_list.extend( self.cecoli )
+                            self.comand_line_list.append( self.jecosi + argvsi + "-sorted" + ".bam" )
+                            self.comand_line_list.append( self.jecosi + argvsi + ".bam" )
 
-                            self.runit()
+                            self.runCommand()
 
-                            self.comali = []
-                            self.comali.extend( self.lscoli )
-                            self.comali.append( self.jecosi + argvsi + ".sam" )
-                            self.comali.append( self.jecosi + argvsi + ".bam" )
-                            self.comali.append( self.jecosi + argvsi + "sorted" + ".bam" )
+                            self.comand_line_list = []
+                            self.comand_line_list.extend( self.lscoli )
+                            self.comand_line_list.append( self.jecosi + argvsi + ".sam" )
+                            self.comand_line_list.append( self.jecosi + argvsi + ".bam" )
+                            self.comand_line_list.append( self.jecosi + argvsi + "sorted" + ".bam" )
 
-                            self.runit()
+                            self.runCommand()
 
-                            self.comali = []
-                            self.comali.extend( self.rmcoli )
-                            self.comali.append( self.jecosi + argvsi + ".bam" )
-                            self.comali.append( self.jecosi + argvsi + ".sam" )
+                            self.comand_line_list = []
+                            self.comand_line_list.extend( self.rmcoli )
+                            self.comand_line_list.append( self.jecosi + argvsi + ".bam" )
+                            self.comand_line_list.append( self.jecosi + argvsi + ".sam" )
 
-                            self.runit()
-        self.endin()
+                            self.runCommand()
+        self.stopLog()
 
 HiSaB = hisatbat()

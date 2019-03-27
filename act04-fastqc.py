@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-import librun, libconfig, sys
-global helber
-helber="""
+import pyWorkFlow, libConfig, sys
+global helper_msg_block
+helper_msg_block="""
 --- README of act04-fastqc ---
  Title:
   Batch Processing for FastQC
@@ -42,63 +42,63 @@ helber="""
   -fa: File (with open())
   -so: JSON
 """
-Confi = libconfig.confi()
-class fasquacon(librun.workflow):
-    def pesonai(self):
+ConfigDict = libConfig.config()
+class fasquacon(pyWorkFlow.workflow):
+    def personalize(self):
         # self.testing = True
-        self.helb = helber
+        self.helper_msg_str = helper_msg_block
 
-        self.dicodi = {
+        self.requested_argv_dict = {
             "tribe"   : [],
             "group"   : [],
             "subgroup": []
         }
-        self.Synom.input(Confi.diget("synom"))
-        self.sync()
+        self.SynonymDict.input(ConfigDict.get_dict("synom"))
+        self.synchornize()
 
-        self.tagesi = ""
+        self.target_file_path = ""
 
-        self.filasi = "act04-fastqc"
-        self.libadi = {
-            "bin/fastqc" : Confi.siget("bin/fastqc"),
-            "result/raw" : Confi.siget("result/raw"),
-            "result/fastqc" : Confi.siget("result/fastqc"),
-            "result/log" : Confi.siget("result/log"),
-            "data/prefix" : Confi.diget("data/prefix"),
-            "raw/type" : Confi.siget("raw/type"),
+        self.script_name = "act04-fastqc"
+        self.requested_config_dict = {
+            "bin/fastqc" : ConfigDict.get_str("bin/fastqc"),
+            "result/raw" : ConfigDict.get_str("result/raw"),
+            "result/fastqc" : ConfigDict.get_str("result/fastqc"),
+            "result/log" : ConfigDict.get_str("result/log"),
+            "data/prefix" : ConfigDict.get_dict("data/prefix"),
+            "raw/type" : ConfigDict.get_str("raw/type"),
         }
-        self.prelogi = self.libadi.get("result/log")+"/act04-fastqc-"
+        self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act04-fastqc-"
 
-        self.comali = []
+        self.comand_line_list = []
         self.adcoli = [
-            self.libadi.get("bin/fastqc") , "-o",
-            self.libadi.get("result/fastqc"), "--extract",
+            self.requested_config_dict.get("bin/fastqc") , "-o",
+            self.requested_config_dict.get("result/fastqc"), "--extract",
         ]
 
     def actor(self):
-        tibeli = self.dicodi.get("tribe",[])
-        gupoli = self.dicodi.get("group",[])
-        suguli = self.dicodi.get("subgroup",[])
+        tribe_list = self.requested_argv_dict.get("tribe",[])
+        group_list = self.requested_argv_dict.get("group",[])
+        suguli = self.requested_argv_dict.get("subgroup",[])
 
-        self.head()
+        self.startLog()
 
-        self.tagesi = self.libadi.get("result/fastqc")
-        self.chkpaf()
-        for tibe in tibeli:
-            for gupo in gupoli:
+        self.target_file_path = self.requested_config_dict.get("result/fastqc")
+        self.checkPath()
+        for tribe_name in tribe_list:
+            for gupo in group_list:
                 for sugu in suguli:
-                    self.comali = []
-                    self.comali.extend(self.adcoli)
+                    self.comand_line_list = []
+                    self.comand_line_list.extend(self.adcoli)
 
                     inpusi = (
-                        self.libadi.get("result/raw") + "/" + tibe + "/" +
-                        self.libadi.get("data/prefix").get(tibe) +
-                        gupo + "-" + sugu + "." + self.libadi.get("raw/type")
+                        self.requested_config_dict.get("result/raw") + "/" + tribe_name + "/" +
+                        self.requested_config_dict.get("data/prefix").get(tribe_name) +
+                        gupo + "-" + sugu + "." + self.requested_config_dict.get("raw/type")
                     )
-                    self.comali.append(inpusi)
+                    self.comand_line_list.append(inpusi)
 
-                    self.runit()
+                    self.runCommand()
 
-        self.endin()
+        self.stopLog()
 
 FaQaC = fasquacon()
