@@ -1,6 +1,7 @@
 # something need to be exclude
 bin/
-data/
+databases/
+results/
 archive/
 temp/
 
