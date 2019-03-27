@@ -1,0 +1,81 @@
+# Draft
+import json
+
+fila = open('data/express-related.json','r')
+jasa = json.load(fila)
+
+homolog = []
+for na in jasa['{key:{id:value}}']['Homolog Name (Ensembl Plant)'].keys():
+    if jasa['{key:{id:value}}']['Homolog Name (Ensembl Plant)'][na] != '':
+        homolog.append(na)
+
+len(homolog)
+
+def action(target,func):
+    resut = []
+    for na in jasa['{key:{id:value}}'][target].keys():
+        tempvalue = jasa['{key:{id:value}}'][target][na]
+        if "# Disappeared" in tempvalue and func == "DIS":
+                resut.append(na)
+        elif "#" not in tempvalue:
+            if float(tempvalue) > 2 and func == "UP":
+                resut.append(na)
+            elif float(tempvalue) < 0.5 and func == "DOWN":
+                resut.append(na)
+            elif float(tempvalue) <= 2 and float(tempvalue) >= 0.5 and func == "MINOR":
+                resut.append(na)
+    tempvalue = ""
+    return resut
+
+def union(xlist,ylist,background):
+    resut = []
+    for na in background:
+        if na in xlist:
+            if na in ylist:
+                resut.append(na)
+    return resut
+
+def matri(target_list,func_list,background_list):
+    resut = {}
+    for target in target_list:
+        for func in func_list:
+            resut.update({ target+"-"+func : action(target,func) })
+            print(target+"-"+func+" : "+str(len(resut[target+"-"+func])))
+    
+    target_combi_list = []
+    appeared_combi_list = []
+    for x_target in target_list:
+        for y_target in target_list:
+            sorted_list = sorted([x_target,y_target])
+            if x_target != y_target and sorted_list not in appeared_combi_list:
+                target_combi_list.append((x_target,y_target))
+                appeared_combi_list.append(sorted([x_target,y_target]))
+    print("Target Combination List: ")
+    print(target_combi_list)
+    
+    func_combi_list = []
+    for x_func in func_list:
+        for y_func in func_list:
+            func_combi_list.append((x_func,y_func))
+    print("Function Combination List: ")
+    print(func_combi_list)
+    
+    for target_combi in target_combi_list:
+        for func_combi in func_combi_list:
+            target_func_front = target_combi[0]+"-"+func_combi[0]
+            target_func_back = target_combi[1]+"-"+func_combi[1]
+            temp_list = []
+            temp_list = union(
+                resut[target_func_front],
+                resut[target_func_back],
+                background_list
+            )
+            resut.update({
+                target_func_front+":"+target_func_back : temp_list
+            })
+            print(target_func_front+":"+target_func_back+" : "+str(len(temp_list)))
+    
+    return resut
+
+resut = {}
+resut = matri(["R(A)","R(B)","R(C)","R(D)"],["UP","MINOR","DOWN","DIS"],homolog)

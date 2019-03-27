@@ -35,13 +35,14 @@ class stingtieResult(pyWorkFlow.workflow):
         self.synchornize()
 
         self.comand_line_list = []
-        self.script_name = "act15-stringtie-result"
-        ConfigDict.requested_dict = {}
+        self.script_name = "act20-CuffTie-result"
         ConfigDict.requested_dict = {
             "result/DESeq2" : "",
             "result/ballgown" : "",
-            "result/st-result" : "",
             "result/stringtie" : "",
+            "result/st-result" : "",
+            "result/cuffdiff" : "",
+            "result/cd-result" : "",
             "result/gff-json": "",
             "result/log" : "",
             "bin/prepDE" : "",
@@ -49,15 +50,15 @@ class stingtieResult(pyWorkFlow.workflow):
             "data/replication" : {},
             "header/TranscriptExpression" : [],
             "header/GeneExpression" : [],
-            "header/TranscriptExpression-repeat" : {},
-            "header/GeneExpression-repeat" : {},
+            "header/FoldChange" : [],
             "header/gff3" : [],
         }
         self.requested_config_dict = ConfigDict.get_batchly()
         self.log_file_prefix_str = self.requested_config_dict.get("result/log")+"/act15-stire-"
 
     def actor(self):
-        branch_list = self.requested_argv_dict.get("branch",[])
+        branch_list = []
+        branch_list.extend(self.requested_argv_dict.get("branch",[]))
         group_list = self.requested_argv_dict.get("group",[])
 
         self.startLog()
@@ -71,6 +72,79 @@ class stingtieResult(pyWorkFlow.workflow):
 
         self.phrase_str = "==========\nStage: Convert TSV/CTAB to JSON\n=========="
         self.printPhrase()
+
+        source_file_list = []
+        for branch_name in branch_list:
+            for group_name in group_list:
+                replication_list = self.requested_config_dict.get("data/replication").get(group_name)
+                for replication_name in replication_list:
+                    if replication_name != "":
+                        post_replication_name = "-"+replication_name
+                    else:
+                        post_replication_name = replication_name
+
+                    souce_file_temp_name = (
+                        self.requested_config_dict.get("result/ballgown")
+                        +"/"+branch_name+"-"+group_name+post_replication_name
+                        +"/t_data.ctab"
+                    )
+                    self.target_file_path = souce_file_temp_name
+                    souce_file_temp_boolean = self.checkFile()
+                    self.target_file_path = souce_file_temp_name.replace(".ctab",".json")
+                    json_file_temp_boolean = self.checkFile()
+
+                    if souce_file_temp_boolean and not json_file_temp_boolean:
+                        source_file_list.append(souce_file_temp_name)
+
+        if source_file_list != []:
+            CvtoJSON = libConvert.cvtDSVtoJSON()
+            CvtoJSON.log_file_name = self.log_file_name
+            CvtoJSON.requested_argv_dict = {
+                "files": source_file_list,
+                "refer_column": "t_id",
+                "prefix": "",
+                "header": [],
+                "headless": False,
+                "delimiter": "\t"
+            }
+            CvtoJSON.script_name = "libConvert.cvtDSVtoJSON"
+            CvtoJSON.actor()
+
+        source_file_list = []
+        for branch_name in branch_list:
+            for group_name in group_list:
+                replication_list = self.requested_config_dict.get("data/replication").get(group_name)
+                for replication_name in replication_list:
+                    if replication_name != "":
+                        post_replication_name = "-"+replication_name
+                    else:
+                        post_replication_name = replication_name
+
+                    souce_file_temp_name = (
+                        self.requested_config_dict.get("result/stringtie")
+                        +"/"+branch_name+"-"+group_name+post_replication_name+"-gene.tsv"
+                    )
+                    self.target_file_path = souce_file_temp_name
+                    souce_file_temp_boolean = self.checkFile()
+                    self.target_file_path = souce_file_temp_name.replace(".tsv",".json")
+                    json_file_temp_boolean = self.checkFile()
+
+                    if souce_file_temp_boolean and not json_file_temp_boolean:
+                        source_file_list.append(souce_file_temp_name)
+
+        if source_file_list != []:
+            CvtoJSON = libConvert.cvtDSVtoJSON()
+            CvtoJSON.log_file_name = self.log_file_name
+            CvtoJSON.requested_argv_dict = {
+                "files": source_file_list,
+                "refer_column": "Gene ID",
+                "prefix": "",
+                "header": [],
+                "headless": False,
+                "delimiter": "\t"
+            }
+            CvtoJSON.filasi = "libConvert.cvtDSVtoJSON"
+            CvtoJSON.actor()
 
         source_file_list = []
         for branch_name in branch_list:
@@ -107,40 +181,6 @@ class stingtieResult(pyWorkFlow.workflow):
             CvtoJSON.filasi = "libConvert.cvtDSVtoJSON"
             CvtoJSON.actor()
 
-        source_file_list = []
-        for branch_name in branch_list:
-            for group_name in group_list:
-                replication_list = self.requested_config_dict.get("data/replication").get(group_name)
-                for replication_name in replication_list:
-                    if replication_name != "":
-                        replication_name = "-"+replication_name
-
-                    souce_file_temp_name = (
-                        self.requested_config_dict.get("result/stringtie")
-                        +"/"+branch_name+"-"+group_name+replication_name+"-gene.tsv"
-                    )
-                    self.target_file_path = souce_file_temp_name
-                    souce_file_temp_boolean = self.checkFile()
-                    self.target_file_path = souce_file_temp_name.replace(".tsv",".json")
-                    json_file_temp_boolean = self.checkFile()
-
-                    if souce_file_temp_boolean and not json_file_temp_boolean:
-                        source_file_list.append(souce_file_temp_name)
-
-        if source_file_list != []:
-            CvtoJSON = libConvert.cvtDSVtoJSON()
-            CvtoJSON.log_file_name = self.log_file_name
-            CvtoJSON.requested_argv_dict = {
-                "files": source_file_list,
-                "refer_column": "Gene ID",
-                "prefix": "",
-                "header": [],
-                "headless": False,
-                "delimiter": "\t"
-            }
-            CvtoJSON.filasi = "libConvert.cvtDSVtoJSON"
-            CvtoJSON.actor()
-
         self.phrase_str = "==========\nStage: Scanning for Variable Parts\n=========="
         self.printPhrase()
 
@@ -154,8 +194,8 @@ class stingtieResult(pyWorkFlow.workflow):
                 "postfix" : "/t_data.json",
                 "header" : self.requested_config_dict.get("header/TranscriptExpression")
             }
-            TranscriptSummary.repeat_boolean_dict = self.requested_config_dict.get("header/TranscriptExpression-repeat")
-            # TranscriptSummary.scanning()
+            TranscriptSummary.log_file_prefix_str = self.log_file_prefix_str + "sca-TranscriptSummary-"
+            TranscriptSummary.scanning()
 
             GeneSummary = libSummarise.summary()
             GeneSummary.log_file_name = self.log_file_name
@@ -166,15 +206,14 @@ class stingtieResult(pyWorkFlow.workflow):
                 "postfix" : "-gene.json",
                 "header"  : self.requested_config_dict.get("header/GeneExpression")
             }
-            GeneSummary.repeat_boolean_dict = self.requested_config_dict.get("header/GeneExpression-repeat")
-            # GeneSummary.scanning()
+            GeneSummary.log_file_prefix_str = self.log_file_prefix_str + "sca-GeneSummary-"
+            GeneSummary.scanning()
 
             self.phrase_str = "==========\nStage: Import Reference\n=========="
             self.printPhrase()
 
             refer_name_dict = self.requested_config_dict.get("data/refer")
             refer_name = refer_name_dict.get(branch_name)
-            refer_file_dict = {}
             refer_file_path = (
                 self.requested_config_dict.get("result/gff-json") + "/"
                 + refer_name + "-attribution-related.json"
@@ -212,8 +251,8 @@ class stingtieResult(pyWorkFlow.workflow):
             TranscriptReplace.log_file_name = self.log_file_name
             TranscriptReplace.requested_argv_dict = {
                 "branch" : branch_name,
-                "target" : "transcript2transcript",
-                "source" : "transcript2transcript"
+                "target" : "transcript2gene",
+                "source" : "transcript2gene"
             }
             TranscriptReplace.refer_dict = MakingRelation.output_dict
 
@@ -240,21 +279,12 @@ class stingtieResult(pyWorkFlow.workflow):
                 "source" : "attribute",
             }
             GeneAddition.refer_dict = refer_file_dict
+            GeneAddition.log_file_prefix_str = self.log_file_prefix_str + "sca-GeneSummary-"
 
+            GeneSummary.log_file_prefix_str = self.log_file_prefix_str + "fus-GeneSummary-"
             GeneSummary.fusion()
 
-            TranscriptReplace.requested_argv_dict = {
-                "branch" : branch_name,
-                "target" : "transcript2gene",
-                "source" : "transcript2gene"
-            }
-            TranscriptReplace.refer_dict = MakingRelation.output_dict
-
-            TranscriptReplace.input_dict = GeneSummary.result_dict
-            TranscriptReplace.output_dict = {}
-            TranscriptReplace.actor()
-
-            GeneAddition.input_dict = TranscriptReplace.output_dict
+            GeneAddition.input_dict = GeneSummary.result_dict
             GeneAddition.actor()
 
             GeneSummary.result_file_name = (
