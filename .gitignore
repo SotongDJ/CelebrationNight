@@ -1,9 +1,10 @@
 # something need to be exclude
 bin/
-databases/
-results/
+data/
 archive/
 temp/
+
+.vscode/
 
 .fuse*
 testing*.py
