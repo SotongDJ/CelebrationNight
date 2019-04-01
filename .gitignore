@@ -4,7 +4,7 @@ data/
 archive/
 temp/
 .vscode/
-*[run].py
+*-run-*.py
 
 .fuse*
 testing*.py
