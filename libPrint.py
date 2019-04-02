@@ -10,6 +10,7 @@ class timer():
 
         self.logFilenameStr = ""
         self.folderStr = "data/config/"
+        self.testingBool = False
         
     def startLog(self):
         self.beginTimeStr = time.strftime("%Y%m%d%H%M%S")
@@ -63,7 +64,8 @@ class timer():
         with open(pathStr,'a') as logFileHandle:
             logFileHandle.write( timeMsgStr + "\n" )
         
-        call(self.phraseStr.split(" "), stdout=open(pathStr,'a'))
+        if not self.testingBool:
+            call(self.phraseStr.split(" "), stdout=open(pathStr,'a'))
 
         self.currentTimeStr = ""
         self.phraseStr = ""
