@@ -28,8 +28,14 @@ class config:
             self.folderStr,self.queryStr
         )
         if self.modeStr == "UPDATE":
-            print("[libConfig]Update json")
-            sourceDict = json.load(open(pathStr))
+            if pathlib.Path(pathStr).exists():
+                print("[libConfig]Update json")
+                sourceDict = json.load(open(pathStr))
+                print("[libConfig]Finish loading")
+            else:
+                print("[libConfig]Create new config dictionary")
+                sourceDict = dict()
+            
         elif self.modeStr == "OVERWRITE":
             print("[libConfig]Overwrite json")
             sourceDict = dict()
