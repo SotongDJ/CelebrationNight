@@ -17,88 +17,120 @@ import pathlib
 
    --- README ---
 """
-# ---- Parameter ----
-Trim = libConfig.config()
-Trim.queryStr = "binTrimmomatic"
-Trim.folderStr = "data/config/"
-Trim.modeStr = "UPDATE"
-Trim.load()
+class trimmer:
+    def __init__(self):
+        # ---- Initialization ----
+        self.commandStr = str()
 
-ExpRep = libConfig.config()
-ExpRep.queryStr = "testing"
-ExpRep.folderStr = "data/config/"
-ExpRep.modeStr = "UPDATE"
-ExpRep.load()
+        self.conditionList = list()
+        self.groupList = list()
+        self.directionList = list()
 
-# ---- Initialization ----
-conditionList = ExpRep.storeDict.get("[trim]condition",[])
-groupList = ExpRep.storeDict.get("group",[])
-directionList = ExpRep.storeDict.get("direction",[])
+        self.branchStr = str()
+        self.pairStr = str()
+        self.unpairStr = str()
 
-branchStr = ExpRep.storeDict.get("branch","")
-pairStr = ExpRep.storeDict.get("pairPostfix","")
-unpairStr = ExpRep.storeDict.get("unpairPostfix","")
+        self.inputFileNameStr = str()
+        self.outputFileNameStr = str()
+        self.fileTypeStr = str()
+        self.checkFolderList = str()
 
-inputFileNameStr = ExpRep.storeDict.get("[trim]inputFileName","")
-outputFileNameStr = ExpRep.storeDict.get("[trim]outputFileName","")
-fileTypeStr = ExpRep.storeDict.get("[trim]fileType","")
-checkFolderList = ExpRep.storeDict.get("[trim]checkFolder",[])
-# ---- Action ----
-for folderStr in checkFolderList:
-    pathlib.Path(folderStr).mkdir(parents=True,exist_ok=True)
+        self.testingBool = False
 
-if type(conditionList) == type(list()) and conditionList != []:
-    for conditionStr in conditionList:
-        Print = libPrint.timer()
-        Print.logFilenameStr = "03-trim-{branch}-{cond}".format(
-            branch=branchStr,
-            cond=conditionStr
-        )
-        Print.folderStr = "data/log/"
-        Print.startLog()
+    def trimming(self):
+        # ---- Action ----
+        for folderStr in self.checkFolderList:
+            pathlib.Path(folderStr).mkdir(parents=True,exist_ok=True)
 
-        TrimPara = libConfig.config()
-        TrimPara.queryStr = conditionStr
-        TrimPara.folderStr = "data/config/"
-        TrimPara.modeStr = "UPDATE"
-        TrimPara.load()
-
-        for groupStr in groupList:
-            inputFileList = list()
-            outputFileList = list()
-            for directionStr in directionList:
-                inputStr = inputFileNameStr.format(
-                    group=groupStr,
-                    direction=directionStr,
-                    fileType=fileTypeStr
+        if type(self.conditionList) == type(list()) and self.conditionList != []:
+            for conditionStr in self.conditionList:
+                Print = libPrint.timer()
+                Print.logFilenameStr = "03-trim-{branch}-{cond}".format(
+                    branch=self.branchStr,
+                    cond=conditionStr
                 )
-                inputFileList.append(inputStr)
-                outputPairStr = outputFileNameStr.format(
-                    condition=conditionStr,
-                    direction=directionStr,
-                    group=groupStr,
-                    pairType=pairStr,
-                    fileType=fileTypeStr,
-                )
-                outputFileList.append(outputPairStr)
-                outputUnPairStr = outputFileNameStr.format(
-                    condition=conditionStr,
-                    direction=directionStr,
-                    group=groupStr,
-                    pairType=unpairStr,
-                    fileType=fileTypeStr,
-                )
-                outputFileList.append(outputUnPairStr)
+                Print.folderStr = "data/log/"
+                Print.testingBool = self.testingBool
+                Print.startLog()
 
-            fileList = inputFileList + outputFileList
-            fileStr = " ".join(fileList)
+                TrimPara = libConfig.config()
+                TrimPara.queryStr = conditionStr
+                TrimPara.folderStr = "data/config/"
+                TrimPara.modeStr = "UPDATE"
+                TrimPara.load()
 
-            commandDict = dict()
-            commandDict.update(TrimPara.storeDict)
-            commandDict.update({ 'files' : fileStr })
-            proCommandStr = Trim.storeDict["command"].format(**commandDict)
-            Print.phraseStr = proCommandStr
-            Print.runCommand()
+                for groupStr in self.groupList:
+                    inputFileList = list()
+                    outputFileList = list()
+                    for directionStr in self.directionList:
+                        inputStr = self.inputFileNameStr.format(
+                            group=groupStr,
+                            direction=directionStr,
+                            fileType=self.fileTypeStr
+                        )
+                        inputFileList.append(inputStr)
+                        outputPairStr = self.outputFileNameStr.format(
+                            condition=conditionStr,
+                            direction=directionStr,
+                            group=groupStr,
+                            pairType=self.pairStr,
+                            fileType=self.fileTypeStr,
+                        )
+                        outputFileList.append(outputPairStr)
+                        outputUnPairStr = self.outputFileNameStr.format(
+                            condition=conditionStr,
+                            direction=directionStr,
+                            group=groupStr,
+                            pairType=self.unpairStr,
+                            fileType=self.fileTypeStr,
+                        )
+                        outputFileList.append(outputUnPairStr)
 
-    Print.stopLog()
+                    fileList = inputFileList + outputFileList
+                    fileStr = " ".join(fileList)
 
+                    commandDict = dict()
+                    commandDict.update(TrimPara.storeDict)
+                    commandDict.update({ 'files' : fileStr })
+                    CommandStr = self.commandStr.format(**commandDict)
+                    Print.phraseStr = CommandStr
+                    Print.runCommand()
+
+            Print.stopLog()
+
+if __name__ == "__main__":
+    print("__name__ == "+__name__)
+    # ---- Parameter ----
+    BinTrim = libConfig.config()
+    BinTrim.queryStr = "binTrimmomatic"
+    BinTrim.folderStr = "data/config/"
+    BinTrim.modeStr = "UPDATE"
+    BinTrim.load()
+
+    ExpRep = libConfig.config()
+    ExpRep.queryStr = "testing"
+    ExpRep.folderStr = "data/config/"
+    ExpRep.modeStr = "UPDATE"
+    ExpRep.load()
+
+    # ---- Initialization ----
+    Trim = trimmer()
+    Trim.commandStr = BinTrim.storeDict["command"]
+
+    Trim.conditionList = ExpRep.storeDict.get("[trim]condition",[])
+    Trim.groupList = ExpRep.storeDict.get("group",[])
+    Trim.directionList = ExpRep.storeDict.get("direction",[])
+
+    Trim.branchStr = ExpRep.storeDict.get("branch","")
+    Trim.pairStr = ExpRep.storeDict.get("pairPostfix","")
+    Trim.unpairStr = ExpRep.storeDict.get("unpairPostfix","")
+
+    Trim.inputFileNameStr = ExpRep.storeDict.get("[trim]inputFileName","")
+    Trim.outputFileNameStr = ExpRep.storeDict.get("[trim]outputFileName","")
+    Trim.fileTypeStr = ExpRep.storeDict.get("[trim]fileType","")
+    Trim.checkFolderList = ExpRep.storeDict.get("[trim]checkFolder",[])
+
+    if ExpRep.storeDict.get("testing",False):
+        Trim.testingBool = True
+
+    Trim.trimming()
