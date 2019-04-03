@@ -1,25 +1,8 @@
 #!/usr/bin/env python3
-import pyWorkFlow, libConfig, sys
-global helper_msg_block
-helper_msg_block="""
+"""
    --- README of act09-hisat-batch ---
   Title:
     Batch Processing for HISAT2
-
-  Usage:
-    python act09-hisat-batch \\
-      [stringtie|cufflinks] -t <TRIBE> -g <GROUP,GROUP,GROUP...> \\
-      -x <GENOME PREFIX that USE in HISAT2-BUILD>
-
-  Data Structure:
-    First : tribe,
-        e.g. raw, untrim, trimmed...
-    Second: group,
-        e.g. control, A, B, 1, 2...
-    Third : subgroup/files,
-        e.g. foward, reverse, pair, unpair
-
-    Visualise graph: explanation01-dataStructure.svg
 
   Original command:
     hisat2 -q [--dta/--dta-cufflinks] --phred[33] -p [4]
@@ -34,19 +17,6 @@ helper_msg_block="""
     <GROUP> don't allowed spacing
 
    --- README ---
-"""
-"""
- Postfix of variables:
-  -si: String
-   -ni: alternative/second string for same Usage
-   -fi: string for open()
-  -ho: String(that store dir path)
-  -ti: Intiger/Float
-  -li: List
-  -tu: Tuple
-  -di: Dictionary
-  -fa: File (with open())
-  -so: JSON
 """
 ConfigDict = libConfig.config()
 class hisatbat(pyWorkFlow.workflow):
