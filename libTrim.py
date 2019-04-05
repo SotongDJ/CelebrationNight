@@ -101,7 +101,7 @@ class trimmer:
                         Print.phraseStr = CommandStr
                         Print.runCommand()
 
-            Print.stopLog()
+                Print.stopLog()
 
 if __name__ == "__main__":
     print("__name__ == "+__name__)
