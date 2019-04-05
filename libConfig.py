@@ -17,11 +17,11 @@ class config:
             with open(pathStr,"w") as targetHandle:
                 json.dump(dict(),targetHandle)
             
-            print("[libConfig]Create new config dictionary")
+            print("[libConfig]Create new config dictionary: "+self.queryStr)
             self.storeDict = dict()
         else:
             self.storeDict = json.load(open(pathStr))
-            print("[libConfig]Finish loading")
+            print("[libConfig]Finish loading: "+self.queryStr)
 
     def save(self):
         pathStr = "{}{}.json".format(
@@ -29,18 +29,18 @@ class config:
         )
         if self.modeStr == "UPDATE":
             if pathlib.Path(pathStr).exists():
-                print("[libConfig]Update json")
+                print("[libConfig]Update json: "+self.queryStr)
                 sourceDict = json.load(open(pathStr))
-                print("[libConfig]Finish loading")
+                print("[libConfig]Finish loading: "+self.queryStr)
             else:
-                print("[libConfig]Create new config dictionary")
+                print("[libConfig]Create new config dictionary: "+self.queryStr)
                 sourceDict = dict()
             
         elif self.modeStr == "OVERWRITE":
-            print("[libConfig]Overwrite json")
+            print("[libConfig]Overwrite json: "+self.queryStr)
             sourceDict = dict()
         else:
-            print("[libConfig]Overwrite json")
+            print("[libConfig]Overwrite json: "+self.queryStr)
             sourceDict = dict()
             
         sourceDict.update(self.queryDict)
