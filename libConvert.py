@@ -21,6 +21,13 @@ helper_msg_block="""
 	}
     CvtoJSON.actor()
 
+    MakingRelation = makingRelation()
+    MakingRelation.inputDict = dict()
+    MakingRelation.inputDict.update(idKeyValueDict)
+    MakingRelation.log_file_prefix_str = self.log_file_prefix_str
+    MakingRelation.actor()
+    relationDict = MakingRelation.outputDict
+
     CvtoTAB = libConvert.cvtJSONtoDSV()
     CvtoTAB.requested_argv_dict = {
         "files" : [<INPUT>,<INPUT>......] ,
@@ -31,6 +38,7 @@ helper_msg_block="""
 
    --- README ---
 """
+
 class cvtDSVtoJSON(pyWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
@@ -54,57 +62,64 @@ class cvtDSVtoJSON(pyWorkFlow.workflow):
         self.log_file_prefix_str = "temp/tmp-"
 
     def actor(self):
-        source_files_list = self.requested_argv_dict.get("files",[])
-        refer_column_name = self.requested_argv_dict.get("refer_column","")
-        prefix_str = self.requested_argv_dict.get("prefix","")
-        header_list = self.requested_argv_dict.get("header",[])
-        headless_boolean = self.requested_argv_dict.get("headless",True)
-        delimiter_str = self.requested_argv_dict.get("delimiter","\t")
+        sourceFilesList = self.requested_argv_dict.get("files",[])
+        referColumnNameStr = self.requested_argv_dict.get("refer_column","")
+        prefixStr = self.requested_argv_dict.get("prefix","")
+        headerList = self.requested_argv_dict.get("header",[])
+        headlessBoo = self.requested_argv_dict.get("headless",True)
+        delimiterStr = self.requested_argv_dict.get("delimiter","\t")
         self.startLog()
-
-        for source_file_name in source_files_list:
-            self.phrase_str = pprint.pformat(source_file_name)
+        #
+        self.phrase_str = "Total files: "+pprint.pformat(sourceFilesList)
+        self.printTimeStamp()
+        #
+        for sourceFilenameStr in sourceFilesList:
+            #
+            self.phrase_str = "{Now processing} "+sourceFilenameStr
             self.printTimeStamp()
-
-            name_temp_list = source_file_name.split(".")
+            #
+            name_temp_list = sourceFilenameStr.split(".")
             name_temp_list[-1] = "json"
-            result_file_name = ".".join(name_temp_list)
-            relation_file_name = result_file_name.replace(".json","-related.json")
+            resultFilenameStr = ".".join(name_temp_list)
 
-            self.target_file_path = result_file_name
+            self.target_file_path = resultFilenameStr
             result_file_boolean = self.checkFile()
-            self.target_file_path = relation_file_name
-            relation_file_boolean = self.checkFile()
 
-            if not result_file_boolean or not relation_file_boolean :
-                lines_list = open(source_file_name).read().splitlines()
+            if not result_file_boolean:
+                #
+                self.phrase_str = "{Loading Files} "+sourceFilenameStr
+                self.printTimeStamp()
+                #
+                linesList = open(sourceFilenameStr).read().splitlines()
                 first_line_boolean = True
-                max_digit_num = len(lines_list)
-                garbage_str = ""
+                max_digit_num = len(linesList)
                 line_num = 0
                 while first_line_boolean and line_num < max_digit_num:
-                    line_str = lines_list[line_num]
-                    if line_str[0] == "#":
-                        garbage_str = lines_list.pop(line_num)
+                    lineStr = linesList[0]
+                    if lineStr[0] == "#":
+                        del linesList[0]
                     else:
-                        first_line_str = lines_list.pop(line_num)
+                        firstLineStr = linesList[0]
                         first_line_boolean = False
-
                     line_num = line_num + 1
 
-                position_dict = {} # {numbering:key}
+                positionDict = dict() # {numbering:key}
 
-                id_dict = {} # {id:{key:value}}
-                relation_dict = {
-                    "{key:{value:[id]}}" : {},
-                    "{key:{id:value}}" : {}
+                idKeyValueDict = dict()
+                relationDict = {
+                    "{key:{value:[id]}}" : dict(),
+                    "{key:{id:[value]}}" : dict()
                 }
-
-                if not headless_boolean:
-                    if header_list == []:
-                        header_list = first_line_str.split(delimiter_str)
+                #
+                self.phrase_str = "{Create Header/Key List} "+sourceFilenameStr
+                self.printTimeStamp()
+                #
+                if not headlessBoo:
+                    if headerList == []:
+                        tempLineStr = linesList.pop(0)
+                        headerList = tempLineStr.split(delimiterStr)
                 else:
-                    column_temp_list = first_line_str.split(delimiter_str)
+                    column_temp_list = firstLineStr.split(delimiterStr)
                     max_digit_num = len(str(len(column_temp_list)))
                     for column_num in range(len(column_temp_list)):
                         digit_num = len(str(len(column_num)))
@@ -112,68 +127,95 @@ class cvtDSVtoJSON(pyWorkFlow.workflow):
                             diff_digit_num = max_digit_num - digit_num
                         else:
                             diff_digit_num = 0
-
-                        header_list.append(
+                            #
+                        headerList.append(
                             "Column_"+("0"*diff_digit_num)+str(column_num)
                         )
+                #
+                self.phrase_str = "{Assign Key's Position} "+sourceFilenameStr
+                self.printTimeStamp()
+                #
+                for number in range(len(headerList)):
+                    if headerList[number] not in positionDict.values():
+                        positionDict.update({ number : headerList[number] })
+                    if headerList[number] not in relationDict.get("{key:{value:[id]}}").keys():
+                        relationDict.get("{key:{value:[id]}}").update({ headerList[number] :{} })
+                    if headerList[number] not in relationDict.get("{key:{id:[value]}}").keys():
+                        relationDict.get("{key:{id:[value]}}").update({ headerList[number] :{} })
 
-                for number in range(len(header_list)):
-                    if header_list[number] not in position_dict.values():
-                        position_dict.update({ number : header_list[number] })
-                    if header_list[number] not in relation_dict.get("{key:{value:[id]}}").keys():
-                        relation_dict.get("{key:{value:[id]}}").update({ header_list[number] :{} })
-                    if header_list[number] not in relation_dict.get("{key:{id:value}}").keys():
-                        relation_dict.get("{key:{id:value}}").update({ header_list[number] :{} })
+                referColumnExistBoo = False
+                if referColumnNameStr != "":
+                    referColumnExistBoo = True
+                #
+                self.phrase_str = "{Start Conversion} "+sourceFilenameStr
+                self.printTimeStamp()
+                #
+                lineIdInt = 0
+                CurrentlineCountInt = 0
+                TotalLineCountInt = len(linesList)
+                for lineStr in linesList:
+                    CurrentlineCountInt = CurrentlineCountInt + 1
+                    if lineStr[0] != "#":
+                        #
+                        wordStr = "["+str(CurrentlineCountInt)+"/"+str(TotalLineCountInt)+"]"
+                        print(wordStr,end="\r")
+                        #
+                        tempValueList = lineStr.split(delimiterStr)
+                        tempKeyValueDict = dict()
+                        idStr = ""
+                        #
+                        lineIdInt = lineIdInt + 1
+                        if not referColumnExistBoo:
+                            idStr = prefixStr + str(lineIdInt)
+                            #
+                        if len(tempValueList) == len(positionDict.keys()):
+                            for number in range(len(list(positionDict.keys()))):
+                                keyStr = positionDict.get(number)
+                                tempKeyValueDict.update({ keyStr : tempValueList[number]})
+                                if keyStr == referColumnNameStr and referColumnExistBoo:
+                                    idStr = tempValueList[number]
+                                    #
+                            if idStr != "":
+                                targetValueDict = idKeyValueDict.get(idStr,dict())
+                                for keyStr in tempKeyValueDict.keys():
+                                    tempList = targetValueDict.get(keyStr,list())
+                                    tempList.append(tempKeyValueDict[keyStr])
+                                    targetValueDict.update({ keyStr : list(set(tempList)) })
+                                    #
+                                idKeyValueDict.update({ idStr : targetValueDict })
+                            else:
+                                # print(lineStr)
+                                self.phrase_str = "[{}/{}] Line without id".format(str(CurrentlineCountInt),str(TotalLineCountInt))
+                                self.printPhrase()
+                        else:
+                            print('line: '+str(lineIdInt))
+                #
+                self.phrase_str = "{Rearrange Relation Dict.} "+sourceFilenameStr
+                self.printTimeStamp()
+                #
+                MakingRelation = makingRelation()
+                MakingRelation.inputDict = dict()
+                MakingRelation.inputDict.update(idKeyValueDict)
+                MakingRelation.log_file_prefix_str = self.log_file_prefix_str
+                MakingRelation.actor()
+                relationDict = MakingRelation.outputDict
+                #
+                with open(resultFilenameStr,"w") as result_file_handle:
+                    json.dump(idKeyValueDict,result_file_handle,indent=4,sort_keys=True)
 
-                refer_column_exist_boolean = False
-                if refer_column_name != "":
-                    refer_column_exist_boolean = True
+                filenameStr = resultFilenameStr.replace(".json","-KeyValueIdDict.json")
+                with open(filenameStr,"w") as relation_file_handle:
+                    json.dump(relationDict["{key:{value:[id]}}"],relation_file_handle,indent=4,sort_keys=True)
 
-                line_id_num = 0
-                for line_str in lines_list:
-                    if line_str[0] != "#":
-                        value_temp_list = line_str.split(delimiter_str)
-                        value_temp_dict = {}
-                        id_name = ""
+                filenameStr = resultFilenameStr.replace(".json","-KeyIdValueDict.json")
+                with open(filenameStr,"w") as relation_file_handle:
+                    json.dump(relationDict["{key:{id:[value]}}"],relation_file_handle,indent=4,sort_keys=True)
 
-                        if not refer_column_exist_boolean:
-                            line_id_num = line_id_num + 1
-                            id_name = prefix_str + str(line_id_num)
-
-                        for number in range(len(list(position_dict.keys()))):
-                            header_list_str = position_dict.get(number)
-                            value_temp_dict.update({ header_list_str : value_temp_list[number]})
-
-                            if header_list_str == refer_column_name and refer_column_exist_boolean:
-                                id_name = value_temp_list[number]
-
-                        id_dict.update({ id_name : value_temp_dict })
-
-                        value_temp_dict = {} # {key:{value:[id]}}
-                        id_temp_dict = {} # {key:{id:value}}
-
-                        for number in range(len(list(position_dict.keys()))):
-                            header_list_str = position_dict.get(number) # key
-                            value_str = value_temp_list[number] # value
-
-                            value_temp_dict = relation_dict.get("{key:{value:[id]}}").get(header_list_str,{})
-                            id_temp_dict = relation_dict.get("{key:{id:value}}").get(header_list_str,{})
-
-                            id_list = value_temp_dict.get(value_temp_list[number],[])
-                            id_list.append(id_name)
-
-                            value_temp_dict.update({ value_temp_list[number] : id_list })
-                            id_temp_dict.update({ id_name : value_str })
-
-                            relation_dict.get("{key:{value:[id]}}").update({ header_list_str : value_temp_dict })
-                            relation_dict.get("{key:{id:value}}").update({ header_list_str : id_temp_dict })
+                filenameStr = resultFilenameStr.replace(".json","-KeyMetadata.json")
+                with open(filenameStr,"w") as relation_file_handle:
+                    json.dump(relationDict["metadata"],relation_file_handle,indent=4,sort_keys=True)
 
 
-                with open(result_file_name,"w") as result_file_handle:
-                    json.dump(id_dict,result_file_handle,indent=4,sort_keys=True)
-
-                with open(relation_file_name,"w") as relation_file_handle:
-                    json.dump(relation_dict,relation_file_handle,indent=4,sort_keys=True)
 
         self.stopLog()
 
@@ -182,47 +224,90 @@ class makingRelation(pyWorkFlow.workflow):
         # self.testing = True
         self.type = "library"
 
-        self.requested_argv_dict = {}
-        self.input_dict = {}
-        self.output_dict = {}
+        self.requested_argv_dict = dict()
+        self.inputDict = dict()
+        self.outputDict = dict()
 
         self.target_file_path = ""
 
-        self.comand_line_list=[]
+        self.comand_line_list = list()
 
         self.script_name = "libConvert.makingRelation"
-        self.requested_config_dict = {}
+        self.requested_config_dict = dict()
         self.log_file_prefix_str = "temp/tmp-"
 
     def actor(self):
         self.startLog()
-        self.output_dict = {
-            "{key:{value:[id]}}" : {},
-            "{key:{id:value}}" : {}
+
+        valueIdDict = dict()
+        idValueDict = dict()
+        metaDict = dict()
+
+        for idStr in list(self.inputDict.keys()):
+            keyValueDict = self.inputDict.get(idStr)
+
+            for keyStr in list(keyValueDict.keys()):
+                sourceValueList = keyValueDict.get(keyStr)
+                for valueStr in sourceValueList:
+                    tempValueIdDict = valueIdDict.get(keyStr,{})
+                    tempIdValueDict = idValueDict.get(keyStr,{})
+
+                    valueList = tempIdValueDict.get(idStr,[])
+                    valueList.append(valueStr)
+                    tempIdValueDict.update({ idStr : valueList })
+
+                    idList = tempValueIdDict.get(valueStr,[])
+                    idList.append(idStr)
+                    tempValueIdDict.update({ valueStr : idList })
+
+                    valueIdDict.update({ keyStr : tempValueIdDict })
+                    idValueDict.update({ keyStr : tempIdValueDict })
+
+        targetValueIdDict = dict()
+        keyValueCountDict = dict()
+        for keyStr in valueIdDict.keys():
+            targetValueDict = dict()
+            valueIdCountDict = dict()
+            for valueStr in valueIdDict[keyStr].keys():
+                idList = valueIdDict[keyStr][valueStr]
+                targetSet = sorted(list(set(idList)))
+                if targetSet != [""] and idList != []:
+                    targetValueDict.update({ valueStr : targetSet })
+                    #
+                    valueCountInt = valueIdCountDict.get(len(targetSet),0)
+                    valueCountInt = valueCountInt + 1
+                    valueIdCountDict.update({ len(targetSet) : valueCountInt })
+            targetValueIdDict.update({ keyStr : targetValueDict })
+            keyValueCountDict.update({ keyStr : valueIdCountDict })
+
+        targetIdValueDict = dict()
+        keyIdCountDict = dict()
+        for keyStr in idValueDict.keys():
+            targetIdDict = dict()
+            idValueCountDict = dict()
+            for idStr in idValueDict[keyStr].keys():
+                valueList = idValueDict[keyStr][idStr]
+                targetSet = sorted(list(set(valueList)))
+                if targetSet != [""] and valueList != []:
+                    targetIdDict.update({ idStr : targetSet })
+                    #
+                    idCountInt = idValueCountDict.get(len(targetSet),0)
+                    idCountInt = idCountInt + 1
+                    idValueCountDict.update({ len(targetSet) : idCountInt })
+            targetIdValueDict.update({ keyStr : targetIdDict })
+            keyIdCountDict.update({ keyStr : idValueCountDict })
+
+        metaDict.update({ "count(id):valueAmount" : keyValueCountDict })
+        metaDict.update({ "count(value):idAmount" : keyIdCountDict })
+        self.outputDict = {
+            "{key:{value:[id]}}" : targetValueIdDict,
+            "{key:{id:[value]}}" : targetIdValueDict,
+            "metadata" : metaDict,
         }
-
-        for id_str in list(self.input_dict.keys()):
-            key_value_dict = self.input_dict.get(id_str)
-
-            for key_str in list(key_value_dict.keys()):
-                value_str = key_value_dict.get(key_str)
-
-                # {key:{value:[id]}}
-                value_temp_dict = self.output_dict.get("{key:{value:[id]}}").get(key_str,{})
-                # {key:{id:value}}
-                id_temp_dict = self.output_dict.get("{key:{id:value}}").get(key_str,{})
-
-                id_list = value_temp_dict.get(value_str,[])
-                id_list.append(id_str)
-
-                value_temp_dict.update({ value_str : id_list })
-                id_temp_dict.update({ id_str : value_str })
-
-                self.output_dict.get("{key:{value:[id]}}").update({ key_str : value_temp_dict })
-                self.output_dict.get("{key:{id:value}}").update({ key_str : id_temp_dict })
 
         self.stopLog()
 
+"""
 class cvtJSONtoDSV(pyWorkFlow.workflow):
     def personalize(self):
         # self.testing = True
@@ -243,16 +328,16 @@ class cvtJSONtoDSV(pyWorkFlow.workflow):
         self.log_file_prefix_str = "temp/tmp-"
 
     def actor(self):
-        source_files_list = self.requested_argv_dict.get("files",[])
-        header_list = self.requested_argv_dict.get("header",[])
-        delimiter_str = self.requested_argv_dict.get("delimiter","\t")
+        sourceFilesList = self.requested_argv_dict.get("files",[])
+        headerList = self.requested_argv_dict.get("header",[])
+        delimiterStr = self.requested_argv_dict.get("delimiter","\t")
         self.startLog()
 
-        for source_file_name in source_files_list:
-            source_file_handle = open(source_file_name,'r')
+        for sourceFilenameStr in sourceFilesList:
+            source_file_handle = open(sourceFilenameStr,'r')
             source_json_dict = json.load(source_file_handle)
 
-            if header_list == []:
+            if headerList == []:
                 column_name_set = set()
                 value_temp_dict = dict()
                 for id_name in list(source_json_dict.keys()):
@@ -260,17 +345,17 @@ class cvtJSONtoDSV(pyWorkFlow.workflow):
                     column_name_set.update(set(value_temp_dict.keys()))
                 header_tuple = tuple(sorted(column_name_set))
             else:
-                header_tuple = tuple(header_list)
+                header_tuple = tuple(headerList)
 
-            with open(source_file_name.replace(".json",".dsv"),"w") as result_file_handle:
-                result_file_handle.write("id"+delimiter_str+delimiter_str.join(header_tuple)+"\n")
+            with open(sourceFilenameStr.replace(".json",".dsv"),"w") as result_file_handle:
+                result_file_handle.write("id"+delimiterStr+delimiterStr.join(header_tuple)+"\n")
                 for id_name in list(source_json_dict.keys()):
-                    line_str = id_name
+                    lineStr = id_name
                     value_temp_dict = dict()
                     value_temp_dict = source_json_dict.get(id_name,{})
                     for column_name in header_tuple:
-                        line_str = line_str + delimiter_str + value_temp_dict.get(column_name,"")
-                    result_file_handle.write(line_str+"\n")
+                        lineStr = lineStr + delimiterStr + value_temp_dict.get(column_name,"")
+                    result_file_handle.write(lineStr+"\n")
 
         self.stopLog()
 
@@ -291,14 +376,14 @@ class attributionExtractor(pyWorkFlow.workflow):
         self.log_file_prefix_str = "temp/tmp-"
 
     def actor(self):
-        source_files_list = self.requested_argv_dict.get("gff.json",[])
+        sourceFilesList = self.requested_argv_dict.get("gff.json",[])
         self.startLog()
 
         WordProc = wordProcess()
 
-        for source_file_name in source_files_list:
-            target_file_name = source_file_name.replace("-related.json",".json")
-            target_file_name = target_file_name.replace(".json","-related.json")
+        for sourceFilenameStr in sourceFilesList:
+            target_file_name = sourceFilenameStr.replace("-relation.json",".json")
+            target_file_name = target_file_name.replace(".json","-relation.json")
 
             self.target_file_path = target_file_name
             target_file_boolean = self.checkFile()
@@ -313,7 +398,7 @@ class attributionExtractor(pyWorkFlow.workflow):
                 key_id_value_dict = target_json_dict.get('{key:{id:value}}')
                 raw_temp_dict = key_id_value_dict.get('attribute')
                 result_dict = {} # id=[key:value]
-                relation_dict = {
+                relationDict = {
                     "{key:{value:[id]}}" : {},
                     "{key:{id:value}}" : {}
                 }
@@ -329,65 +414,69 @@ class attributionExtractor(pyWorkFlow.workflow):
                         # value_str = WordProc.changeESC(value_str)
                         attribution_temp_dict.update({ key_str : value_str })
 
-                        value_temp_dict = relation_dict.get("{key:{value:[id]}}").get(key_str,{})
+                        value_temp_dict = relationDict.get("{key:{value:[id]}}").get(key_str,{})
                         value_temp_dict.update({ value_str : [gffid_name] })
-                        relation_dict.get("{key:{value:[id]}}").update({ key_str : value_temp_dict })
+                        relationDict.get("{key:{value:[id]}}").update({ key_str : value_temp_dict })
 
-                        gffid_temp_dict = relation_dict.get("{key:{id:value}}").get(key_str,{})
+                        gffid_temp_dict = relationDict.get("{key:{id:value}}").get(key_str,{})
                         gffid_temp_dict.update({ gffid_name : value_str })
-                        relation_dict.get("{key:{id:value}}").update({ key_str : gffid_temp_dict })
+                        relationDict.get("{key:{id:value}}").update({ key_str : gffid_temp_dict })
 
                     result_dict.update({ gffid_name : attribution_temp_dict })
 
 
-                result_file_name = target_file_name.replace("-related.json","-attribution.json")
-                with open(result_file_name,"w") as result_file_handle:
+                resultFilenameStr = target_file_name.replace("-relation.json","-attribution.json")
+                with open(resultFilenameStr,"w") as result_file_handle:
                     json.dump(result_dict,result_file_handle,indent=4,sort_keys=True)
 
-                relation_file_name = target_file_name.replace("-related.json","-attribution-related.json")
+                relation_file_name = target_file_name.replace("-relation.json","-attribution-relation.json")
                 with open(relation_file_name,"w") as relation_file_handle:
-                    json.dump(relation_dict,relation_file_handle,indent=4,sort_keys=True)
+                    json.dump(relationDict,relation_file_handle,indent=4,sort_keys=True)
 
         self.stopLog()
+        
 class wordProcess:
     def __init__(self):
         self.input_file_name = ""
 
-    def changeESC(self):
+    def loadSymbolDict(self):
         library_file_name = 'esc.json'
         library_file_handle = open(library_file_name,'r')
-        library_dict = json.load(library_file_handle)
+        self.libDict = json.load(library_file_handle)
 
+    def recoverSymbol(self):
         self.input_lines = open(self.input_file_name).read().splitlines()
         self.output_lines = []
 
-        for line_str in self.input_lines:
-            if "%" in line_str:
-                for key_str in list(library_dict.keys()):
-                    value_str = library_dict.get(key_str)
-                    line_str = line_str.replace(key_str,value_str)
-                self.output_lines.append(line_str)
+        for lineStr in self.input_lines:
+            if "%" in lineStr:
+                for key_str in set(self.libDict.keys()):
+                    value_str = self.libDict.get(key_str)
+                    lineStr = lineStr.replace(key_str,value_str)
+                self.output_lines.append(lineStr)
             else:
-                self.output_lines.append(line_str)
+                self.output_lines.append(lineStr)
 
-    def replaceTAB(self):
+    def removeTAB(self):
         self.input_lines = open(self.input_file_name).read().splitlines()
         self.output_lines = []
 
-        for line_str in self.input_lines:
-            line_str = line_str.replace("\t","")
-            self.output_lines.append(line_str)
+        for lineStr in self.input_lines:
+            lineStr = lineStr.replace("\t","")
+            self.output_lines.append(lineStr)
 
-    def replaceQuotation(self):
+    def removeQuotation(self):
         self.input_lines = open(self.input_file_name).read().splitlines()
         self.output_lines = []
 
-        for line_str in self.input_lines:
-            line_str = line_str.replace("\"","")
-            line_str = line_str.replace("\'","")
-            self.output_lines.append(line_str)
+        for lineStr in self.input_lines:
+            lineStr = lineStr.replace("\"","")
+            lineStr = lineStr.replace("\'","")
+            self.output_lines.append(lineStr)
 
     def save(self):
         with open(self.input_file_name,'w') as output_file_handle:
-            for line_str in self.output_lines:
-                output_file_handle.write(line_str+"\n")
+            for lineStr in self.output_lines:
+                output_file_handle.write(lineStr+"\n")
+
+"""
