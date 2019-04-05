@@ -36,6 +36,7 @@ Trim.commandStr = BinTrim.storeDict["command"]
 
 Trim.conditionList = ExpRep.storeDict.get("[trim]condition",[])
 Trim.groupList = ExpRep.storeDict.get("group",[])
+Trim.replicationList = ExpRep.storeDict.get("replication",[])
 Trim.directionList = ExpRep.storeDict.get("direction",[])
 
 Trim.branchStr = ExpRep.storeDict.get("branch","")
@@ -46,5 +47,8 @@ Trim.inputFileNameStr = ExpRep.storeDict.get("[trim]inputFileName","")
 Trim.outputFileNameStr = ExpRep.storeDict.get("[trim]outputFileName","")
 Trim.fileTypeStr = ExpRep.storeDict.get("[trim]fileType","")
 Trim.checkFolderList = ExpRep.storeDict.get("[trim]checkFolder",[])
+
+if ExpRep.storeDict.get("testing",False):
+   Trim.testingBool = True
 
 Trim.trimming()

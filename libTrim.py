@@ -24,6 +24,7 @@ class trimmer:
 
         self.conditionList = list()
         self.groupList = list()
+        self.replicationList = list()
         self.directionList = list()
 
         self.branchStr = str()
@@ -60,41 +61,45 @@ class trimmer:
                 TrimPara.load()
 
                 for groupStr in self.groupList:
-                    inputFileList = list()
-                    outputFileList = list()
-                    for directionStr in self.directionList:
-                        inputStr = self.inputFileNameStr.format(
-                            group=groupStr,
-                            direction=directionStr,
-                            fileType=self.fileTypeStr
-                        )
-                        inputFileList.append(inputStr)
-                        outputPairStr = self.outputFileNameStr.format(
-                            condition=conditionStr,
-                            direction=directionStr,
-                            group=groupStr,
-                            pairType=self.pairStr,
-                            fileType=self.fileTypeStr,
-                        )
-                        outputFileList.append(outputPairStr)
-                        outputUnPairStr = self.outputFileNameStr.format(
-                            condition=conditionStr,
-                            direction=directionStr,
-                            group=groupStr,
-                            pairType=self.unpairStr,
-                            fileType=self.fileTypeStr,
-                        )
-                        outputFileList.append(outputUnPairStr)
+                    for replicationStr in self.replicationList:
+                        inputFileList = list()
+                        outputFileList = list()
+                        for directionStr in self.directionList:
+                            inputStr = self.inputFileNameStr.format(
+                                group=groupStr,
+                                replication=replicationStr,
+                                direction=directionStr,
+                                fileType=self.fileTypeStr
+                            )
+                            inputFileList.append(inputStr)
+                            outputPairStr = self.outputFileNameStr.format(
+                                condition=conditionStr,
+                                direction=directionStr,
+                                group=groupStr,
+                                replication=replicationStr,
+                                pairType=self.pairStr,
+                                fileType=self.fileTypeStr,
+                            )
+                            outputFileList.append(outputPairStr)
+                            outputUnPairStr = self.outputFileNameStr.format(
+                                condition=conditionStr,
+                                direction=directionStr,
+                                group=groupStr,
+                                replication=replicationStr,
+                                pairType=self.unpairStr,
+                                fileType=self.fileTypeStr,
+                            )
+                            outputFileList.append(outputUnPairStr)
 
-                    fileList = inputFileList + outputFileList
-                    fileStr = " ".join(fileList)
+                        fileList = inputFileList + outputFileList
+                        fileStr = " ".join(fileList)
 
-                    commandDict = dict()
-                    commandDict.update(TrimPara.storeDict)
-                    commandDict.update({ 'files' : fileStr })
-                    CommandStr = self.commandStr.format(**commandDict)
-                    Print.phraseStr = CommandStr
-                    Print.runCommand()
+                        commandDict = dict()
+                        commandDict.update(TrimPara.storeDict)
+                        commandDict.update({ 'files' : fileStr })
+                        CommandStr = self.commandStr.format(**commandDict)
+                        Print.phraseStr = CommandStr
+                        Print.runCommand()
 
             Print.stopLog()
 
@@ -119,6 +124,7 @@ if __name__ == "__main__":
 
     Trim.conditionList = ExpRep.storeDict.get("[trim]condition",[])
     Trim.groupList = ExpRep.storeDict.get("group",[])
+    Trim.replicationList = ExpRep.storeDict.get("replication",[])
     Trim.directionList = ExpRep.storeDict.get("direction",[])
 
     Trim.branchStr = ExpRep.storeDict.get("branch","")
