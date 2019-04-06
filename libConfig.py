@@ -45,9 +45,12 @@ class config:
             
         sourceDict.update(self.queryDict)
 
+
         pathlib.Path(self.folderStr).mkdir(parents=True,exist_ok=True)
         with open(pathStr,"w") as targetHandle:
             json.dump(self.queryDict,targetHandle,indent=2,sort_keys=True)
+
+        print("[libConfig]Finish writing json: "+self.queryStr)
 
 if __name__ == "__main__":
     print("__name__ == "+__name__)
