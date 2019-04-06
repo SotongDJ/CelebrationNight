@@ -20,7 +20,7 @@ class indexer:
         self.indexHeaderStr = ""
         self.threadStr = ""
 
-        self.testingBool = True
+        self.testingBool = False
 
     def indexing(self):
         # ---- Action ----

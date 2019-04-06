@@ -12,7 +12,7 @@ Testing.queryDict = {
     "replication"          : ["r1"],
     "pairPostfix"          : "pair",
     "unpairPostfix"        : "unpair",
-    "[trim]checkFolder"    : ["data/01-raw/","data/01-trimed/testing/"],
+    "[trim]checkFolder"    : ["data/01-raw/","data/03-trimed/testing/"],
     "[trim]condition"      : ["trimQ20","trimQ30"],
     "[trim]inputFileName"  : "data/01-raw/{group}-{replication}-{direction}{fileType}",
     # above: data/tmp/T1-r1-F.fastq

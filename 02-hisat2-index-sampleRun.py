@@ -25,7 +25,9 @@ for indexStr in ["speciesTestingA","speciesTestingB","speciesTestingC"]:
     Index.indexHeaderStr = Target.storeDict.get("indexHeader","")
     Index.threadStr = Target.storeDict.get("thread","")
 
-    if Target.storeDict.get("testing",False):
+    if not Target.storeDict.get("testing",True):
+        Index.testingBool = False
+    else:
         Index.testingBool = True
 
     Index.indexing()

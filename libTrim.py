@@ -136,7 +136,9 @@ if __name__ == "__main__":
     Trim.fileTypeStr = ExpRep.storeDict.get("[trim]fileType","")
     Trim.checkFolderList = ExpRep.storeDict.get("[trim]checkFolder",[])
 
-    if ExpRep.storeDict.get("testing",False):
+    if not ExpRep.storeDict.get("testing",True):
+        Trim.testingBool = False
+    else:
         Trim.testingBool = True
 
     Trim.trimming()
