@@ -36,7 +36,7 @@ class trimmer:
         self.fileTypeStr = str()
         self.checkFolderList = str()
 
-        self.testingBool = False
+        self.testingBool = True
 
     def trimming(self):
         # ---- Action ----
