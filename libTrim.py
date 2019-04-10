@@ -21,6 +21,7 @@ class trimmer:
     def __init__(self):
         # ---- Initialization ----
         self.commandStr = str()
+        self.queryStr = str()
 
         self.conditionList = list()
         self.groupList = list()
@@ -39,6 +40,41 @@ class trimmer:
         self.testingBool = True
 
     def trimming(self):
+        # ---- Parameter ----
+        BinTrim = libConfig.config()
+        BinTrim.queryStr = "binTrimmomatic"
+        BinTrim.folderStr = "data/config/"
+        BinTrim.modeStr = "UPDATE"
+        BinTrim.load()
+
+        ExpRep = libConfig.config()
+        ExpRep.queryStr = self.queryStr
+        ExpRep.folderStr = "data/config/"
+        ExpRep.modeStr = "UPDATE"
+        ExpRep.load()
+
+        # ---- Initialization ----
+        self.commandStr = BinTrim.storeDict["command"]
+
+        self.conditionList = ExpRep.storeDict.get("[trim]condition",[])
+        self.groupList = ExpRep.storeDict.get("group",[])
+        self.replicationList = ExpRep.storeDict.get("replication",[])
+        self.directionList = ExpRep.storeDict.get("direction",[])
+
+        self.branchStr = ExpRep.storeDict.get("branch","")
+        self.pairStr = ExpRep.storeDict.get("pairPostfix","")
+        self.unpairStr = ExpRep.storeDict.get("unpairPostfix","")
+
+        self.inputFileNameStr = ExpRep.storeDict.get("[trim]inputFileName","")
+        self.outputFileNameStr = ExpRep.storeDict.get("[trim]outputFileName","")
+        self.fileTypeStr = ExpRep.storeDict.get("[trim]fileType","")
+        self.checkFolderList = ExpRep.storeDict.get("[trim]checkFolder",[])
+
+        if not ExpRep.storeDict.get("testing",True):
+            self.testingBool = False
+        else:
+            self.testingBool = True
+
         # ---- Action ----
         for folderStr in self.checkFolderList:
             pathlib.Path(folderStr).mkdir(parents=True,exist_ok=True)
@@ -105,40 +141,6 @@ class trimmer:
 
 if __name__ == "__main__":
     print("__name__ == "+__name__)
-    # ---- Parameter ----
-    BinTrim = libConfig.config()
-    BinTrim.queryStr = "binTrimmomatic"
-    BinTrim.folderStr = "data/config/"
-    BinTrim.modeStr = "UPDATE"
-    BinTrim.load()
-
-    ExpRep = libConfig.config()
-    ExpRep.queryStr = "testing"
-    ExpRep.folderStr = "data/config/"
-    ExpRep.modeStr = "UPDATE"
-    ExpRep.load()
-
-    # ---- Initialization ----
     Trim = trimmer()
-    Trim.commandStr = BinTrim.storeDict["command"]
-
-    Trim.conditionList = ExpRep.storeDict.get("[trim]condition",[])
-    Trim.groupList = ExpRep.storeDict.get("group",[])
-    Trim.replicationList = ExpRep.storeDict.get("replication",[])
-    Trim.directionList = ExpRep.storeDict.get("direction",[])
-
-    Trim.branchStr = ExpRep.storeDict.get("branch","")
-    Trim.pairStr = ExpRep.storeDict.get("pairPostfix","")
-    Trim.unpairStr = ExpRep.storeDict.get("unpairPostfix","")
-
-    Trim.inputFileNameStr = ExpRep.storeDict.get("[trim]inputFileName","")
-    Trim.outputFileNameStr = ExpRep.storeDict.get("[trim]outputFileName","")
-    Trim.fileTypeStr = ExpRep.storeDict.get("[trim]fileType","")
-    Trim.checkFolderList = ExpRep.storeDict.get("[trim]checkFolder",[])
-
-    if not ExpRep.storeDict.get("testing",True):
-        Trim.testingBool = False
-    else:
-        Trim.testingBool = True
-
+    Trim.queryStr = "testing"
     Trim.trimming()
