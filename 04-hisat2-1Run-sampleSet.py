@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import libConfig
 # ---- Configuration of Experiment Design ---- 
 expRep = libConfig.config()
@@ -69,7 +70,7 @@ HISAT2.queryStr = "binHISAT2-RUN"
 HISAT2.folderStr = "data/config/"
 HISAT2.queryDict = {
     "command" : 
-        "hisat2 -q {dta} --phred{phred} -p {thread} " +
+        "bin/hisat2/hisat2 -q {dta} --phred{phred} -p {thread} " +
         "-x {indexHeader} " +
         "-1 {forwardFASTQ} " +
         "-2 {reverseFASTQ} " +
@@ -77,3 +78,33 @@ HISAT2.queryDict = {
 }
 HISAT2.modeStr = "OVERWRITE"
 HISAT2.save()
+
+SAMconvert = libConfig.config()
+SAMconvert.queryStr = "binSAMtools-CONVERT"
+SAMconvert.folderStr = "data/config/"
+SAMconvert.queryDict = {
+    "command" : 
+        "bin/samtools/samtools view -o {outputBAM} -Su {inputSAM}"
+}
+SAMconvert.modeStr = "OVERWRITE"
+SAMconvert.save()
+
+SAMsort = libConfig.config()
+SAMsort.queryStr = "binSAMtools-SORT"
+SAMsort.folderStr = "data/config/"
+SAMsort.queryDict = {
+    "command" : 
+        "bin/samtools/samtools sort -o {outputBAM} {inputBAM}"
+}
+SAMsort.modeStr = "OVERWRITE"
+SAMsort.save()
+
+Remove = libConfig.config()
+Remove.queryStr = "commandRM"
+Remove.folderStr = "data/config/"
+Remove.queryDict = {
+    "command" : 
+        "rm -vf {target}"
+}
+Remove.modeStr = "OVERWRITE"
+Remove.save()

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import libConfig
 # ---- Configuration of Experiment Design ---- 
 Testing = libConfig.config()
