@@ -23,6 +23,32 @@ class indexer:
         self.testingBool = False
 
     def indexing(self):
+        # ---- Parameter for Indexing ----
+        BinIndex = libConfig.config()
+        BinIndex.queryStr = "binHISAT2-BUILD"
+        BinIndex.folderStr = "data/config/"
+        BinIndex.modeStr = "UPDATE"
+        BinIndex.load()
+        # ---- Initialization for Indexing ----
+
+        self.commandStr = BinIndex.storeDict["command"]
+
+        Target = libConfig.config()
+        Target.queryStr = self.titleStr
+        Target.folderStr = "data/config/"
+        Target.modeStr = "UPDATE"
+        Target.load()
+
+        self.folderStr = Target.storeDict.get("checkFolder","")
+        self.seqPathStr = Target.storeDict.get("seqPath","")
+        self.indexHeaderStr = Target.storeDict.get("indexHeader","")
+        self.threadStr = Target.storeDict.get("thread","")
+
+        if not Target.storeDict.get("testing",True):
+            self.testingBool = False
+        else:
+            self.testingBool = True
+
         # ---- Action ----
         pathlib.Path(self.folderStr).mkdir(parents=True,exist_ok=True)
 
@@ -56,7 +82,23 @@ class aligner:
         HISAT2.modeStr = "UPDATE"
         HISAT2.load()
 
-        commandStr = HISAT2.storeDict.get("command","")
+        SAMconvert = libConfig.config()
+        SAMconvert.queryStr = "binSAMtools-CONVERT"
+        SAMconvert.folderStr = "data/config/"
+        SAMconvert.modeStr = "UPDATE"
+        SAMconvert.load()
+
+        SAMsort = libConfig.config()
+        SAMsort.queryStr = "binSAMtools-SORT"
+        SAMsort.folderStr = "data/config/"
+        SAMsort.modeStr = "UPDATE"
+        SAMsort.load()
+
+        Remove = libConfig.config()
+        Remove.queryStr = "commandRM"
+        Remove.folderStr = "data/config/"
+        Remove.modeStr = "UPDATE"
+        Remove.load()
 
         expRep = libConfig.config()
         expRep.queryStr = self.branchStr
@@ -136,7 +178,7 @@ class aligner:
                                 "pairType" : pairPostfixStr,
                                 "fileType" : fileTypeStr,
                             }
-                            outputDict = {
+                            samDict = {
                                 "annotateCondition": annotateConditionStr,
                                 "trimCondition": trimConditionStr,
                                 "hisat2Condition": hisat2ConditionStr,
@@ -144,45 +186,85 @@ class aligner:
                                 "replication": replicationStr,
                                 "fileType": ".sam",
                             }
-                            
-                            finalDict.update({
-                                "forwardFASTQ" : inputFileNameStr.format(**forwardDict),
-                                "reverseFASTQ" : inputFileNameStr.format(**reverseDict),
-                                "outputSAM"    : outputFileNameStr.format(**outputDict)
-                            })
+                            samFileStr = outputFileNameStr.format(**samDict)
+                            bamDict = {
+                                "annotateCondition": annotateConditionStr,
+                                "trimCondition": trimConditionStr,
+                                "hisat2Condition": hisat2ConditionStr,
+                                "group": groupStr,
+                                "replication": replicationStr,
+                                "fileType": ".bam",
+                            }
+                            bamFileStr = outputFileNameStr.format(**bamDict)
+                            sortedBAMDict = {
+                                "annotateCondition": annotateConditionStr,
+                                "trimCondition": trimConditionStr,
+                                "hisat2Condition": hisat2ConditionStr,
+                                "group": groupStr,
+                                "replication": replicationStr,
+                                "fileType": "-sorted.bam",
+                            }
+                            sortedBAMFileStr = outputFileNameStr.format(**sortedBAMDict)
 
-                            finalCommandStr = commandStr.format(**finalDict)
-                            Print.phraseStr = finalCommandStr
-                            Print.runCommand()
+                            if pathlib.Path(samFileStr).exists():
+                                Print.phraseStr = "SAM File existed: "+samFileStr
+                                Print.printTimeStamp()
+                            elif not pathlib.Path(samFileStr).exists() and not pathlib.Path(bamFileStr).exists() and not pathlib.Path(sortedBAMFileStr).exists():
+                                commandStr = HISAT2.storeDict.get("command","")
+                                finalDict.update({
+                                    "forwardFASTQ" : inputFileNameStr.format(**forwardDict),
+                                    "reverseFASTQ" : inputFileNameStr.format(**reverseDict),
+                                    "outputSAM"    : samFileStr
+                                })
+                                finalCommandStr = commandStr.format(**finalDict)
+                                Print.phraseStr = finalCommandStr
+                                Print.runCommand()
+
+                            if pathlib.Path(bamFileStr).exists():
+                                Print.phraseStr = "BAM File existed: "+bamFileStr
+                                Print.printTimeStamp()
+                            elif not pathlib.Path(bamFileStr).exists() and not pathlib.Path(sortedBAMFileStr).exists():
+                                commandStr = SAMconvert.storeDict.get("command","")
+                                finalDict.update({
+                                    "outputBAM" : bamFileStr,
+                                    "inputSAM" : samFileStr,
+                                })
+                                finalCommandStr = commandStr.format(**finalDict)
+                                Print.phraseStr = finalCommandStr
+                                Print.runCommand()
+
+                            if pathlib.Path(samFileStr).exists() and pathlib.Path(bamFileStr).exists():
+                                commandStr = Remove.storeDict.get("command","")
+                                finalCommandStr = commandStr.format(target=samFileStr)
+                                Print.phraseStr = finalCommandStr
+                                Print.runCommand()
+
+                            if pathlib.Path(sortedBAMFileStr).exists():
+                                Print.phraseStr = "Sorted BAM File existed: "+sortedBAMFileStr
+                                Print.printTimeStamp()
+                            else:
+                                commandStr = SAMsort.storeDict.get("command","")
+                                finalDict.update({
+                                    "outputBAM" : sortedBAMFileStr,
+                                    "inputBAM" : bamFileStr,
+                                })
+                                finalCommandStr = commandStr.format(**finalDict)
+                                Print.phraseStr = finalCommandStr
+                                Print.runCommand()
+
+                            if pathlib.Path(bamFileStr).exists() and pathlib.Path(sortedBAMFileStr).exists():
+                                commandStr = Remove.storeDict.get("command","")
+                                finalCommandStr = commandStr.format(target=bamFileStr)
+                                Print.phraseStr = finalCommandStr
+                                Print.runCommand()
+
+
                     Print.stopLog()
 
 if __name__ == "__main__":
     print("__name__ == "+__name__)
-    # ---- Parameter for Indexing ----
-    BinIndex = libConfig.config()
-    BinIndex.queryStr = "binHISAT2-BUILD"
-    BinIndex.folderStr = "data/config/"
-    BinIndex.modeStr = "UPDATE"
-    BinIndex.load()
 
     for indexStr in ["speciesTestingA","speciesTestingB","speciesTestingC"]:
-        # ---- Initialization for Indexing ----
-        Target = libConfig.config()
-        Target.queryStr = indexStr
-        Target.folderStr = "data/config/"
-        Target.modeStr = "UPDATE"
-        Target.load()
-
         Index = indexer()
-        Index.commandStr = BinIndex.storeDict["command"]
-
         Index.titleStr = indexStr
-        Index.folderStr = Target.storeDict.get("checkFolder","")
-        Index.seqPathStr = Target.storeDict.get("seqPath","")
-        Index.indexHeaderStr = Target.storeDict.get("indexHeader","")
-        Index.threadStr = Target.storeDict.get("thread","")
-
-        if Target.storeDict.get("testing",False):
-            Index.testingBool = True
-
         Index.indexing()
