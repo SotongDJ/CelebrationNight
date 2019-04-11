@@ -2,12 +2,24 @@
 import libConfig, libPrint
 import pathlib
 """
---- README of HISAT2 related actions ---
-Original Command of Building HISAT2 Index:
-  hisat2-build -p [THREAD] <Path and Name of GENOME File> \\
-    <OUTPUT FOLDER for HISAT2>/<codename>
+    --- README of HISAT2 related actions ---
+Original Command:
+    # Building HISAT2 Index
+    hisat2-build -p [THREAD] <Path and Name of GENOME File> \\
+        < prefix of HISAT2-build genome index (path+header)>
+    # Aligning and mapping
+    hisat2 \\
+        -q [--dta/--dta-cufflinks] --phred[phred] -p [thread] \\
+        -x [prefix of HISAT2-build genome index] \\
+        -1 [forward fastq files of] \\
+        -2 [reverse fastq files of] \\
+        -S [output SAM files] \\
+    # Convert SAM to BAM
+    samtools view -o [out.bam] -Su [in.sam]
+    # Sorting BAM for decreasing file size
+    samtools sort -o [out-sorted.bam] [in.bam]
 
---- README ---
+    --- README ---
 """
 class indexer:
     def __init__(self):
