@@ -1,4 +1,4 @@
-# CuffTie
+# CelebrationNight
 ## Scripts for StringTie/Cufflink hybrid protocol.
 
 - This project include some experiment coding for testing purpose.
