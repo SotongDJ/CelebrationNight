@@ -51,7 +51,7 @@ class indexer:
         Target.modeStr = "UPDATE"
         Target.load()
 
-        self.folderList = Target.storeDict.get("checkFolder",[])
+        self.folderStr = Target.storeDict.get("checkFolder","")
         self.seqPathStr = Target.storeDict.get("seqPath","")
         self.indexHeaderStr = Target.storeDict.get("indexHeader","")
         self.threadStr = Target.storeDict.get("thread","")
@@ -62,8 +62,7 @@ class indexer:
             self.testingBool = True
 
         # ---- Action ----
-        for folderStr in self.folderList:
-            pathlib.Path(folderStr).mkdir(parents=True,exist_ok=True)
+        pathlib.Path(self.folderStr).mkdir(parents=True,exist_ok=True)
 
         Print = libPrint.timer()
         Print.logFilenameStr = "02-hisat2-index-{title}".format(
@@ -89,11 +88,11 @@ class aligner:
         self.testingBool = False
     
     def aligning(self):
-        HISAT2 = libConfig.config()
-        HISAT2.queryStr = "binHISAT2-RUN"
-        HISAT2.folderStr = "data/config/"
-        HISAT2.modeStr = "UPDATE"
-        HISAT2.load()
+        BinHISAT2 = libConfig.config()
+        BinHISAT2.queryStr = "binHISAT2-RUN"
+        BinHISAT2.folderStr = "data/config/"
+        BinHISAT2.modeStr = "UPDATE"
+        BinHISAT2.load()
 
         SAMconvert = libConfig.config()
         SAMconvert.queryStr = "binSAMtools-CONVERT"
@@ -223,7 +222,7 @@ class aligner:
                                 Print.phraseStr = "SAM File existed: "+samFileStr
                                 Print.printTimeStamp()
                             elif not pathlib.Path(samFileStr).exists() and not pathlib.Path(bamFileStr).exists() and not pathlib.Path(sortedBAMFileStr).exists():
-                                commandStr = HISAT2.storeDict.get("command","")
+                                commandStr = BinHISAT2.storeDict.get("command","")
                                 finalDict.update({
                                     "forwardFASTQ" : inputFileNameStr.format(**forwardDict),
                                     "reverseFASTQ" : inputFileNameStr.format(**reverseDict),

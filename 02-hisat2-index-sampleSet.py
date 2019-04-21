@@ -8,7 +8,7 @@ SpeA.queryDict = {
     "from" : "binHISAT2-BUILD",
     "seqPath" : "data/GenomeSequence/SpeA.fa",
     "indexHeader" : "data/02-hisat2Index/SpeA",
-    "checkFolder"    : ["data/02-hisat2Index/"],
+    "checkFolder"    : "data/02-hisat2Index/",
     "thread" : "6",
     "testing" : True,
 }
@@ -22,7 +22,7 @@ SpeB.queryDict = {
     "from" : "binHISAT2-BUILD",
     "seqPath" : "data/GenomeSequence/SpeB.fna",
     "indexHeader" : "data/02-hisat2Index/SpeB",
-    "checkFolder"    : ["data/02-hisat2Index/"],
+    "checkFolder"    : "data/02-hisat2Index/",
     "thread" : "6",
     "testing" : True,
 }
@@ -36,7 +36,7 @@ SpeC.queryDict = {
     "from" : "binHISAT2-BUILD",
     "seqPath" : "data/GenomeSequence/SpeC.fasta",
     "indexHeader" : "data/02-hisat2Index/SpeC",
-    "checkFolder"    : ["data/02-hisat2Index/"],
+    "checkFolder"    : "data/02-hisat2Index/",
     "thread" : "6",
     "testing" : True,
 }
