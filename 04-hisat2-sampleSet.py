@@ -30,7 +30,7 @@ expRep.queryDict = {
 expRep.modeStr = "UPDATE"
 expRep.save()
 
-# ---- Configuration of Trimming Conditions ---- 
+# ---- Configuration of Alignment Conditions ---- 
 stringtiePara = libConfig.config()
 stringtiePara.queryStr = "hisat2ForStringtie"
 stringtiePara.folderStr = "data/config/"
@@ -53,7 +53,7 @@ cufflinksPara.queryDict = {
 cufflinksPara.modeStr = "OVERWRITE"
 cufflinksPara.save()
 
-# ---- Configuration of Trimming Command ---- 
+# ---- Configuration of Alignment Command ---- 
 """
   Original command:
     hisat2 -q [--dta/--dta-cufflinks] --phred[33] -p [4]

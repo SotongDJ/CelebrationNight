@@ -51,7 +51,7 @@ class indexer:
         Target.modeStr = "UPDATE"
         Target.load()
 
-        self.folderStr = Target.storeDict.get("checkFolder","")
+        self.folderList = Target.storeDict.get("checkFolder",[])
         self.seqPathStr = Target.storeDict.get("seqPath","")
         self.indexHeaderStr = Target.storeDict.get("indexHeader","")
         self.threadStr = Target.storeDict.get("thread","")
@@ -62,7 +62,8 @@ class indexer:
             self.testingBool = True
 
         # ---- Action ----
-        pathlib.Path(self.folderStr).mkdir(parents=True,exist_ok=True)
+        for folderStr in self.folderList:
+            pathlib.Path(folderStr).mkdir(parents=True,exist_ok=True)
 
         Print = libPrint.timer()
         Print.logFilenameStr = "02-hisat2-index-{title}".format(
