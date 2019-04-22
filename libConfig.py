@@ -36,9 +36,6 @@ class config:
                 print("[libConfig]Create new config dictionary: "+self.queryStr)
                 sourceDict = dict()
             
-        elif self.modeStr == "OVERWRITE":
-            print("[libConfig]Overwrite json: "+self.queryStr)
-            sourceDict = dict()
         else:
             print("[libConfig]Overwrite json: "+self.queryStr)
             sourceDict = dict()
@@ -48,7 +45,7 @@ class config:
 
         pathlib.Path(self.folderStr).mkdir(parents=True,exist_ok=True)
         with open(pathStr,"w") as targetHandle:
-            json.dump(self.queryDict,targetHandle,indent=2,sort_keys=True)
+            json.dump(sourceDict,targetHandle,indent=2,sort_keys=True)
 
         print("[libConfig]Finish writing json: "+self.queryStr)
 
