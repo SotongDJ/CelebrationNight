@@ -99,6 +99,16 @@ SAMsort.queryDict = {
 SAMsort.modeStr = "OVERWRITE"
 SAMsort.save()
 
+FLAGstat = libConfig.config()
+FLAGstat.queryStr = "binSAMtools-FLAGSTAT"
+FLAGstat.folderStr = "data/config/"
+FLAGstat.queryDict = {
+    "command" : 
+        "bin/samtools/samtools flagstat {outputBAM}"
+}
+FLAGstat.modeStr = "OVERWRITE"
+FLAGstat.save()
+
 Remove = libConfig.config()
 Remove.queryStr = "commandRM"
 Remove.folderStr = "data/config/"
