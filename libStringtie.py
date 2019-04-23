@@ -46,15 +46,6 @@ class assembler:
             self.testingBool = False
         else:
             self.testingBool = True
-        
-        # ---- Action ----
-        Print = libPrint.timer()
-        Print.logFilenameStr = "05-stringtie-assembling-{title}".format(
-            title=self.branchStr
-        )
-        Print.folderStr = "data/log/"
-        Print.testingBool = self.testingBool
-        Print.startLog()
 
         for antCondStr in self.annotateConditionList:
             Annotate = libConfig.config()
@@ -67,6 +58,16 @@ class assembler:
             antPathStr = Annotate.storeDict.get("antPath","")
 
             for trimCondStr in self.trimConditionList:
+                # ---- Action ----
+                Print = libPrint.timer()
+                Print.logFilenameStr = "05-stringtie-assembling-{annotate}-{trim}".format(
+                    annotate=antCondStr,
+                    trim=trimCondStr,
+                )
+                Print.folderStr = "data/log/"
+                Print.testingBool = self.testingBool
+                Print.startLog()
+                
                 for groupStr in self.groupList:
                     for repliStr in self.replicationList:
                         outputFolderStr = self.outputFolderStr.format(
@@ -74,12 +75,14 @@ class assembler:
                             trimCondition=trimCondStr
                         )
                         pathlib.Path(outputFolderStr).mkdir(parents=True,exist_ok=True)
+
                         outputFilenameStr = self.outputFileNameStr.format(
                             annotateCondition=antCondStr,
                             trimCondition=trimCondStr,
                             group=groupStr,
                             replication=repliStr
                         )
+
                         inputFilenameStr = self.inputFileNameStr.format(
                             annotateCondition=antCondStr,
                             hisat2Condition=self.hisat2ConditionStr,
@@ -87,11 +90,15 @@ class assembler:
                             group=groupStr,
                             replication=repliStr
                         )
+
                         CommandStr = self.commandStr.format(
-                                bamfile=inputFilenameStr,
-                                outputfile=outputFilenameStr,
-                                thread=threadStr,
-                                antPath=antPathStr
-                            )       
+                            bamfile=inputFilenameStr,
+                            outputfile=outputFilenameStr,
+                            thread=threadStr,
+                            antPath=antPathStr
+                        )
+                        
                         Print.phraseStr = CommandStr
                         Print.runCommand()
+
+                Print.stopLog()
