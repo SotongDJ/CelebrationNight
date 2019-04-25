@@ -18,8 +18,11 @@ expRep.queryDict = {
     "[stringtie2]inputFileName" : "data/04-hisat2/testing/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}{replication}-sorted.bam",
     # above: data/04-hisat2/testing/speciesTestingA-trimQ20/hisat2ForStringtie-T1r1-sorted.bam
     "[stringtie2]outputFileName" : "data/05-stringtie2/testing/{annotateCondition}-{trimCondition}/{group}{replication}.gtf",
-    # above: data/05-stringtie2/singRep/speciesTestingA-trimQ20/T1r1.gtf
+    # above: data/05-stringtie2/testing/speciesTestingA-trimQ20/T1r1.gtf
     "[stringtie2]outputFolder" : "data/05-stringtie2/testing/{annotateCondition}-{trimCondition}/",
+    "[stringtie2]mergedFileName" : "data/05-stringtie2/testing/{annotateCondition}-{trimCondition}-merged.gtf",
+    # above: data/05-stringtie2/testing/speciesTestingA-trimQ20-merged.gtf
+    "[stringtie2]mergedFolder" : "data/05-stringtie2/singRep/",
     "testing" : False,
 }
 expRep.modeStr = "UPDATE"
@@ -88,3 +91,14 @@ Stringtie.queryDict = {
 }
 Stringtie.modeStr = "UPDATE"
 Stringtie.save()
+
+StMerge = libConfig.config()
+StMerge.queryStr = "binStringTie-MERGE"
+StMerge.folderStr = "data/config/"
+StMerge.queryDict = {
+    "command" : 
+        "bin/stringtie/stringtie {inputfiles} --merge -o {outputfile} "+
+        "-p {thread} -G {antPath}"
+}
+StMerge.modeStr = "UPDATE"
+StMerge.save()
