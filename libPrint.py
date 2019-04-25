@@ -52,11 +52,13 @@ class timer():
         self.delimiterStr = ""
 
     def runCommand(self):
+        pathlib.Path(self.folderStr).mkdir(parents=True,exist_ok=True)
         pathStr = "{}{}.log".format(
             self.folderStr,self.logFilenameStr
         )
-        pathlib.Path(self.folderStr).mkdir(parents=True,exist_ok=True)
-
+        errorStr = "{}{}-error.log".format(
+            self.folderStr,self.logFilenameStr
+        )
         self.currentTimeStr = time.strftime("%Y%m%d%H%M%S")
         self.delimiterStr = "- :" # for convertTime()
         timeMsgStr = "[{}] Run command: {}".format(self.convertTime(),self.phraseStr)
@@ -64,8 +66,11 @@ class timer():
         with open(pathStr,'a') as logFileHandle:
             logFileHandle.write( timeMsgStr + "\n" )
         
+        with open(errorStr,'a') as logFileHandle:
+            logFileHandle.write( timeMsgStr + "\n" )
+        
         if not self.testingBool:
-            call(self.phraseStr.split(" "), stdout=open(pathStr,'a'))
+            call(self.phraseStr.split(" "), stdout=open(pathStr,'a'),stderr=open(errorStr,'a'))
 
         self.currentTimeStr = ""
         self.phraseStr = ""
