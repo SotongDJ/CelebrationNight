@@ -69,8 +69,15 @@ class timer():
         with open(errorStr,'a') as logFileHandle:
             logFileHandle.write( timeMsgStr + "\n" )
         
+        commandList = self.phraseStr.split(" ")
+        if "" in commandList:
+            errorMsgStr = "\n[libPrint ERROR MSG] \"\" in command line\n"
+            print(errorMsgStr)
+            with open(errorStr,'a') as logFileHandle:
+                logFileHandle.write( errorMsgStr + "\n" )
+            
         if not self.testingBool:
-            call(self.phraseStr.split(" "), stdout=open(pathStr,'a'),stderr=open(errorStr,'a'))
+            call(commandList, stdout=open(pathStr,'a'),stderr=open(errorStr,'a'))
 
         self.currentTimeStr = ""
         self.phraseStr = ""
