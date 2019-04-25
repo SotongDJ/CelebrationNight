@@ -204,7 +204,7 @@ class estimator:
     def estimating(self):
         # ---- Parameter for Assembling ----
         BinMap = libConfig.config()
-        BinMap.queryStr = "binStringTie-RUN"
+        BinMap.queryStr = "binStringTie-ESTIMATE"
         BinMap.folderStr = "data/config/"
         BinMap.modeStr = "UPDATE"
         BinMap.load()
@@ -224,8 +224,10 @@ class estimator:
         self.annotateConditionList = Target.storeDict.get("[stringtie2]annotateCondition",[])
         self.trimConditionList = Target.storeDict.get("[stringtie2]trimCondition",[])
         self.inputFileNameStr = Target.storeDict.get("[stringtie2]inputFileName","")
-        self.outputFileNameStr = Target.storeDict.get("[stringtie2]outputFileName","")
-        self.outputFolderStr = Target.storeDict.get("[stringtie2]outputFolder","")
+        self.mergedFileNameStr = Target.storeDict.get("[stringtie2]mergedFileName","")
+        self.balgownFolderStr = Target.storeDict.get("[stringtie2]ballgownFolder","")
+        self.gtfFileNameStr = Target.storeDict.get("[stringtie2]gtfFileName","")
+        self.tsvFileNameStr = Target.storeDict.get("[stringtie2]tsvFileName","")
         
         if not Target.storeDict.get("testing",True):
             self.testingBool = False
@@ -240,12 +242,11 @@ class estimator:
             Annotate.load()
 
             threadStr = Annotate.storeDict.get("thread","")
-            antPathStr = Annotate.storeDict.get("antPath","")
 
             for trimCondStr in self.trimConditionList:
                 # ---- Action ----
                 Print = libPrint.timer()
-                Print.logFilenameStr = "05-stringtie-assembling-{annotate}-{trim}".format(
+                Print.logFilenameStr = "05-stringtie-estimating-{annotate}-{trim}".format(
                     annotate=antCondStr,
                     trim=trimCondStr,
                 )
@@ -255,20 +256,13 @@ class estimator:
                 
                 for groupStr in self.groupList:
                     for repliStr in self.replicationList:
-                        outputFolderStr = self.outputFolderStr.format(
+                        ballgownPathStr = self.balgownFolderStr.format(
                             annotateCondition=antCondStr,
                             trimCondition=trimCondStr
                         )
-                        pathlib.Path(outputFolderStr).mkdir(parents=True,exist_ok=True)
+                        pathlib.Path(ballgownPathStr).mkdir(parents=True,exist_ok=True)
 
-                        outputFilenameStr = self.outputFileNameStr.format(
-                            annotateCondition=antCondStr,
-                            trimCondition=trimCondStr,
-                            group=groupStr,
-                            replication=repliStr
-                        )
-
-                        inputFilenameStr = self.inputFileNameStr.format(
+                        bamPathStr = self.inputFileNameStr.format(
                             annotateCondition=antCondStr,
                             hisat2Condition=self.hisat2ConditionStr,
                             trimCondition=trimCondStr,
@@ -276,11 +270,32 @@ class estimator:
                             replication=repliStr
                         )
 
+                        mergeFileNameStr = self.mergedFileNameStr.format(
+                            annotateCondition=antCondStr,
+                            trimCondition=trimCondStr
+                        )
+
+                        gtfPathStr = self.gtfFileNameStr.format(
+                            annotateCondition=antCondStr,
+                            trimCondition=trimCondStr,
+                            group=groupStr,
+                            replication=repliStr
+                        )
+
+                        tsvPathStr = self.tsvFileNameStr.format(
+                            annotateCondition=antCondStr,
+                            trimCondition=trimCondStr,
+                            group=groupStr,
+                            replication=repliStr
+                        )
+
                         CommandStr = self.commandStr.format(
-                            bamfile=inputFilenameStr,
-                            outputfile=outputFilenameStr,
                             thread=threadStr,
-                            antPath=antPathStr
+                            mergePath=mergeFileNameStr,
+                            bamfile=bamPathStr,
+                            ballgownPath=ballgownPathStr,
+                            gtffile=gtfPathStr,
+                            tsvfile=tsvPathStr
                         )
                         
                         Print.phraseStr = CommandStr
