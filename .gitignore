@@ -8,7 +8,7 @@ temp/
 *-set*.py
 
 .fuse*
-testing*.py
+testing*.*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
