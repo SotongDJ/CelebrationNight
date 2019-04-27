@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import pathlib
 
-compareSet = set()
+# compareSet = set()
 antStr = "speciesTestingA"
 trimStr = "trimQ20" # ["trimQ20","trimQ30"]:
 sampleList = ["Controlr1","T1r1","T2r1","T3r1","T4r1","T5r1"]
@@ -20,7 +20,14 @@ for sampleStr in sampleList:
     """
     compareList = list()
     for rowInt in range(countInt):
-        compareStr = "\t".join([str(x) for x in rowList[rowInt][0:7]])
+        insertList = []
+        sourceList = rowList[rowInt]
+        if 'MSTRG' in sourceList[0]:
+            insertList.append(sourceList[0])
+        else:
+            insertList.append("UUID."+str(rowInt))
+        insertList.extend(sourceList[0:7])
+        compareStr = "\t".join([str(x) for x in insertList])
         compareList.append(compareStr)
     
     if compareSet == set():
