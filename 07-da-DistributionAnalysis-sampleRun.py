@@ -3,11 +3,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import pathlib
 
-for trimStr in ["trimQ20","trimQ30"]:
-    for sampleStr in ["Controlr1","T1r1","T2r1","T3r1","T4r1","T5r1"]:
-        antStr = "speciesTestingA"
-        pathStr = "data/05-stringtie2/testing/{ant}-{trim}/{sample}-expression.tsv"
-        samplePath = pathStr.format(ant=antStr,trim=trimStr,sample=sampleStr)
+branshStr = "testing"
+trimList = ["trimQ20","trimQ30"]
+antStr = "speciesTestingA"
+sampleList = ["Controlr1","T1r1","T2r1","T3r1","T4r1","T5r1"]
+
+for trimStr in trimList:
+    for sampleStr in sampleList:
+        pathStr = "data/05-stringtie2/{branch}/{ant}-{trim}/{sample}-expression.tsv"
+        samplePath = pathStr.format(branch=branshStr,ant=antStr,trim=trimStr,sample=sampleStr)
         sampleDF = pd.read_csv(samplePath,delimiter="\t",header=0)
         # sampleDF.columns.values
         # sampleDF.head(10)
@@ -28,10 +32,11 @@ for trimStr in ["trimQ20","trimQ30"]:
         ax1.boxplot(l10ScaAy, showfliers=False, whis='range')
         # ax1.boxplot(sampleAy)
         # plt.xticks(xNumList,xNameList)
-        pathlib.Path("data/05-stringtie2/testing/BoxPlot/").mkdir(parents=True,exist_ok=True)
-        savePathStr = "data/05-stringtie2/testing/BoxPlot/{ant}-{trim}-{sample}-boxplot.png"
-        savePath = savePathStr.format(ant=antStr,trim=trimStr,sample=sampleStr)
+        pathlib.Path("data/06-da-DitributionAnalysis/{branch}/".format(branch=branshStr)).mkdir(parents=True,exist_ok=True)
+        savePathStr = "data/06-da-DitributionAnalysis/{branch}/{ant}-{trim}-{sample}-boxplot.png"
+        savePath = savePathStr.format(branch=branshStr,ant=antStr,trim=trimStr,sample=sampleStr)
         plt.ylim((-5,5))
+        plt.xticks((1),(sampleStr+"("+trimStr+")"))
         plt.savefig(savePath, bbox_inches='tight')
         # plt.show()
         plt.close()
