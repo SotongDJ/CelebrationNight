@@ -83,6 +83,20 @@ class timer():
         self.phraseStr = ""
         self.delimiterStr = ""
         
+    def printing(self,printMsgStr):
+        pathStr = "{}{}.log".format(
+            self.folderStr,self.logFilenameStr
+        )
+        pathlib.Path(self.folderStr).mkdir(parents=True,exist_ok=True)
+
+        print(printMsgStr)
+        with open(pathStr,'a') as logFileHandle:
+            logFileHandle.write(printMsgStr+"\n")
+
+        self.currentTimeStr = ""
+        self.phraseStr = ""
+        self.delimiterStr = ""
+        
     def printPhrase(self):
         pathStr = "{}{}.log".format(
             self.folderStr,self.logFilenameStr
