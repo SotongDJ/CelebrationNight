@@ -10,9 +10,11 @@ antStr = "speciesTestingA"
 sampleList = ["Controlr1","T1r1","T2r1","T3r1","T4r1","T5r1"]
 testingBool = True
 
-pathlib.Path("data/06-da-DitributionAnalysis/{branch}/".format(branch=branshStr)).mkdir(parents=True,exist_ok=True)
+fig, axs = plt.subplots(1,10, sharex=True, sharey=True)
+yInt = 0
+pathlib.Path("data/07-da-DitributionAnalysis/{branch}/".format(branch=branshStr)).mkdir(parents=True,exist_ok=True)
 for trimStr in trimList:
-    summaryPathStr = "data/06-da-DitributionAnalysis/{branch}/{ant}-{trim}.tsv"
+    summaryPathStr = "data/07-da-DitributionAnalysis/{branch}/{ant}-{trim}.tsv"
     summaryPath = summaryPathStr.format(branch=branshStr,ant=antStr,trim=trimStr)
     with open(summaryPath,'w') as summaryHandle:
         summaryColumnList = list()
@@ -29,7 +31,7 @@ for trimStr in trimList:
         
         Print = libPrint.timer()
         Print.logFilenameStr = logFileName
-        Print.folderStr = "data/06-da-DitributionAnalysis/{branch}/".format(branch=branshStr)
+        Print.folderStr = "data/07-da-DitributionAnalysis/{branch}/".format(branch=branshStr)
         Print.testingBool = testingBool
         Print.startLog()
 
@@ -80,18 +82,17 @@ for trimStr in trimList:
         with open(summaryPath,'a') as summaryHandle:
             summaryHandle.write("\t".join(summaryList)+"\n")
 
-        fig1, ax = plt.subplots()
-        # ax.set_title(sampleStr+"("+trimStr+")")
-        ax.boxplot(l10ScaAy, showfliers=False, whis='range')
-
-        savePathStr = "data/06-da-DitributionAnalysis/{branch}/{ant}-{trim}-{sample}-boxplot.png"
-        savePath = savePathStr.format(branch=branshStr,ant=antStr,trim=trimStr,sample=sampleStr)
-        plt.ylim((-5,5))
-
-        plt.xticks([1],[sampleStr+"("+trimStr+")"])
-        plt.savefig(savePath, bbox_inches='tight')
-        # plt.show()
-        plt.close()
-        Print.printing("  BoxPlot drawed and saved in "+savePath)
-        Print.printing("\n")
+        axs[yInt].set_title(sampleStr+"("+trimStr+")")
+        axs[yInt].boxplot(l10ScaAy, showfliers=False, whis='range')
         Print.stopLog()
+        yInt = yInt + 1
+
+savePathStr = "data/07-da-DitributionAnalysis/{branch}/{ant}-boxplot.png"
+savePath = savePathStr.format(branch=branshStr,ant=antStr)
+# plt.xticks([1],[sampleStr+"("+trimStr+")"])
+plt.ylim((-5,5))
+# plt.savefig(savePath, bbox_inches='tight')
+plt.show()
+plt.close()
+# Print.printing("  BoxPlot drawed and saved in "+savePath)
+# Print.printing("\n")
