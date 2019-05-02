@@ -40,8 +40,8 @@ for conditionTup in conditionList:
         elif compareSet == set(compareList):
             print("    "+sampleStr+": different")
 
-        pathlib.Path( "data/07-expressionTable-SQLite3/{}/".format(branchStr) ).mkdir(parents=True,exist_ok=True)
-        fileStr = 'data/07-expressionTable-SQLite3/{branch}/Expression-{ant}-{trim}.db'
+        pathlib.Path( "data/07-sl-expressionTable-SQLite3/{}/".format(branchStr) ).mkdir(parents=True,exist_ok=True)
+        fileStr = 'data/07-sl-expressionTable-SQLite3/{branch}/Expression-{ant}-{trim}.db'
         filePath = fileStr.format(branch=branchStr,ant=antStr,trim=trimStr)
         Connect = sqlite3.connect(filePath)
         print("[SQLite3]\n    "+filePath)
@@ -84,7 +84,7 @@ for conditionTup in conditionList:
             createColumnList.append(columnStr)
             insertColumnList.append("{target}_{sample}".format(target=targetStr,sample=sampleStr))
 
-    fileStr = 'data/07-expressionTable-SQLite3/{branch}/Expression-{ant}-{trim}.db'
+    fileStr = 'data/07-sl-expressionTable-SQLite3/{branch}/Expression-{ant}-{trim}.db'
     filePath = fileStr.format(branch=branchStr,ant=antStr,trim=trimStr)
     Connect = sqlite3.connect(filePath)
     print("[SQLite3]\n    "+filePath)
