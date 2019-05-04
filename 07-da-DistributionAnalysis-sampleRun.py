@@ -9,12 +9,16 @@ trimList = ["trimQ20","trimQ30"]
 antStr = "speciesTestingA"
 sampleList = ["Controlr1","T1r1","T2r1","T3r1","T4r1","T5r1"]
 testingBool = True
+saveFolderStr = "data/07-da-DitributionAnalysis/{branch}/"
+savePathStr = "data/07-da-DitributionAnalysis/{branch}/{ant}-boxplot.png"
+summaryPathStr = "data/07-da-DitributionAnalysis/{branch}/{ant}-{trim}.tsv"
+expressionPathStr = "data/05-stringtie2/{branch}/{ant}-{trim}/{sample}-expression.tsv"
+logFileNamehStr = "{ant}-{trim}-{sample}"
 
 fig, axs = plt.subplots(1,10, sharex=True, sharey=True)
 yInt = 0
-pathlib.Path("data/07-da-DitributionAnalysis/{branch}/".format(branch=branshStr)).mkdir(parents=True,exist_ok=True)
+pathlib.Path(saveFolderStr.format(branch=branshStr)).mkdir(parents=True,exist_ok=True)
 for trimStr in trimList:
-    summaryPathStr = "data/07-da-DitributionAnalysis/{branch}/{ant}-{trim}.tsv"
     summaryPath = summaryPathStr.format(branch=branshStr,ant=antStr,trim=trimStr)
     with open(summaryPath,'w') as summaryHandle:
         summaryColumnList = list()
@@ -26,12 +30,10 @@ for trimStr in trimList:
     for sampleStr in sampleList:
         summaryList = list()
 
-        logFileNamehStr = "{ant}-{trim}-{sample}"
         logFileName = logFileNamehStr.format(branch=branshStr,ant=antStr,trim=trimStr,sample=sampleStr)
-        
         Print = libPrint.timer()
         Print.logFilenameStr = logFileName
-        Print.folderStr = "data/07-da-DitributionAnalysis/{branch}/".format(branch=branshStr)
+        Print.folderStr = saveFolderStr.format(branch=branshStr)
         Print.testingBool = testingBool
         Print.startLog()
 
@@ -39,8 +41,7 @@ for trimStr in trimList:
         Print.printing("Sample: "+sampleStr)
         summaryList.append(sampleStr)
 
-        pathStr = "data/05-stringtie2/{branch}/{ant}-{trim}/{sample}-expression.tsv"
-        samplePath = pathStr.format(branch=branshStr,ant=antStr,trim=trimStr,sample=sampleStr)
+        samplePath = expressionPathStr.format(branch=branshStr,ant=antStr,trim=trimStr,sample=sampleStr)
         sampleDF = pd.read_csv(samplePath,delimiter="\t",header=0)
         # sampleDF.columns.values
         # sampleDF.head(10)
@@ -87,7 +88,6 @@ for trimStr in trimList:
         Print.stopLog()
         yInt = yInt + 1
 
-savePathStr = "data/07-da-DitributionAnalysis/{branch}/{ant}-boxplot.png"
 savePath = savePathStr.format(branch=branshStr,ant=antStr)
 # plt.xticks([1],[sampleStr+"("+trimStr+")"])
 plt.ylim((-5,5))

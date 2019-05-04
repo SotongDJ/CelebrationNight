@@ -9,11 +9,12 @@ branchStr = "testing"
 antStr = "speciesTestingA"
 controlStr = "Controlr1"
 sampleList = ["Controlr1","T1r1","T2r1","T3r1","T4r1","T5r1"]
+trim20PathStr = 'data/07-sl-expressionTable-SQLite3/{branch}/Expression-{ant}-trimQ20.db'
+trim30PathStr = 'data/07-sl-expressionTable-SQLite3/{branch}/Expression-{ant}-trimQ30.db'
 
-fileStr = 'data/07-sl-expressionTable-SQLite3/{branch}/Expression-{ant}-trimQ20.db'
-filePath = fileStr.format(branch=branchStr,ant=antStr)
-Connect = sqlite3.connect(filePath)
-print("[SQLite3]\n    "+filePath)
+trim20Path = trim20PathStr.format(branch=branchStr,ant=antStr)
+Connect = sqlite3.connect(trim20Path)
+print("[SQLite3]\n    "+trim20Path)
 Cursor = Connect.cursor()
 
 q20Dict = dict()
@@ -27,10 +28,9 @@ for sampleStr in sampleList:
 
 Connect.close()
 
-fileStr = 'data/07-sl-expressionTable-SQLite3/{branch}/Expression-{ant}-trimQ30.db'
-filePath = fileStr.format(branch=branchStr,ant=antStr)
-Connect = sqlite3.connect(filePath)
-print("[SQLite3]\n    "+filePath)
+trim30Path = trim30PathStr.format(branch=branchStr,ant=antStr)
+Connect = sqlite3.connect(trim30Path)
+print("[SQLite3]\n    "+trim30Path)
 Cursor = Connect.cursor()
 
 q30Dict = dict()

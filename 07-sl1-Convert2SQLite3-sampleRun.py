@@ -9,15 +9,22 @@ conditionList = [("speciesTestingA","trimQ20"),("speciesTestingA","trimQ30")]
 controlStr = "Controlr1"
 sampleList = ["Controlr1","T1r1","T2r1","T3r1","T4r1","T5r1"]
 compareSet = set()
+stringtiePathStr = "data/05-st-stringtie2/{branch}/{ant}-{trim}/{sample}-expression.tsv"
+sqlFolderStr = "data/07-sl-expressionTable-SQLite3/{branch}/"
+sqlPathStr = 'data/07-sl-expressionTable-SQLite3/{branch}/Expression-{ant}-{trim}.db'
 
 for conditionTup in conditionList:
     antStr = conditionTup[0]
     trimStr = conditionTup[1]
     for sampleStr in sampleList:
-        pathStr = "data/05-stringtie2/{branch}/{ant}-{trim}/{sample}-expression.tsv"
-        samplePath = pathStr.format(branch=branchStr,ant=antStr,trim=trimStr,sample=sampleStr)
+        samplePath = stringtiePathStr.format(
+                branch=branchStr,
+                ant=antStr,
+                trim=trimStr,
+                sample=sampleStr
+            )
         sampleDF = pd.read_csv(samplePath,delimiter="\t",header=0)
-        print("[Pandas]\n    "+pathStr)
+        print("[Pandas]\n    "+samplePath)
         
         rowList = sampleDF.values.tolist()
         countInt = len(rowList)
@@ -40,11 +47,10 @@ for conditionTup in conditionList:
         elif compareSet == set(compareList):
             print("    "+sampleStr+": different")
 
-        pathlib.Path( "data/07-sl-expressionTable-SQLite3/{}/".format(branchStr) ).mkdir(parents=True,exist_ok=True)
-        fileStr = 'data/07-sl-expressionTable-SQLite3/{branch}/Expression-{ant}-{trim}.db'
-        filePath = fileStr.format(branch=branchStr,ant=antStr,trim=trimStr)
-        Connect = sqlite3.connect(filePath)
-        print("[SQLite3]\n    "+filePath)
+        pathlib.Path( sqlFolderStr.format(branch=branchStr) ).mkdir(parents=True,exist_ok=True)
+        sqlPath = sqlPathStr.format(branch=branchStr,ant=antStr,trim=trimStr)
+        Connect = sqlite3.connect(sqlPath)
+        print("[SQLite3]\n    "+sqlPath)
         Cursor = Connect.cursor()
         ReturnMsg = Cursor.execute("""CREATE TABLE {}_Expression
                     ('UUID'  TEXT    PRIMARY KEY NOT NULL, 
@@ -84,10 +90,8 @@ for conditionTup in conditionList:
             createColumnList.append(columnStr)
             insertColumnList.append("{target}_{sample}".format(target=targetStr,sample=sampleStr))
 
-    fileStr = 'data/07-sl-expressionTable-SQLite3/{branch}/Expression-{ant}-{trim}.db'
-    filePath = fileStr.format(branch=branchStr,ant=antStr,trim=trimStr)
-    Connect = sqlite3.connect(filePath)
-    print("[SQLite3]\n    "+filePath)
+    Connect = sqlite3.connect(sqlPath)
+    print("[SQLite3]\n    "+sqlPath)
     Cursor = Connect.cursor()
     ReturnMsg = Cursor.execute(createComStr.format(",".join(createColumnList)))
     Connect.commit()
