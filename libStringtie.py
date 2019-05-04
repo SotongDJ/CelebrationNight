@@ -302,3 +302,105 @@ class estimator:
                         Print.runCommand()
 
                 Print.stopLog()
+
+class directEstimator:
+    def __init__(self):
+        self.branchStr = ""
+        self.testingBool = True
+
+    def directEstimating(self):
+        # ---- Parameter for Assembling ----
+        BinMap = libConfig.config()
+        BinMap.queryStr = "binStringTie-ESTIMATE"
+        BinMap.folderStr = "data/config/"
+        BinMap.modeStr = "UPDATE"
+        BinMap.load()
+
+        self.commandStr = BinMap.storeDict["command"]
+
+        # ---- Initialization for Assembling ----
+        Target = libConfig.config()
+        Target.queryStr = self.branchStr
+        Target.folderStr = "data/config/"
+        Target.modeStr = "UPDATE"
+        Target.load()
+
+        self.groupList = Target.storeDict.get("group",[])
+        self.replicationList = Target.storeDict.get("replication",[])
+        self.hisat2ConditionStr = Target.storeDict.get("[stringtie2]hisat2Condition","")
+        self.annotateConditionList = Target.storeDict.get("[stringtie2]annotateCondition",[])
+        self.trimConditionList = Target.storeDict.get("[stringtie2]trimCondition",[])
+        self.inputFileNameStr = Target.storeDict.get("[stringtie2]inputFileName","")
+        self.balgownFolderStr = Target.storeDict.get("[dsStringtie2]ballgownFolder","")
+        self.gtfFileNameStr = Target.storeDict.get("[dsStringtie2]gtfFileName","")
+        self.tsvFileNameStr = Target.storeDict.get("[dsStringtie2]tsvFileName","")
+        
+        if not Target.storeDict.get("testing",True):
+            self.testingBool = False
+        else:
+            self.testingBool = True
+
+        for antCondStr in self.annotateConditionList:
+            Annotate = libConfig.config()
+            Annotate.queryStr = antCondStr
+            Annotate.folderStr = "data/config/"
+            Annotate.modeStr = "UPDATE"
+            Annotate.load()
+
+            threadStr = Annotate.storeDict.get("thread","")
+            antPathStr = Annotate.storeDict.get("antPath","")
+
+            for trimCondStr in self.trimConditionList:
+                # ---- Action ----
+                Print = libPrint.timer()
+                Print.logFilenameStr = "05-stringtie-directEstimating-{annotate}-{trim}".format(
+                    annotate=antCondStr,
+                    trim=trimCondStr,
+                )
+                Print.folderStr = "data/log/"
+                Print.testingBool = self.testingBool
+                Print.startLog()
+                
+                for groupStr in self.groupList:
+                    for repliStr in self.replicationList:
+                        ballgownPathStr = self.balgownFolderStr.format(
+                            annotateCondition=antCondStr,
+                            trimCondition=trimCondStr
+                        )
+                        pathlib.Path(ballgownPathStr).mkdir(parents=True,exist_ok=True)
+
+                        bamPathStr = self.inputFileNameStr.format(
+                            annotateCondition=antCondStr,
+                            hisat2Condition=self.hisat2ConditionStr,
+                            trimCondition=trimCondStr,
+                            group=groupStr,
+                            replication=repliStr
+                        )
+
+                        gtfPathStr = self.gtfFileNameStr.format(
+                            annotateCondition=antCondStr,
+                            trimCondition=trimCondStr,
+                            group=groupStr,
+                            replication=repliStr
+                        )
+
+                        tsvPathStr = self.tsvFileNameStr.format(
+                            annotateCondition=antCondStr,
+                            trimCondition=trimCondStr,
+                            group=groupStr,
+                            replication=repliStr
+                        )
+
+                        CommandStr = self.commandStr.format(
+                            thread=threadStr,
+                            mergePath=antPathStr,
+                            bamfile=bamPathStr,
+                            ballgownPath=ballgownPathStr,
+                            gtffile=gtfPathStr,
+                            tsvfile=tsvPathStr
+                        )
+                        
+                        Print.phraseStr = CommandStr
+                        Print.runCommand()
+
+                Print.stopLog()
