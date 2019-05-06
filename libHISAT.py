@@ -81,18 +81,18 @@ class indexer:
         Print.runCommand()
 
         Print.stopLog()
-        
+   
 class aligner:
     def __init__(self):
         self.branchStr = ""
         self.testingBool = False
     
     def aligning(self):
-        HISAT2 = libConfig.config()
-        HISAT2.queryStr = "binHISAT2-RUN"
-        HISAT2.folderStr = "data/config/"
-        HISAT2.modeStr = "UPDATE"
-        HISAT2.load()
+        BinHISAT2 = libConfig.config()
+        BinHISAT2.queryStr = "binHISAT2-RUN"
+        BinHISAT2.folderStr = "data/config/"
+        BinHISAT2.modeStr = "UPDATE"
+        BinHISAT2.load()
 
         SAMconvert = libConfig.config()
         SAMconvert.queryStr = "binSAMtools-CONVERT"
@@ -146,7 +146,7 @@ class aligner:
                 pathlib.Path(finalOutputFolderStr).mkdir(parents=True,exist_ok=True)
                 for hisat2ConditionStr in hisat2ConditionList:
                     Print = libPrint.timer()
-                    Print.logFilenameStr = "04-hisat2-{hisat2cond}-{annotateCon}-{trimCon}".format(
+                    Print.logFilenameStr = "04-hs1-hisat2-{hisat2cond}-{annotateCon}-{trimCon}".format(
                         hisat2cond=hisat2ConditionStr,
                         annotateCon=annotateConditionStr,
                         trimCon=trimConditionStr,
@@ -222,7 +222,7 @@ class aligner:
                                 Print.phraseStr = "SAM File existed: "+samFileStr
                                 Print.printTimeStamp()
                             elif not pathlib.Path(samFileStr).exists() and not pathlib.Path(bamFileStr).exists() and not pathlib.Path(sortedBAMFileStr).exists():
-                                commandStr = HISAT2.storeDict.get("command","")
+                                commandStr = BinHISAT2.storeDict.get("command","")
                                 finalDict.update({
                                     "forwardFASTQ" : inputFileNameStr.format(**forwardDict),
                                     "reverseFASTQ" : inputFileNameStr.format(**reverseDict),
@@ -272,11 +272,74 @@ class aligner:
 
 
                     Print.stopLog()
+class summariser:
+    def __init__(self):
+        self.branchStr = ""
+        self.testingBool = False
+    
+    def summaring(self):
+        FLAGstat = libConfig.config()
+        FLAGstat.queryStr = "binSAMtools-FLAGSTAT"
+        FLAGstat.folderStr = "data/config/"
+        FLAGstat.modeStr = "UPDATE"
+        FLAGstat.load()
 
-if __name__ == "__main__":
-    print("__name__ == "+__name__)
+        expRep = libConfig.config()
+        expRep.queryStr = self.branchStr
+        expRep.folderStr = "data/config/"
+        expRep.modeStr = "UPDATE"
+        expRep.load()
 
-    for indexStr in ["speciesTestingA","speciesTestingB","speciesTestingC"]:
-        Index = indexer()
-        Index.titleStr = indexStr
-        Index.indexing()
+        trimConditionList = expRep.storeDict.get("[trim]condition",[])
+        hisat2ConditionList = expRep.storeDict.get("[hisat2]hisat2Condition",[])
+        annotateConditionList = expRep.storeDict.get("[hisat2]annotateCondition",[])
+        groupList = expRep.storeDict.get("group",[])
+        replicationList = expRep.storeDict.get("replication",[])
+
+        outputFolderStr = expRep.storeDict.get("[hisat2]outputFolder","")
+        outputFileNameStr = expRep.storeDict.get("[hisat2]outputFileName","")
+
+        if not expRep.storeDict.get("testing",True):
+            self.testingBool = False
+        else:
+            self.testingBool = True
+
+        for trimConditionStr in trimConditionList:
+            for annotateConditionStr in annotateConditionList:
+                finalOutputFolderStr = outputFolderStr.format(
+                    annotateCondition=annotateConditionStr,
+                    trimCondition=trimConditionStr
+                )
+                pathlib.Path(finalOutputFolderStr).mkdir(parents=True,exist_ok=True)
+
+                for hisat2ConditionStr in hisat2ConditionList:
+                    Print = libPrint.timer()
+                    Print.logFilenameStr = "04-hs2-hisat2-{hisat2cond}-{annotateCon}-{trimCon}".format(
+                        hisat2cond=hisat2ConditionStr,
+                        annotateCon=annotateConditionStr,
+                        trimCon=trimConditionStr,
+                    )
+                    Print.folderStr = "data/log/"
+                    Print.testingBool = self.testingBool
+                    Print.startLog()
+                    
+                    for groupStr in groupList:
+                        for replicationStr in replicationList:
+                            sortedBAMDict = {
+                                "annotateCondition": annotateConditionStr,
+                                "trimCondition": trimConditionStr,
+                                "hisat2Condition": hisat2ConditionStr,
+                                "group": groupStr,
+                                "replication": replicationStr,
+                                "fileType": "-sorted.bam",
+                            }
+                            sortedBAMFileStr = outputFileNameStr.format(**sortedBAMDict)
+    
+                            if pathlib.Path(sortedBAMFileStr).exists():
+                                commandStr = FLAGstat.storeDict.get("command","")
+                                finalCommandStr = commandStr.format(BAMfile=sortedBAMFileStr)
+                                Print.phraseStr = finalCommandStr
+                                Print.runCommand()
+
+
+                    Print.stopLog()
