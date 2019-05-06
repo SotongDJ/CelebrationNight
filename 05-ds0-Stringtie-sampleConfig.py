@@ -19,10 +19,10 @@ expRep.queryDict = {
     # above: data/04-hisat2/testing/speciesTestingA-trimQ20/hisat2ForStringtie-T1r1-sorted.bam
     "[dsStringtie2]tsvFileName" : "data/05-ds-stringtie2/testing/{annotateCondition}-{trimCondition}/{group}{replication}-expression.tsv",
     # above: data/05-stringtie2/testing/speciesTestingA-trimQ20/T1r1-expression.tsv
-    "[dsStringtie2]ballgownFolder" : "data/05-ds-ballgown/testing/{annotateCondition}-{trimCondition}/",
-    # above: data/06-ballgown/testing/speciesTestingA-trimQ20/
-    "[dsStringtie2]gtfFileName" : "data/05-ds-ballgown/testing/{annotateCondition}-{trimCondition}/{group}{replication}.gtf",
-    # above: data/06-ballgown/testing/speciesTestingA-trimQ20/T1r1.gtf
+    "[dsStringtie2]ballgownFolder" : "data/05-ds-ballgown/testing/{annotateCondition}-{trimCondition}-{group}{replication}/",
+    # above: data/06-ballgown/testing/speciesTestingA-trimQ20-T1r1/
+    "[dsStringtie2]gtfFileName" : "data/05-ds-ballgown/testing/{annotateCondition}-{trimCondition}-{group}{replication}/{group}{replication}-expression.gtf",
+    # above: data/06-ballgown/testing/speciesTestingA-trimQ20-T1r1/T1r1-expression.gtf
     "testing" : False,
 }
 expRep.modeStr = "UPDATE"

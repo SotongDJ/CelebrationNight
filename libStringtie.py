@@ -258,7 +258,9 @@ class estimator:
                     for repliStr in self.replicationList:
                         ballgownPathStr = self.balgownFolderStr.format(
                             annotateCondition=antCondStr,
-                            trimCondition=trimCondStr
+                            trimCondition=trimCondStr,
+                            group=groupStr,
+                            replication=repliStr
                         )
                         pathlib.Path(ballgownPathStr).mkdir(parents=True,exist_ok=True)
 
@@ -365,7 +367,9 @@ class directEstimator:
                     for repliStr in self.replicationList:
                         ballgownPathStr = self.balgownFolderStr.format(
                             annotateCondition=antCondStr,
-                            trimCondition=trimCondStr
+                            trimCondition=trimCondStr,
+                            group=groupStr,
+                            replication=repliStr
                         )
                         pathlib.Path(ballgownPathStr).mkdir(parents=True,exist_ok=True)
 
