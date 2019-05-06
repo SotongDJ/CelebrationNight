@@ -1,6 +1,7 @@
 # something need to be exclude
 bin/
 data/
+data
 archive/
 temp/
 .vscode/
