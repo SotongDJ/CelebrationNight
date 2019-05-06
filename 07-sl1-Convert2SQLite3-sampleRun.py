@@ -43,9 +43,9 @@ for conditionTup in conditionList:
             print("    "+sampleStr+": Empty")
             compareSet = set(compareList)
         elif compareSet != set(compareList):
-            print("    "+sampleStr+": same")
+            print("    "+sampleStr+": Same")
         elif compareSet == set(compareList):
-            print("    "+sampleStr+": different")
+            print("    "+sampleStr+": Different")
 
         pathlib.Path( sqlFolderStr.format(branch=branchStr) ).mkdir(parents=True,exist_ok=True)
         sqlPath = sqlPathStr.format(branch=branchStr,ant=antStr,trim=trimStr)
