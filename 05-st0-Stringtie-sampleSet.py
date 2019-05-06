@@ -25,10 +25,10 @@ expRep.queryDict = {
     # above: data/05-st-stringtie2/testing/speciesTestingA-trimQ20-merged.gtf
     "[stringtie2]tsvFileName" : "data/05-st-stringtie2/testing/{annotateCondition}-{trimCondition}/{group}{replication}-expression.tsv",
     # above: data/05-st-stringtie2/testing/speciesTestingA-trimQ20/T1r1-expression.tsv
-    "[stringtie2]ballgownFolder" : "data/05-st-ballgown/testingv/{annotateCondition}-{trimCondition}/",
-    # above: data/05-st-ballgown/testing/speciesTestingA-trimQ20/
-    "[stringtie2]gtfFileName" : "data/05-st-ballgown/testing/{annotateCondition}-{trimCondition}/{group}{replication}.gtf",
-    # above: data/05-st-ballgown/testing/speciesTestingA-trimQ20/T1r1.gtf
+    "[stringtie2]ballgownFolder" : "data/05-st-ballgown/testingv/{annotateCondition}-{trimCondition}-{group}{replication}{group}{replication}/",
+    # above: data/05-st-ballgown/testing/speciesTestingA-trimQ20-T1r1/
+    "[stringtie2]gtfFileName" : "data/05-st-ballgown/testing/{annotateCondition}-{trimCondition}-{group}{replication}/{group}{replication}-expression.gtf",
+    # above: data/05-st-ballgown/testing/speciesTestingA-trimQ20-T1r1/T1r1-expression.gtf
     "testing" : False,
 }
 expRep.modeStr = "UPDATE"
