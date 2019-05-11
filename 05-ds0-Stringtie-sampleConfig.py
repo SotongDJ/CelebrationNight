@@ -85,8 +85,8 @@ Stringtie.queryStr = "binStringTie-RUN"
 Stringtie.folderStr = "data/config/"
 Stringtie.queryDict = {
     "command" : 
-        "bin/stringtie/stringtie {bamfile} -o {outputfile} "+
-        "-p {thread} -G {antPath} -e"
+        "bin/stringtie/stringtie {bamfile} -v -o {outputfile} "+
+        "-p {thread} -G {antPath}"
 }
 Stringtie.modeStr = "UPDATE"
 Stringtie.save()
@@ -96,7 +96,7 @@ StMerge.queryStr = "binStringTie-MERGE"
 StMerge.folderStr = "data/config/"
 StMerge.queryDict = {
     "command" : 
-        "bin/stringtie/stringtie {inputfiles} --merge -o {outputfile} "+
+        "bin/stringtie/stringtie {inputfiles} --merge -v -o {outputfile} "+
         "-p {thread} -G {antPath}"
 }
 StMerge.modeStr = "UPDATE"
@@ -107,7 +107,7 @@ StEstimate.queryStr = "binStringTie-ESTIMATE"
 StEstimate.folderStr = "data/config/"
 StEstimate.queryDict = {
     "command" : 
-        "bin/stringtie/stringtie {bamfile} "+
+        "bin/stringtie/stringtie {bamfile} -v "+
         "-b {ballgownPath} " +
         "-p {thread} -G {mergePath} " +
         "-o {gtffile} "        
