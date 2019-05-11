@@ -13,7 +13,6 @@ expRep.queryDict = {
     "pairPostfix" : "pair",
     "unpairPostfix" : "unpair",
     "[trim]fileType" : ".fastq",
-    "[trim]condition" : ["trimQ20","trimQ30"],
     "[hisat2]direction" : {
         '1' : "F",
         '2' : "R",
@@ -21,7 +20,7 @@ expRep.queryDict = {
     "[hisat2]inputFileName" : "data/03-trimed/testing/{trimCondition}-{group}-{replication}-{direction}-{pairType}{fileType}",
     # above: data/tmp/trimQ20-T1-r1-F-pair.fastq
     "[hisat2]hisat2Condition" : ["hisat2ForStringtie","hisat2ForCufflinks"],
-    "[hisat2]annotateCondition" : ["speciesTestingA","speciesTestingB","speciesTestingC"],
+    "[hisat2]conditionList" : [("speciesTestingA","trimQ20"),("speciesTestingB","trimQ20"),("speciesTestingC","trimQ20")],
     "[hisat2]outputFolder" : "data/04-hisat2/testing/{annotateCondition}-{trimCondition}/",
     "[hisat2]outputFileName" : "data/04-hisat2/testing/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}-{replication}{fileType}",
     # above: date/04-hisat2/testing/speciesTestingA-trimQ20/hisat2ForStringtie-T1-r1.sam

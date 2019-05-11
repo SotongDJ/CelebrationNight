@@ -12,9 +12,8 @@ expRep.queryDict = {
     "replication" : ["r1"],
     "pairPostfix" : "pair",
     "unpairPostfix" : "unpair",
-    "[stringtie2]trimCondition" : ["trimQ20"],
     "[stringtie2]hisat2Condition" : "hisat2ForStringtie",
-    "[stringtie2]annotateCondition" : ["speciesTestingA","speciesTestingB","speciesTestingC"],
+    "[stringtie2]conditionList" : [("speciesTestingA","trimQ20"),("speciesTestingB","trimQ20"),("speciesTestingC","trimQ20")],
     "[stringtie2]inputFileName" : "data/04-hisat2/testing/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}{replication}-sorted.bam",
     # above: data/04-hisat2/testing/speciesTestingA-trimQ20/hisat2ForStringtie-T1r1-sorted.bam
     "[stringtie2]outputFolder" : "data/05-st-stringtie2/testing/{annotateCondition}-{trimCondition}/",

@@ -118,9 +118,8 @@ class aligner:
         expRep.modeStr = "UPDATE"
         expRep.load()
 
-        trimConditionList = expRep.storeDict.get("[trim]condition",[])
         hisat2ConditionList = expRep.storeDict.get("[hisat2]hisat2Condition",[])
-        annotateConditionList = expRep.storeDict.get("[hisat2]annotateCondition",[])
+        conditionList = expRep.storeDict.get("[hisat2]conditionList",[])
         groupList = expRep.storeDict.get("group",[])
         replicationList = expRep.storeDict.get("replication",[])
 
@@ -137,141 +136,143 @@ class aligner:
         else:
             self.testingBool = True
 
-        for trimConditionStr in trimConditionList:
-            for annotateConditionStr in annotateConditionList:
-                finalOutputFolderStr = outputFolderStr.format(
-                    annotateCondition=annotateConditionStr,
-                    trimCondition=trimConditionStr
+        for conditionTup in conditionList:
+            annotateConditionStr = conditionTup[0]
+            trimConditionStr = conditionTup[1]
+            finalOutputFolderStr = outputFolderStr.format(
+                annotateCondition=annotateConditionStr,
+                trimCondition=trimConditionStr
+            )
+            pathlib.Path(finalOutputFolderStr).mkdir(parents=True,exist_ok=True)
+            for hisat2ConditionStr in hisat2ConditionList:
+                Print = libPrint.timer()
+                Print.logFilenameStr = "04-hs1-hisat2-{hisat2cond}-{annotateCon}-{trimCon}".format(
+                    hisat2cond=hisat2ConditionStr,
+                    annotateCon=annotateConditionStr,
+                    trimCon=trimConditionStr,
                 )
-                pathlib.Path(finalOutputFolderStr).mkdir(parents=True,exist_ok=True)
-                for hisat2ConditionStr in hisat2ConditionList:
-                    Print = libPrint.timer()
-                    Print.logFilenameStr = "04-hs1-hisat2-{hisat2cond}-{annotateCon}-{trimCon}".format(
-                        hisat2cond=hisat2ConditionStr,
-                        annotateCon=annotateConditionStr,
-                        trimCon=trimConditionStr,
-                    )
-                    Print.folderStr = "data/log/"
-                    Print.testingBool = self.testingBool
-                    Print.startLog()
-                    for groupStr in groupList:
-                        for replicationStr in replicationList:
-                            finalDict = dict()
+                Print.folderStr = "data/log/"
+                Print.testingBool = self.testingBool
+                Print.startLog()
+                for groupStr in groupList:
+                    for replicationStr in replicationList:
+                        finalDict = dict()
 
-                            Para = libConfig.config() #parameters
-                            Para.queryStr = hisat2ConditionStr
-                            Para.folderStr = "data/config/"
-                            Para.modeStr = "UPDATE"
-                            Para.load()
-                            finalDict.update(Para.storeDict)
+                        Para = libConfig.config() #parameters
+                        Para.queryStr = hisat2ConditionStr
+                        Para.folderStr = "data/config/"
+                        Para.modeStr = "UPDATE"
+                        Para.load()
+                        finalDict.update(Para.storeDict)
 
-                            Spec = libConfig.config() #parameters
-                            Spec.queryStr = annotateConditionStr
-                            Spec.folderStr = "data/config/"
-                            Spec.modeStr = "UPDATE"
-                            Spec.load()
+                        Spec = libConfig.config() #parameters
+                        Spec.queryStr = annotateConditionStr
+                        Spec.folderStr = "data/config/"
+                        Spec.modeStr = "UPDATE"
+                        Spec.load()
+                        finalDict.update({
+                            "indexHeader" : Spec.storeDict.get("indexHeader","")
+                        })
+
+                        forwardDict = {
+                            "trimCondition" : trimConditionStr,
+                            "group" : groupStr,
+                            "replication": replicationStr,
+                            "direction" : directionDict['1'],
+                            "pairType" : pairPostfixStr,
+                            "fileType" : fileTypeStr,
+                        }
+                        reverseDict = {
+                            "trimCondition" : trimConditionStr,
+                            "group" : groupStr,
+                            "replication": replicationStr,
+                            "direction" : directionDict['2'],
+                            "pairType" : pairPostfixStr,
+                            "fileType" : fileTypeStr,
+                        }
+                        samDict = {
+                            "annotateCondition": annotateConditionStr,
+                            "trimCondition": trimConditionStr,
+                            "hisat2Condition": hisat2ConditionStr,
+                            "group": groupStr,
+                            "replication": replicationStr,
+                            "fileType": ".sam",
+                        }
+                        samFileStr = outputFileNameStr.format(**samDict)
+                        bamDict = {
+                            "annotateCondition": annotateConditionStr,
+                            "trimCondition": trimConditionStr,
+                            "hisat2Condition": hisat2ConditionStr,
+                            "group": groupStr,
+                            "replication": replicationStr,
+                            "fileType": ".bam",
+                        }
+                        bamFileStr = outputFileNameStr.format(**bamDict)
+                        sortedBAMDict = {
+                            "annotateCondition": annotateConditionStr,
+                            "trimCondition": trimConditionStr,
+                            "hisat2Condition": hisat2ConditionStr,
+                            "group": groupStr,
+                            "replication": replicationStr,
+                            "fileType": "-sorted.bam",
+                        }
+                        sortedBAMFileStr = outputFileNameStr.format(**sortedBAMDict)
+
+                        if pathlib.Path(samFileStr).exists():
+                            Print.phraseStr = "SAM File existed: "+samFileStr
+                            Print.printTimeStamp()
+                        elif not pathlib.Path(samFileStr).exists() and not pathlib.Path(bamFileStr).exists() and not pathlib.Path(sortedBAMFileStr).exists():
+                            commandStr = BinHISAT2.storeDict.get("command","")
                             finalDict.update({
-                                "indexHeader" : Spec.storeDict.get("indexHeader","")
+                                "forwardFASTQ" : inputFileNameStr.format(**forwardDict),
+                                "reverseFASTQ" : inputFileNameStr.format(**reverseDict),
+                                "outputSAM"    : samFileStr
                             })
+                            finalCommandStr = commandStr.format(**finalDict)
+                            Print.phraseStr = finalCommandStr
+                            Print.runCommand()
 
-                            forwardDict = {
-                                "trimCondition" : trimConditionStr,
-                                "group" : groupStr,
-                                "replication": replicationStr,
-                                "direction" : directionDict['1'],
-                                "pairType" : pairPostfixStr,
-                                "fileType" : fileTypeStr,
-                            }
-                            reverseDict = {
-                                "trimCondition" : trimConditionStr,
-                                "group" : groupStr,
-                                "replication": replicationStr,
-                                "direction" : directionDict['2'],
-                                "pairType" : pairPostfixStr,
-                                "fileType" : fileTypeStr,
-                            }
-                            samDict = {
-                                "annotateCondition": annotateConditionStr,
-                                "trimCondition": trimConditionStr,
-                                "hisat2Condition": hisat2ConditionStr,
-                                "group": groupStr,
-                                "replication": replicationStr,
-                                "fileType": ".sam",
-                            }
-                            samFileStr = outputFileNameStr.format(**samDict)
-                            bamDict = {
-                                "annotateCondition": annotateConditionStr,
-                                "trimCondition": trimConditionStr,
-                                "hisat2Condition": hisat2ConditionStr,
-                                "group": groupStr,
-                                "replication": replicationStr,
-                                "fileType": ".bam",
-                            }
-                            bamFileStr = outputFileNameStr.format(**bamDict)
-                            sortedBAMDict = {
-                                "annotateCondition": annotateConditionStr,
-                                "trimCondition": trimConditionStr,
-                                "hisat2Condition": hisat2ConditionStr,
-                                "group": groupStr,
-                                "replication": replicationStr,
-                                "fileType": "-sorted.bam",
-                            }
-                            sortedBAMFileStr = outputFileNameStr.format(**sortedBAMDict)
+                        if pathlib.Path(bamFileStr).exists():
+                            Print.phraseStr = "BAM File existed: "+bamFileStr
+                            Print.printTimeStamp()
+                        elif not pathlib.Path(bamFileStr).exists() and not pathlib.Path(sortedBAMFileStr).exists():
+                            commandStr = SAMconvert.storeDict.get("command","")
+                            finalDict.update({
+                                "outputBAM" : bamFileStr,
+                                "inputSAM" : samFileStr,
+                            })
+                            finalCommandStr = commandStr.format(**finalDict)
+                            Print.phraseStr = finalCommandStr
+                            Print.runCommand()
 
-                            if pathlib.Path(samFileStr).exists():
-                                Print.phraseStr = "SAM File existed: "+samFileStr
-                                Print.printTimeStamp()
-                            elif not pathlib.Path(samFileStr).exists() and not pathlib.Path(bamFileStr).exists() and not pathlib.Path(sortedBAMFileStr).exists():
-                                commandStr = BinHISAT2.storeDict.get("command","")
-                                finalDict.update({
-                                    "forwardFASTQ" : inputFileNameStr.format(**forwardDict),
-                                    "reverseFASTQ" : inputFileNameStr.format(**reverseDict),
-                                    "outputSAM"    : samFileStr
-                                })
-                                finalCommandStr = commandStr.format(**finalDict)
-                                Print.phraseStr = finalCommandStr
-                                Print.runCommand()
+                        if pathlib.Path(samFileStr).exists() and pathlib.Path(bamFileStr).exists():
+                            commandStr = Remove.storeDict.get("command","")
+                            finalCommandStr = commandStr.format(target=samFileStr)
+                            Print.phraseStr = finalCommandStr
+                            Print.runCommand()
 
-                            if pathlib.Path(bamFileStr).exists():
-                                Print.phraseStr = "BAM File existed: "+bamFileStr
-                                Print.printTimeStamp()
-                            elif not pathlib.Path(bamFileStr).exists() and not pathlib.Path(sortedBAMFileStr).exists():
-                                commandStr = SAMconvert.storeDict.get("command","")
-                                finalDict.update({
-                                    "outputBAM" : bamFileStr,
-                                    "inputSAM" : samFileStr,
-                                })
-                                finalCommandStr = commandStr.format(**finalDict)
-                                Print.phraseStr = finalCommandStr
-                                Print.runCommand()
+                        if pathlib.Path(sortedBAMFileStr).exists():
+                            Print.phraseStr = "Sorted BAM File existed: "+sortedBAMFileStr
+                            Print.printTimeStamp()
+                        else:
+                            commandStr = SAMsort.storeDict.get("command","")
+                            finalDict.update({
+                                "outputBAM" : sortedBAMFileStr,
+                                "inputBAM" : bamFileStr,
+                            })
+                            finalCommandStr = commandStr.format(**finalDict)
+                            Print.phraseStr = finalCommandStr
+                            Print.runCommand()
 
-                            if pathlib.Path(samFileStr).exists() and pathlib.Path(bamFileStr).exists():
-                                commandStr = Remove.storeDict.get("command","")
-                                finalCommandStr = commandStr.format(target=samFileStr)
-                                Print.phraseStr = finalCommandStr
-                                Print.runCommand()
-
-                            if pathlib.Path(sortedBAMFileStr).exists():
-                                Print.phraseStr = "Sorted BAM File existed: "+sortedBAMFileStr
-                                Print.printTimeStamp()
-                            else:
-                                commandStr = SAMsort.storeDict.get("command","")
-                                finalDict.update({
-                                    "outputBAM" : sortedBAMFileStr,
-                                    "inputBAM" : bamFileStr,
-                                })
-                                finalCommandStr = commandStr.format(**finalDict)
-                                Print.phraseStr = finalCommandStr
-                                Print.runCommand()
-
-                            if pathlib.Path(bamFileStr).exists() and pathlib.Path(sortedBAMFileStr).exists():
-                                commandStr = Remove.storeDict.get("command","")
-                                finalCommandStr = commandStr.format(target=bamFileStr)
-                                Print.phraseStr = finalCommandStr
-                                Print.runCommand()
+                        if pathlib.Path(bamFileStr).exists() and pathlib.Path(sortedBAMFileStr).exists():
+                            commandStr = Remove.storeDict.get("command","")
+                            finalCommandStr = commandStr.format(target=bamFileStr)
+                            Print.phraseStr = finalCommandStr
+                            Print.runCommand()
 
 
-                    Print.stopLog()
+                Print.stopLog()
+
 class summariser:
     def __init__(self):
         self.branchStr = ""
