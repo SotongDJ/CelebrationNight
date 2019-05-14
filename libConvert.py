@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-import sys, pprint, json
-import pyWorkFlow
+import sys, pprint, json, pathlib
+import libPrint
 global helper_msg_block
 helper_msg_block="""
    --- README of Conversion Library ---
@@ -10,8 +10,8 @@ helper_msg_block="""
   Usage:
     import libConvert
 
-    CvtoJSON = libConvert.cvtDSVtoJSON()
-    CvtoJSON.requested_argv_dict = {
+    CvtoJSON = libConvert.convertDSVtoJSON()
+    CvtoJSON.argumentDict = {
 		"files": [],
 		"refer_column": "",
 		"prefix": "",
@@ -19,32 +19,25 @@ helper_msg_block="""
 		"headless": True,
 		"delimiter": "\t"
 	}
-    CvtoJSON.actor()
+    CvtoJSON.converting()
 
-    MakingRelation = makingRelation()
+    MakingRelation = relationGeneration()
     MakingRelation.inputDict = dict()
     MakingRelation.inputDict.update(idKeyValueDict)
-    MakingRelation.log_file_prefix_str = self.log_file_prefix_str
-    MakingRelation.actor()
+    MakingRelation.logFilenameStr = self.logFilenameStr+"-relation"
+    MakingRelation.generating()
     relationDict = MakingRelation.outputDict
-
-    CvtoTAB = libConvert.cvtJSONtoDSV()
-    CvtoTAB.requested_argv_dict = {
-        "files" : [<INPUT>,<INPUT>......] ,
-        "header": [<NAME>,<NAME>......] # for sorting
-        "delimiter": "\t"
-    }
-    CvtoTAB.actor()
 
    --- README ---
 """
 
-class cvtDSVtoJSON(pyWorkFlow.workflow):
-    def personalize(self):
-        # self.testing = True
-        self.type = "library"
+class convertDSVtoJSON:
+    def __init__(self):
+        self.testingBool = False
+        self.logFilenameStr = ""
+        self.folderStr = "data/log/"
 
-        self.requested_argv_dict = {
+        self.argumentDict = {
             "files": [],
             "refer_column": "",
             "prefix": "",
@@ -53,55 +46,51 @@ class cvtDSVtoJSON(pyWorkFlow.workflow):
             "delimiter": "\t"
         }
 
-        self.target_file_path = ""
+    def converting(self):
+        sourceFilesList = self.argumentDict.get("files",[])
+        referColumnNameStr = self.argumentDict.get("refer_column","")
+        prefixStr = self.argumentDict.get("prefix","")
+        headerList = self.argumentDict.get("header",[])
+        headlessBoo = self.argumentDict.get("headless",True)
+        delimiterStr = self.argumentDict.get("delimiter","\t")
 
-        self.comand_line_list=[]
+        Print = libPrint.timer()
+        Print.logFilenameStr = self.logFilenameStr
+        Print.folderStr = self.folderStr
+        Print.testingBool = self.testingBool
+        Print.startLog()
 
-        self.script_name = "libConvert.cvtDSVtoJSON"
-        self.requested_config_dict = {}
-        self.log_file_prefix_str = "temp/tmp-"
-
-    def actor(self):
-        sourceFilesList = self.requested_argv_dict.get("files",[])
-        referColumnNameStr = self.requested_argv_dict.get("refer_column","")
-        prefixStr = self.requested_argv_dict.get("prefix","")
-        headerList = self.requested_argv_dict.get("header",[])
-        headlessBoo = self.requested_argv_dict.get("headless",True)
-        delimiterStr = self.requested_argv_dict.get("delimiter","\t")
-        self.startLog()
-        #
-        self.phrase_str = "Total files: "+pprint.pformat(sourceFilesList)
-        self.printTimeStamp()
+        Print.phraseStr = "Total files: "+pprint.pformat(sourceFilesList)
+        Print.printTimeStamp()
         #
         for sourceFilenameStr in sourceFilesList:
             #
-            self.phrase_str = "{Now processing} "+sourceFilenameStr
-            self.printTimeStamp()
+            Print.phraseStr = "{Now processing} "+sourceFilenameStr
+            Print.printTimeStamp()
             #
-            name_temp_list = sourceFilenameStr.split(".")
-            name_temp_list[-1] = "json"
-            resultFilenameStr = ".".join(name_temp_list)
+            tempFilenamelist = sourceFilenameStr.split(".")
+            tempFilenamelist[-1] = "json"
+            resultFilenameStr = ".".join(tempFilenamelist)
 
-            self.target_file_path = resultFilenameStr
-            result_file_boolean = self.checkFile()
+            resultFileBo = pathlib.Path(resultFilenameStr).exists()
 
-            if not result_file_boolean:
+            if not resultFileBo:
                 #
-                self.phrase_str = "{Loading Files} "+sourceFilenameStr
-                self.printTimeStamp()
+                Print.phraseStr = "{Loading Files} "+sourceFilenameStr
+                Print.printTimeStamp()
                 #
                 linesList = open(sourceFilenameStr).read().splitlines()
-                first_line_boolean = True
-                max_digit_num = len(linesList)
-                line_num = 0
-                while first_line_boolean and line_num < max_digit_num:
+                firstLineBo = True
+                maxDigitInt = len(linesList)
+                lineNumInt = 0
+                while firstLineBo and lineNumInt < maxDigitInt:
                     lineStr = linesList[0]
                     if lineStr[0] == "#":
                         del linesList[0]
                     else:
                         firstLineStr = linesList[0]
-                        first_line_boolean = False
-                    line_num = line_num + 1
+                        firstLineBo = False
+                    lineNumInt = lineNumInt + 1
 
                 positionDict = dict() # {numbering:key}
 
@@ -111,8 +100,8 @@ class cvtDSVtoJSON(pyWorkFlow.workflow):
                     "{key:{id:[value]}}" : dict()
                 }
                 #
-                self.phrase_str = "{Create Header/Key List} "+sourceFilenameStr
-                self.printTimeStamp()
+                Print.phraseStr = "{Create Header/Key List} "+sourceFilenameStr
+                Print.printTimeStamp()
                 #
                 if not headlessBoo:
                     if headerList == []:
@@ -120,11 +109,11 @@ class cvtDSVtoJSON(pyWorkFlow.workflow):
                         headerList = tempLineStr.split(delimiterStr)
                 else:
                     column_temp_list = firstLineStr.split(delimiterStr)
-                    max_digit_num = len(str(len(column_temp_list)))
+                    maxDigitInt = len(str(len(column_temp_list)))
                     for column_num in range(len(column_temp_list)):
                         digit_num = len(str(len(column_num)))
-                        if digit_num != max_digit_num:
-                            diff_digit_num = max_digit_num - digit_num
+                        if digit_num != maxDigitInt:
+                            diff_digit_num = maxDigitInt - digit_num
                         else:
                             diff_digit_num = 0
                             #
@@ -132,8 +121,8 @@ class cvtDSVtoJSON(pyWorkFlow.workflow):
                             "Column_"+("0"*diff_digit_num)+str(column_num)
                         )
                 #
-                self.phrase_str = "{Assign Key's Position} "+sourceFilenameStr
-                self.printTimeStamp()
+                Print.phraseStr = "{Assign Key's Position} "+sourceFilenameStr
+                Print.printTimeStamp()
                 #
                 for number in range(len(headerList)):
                     if headerList[number] not in positionDict.values():
@@ -147,8 +136,8 @@ class cvtDSVtoJSON(pyWorkFlow.workflow):
                 if referColumnNameStr != "":
                     referColumnExistBoo = True
                 #
-                self.phrase_str = "{Start Conversion} "+sourceFilenameStr
-                self.printTimeStamp()
+                Print.phraseStr = "{Start Conversion} "+sourceFilenameStr
+                Print.printTimeStamp()
                 #
                 lineIdInt = 0
                 CurrentlineCountInt = 0
@@ -185,19 +174,19 @@ class cvtDSVtoJSON(pyWorkFlow.workflow):
                                 idKeyValueDict.update({ idStr : targetValueDict })
                             else:
                                 # print(lineStr)
-                                self.phrase_str = "[{}/{}] Line without id".format(str(CurrentlineCountInt),str(TotalLineCountInt))
-                                self.printPhrase()
+                                Print.phraseStr = "[{}/{}] Line without id".format(str(CurrentlineCountInt),str(TotalLineCountInt))
+                                Print.printPhrase()
                         else:
                             print('line: '+str(lineIdInt))
                 #
-                self.phrase_str = "{Rearrange Relation Dict.} "+sourceFilenameStr
-                self.printTimeStamp()
+                Print.phraseStr = "{Rearrange Relation Dict.} "+sourceFilenameStr
+                Print.printTimeStamp()
                 #
-                MakingRelation = makingRelation()
+                MakingRelation = relationGeneration()
                 MakingRelation.inputDict = dict()
                 MakingRelation.inputDict.update(idKeyValueDict)
-                MakingRelation.log_file_prefix_str = self.log_file_prefix_str
-                MakingRelation.actor()
+                MakingRelation.logFilenameStr = self.logFilenameStr+"-relation"
+                MakingRelation.generating()
                 relationDict = MakingRelation.outputDict
                 #
                 with open(resultFilenameStr,"w") as result_file_handle:
@@ -217,27 +206,24 @@ class cvtDSVtoJSON(pyWorkFlow.workflow):
 
 
 
-        self.stopLog()
+        Print.stopLog()
 
-class makingRelation(pyWorkFlow.workflow):
-    def personalize(self):
-        # self.testing = True
-        self.type = "library"
+class relationGeneration:
+    def __init__(self):
+        self.testingBool = False
+        self.logFilenameStr = ""
+        self.folderStr = "data/log/"
 
-        self.requested_argv_dict = dict()
+        self.argumentDict = dict()
         self.inputDict = dict()
         self.outputDict = dict()
 
-        self.target_file_path = ""
-
-        self.comand_line_list = list()
-
-        self.script_name = "libConvert.makingRelation"
-        self.requested_config_dict = dict()
-        self.log_file_prefix_str = "temp/tmp-"
-
-    def actor(self):
-        self.startLog()
+    def generating(self):
+        Print = libPrint.timer()
+        Print.logFilenameStr = self.logFilenameStr
+        Print.folderStr = self.folderStr
+        Print.testingBool = self.testingBool
+        Print.startLog()
 
         valueIdDict = dict()
         idValueDict = dict()
@@ -305,178 +291,4 @@ class makingRelation(pyWorkFlow.workflow):
             "metadata" : metaDict,
         }
 
-        self.stopLog()
-
-"""
-class cvtJSONtoDSV(pyWorkFlow.workflow):
-    def personalize(self):
-        # self.testing = True
-        self.type = "library"
-
-        self.requested_argv_dict = {
-            "files" : [],
-            "header" : [],
-            "delimiter": "\t"
-        }
-
-        self.target_file_path = ""
-
-        self.comand_line_list=[]
-
-        self.script_name = "libConvert.cvtJSONtoDSV"
-        self.requested_config_dict = {}
-        self.log_file_prefix_str = "temp/tmp-"
-
-    def actor(self):
-        sourceFilesList = self.requested_argv_dict.get("files",[])
-        headerList = self.requested_argv_dict.get("header",[])
-        delimiterStr = self.requested_argv_dict.get("delimiter","\t")
-        self.startLog()
-
-        for sourceFilenameStr in sourceFilesList:
-            source_file_handle = open(sourceFilenameStr,'r')
-            source_json_dict = json.load(source_file_handle)
-
-            if headerList == []:
-                column_name_set = set()
-                value_temp_dict = dict()
-                for id_name in list(source_json_dict.keys()):
-                    value_temp_dict = source_json_dict.get(id_name,{})
-                    column_name_set.update(set(value_temp_dict.keys()))
-                header_tuple = tuple(sorted(column_name_set))
-            else:
-                header_tuple = tuple(headerList)
-
-            with open(sourceFilenameStr.replace(".json",".dsv"),"w") as result_file_handle:
-                result_file_handle.write("id"+delimiterStr+delimiterStr.join(header_tuple)+"\n")
-                for id_name in list(source_json_dict.keys()):
-                    lineStr = id_name
-                    value_temp_dict = dict()
-                    value_temp_dict = source_json_dict.get(id_name,{})
-                    for column_name in header_tuple:
-                        lineStr = lineStr + delimiterStr + value_temp_dict.get(column_name,"")
-                    result_file_handle.write(lineStr+"\n")
-
-        self.stopLog()
-
-class attributionExtractor(pyWorkFlow.workflow):
-    def personalize(self):
-        # self.testing = True
-        self.type = "library"
-
-        self.helper_msg_str = helper_msg_block
-
-        self.requested_argv_dict = {
-            "gff.json": [],
-        }
-
-        self.comand_line_list = []
-        self.script_name = "libConvert.attributionExtractor"
-        self.requested_config_dict = {}
-        self.log_file_prefix_str = "temp/tmp-"
-
-    def actor(self):
-        sourceFilesList = self.requested_argv_dict.get("gff.json",[])
-        self.startLog()
-
-        WordProc = wordProcess()
-
-        for sourceFilenameStr in sourceFilesList:
-            target_file_name = sourceFilenameStr.replace("-relation.json",".json")
-            target_file_name = target_file_name.replace(".json","-relation.json")
-
-            self.target_file_path = target_file_name
-            target_file_boolean = self.checkFile()
-
-            if target_file_boolean:
-                self.phrase_str = "Extracting "+target_file_name
-                self.printTimeStamp()
-
-                target_file_handle = open(target_file_name,'r')
-                target_json_dict = json.load(target_file_handle)
-
-                key_id_value_dict = target_json_dict.get('{key:{id:value}}')
-                raw_temp_dict = key_id_value_dict.get('attribute')
-                result_dict = {} # id=[key:value]
-                relationDict = {
-                    "{key:{value:[id]}}" : {},
-                    "{key:{id:value}}" : {}
-                }
-
-                for gffid_name in list(raw_temp_dict.keys()):
-                    attribution_str = raw_temp_dict.get(gffid_name)
-                    attribution_temp_dict = {}
-
-                    for paired_set_str in attribution_str.split(";"):
-                        paired_set_list = paired_set_str.split("=")
-                        key_str = paired_set_list[0]
-                        value_str = paired_set_list[1]
-                        # value_str = WordProc.changeESC(value_str)
-                        attribution_temp_dict.update({ key_str : value_str })
-
-                        value_temp_dict = relationDict.get("{key:{value:[id]}}").get(key_str,{})
-                        value_temp_dict.update({ value_str : [gffid_name] })
-                        relationDict.get("{key:{value:[id]}}").update({ key_str : value_temp_dict })
-
-                        gffid_temp_dict = relationDict.get("{key:{id:value}}").get(key_str,{})
-                        gffid_temp_dict.update({ gffid_name : value_str })
-                        relationDict.get("{key:{id:value}}").update({ key_str : gffid_temp_dict })
-
-                    result_dict.update({ gffid_name : attribution_temp_dict })
-
-
-                resultFilenameStr = target_file_name.replace("-relation.json","-attribution.json")
-                with open(resultFilenameStr,"w") as result_file_handle:
-                    json.dump(result_dict,result_file_handle,indent=4,sort_keys=True)
-
-                relation_file_name = target_file_name.replace("-relation.json","-attribution-relation.json")
-                with open(relation_file_name,"w") as relation_file_handle:
-                    json.dump(relationDict,relation_file_handle,indent=4,sort_keys=True)
-
-        self.stopLog()
-        
-class wordProcess:
-    def __init__(self):
-        self.input_file_name = ""
-
-    def loadSymbolDict(self):
-        library_file_name = 'esc.json'
-        library_file_handle = open(library_file_name,'r')
-        self.libDict = json.load(library_file_handle)
-
-    def recoverSymbol(self):
-        self.input_lines = open(self.input_file_name).read().splitlines()
-        self.output_lines = []
-
-        for lineStr in self.input_lines:
-            if "%" in lineStr:
-                for key_str in set(self.libDict.keys()):
-                    value_str = self.libDict.get(key_str)
-                    lineStr = lineStr.replace(key_str,value_str)
-                self.output_lines.append(lineStr)
-            else:
-                self.output_lines.append(lineStr)
-
-    def removeTAB(self):
-        self.input_lines = open(self.input_file_name).read().splitlines()
-        self.output_lines = []
-
-        for lineStr in self.input_lines:
-            lineStr = lineStr.replace("\t","")
-            self.output_lines.append(lineStr)
-
-    def removeQuotation(self):
-        self.input_lines = open(self.input_file_name).read().splitlines()
-        self.output_lines = []
-
-        for lineStr in self.input_lines:
-            lineStr = lineStr.replace("\"","")
-            lineStr = lineStr.replace("\'","")
-            self.output_lines.append(lineStr)
-
-    def save(self):
-        with open(self.input_file_name,'w') as output_file_handle:
-            for lineStr in self.output_lines:
-                output_file_handle.write(lineStr+"\n")
-
-"""
+        Print.stopLog()
