@@ -38,7 +38,7 @@ class indexer:
         # ---- Parameter for Indexing ----
         BinIndex = libConfig.config()
         BinIndex.queryStr = "binHISAT2-BUILD"
-        BinIndex.folderStr = "data/config/"
+        BinIndex.folderStr = "config/"
         BinIndex.modeStr = "UPDATE"
         BinIndex.load()
         # ---- Initialization for Indexing ----
@@ -47,7 +47,7 @@ class indexer:
 
         Target = libConfig.config()
         Target.queryStr = self.titleStr
-        Target.folderStr = "data/config/"
+        Target.folderStr = "config/"
         Target.modeStr = "UPDATE"
         Target.load()
 
@@ -68,7 +68,7 @@ class indexer:
         Print.logFilenameStr = "02-hisat2-index-{title}".format(
             title=self.titleStr
         )
-        Print.folderStr = "data/log/"
+        Print.folderStr = "log/"
         Print.testingBool = self.testingBool
         Print.startLog()
 
@@ -90,31 +90,31 @@ class aligner:
     def aligning(self):
         BinHISAT2 = libConfig.config()
         BinHISAT2.queryStr = "binHISAT2-RUN"
-        BinHISAT2.folderStr = "data/config/"
+        BinHISAT2.folderStr = "config/"
         BinHISAT2.modeStr = "UPDATE"
         BinHISAT2.load()
 
         SAMconvert = libConfig.config()
         SAMconvert.queryStr = "binSAMtools-CONVERT"
-        SAMconvert.folderStr = "data/config/"
+        SAMconvert.folderStr = "config/"
         SAMconvert.modeStr = "UPDATE"
         SAMconvert.load()
 
         SAMsort = libConfig.config()
         SAMsort.queryStr = "binSAMtools-SORT"
-        SAMsort.folderStr = "data/config/"
+        SAMsort.folderStr = "config/"
         SAMsort.modeStr = "UPDATE"
         SAMsort.load()
 
         Remove = libConfig.config()
         Remove.queryStr = "commandRM"
-        Remove.folderStr = "data/config/"
+        Remove.folderStr = "config/"
         Remove.modeStr = "UPDATE"
         Remove.load()
 
         expRep = libConfig.config()
         expRep.queryStr = self.queryStr
-        expRep.folderStr = "data/config/"
+        expRep.folderStr = "config/"
         expRep.modeStr = "UPDATE"
         expRep.load()
 
@@ -155,7 +155,7 @@ class aligner:
                     annotateCon=annotateConditionStr,
                     trimCon=trimConditionStr,
                 )
-                Print.folderStr = "data/log/"
+                Print.folderStr = "log/"
                 Print.testingBool = self.testingBool
                 Print.startLog()
                 for groupStr in groupList:
@@ -164,14 +164,14 @@ class aligner:
 
                         Para = libConfig.config() #parameters
                         Para.queryStr = hisat2ConditionStr
-                        Para.folderStr = "data/config/"
+                        Para.folderStr = "config/"
                         Para.modeStr = "UPDATE"
                         Para.load()
                         finalDict.update(Para.storeDict)
 
                         Spec = libConfig.config() #parameters
                         Spec.queryStr = annotateConditionStr
-                        Spec.folderStr = "data/config/"
+                        Spec.folderStr = "config/"
                         Spec.modeStr = "UPDATE"
                         Spec.load()
                         finalDict.update({
@@ -303,13 +303,13 @@ class summariser:
     def summaring(self):
         FLAGstat = libConfig.config()
         FLAGstat.queryStr = "binSAMtools-FLAGSTAT"
-        FLAGstat.folderStr = "data/config/"
+        FLAGstat.folderStr = "config/"
         FLAGstat.modeStr = "UPDATE"
         FLAGstat.load()
 
         expRep = libConfig.config()
         expRep.queryStr = self.branchStr
-        expRep.folderStr = "data/config/"
+        expRep.folderStr = "config/"
         expRep.modeStr = "UPDATE"
         expRep.load()
 
@@ -342,7 +342,7 @@ class summariser:
                         annotateCon=annotateConditionStr,
                         trimCon=trimConditionStr,
                     )
-                    Print.folderStr = "data/log/"
+                    Print.folderStr = "log/"
                     Print.testingBool = self.testingBool
                     Print.startLog()
                     

@@ -35,7 +35,7 @@ class convertDSVtoJSON:
     def __init__(self):
         self.testingBool = False
         self.logFilenameStr = ""
-        self.folderStr = "data/log/"
+        self.folderStr = "log/"
 
         self.argumentDict = {
             "files": [],
@@ -212,7 +212,7 @@ class relationGeneration:
     def __init__(self):
         self.testingBool = False
         self.logFilenameStr = ""
-        self.folderStr = "data/log/"
+        self.folderStr = "log/"
 
         self.argumentDict = dict()
         self.inputDict = dict()

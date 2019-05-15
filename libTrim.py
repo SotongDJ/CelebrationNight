@@ -26,13 +26,13 @@ class trimmer:
         # ---- Parameter ----
         BinTrim = libConfig.config()
         BinTrim.queryStr = "binTrimmomatic"
-        BinTrim.folderStr = "data/config/"
+        BinTrim.folderStr = "config/"
         BinTrim.modeStr = "UPDATE"
         BinTrim.load()
 
         ExpRep = libConfig.config()
         ExpRep.queryStr = self.queryStr
-        ExpRep.folderStr = "data/config/"
+        ExpRep.folderStr = "config/"
         ExpRep.modeStr = "UPDATE"
         ExpRep.load()
 
@@ -69,13 +69,13 @@ class trimmer:
                     branch=branchStr,
                     cond=conditionStr
                 )
-                Print.folderStr = "data/log/"
+                Print.folderStr = "log/"
                 Print.testingBool = testingBool
                 Print.startLog()
 
                 TrimPara = libConfig.config()
                 TrimPara.queryStr = conditionStr
-                TrimPara.folderStr = "data/config/"
+                TrimPara.folderStr = "config/"
                 TrimPara.modeStr = "UPDATE"
                 TrimPara.load()
 

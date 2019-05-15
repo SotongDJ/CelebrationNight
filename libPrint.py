@@ -9,7 +9,7 @@ class timer():
         self.delimiterStr = ""
 
         self.logFilenameStr = ""
-        self.folderStr = "data/config/"
+        self.folderStr = "config/"
         self.testingBool = False
         
     def startLog(self):

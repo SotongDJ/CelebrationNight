@@ -20,7 +20,7 @@ class assembler:
         # ---- Parameter for Assembling ----
         BinMap = libConfig.config()
         BinMap.queryStr = "binStringTie-RUN"
-        BinMap.folderStr = "data/config/"
+        BinMap.folderStr = "config/"
         BinMap.modeStr = "UPDATE"
         BinMap.load()
 
@@ -29,7 +29,7 @@ class assembler:
         # ---- Initialization for Assembling ----
         Target = libConfig.config()
         Target.queryStr = self.branchStr
-        Target.folderStr = "data/config/"
+        Target.folderStr = "config/"
         Target.modeStr = "UPDATE"
         Target.load()
 
@@ -52,7 +52,7 @@ class assembler:
 
             Annotate = libConfig.config()
             Annotate.queryStr = antCondStr
-            Annotate.folderStr = "data/config/"
+            Annotate.folderStr = "config/"
             Annotate.modeStr = "UPDATE"
             Annotate.load()
 
@@ -65,7 +65,7 @@ class assembler:
                 annotate=antCondStr,
                 trim=trimCondStr,
             )
-            Print.folderStr = "data/log/"
+            Print.folderStr = "log/"
             Print.testingBool = self.testingBool
             Print.startLog()
             
@@ -113,7 +113,7 @@ class merger:
         # ---- Parameter for Assembling ----
         BinMap = libConfig.config()
         BinMap.queryStr = "binStringTie-MERGE"
-        BinMap.folderStr = "data/config/"
+        BinMap.folderStr = "config/"
         BinMap.modeStr = "UPDATE"
         BinMap.load()
 
@@ -122,7 +122,7 @@ class merger:
         # ---- Initialization for Assembling ----
         Target = libConfig.config()
         Target.queryStr = self.branchStr
-        Target.folderStr = "data/config/"
+        Target.folderStr = "config/"
         Target.modeStr = "UPDATE"
         Target.load()
 
@@ -144,7 +144,7 @@ class merger:
 
             Annotate = libConfig.config()
             Annotate.queryStr = antCondStr
-            Annotate.folderStr = "data/config/"
+            Annotate.folderStr = "config/"
             Annotate.modeStr = "UPDATE"
             Annotate.load()
 
@@ -157,7 +157,7 @@ class merger:
                 annotate=antCondStr,
                 trim=trimCondStr,
             )
-            Print.folderStr = "data/log/"
+            Print.folderStr = "log/"
             Print.testingBool = self.testingBool
             Print.startLog()
 
@@ -207,7 +207,7 @@ class estimator:
         # ---- Parameter for Assembling ----
         BinMap = libConfig.config()
         BinMap.queryStr = "binStringTie-ESTIMATE"
-        BinMap.folderStr = "data/config/"
+        BinMap.folderStr = "config/"
         BinMap.modeStr = "UPDATE"
         BinMap.load()
 
@@ -216,7 +216,7 @@ class estimator:
         # ---- Initialization for Assembling ----
         Target = libConfig.config()
         Target.queryStr = self.branchStr
-        Target.folderStr = "data/config/"
+        Target.folderStr = "config/"
         Target.modeStr = "UPDATE"
         Target.load()
 
@@ -241,7 +241,7 @@ class estimator:
 
             Annotate = libConfig.config()
             Annotate.queryStr = antCondStr
-            Annotate.folderStr = "data/config/"
+            Annotate.folderStr = "config/"
             Annotate.modeStr = "UPDATE"
             Annotate.load()
 
@@ -253,7 +253,7 @@ class estimator:
                 annotate=antCondStr,
                 trim=trimCondStr,
             )
-            Print.folderStr = "data/log/"
+            Print.folderStr = "log/"
             Print.testingBool = self.testingBool
             Print.startLog()
             
@@ -317,7 +317,7 @@ class directEstimator:
         # ---- Parameter for Assembling ----
         BinMap = libConfig.config()
         BinMap.queryStr = "binStringTie-ESTIMATE"
-        BinMap.folderStr = "data/config/"
+        BinMap.folderStr = "config/"
         BinMap.modeStr = "UPDATE"
         BinMap.load()
 
@@ -326,7 +326,7 @@ class directEstimator:
         # ---- Initialization for Assembling ----
         Target = libConfig.config()
         Target.queryStr = self.branchStr
-        Target.folderStr = "data/config/"
+        Target.folderStr = "config/"
         Target.modeStr = "UPDATE"
         Target.load()
 
@@ -350,7 +350,7 @@ class directEstimator:
             
             Annotate = libConfig.config()
             Annotate.queryStr = antCondStr
-            Annotate.folderStr = "data/config/"
+            Annotate.folderStr = "config/"
             Annotate.modeStr = "UPDATE"
             Annotate.load()
 
@@ -363,7 +363,7 @@ class directEstimator:
                 annotate=antCondStr,
                 trim=trimCondStr,
             )
-            Print.folderStr = "data/log/"
+            Print.folderStr = "log/"
             Print.testingBool = self.testingBool
             Print.startLog()
             

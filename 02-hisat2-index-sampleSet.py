@@ -3,7 +3,7 @@ import libConfig
 # ---- Configuration of Indexing Conditions ---- 
 SpeA = libConfig.config()
 SpeA.queryStr = "speciesTestingA"
-SpeA.folderStr = "data/config/"
+SpeA.folderStr = "config/"
 SpeA.queryDict = {
     "from" : "binHISAT2-BUILD",
     "seqPath" : "data/GenomeSequence/SpeA.fa",
@@ -17,7 +17,7 @@ SpeA.save()
 
 SpeB = libConfig.config()
 SpeB.queryStr = "speciesTestingB"
-SpeB.folderStr = "data/config/"
+SpeB.folderStr = "config/"
 SpeB.queryDict = {
     "from" : "binHISAT2-BUILD",
     "seqPath" : "data/GenomeSequence/SpeB.fna",
@@ -31,7 +31,7 @@ SpeB.save()
 
 SpeC = libConfig.config()
 SpeC.queryStr = "speciesTestingC"
-SpeC.folderStr = "data/config/"
+SpeC.folderStr = "config/"
 SpeC.queryDict = {
     "from" : "binHISAT2-BUILD",
     "seqPath" : "data/GenomeSequence/SpeC.fasta",
@@ -62,7 +62,7 @@ Main arguments
 
 HISAT = libConfig.config()
 HISAT.queryStr = "binHISAT2-BUILD"
-HISAT.folderStr = "data/config/"
+HISAT.folderStr = "config/"
 HISAT.queryDict = {
     "command" : "bin/hisat2/hisat2-build -p {thread} {seqPath} {indexHeader}"
 }

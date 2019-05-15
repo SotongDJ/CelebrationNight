@@ -3,7 +3,7 @@ import libConfig
 # ---- Configuration of Experiment Design ---- 
 Testing = libConfig.config()
 Testing.queryStr = "testing"
-Testing.folderStr = "data/config/"
+Testing.folderStr = "config/"
 # Arguments/Parameters below need to modify depend on 
 # your experiment design and naming style
 Testing.queryDict = {
@@ -28,7 +28,7 @@ Testing.save()
 # ---- Configuration of Trimming Conditions ---- 
 TrimParA = libConfig.config()
 TrimParA.queryStr = "trimQ20"
-TrimParA.folderStr = "data/config/"
+TrimParA.folderStr = "config/"
 TrimParA.queryDict = {
     "singlePair" : "PE", # Pair end
     "phred"      : "33", # sequencing type, illumina solexa = 33
@@ -44,7 +44,7 @@ TrimParA.save()
 
 TrimParB = libConfig.config()
 TrimParB.queryStr = "trimQ30"
-TrimParB.folderStr = "data/config/"
+TrimParB.folderStr = "config/"
 TrimParB.queryDict = {
     "singlePair" : "PE", # Pair end
     "phred"      : "33", # sequencing type, illumina solexa = 33
@@ -101,7 +101,7 @@ Step options:
 
 Trim = libConfig.config()
 Trim.queryStr = "binTrimmomatic"
-Trim.folderStr = "data/config/"
+Trim.folderStr = "config/"
 Trim.queryDict = {
     "command" : 
         "java -jar bin/trimmomatic/trimmomatic-0.36.jar "+
