@@ -59,6 +59,7 @@ cufflinksPara.save()
         -x [prefix of HISAT2-build genome index]
         -1 [forward fastq files]
         -2 [reverse fastq files]
+        -U [unpair fastq files]
         -S [output SAM files]
     samtools view -o [out.bam] -Su [in.sam]
     samtools sort -o [out-sorted.bam] [in.bam]
@@ -71,8 +72,9 @@ HISAT2.queryDict = {
     "command" : 
         "bin/hisat2/hisat2 -q {dta} --phred{phred} -p {thread} " +
         "-x {indexHeader} " +
-        "-1 {forwardFASTQ} " +
-        "-2 {reverseFASTQ} " +
+        "-1 {pairForwardFASTQ} " +
+        "-2 {pairReverseFASTQ} " +
+        "-U {unpairForwardFASTQ},{unpairReverseFASTQ} " +
         "-S {outputSAM}"
 }
 HISAT2.modeStr = "OVERWRITE"
@@ -103,7 +105,7 @@ FLAGstat.queryStr = "binSAMtools-FLAGSTAT"
 FLAGstat.folderStr = "data/config/"
 FLAGstat.queryDict = {
     "command" : 
-        "bin/samtools/samtools flagstat {outputBAM}"
+        "bin/samtools/samtools flagstat {BAMfile}"
 }
 FLAGstat.modeStr = "OVERWRITE"
 FLAGstat.save()

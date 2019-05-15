@@ -84,7 +84,7 @@ class indexer:
    
 class aligner:
     def __init__(self):
-        self.branchStr = ""
+        self.queryStr = ""
         self.testingBool = False
     
     def aligning(self):
@@ -113,19 +113,22 @@ class aligner:
         Remove.load()
 
         expRep = libConfig.config()
-        expRep.queryStr = self.branchStr
+        expRep.queryStr = self.queryStr
         expRep.folderStr = "data/config/"
         expRep.modeStr = "UPDATE"
         expRep.load()
 
-        hisat2ConditionList = expRep.storeDict.get("[hisat2]hisat2Condition",[])
-        conditionList = expRep.storeDict.get("[hisat2]conditionList",[])
+        branchStr = expRep.storeDict.get("branch","")
+        pairPostfixStr = expRep.storeDict.get("pairPostfix","")
+        unpairPostfixStr = expRep.storeDict.get("unpairPostfix","")
         groupList = expRep.storeDict.get("group",[])
         replicationList = expRep.storeDict.get("replication",[])
 
+        hisat2ConditionList = expRep.storeDict.get("[hisat2]hisat2Condition",[])
+        conditionList = expRep.storeDict.get("[hisat2]conditionList",[])
+
         directionDict = expRep.storeDict.get("[hisat2]direction",dict())
 
-        pairPostfixStr = expRep.storeDict.get("pairPostfix","")
         fileTypeStr = expRep.storeDict.get("[trim]fileType","")
         inputFileNameStr = expRep.storeDict.get("[hisat2]inputFileName","")
         outputFolderStr = expRep.storeDict.get("[hisat2]outputFolder","")
@@ -146,7 +149,8 @@ class aligner:
             pathlib.Path(finalOutputFolderStr).mkdir(parents=True,exist_ok=True)
             for hisat2ConditionStr in hisat2ConditionList:
                 Print = libPrint.timer()
-                Print.logFilenameStr = "04-hs1-hisat2-{hisat2cond}-{annotateCon}-{trimCon}".format(
+                Print.logFilenameStr = "04-hs1-hisat2-{branch}-{hisat2cond}-{annotateCon}-{trimCon}".format(
+                    branch=branchStr,
                     hisat2cond=hisat2ConditionStr,
                     annotateCon=annotateConditionStr,
                     trimCon=trimConditionStr,
@@ -174,7 +178,7 @@ class aligner:
                             "indexHeader" : Spec.storeDict.get("indexHeader","")
                         })
 
-                        forwardDict = {
+                        pairForwardDict = {
                             "trimCondition" : trimConditionStr,
                             "group" : groupStr,
                             "replication": replicationStr,
@@ -182,12 +186,28 @@ class aligner:
                             "pairType" : pairPostfixStr,
                             "fileType" : fileTypeStr,
                         }
-                        reverseDict = {
+                        pairReverseDict = {
                             "trimCondition" : trimConditionStr,
                             "group" : groupStr,
                             "replication": replicationStr,
                             "direction" : directionDict['2'],
                             "pairType" : pairPostfixStr,
+                            "fileType" : fileTypeStr,
+                        }
+                        unpairForwardDict = {
+                            "trimCondition" : trimConditionStr,
+                            "group" : groupStr,
+                            "replication": replicationStr,
+                            "direction" : directionDict['1'],
+                            "pairType" : unpairPostfixStr,
+                            "fileType" : fileTypeStr,
+                        }
+                        unpairReverseDict = {
+                            "trimCondition" : trimConditionStr,
+                            "group" : groupStr,
+                            "replication": replicationStr,
+                            "direction" : directionDict['2'],
+                            "pairType" : unpairPostfixStr,
                             "fileType" : fileTypeStr,
                         }
                         samDict = {
@@ -224,8 +244,10 @@ class aligner:
                         elif not pathlib.Path(samFileStr).exists() and not pathlib.Path(bamFileStr).exists() and not pathlib.Path(sortedBAMFileStr).exists():
                             commandStr = BinHISAT2.storeDict.get("command","")
                             finalDict.update({
-                                "forwardFASTQ" : inputFileNameStr.format(**forwardDict),
-                                "reverseFASTQ" : inputFileNameStr.format(**reverseDict),
+                                "pairForwardFASTQ" : inputFileNameStr.format(**pairForwardDict),
+                                "pairReverseFASTQ" : inputFileNameStr.format(**pairReverseDict),
+                                "unpairForwardFASTQ" : inputFileNameStr.format(**unpairForwardDict),
+                                "unpairReverseFASTQ" : inputFileNameStr.format(**unpairReverseDict),
                                 "outputSAM"    : samFileStr
                             })
                             finalCommandStr = commandStr.format(**finalDict)
