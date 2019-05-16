@@ -6,7 +6,7 @@ SpeA.queryStr = "speciesTestingA"
 SpeA.folderStr = "config/"
 SpeA.queryDict = {
     "from" : "binHISAT2-BUILD",
-    "seqPath" : "data/GenomeSequence/SpeA.fa",
+    "seqPath" : "large/GenomeSequence/SpeA.fa",
     "indexHeader" : "large/02-hisat2Index/SpeA",
     "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
@@ -20,7 +20,7 @@ SpeB.queryStr = "speciesTestingB"
 SpeB.folderStr = "config/"
 SpeB.queryDict = {
     "from" : "binHISAT2-BUILD",
-    "seqPath" : "data/GenomeSequence/SpeB.fna",
+    "seqPath" : "large/GenomeSequence/SpeB.fna",
     "indexHeader" : "large/02-hisat2Index/SpeB",
     "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
@@ -34,7 +34,7 @@ SpeC.queryStr = "speciesTestingC"
 SpeC.folderStr = "config/"
 SpeC.queryDict = {
     "from" : "binHISAT2-BUILD",
-    "seqPath" : "data/GenomeSequence/SpeC.fasta",
+    "seqPath" : "large/GenomeSequence/SpeC.fasta",
     "indexHeader" : "large/02-hisat2Index/SpeC",
     "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
