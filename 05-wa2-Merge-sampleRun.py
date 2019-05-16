@@ -4,5 +4,5 @@ import libStringtie
 
 Merging = libStringtie.merger()
 Merging.branchStr = "testing"
-Merging.headerStr = "Stringtie"
+Merging.headerStr = "waStringtie"
 Merging.merging()

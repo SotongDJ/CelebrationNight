@@ -4,6 +4,5 @@ import libStringtie
 
 Estimating = libStringtie.estimator()
 Estimating.branchStr = "testing"
-Estimating.directEstimating = True
-Estimating.headerStr = "dsStringtie"
+Estimating.headerStr = "waStringtie"
 Estimating.estimating()

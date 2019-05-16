@@ -4,5 +4,6 @@ import libStringtie
 
 Assembling = libStringtie.assembler()
 Assembling.branchStr = "testing"
-Assembling.headerStr = "Stringtie"
+Assembling.withoutAnnotation = True
+Assembling.headerStr = "waStringtie"
 Assembling.assembling()

@@ -12,21 +12,21 @@ expRep.queryDict = {
     "replication" : ["r1"],
     "pairPostfix" : "pair",
     "unpairPostfix" : "unpair",
-    "[stringtie2]hisat2Condition" : "hisat2ForStringtie",
-    "[stringtie2]conditionList" : [("speciesTestingA","trimQ20"),("speciesTestingB","trimQ20"),("speciesTestingC","trimQ20")],
-    "[stringtie2]inputFileName" : "data/04-hisat2/testing/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}{replication}-sorted.bam",
+    "[Stringtie]hisat2Condition" : "hisat2ForStringtie",
+    "[Stringtie]conditionList" : [("speciesTestingA","trimQ20"),("speciesTestingB","trimQ20"),("speciesTestingC","trimQ20")],
+    "[Stringtie]inputFileName" : "data/04-hisat2/testing/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}{replication}-sorted.bam",
     # above: data/04-hisat2/testing/speciesTestingA-trimQ20/hisat2ForStringtie-T1r1-sorted.bam
-    "[stringtie2]outputFolder" : "data/05-st-stringtie2/testing/{annotateCondition}-{trimCondition}/",
-    "[stringtie2]outputFileName" : "data/05-st-stringtie2/testing/{annotateCondition}-{trimCondition}/{group}{replication}.gtf",
-    # above: data/05-st-stringtie2/testing/speciesTestingA-trimQ20/T1r1.gtf
-    "[stringtie2]mergedFolder" : "data/05-st-stringtie2/testing/",
-    "[stringtie2]mergedFileName" : "data/05-st-stringtie2/testing/{annotateCondition}-{trimCondition}-merged.gtf",
-    # above: data/05-st-stringtie2/testing/speciesTestingA-trimQ20-merged.gtf
-    "[stringtie2]tsvFileName" : "data/05-st-stringtie2/testing/{annotateCondition}-{trimCondition}/{group}{replication}-expression.tsv",
-    # above: data/05-st-stringtie2/testing/speciesTestingA-trimQ20/T1r1-expression.tsv
-    "[stringtie2]ballgownFolder" : "data/05-st-ballgown/testingv/{annotateCondition}-{trimCondition}-{group}{replication}{group}{replication}/",
+    "[Stringtie]outputFolder" : "data/05-st-Stringtie/testing/{annotateCondition}-{trimCondition}/",
+    "[Stringtie]outputFileName" : "data/05-st-Stringtie/testing/{annotateCondition}-{trimCondition}/{group}{replication}.gtf",
+    # above: data/05-st-Stringtie/testing/speciesTestingA-trimQ20/T1r1.gtf
+    "[Stringtie]mergedFolder" : "data/05-st-Stringtie/testing/",
+    "[Stringtie]mergedFileName" : "data/05-st-Stringtie/testing/{annotateCondition}-{trimCondition}-merged.gtf",
+    # above: data/05-st-Stringtie/testing/speciesTestingA-trimQ20-merged.gtf
+    "[Stringtie]tsvFileName" : "data/05-st-Stringtie/testing/{annotateCondition}-{trimCondition}/{group}{replication}-expression.tsv",
+    # above: data/05-st-Stringtie/testing/speciesTestingA-trimQ20/T1r1-expression.tsv
+    "[Stringtie]ballgownFolder" : "data/05-st-ballgown/testingv/{annotateCondition}-{trimCondition}-{group}{replication}{group}{replication}/",
     # above: data/05-st-ballgown/testing/speciesTestingA-trimQ20-T1r1/
-    "[stringtie2]gtfFileName" : "data/05-st-ballgown/testing/{annotateCondition}-{trimCondition}-{group}{replication}/{group}{replication}-expression.gtf",
+    "[Stringtie]gtfFileName" : "data/05-st-ballgown/testing/{annotateCondition}-{trimCondition}-{group}{replication}/{group}{replication}-expression.gtf",
     # above: data/05-st-ballgown/testing/speciesTestingA-trimQ20-T1r1/T1r1-expression.gtf
     "testing" : False,
 }
@@ -97,13 +97,24 @@ Stringtie.queryDict = {
 Stringtie.modeStr = "UPDATE"
 Stringtie.save()
 
+Stringtie = libConfig.config()
+Stringtie.queryStr = "binStringTie-RUN-withoutAnnotation"
+Stringtie.folderStr = "data/config/"
+Stringtie.queryDict = {
+    "command" : 
+        "bin/stringtie/stringtie {bamfile} -v -o {outputfile} "+
+        "-p {thread}"
+}
+Stringtie.modeStr = "UPDATE"
+Stringtie.save()
+
 StMerge = libConfig.config()
 StMerge.queryStr = "binStringTie-MERGE"
 StMerge.folderStr = "data/config/"
 StMerge.queryDict = {
     "command" : 
         "bin/stringtie/stringtie {inputfiles} --merge -v -o {outputfile} "+
-        "-p {thread} -G {antPath}"
+        "-p {thread}"
 }
 StMerge.modeStr = "UPDATE"
 StMerge.save()

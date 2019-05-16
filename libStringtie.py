@@ -15,14 +15,23 @@ class assembler:
     def __init__(self):
         self.branchStr = ""
         self.testingBool = True
+        self.withoutAnnotation = False
+        self.headerStr = "Stringtie"
 
     def assembling(self):
         # ---- Parameter for Assembling ----
-        BinMap = libConfig.config()
-        BinMap.queryStr = "binStringTie-RUN"
-        BinMap.folderStr = "config/"
-        BinMap.modeStr = "UPDATE"
-        BinMap.load()
+        if self.withoutAnnotation:
+            BinMap = libConfig.config()
+            BinMap.queryStr = "binStringTie-RUN-withoutAnnotation"
+            BinMap.folderStr = "config/"
+            BinMap.modeStr = "UPDATE"
+            BinMap.load()
+        else:
+            BinMap = libConfig.config()
+            BinMap.queryStr = "binStringTie-RUN"
+            BinMap.folderStr = "config/"
+            BinMap.modeStr = "UPDATE"
+            BinMap.load()
 
         commandStr = BinMap.storeDict["command"]
 
@@ -33,13 +42,14 @@ class assembler:
         Target.modeStr = "UPDATE"
         Target.load()
 
+        branchStr = Target.storeDict.get("branch","")
         groupList = Target.storeDict.get("group",[])
         replicationList = Target.storeDict.get("replication",[])
-        hisat2ConditionStr = Target.storeDict.get("[stringtie2]hisat2Condition","")
-        conditionList = Target.storeDict.get("[stringtie2]conditionList",[])
-        inputFileNameStr = Target.storeDict.get("[stringtie2]inputFileName","")
-        outputFileNameStr = Target.storeDict.get("[stringtie2]outputFileName","")
-        outputFolderStr = Target.storeDict.get("[stringtie2]outputFolder","")
+        hisat2ConditionStr = Target.storeDict.get("[{}}]hisat2Condition".format(self.headerStr),"")
+        conditionList = Target.storeDict.get("[{}]conditionList".format(self.headerStr),[])
+        inputFileNameStr = Target.storeDict.get("[{}]inputFileName".format(self.headerStr),"")
+        outputFileNameStr = Target.storeDict.get("[{}]outputFileName".format(self.headerStr),"")
+        outputFolderStr = Target.storeDict.get("[{}]outputFolder".format(self.headerStr),"")
         
         if not Target.storeDict.get("testing",True):
             self.testingBool = False
@@ -61,7 +71,8 @@ class assembler:
 
             # ---- Action ----
             Print = libPrint.timer()
-            Print.logFilenameStr = "05-stringtie-assembling-{annotate}-{trim}".format(
+            Print.logFilenameStr = "05-stringtie-assembling-{branch}-{annotate}-{trim}".format(
+                branch=branchStr,
                 annotate=antCondStr,
                 trim=trimCondStr,
             )
@@ -108,11 +119,12 @@ class merger:
     def __init__(self):
         self.branchStr = ""
         self.testingBool = True
+        self.headerStr = "Stringtie"
 
     def merging(self):
         # ---- Parameter for Assembling ----
         BinMap = libConfig.config()
-        BinMap.queryStr = "binStringTie-MERGE"
+        BinMap.queryStr = "bin{}-MERGE"
         BinMap.folderStr = "config/"
         BinMap.modeStr = "UPDATE"
         BinMap.load()
@@ -126,12 +138,13 @@ class merger:
         Target.modeStr = "UPDATE"
         Target.load()
 
+        branchStr = Target.storeDict.get("branch","")
         groupList = Target.storeDict.get("group",[])
         replicationList = Target.storeDict.get("replication",[])
-        conditionList = Target.storeDict.get("[stringtie2]conditionList",[])
-        inputFileNameStr = Target.storeDict.get("[stringtie2]outputFileName","")
-        outputFileNameStr = Target.storeDict.get("[stringtie2]mergedFileName","")
-        outputFolderStr = Target.storeDict.get("[stringtie2]mergedFolder","")
+        conditionList = Target.storeDict.get("[{}]conditionList".format(self.headerStr),[])
+        inputFileNameStr = Target.storeDict.get("[{}]outputFileName".format(self.headerStr),"")
+        outputFileNameStr = Target.storeDict.get("[{}]mergedFileName".format(self.headerStr),"")
+        outputFolderStr = Target.storeDict.get("[{}]mergedFolder".format(self.headerStr),"")
         
         if not Target.storeDict.get("testing",True):
             self.testingBool = False
@@ -153,7 +166,8 @@ class merger:
 
             # ---- Action ----
             Print = libPrint.timer()
-            Print.logFilenameStr = "05-stringtie-merging-{annotate}-{trim}".format(
+            Print.logFilenameStr = "05-stringtie-merging-{branch}-{annotate}-{trim}".format(
+                branch=branchStr,
                 annotate=antCondStr,
                 trim=trimCondStr,
             )
@@ -202,6 +216,8 @@ class estimator:
     def __init__(self):
         self.branchStr = ""
         self.testingBool = True
+        self.directEstimating = False
+        self.headerStr = "Stringtie"
 
     def estimating(self):
         # ---- Parameter for Assembling ----
@@ -220,15 +236,16 @@ class estimator:
         Target.modeStr = "UPDATE"
         Target.load()
 
+        branchStr = Target.storeDict.get("branch","")
         groupList = Target.storeDict.get("group",[])
         replicationList = Target.storeDict.get("replication",[])
-        hisat2ConditionStr = Target.storeDict.get("[stringtie2]hisat2Condition","")
-        conditionList = Target.storeDict.get("[stringtie2]conditionList",[])
-        inputFileNameStr = Target.storeDict.get("[stringtie2]inputFileName","")
-        mergedFileNameStr = Target.storeDict.get("[stringtie2]mergedFileName","")
-        balgownFolderStr = Target.storeDict.get("[stringtie2]ballgownFolder","")
-        gtfFileNameStr = Target.storeDict.get("[stringtie2]gtfFileName","")
-        tsvFileNameStr = Target.storeDict.get("[stringtie2]tsvFileName","")
+        hisat2ConditionStr = Target.storeDict.get("[{}]hisat2Condition".format(self.headerStr),"")
+        conditionList = Target.storeDict.get("[{}]conditionList".format(self.headerStr),[])
+        inputFileNameStr = Target.storeDict.get("[{}]inputFileName".format(self.headerStr),"")
+        mergedFileNameStr = Target.storeDict.get("[{}]mergedFileName".format(self.headerStr),"")
+        balgownFolderStr = Target.storeDict.get("[{}]ballgownFolder".format(self.headerStr),"")
+        gtfFileNameStr = Target.storeDict.get("[{}]gtfFileName".format(self.headerStr),"")
+        tsvFileNameStr = Target.storeDict.get("[{}]tsvFileName".format(self.headerStr),"")
         
         if not Target.storeDict.get("testing",True):
             self.testingBool = False
@@ -246,10 +263,12 @@ class estimator:
             Annotate.load()
 
             threadStr = Annotate.storeDict.get("thread","")
+            antPathStr = Annotate.storeDict.get("antPath","")
 
             # ---- Action ----
             Print = libPrint.timer()
-            Print.logFilenameStr = "05-stringtie-estimating-{annotate}-{trim}".format(
+            Print.logFilenameStr = "05-stringtie-estimating-{branch}-{annotate}-{trim}".format(
+                branch=branchStr,
                 annotate=antCondStr,
                 trim=trimCondStr,
             )
@@ -294,120 +313,25 @@ class estimator:
                         replication=repliStr
                     )
 
-                    CommandStr = commandStr.format(
-                        thread=threadStr,
-                        mergePath=mergeFileNameStr,
-                        bamfile=bamPathStr,
-                        ballgownPath=ballgownPathStr,
-                        gtffile=gtfPathStr,
-                        tsvfile=tsvPathStr
-                    )
-                    
-                    Print.phraseStr = CommandStr
-                    Print.runCommand()
+                    if self.directEstimating:
+                        CommandStr = commandStr.format(
+                            thread=threadStr,
+                            mergePath=antPathStr,
+                            bamfile=bamPathStr,
+                            ballgownPath=ballgownPathStr,
+                            gtffile=gtfPathStr,
+                            tsvfile=tsvPathStr
+                        )
+                    else:
+                        CommandStr = commandStr.format(
+                            thread=threadStr,
+                            mergePath=mergeFileNameStr,
+                            bamfile=bamPathStr,
+                            ballgownPath=ballgownPathStr,
+                            gtffile=gtfPathStr,
+                            tsvfile=tsvPathStr
+                        )
 
-            Print.stopLog()
-
-class directEstimator:
-    def __init__(self):
-        self.branchStr = ""
-        self.testingBool = True
-
-    def directEstimating(self):
-        # ---- Parameter for Assembling ----
-        BinMap = libConfig.config()
-        BinMap.queryStr = "binStringTie-ESTIMATE"
-        BinMap.folderStr = "config/"
-        BinMap.modeStr = "UPDATE"
-        BinMap.load()
-
-        commandStr = BinMap.storeDict["command"]
-
-        # ---- Initialization for Assembling ----
-        Target = libConfig.config()
-        Target.queryStr = self.branchStr
-        Target.folderStr = "config/"
-        Target.modeStr = "UPDATE"
-        Target.load()
-
-        groupList = Target.storeDict.get("group",[])
-        replicationList = Target.storeDict.get("replication",[])
-        hisat2ConditionStr = Target.storeDict.get("[stringtie2]hisat2Condition","")
-        conditionList = Target.storeDict.get("[stringtie2]conditionList",[])
-        inputFileNameStr = Target.storeDict.get("[stringtie2]inputFileName","")
-        balgownFolderStr = Target.storeDict.get("[dsStringtie2]ballgownFolder","")
-        gtfFileNameStr = Target.storeDict.get("[dsStringtie2]gtfFileName","")
-        tsvFileNameStr = Target.storeDict.get("[dsStringtie2]tsvFileName","")
-        
-        if not Target.storeDict.get("testing",True):
-            self.testingBool = False
-        else:
-            self.testingBool = True
-
-        for conditionTup in conditionList:
-            antCondStr = conditionTup[0]
-            trimCondStr = conditionTup[1]
-            
-            Annotate = libConfig.config()
-            Annotate.queryStr = antCondStr
-            Annotate.folderStr = "config/"
-            Annotate.modeStr = "UPDATE"
-            Annotate.load()
-
-            threadStr = Annotate.storeDict.get("thread","")
-            antPathStr = Annotate.storeDict.get("antPath","")
-
-            # ---- Action ----
-            Print = libPrint.timer()
-            Print.logFilenameStr = "05-stringtie-directEstimating-{annotate}-{trim}".format(
-                annotate=antCondStr,
-                trim=trimCondStr,
-            )
-            Print.folderStr = "log/"
-            Print.testingBool = self.testingBool
-            Print.startLog()
-            
-            for groupStr in groupList:
-                for repliStr in replicationList:
-                    ballgownPathStr = balgownFolderStr.format(
-                        annotateCondition=antCondStr,
-                        trimCondition=trimCondStr,
-                        group=groupStr,
-                        replication=repliStr
-                    )
-                    pathlib.Path(ballgownPathStr).mkdir(parents=True,exist_ok=True)
-
-                    bamPathStr = inputFileNameStr.format(
-                        annotateCondition=antCondStr,
-                        hisat2Condition=hisat2ConditionStr,
-                        trimCondition=trimCondStr,
-                        group=groupStr,
-                        replication=repliStr
-                    )
-
-                    gtfPathStr = gtfFileNameStr.format(
-                        annotateCondition=antCondStr,
-                        trimCondition=trimCondStr,
-                        group=groupStr,
-                        replication=repliStr
-                    )
-
-                    tsvPathStr = tsvFileNameStr.format(
-                        annotateCondition=antCondStr,
-                        trimCondition=trimCondStr,
-                        group=groupStr,
-                        replication=repliStr
-                    )
-
-                    CommandStr = commandStr.format(
-                        thread=threadStr,
-                        mergePath=antPathStr,
-                        bamfile=bamPathStr,
-                        ballgownPath=ballgownPathStr,
-                        gtffile=gtfPathStr,
-                        tsvfile=tsvPathStr
-                    )
-                    
                     Print.phraseStr = CommandStr
                     Print.runCommand()
 

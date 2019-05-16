@@ -12,16 +12,22 @@ expRep.queryDict = {
     "replication" : ["r1"],
     "pairPostfix" : "pair",
     "unpairPostfix" : "unpair",
-    "[dsStringtie]hisat2Condition" : "hisat2ForStringtie",
-    "[dsStringtie]conditionList" : [("speciesTestingA","trimQ20"),("speciesTestingB","trimQ20"),("speciesTestingC","trimQ20")],
-    "[dsStringtie]inputFileName" : "data/04-hisat2/testing/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}{replication}-sorted.bam",
+    "[waStringtie]hisat2Condition" : "hisat2ForStringtie",
+    "[waStringtie]conditionList" : [("speciesTestingA","trimQ20"),("speciesTestingB","trimQ20"),("speciesTestingC","trimQ20")],
+    "[waStringtie]inputFileName" : "data/04-hisat2/testing/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}{replication}-sorted.bam",
     # above: data/04-hisat2/testing/speciesTestingA-trimQ20/hisat2ForStringtie-T1r1-sorted.bam
-    "[dsStringtie]tsvFileName" : "data/05-ds-Stringtie/testing/{annotateCondition}-{trimCondition}/{group}{replication}-expression.tsv",
-    # above: data/05-Stringtie/testing/speciesTestingA-trimQ20/T1r1-expression.tsv
-    "[dsStringtie]ballgownFolder" : "data/05-ds-ballgown/testing/{annotateCondition}-{trimCondition}-{group}{replication}/",
-    # above: data/06-ballgown/testing/speciesTestingA-trimQ20-T1r1/
-    "[dsStringtie]gtfFileName" : "data/05-ds-ballgown/testing/{annotateCondition}-{trimCondition}-{group}{replication}/{group}{replication}-expression.gtf",
-    # above: data/06-ballgown/testing/speciesTestingA-trimQ20-T1r1/T1r1-expression.gtf
+    "[waStringtie]outputFolder" : "data/05-wa-Stringtie/testing/{annotateCondition}-{trimCondition}/",
+    "[waStringtie]outputFileName" : "data/05-wa-Stringtie/testing/{annotateCondition}-{trimCondition}/{group}{replication}.gtf",
+    # above: data/05-wa-Stringtie/testing/speciesTestingA-trimQ20/T1r1.gtf
+    "[waStringtie]mergedFolder" : "data/05-wa-Stringtie/testing/",
+    "[waStringtie]mergedFileName" : "data/05-wa-Stringtie/testing/{annotateCondition}-{trimCondition}-merged.gtf",
+    # above: data/05-wa-Stringtie/testing/speciesTestingA-trimQ20-merged.gtf
+    "[waStringtie]tsvFileName" : "data/05-wa-Stringtie/testing/{annotateCondition}-{trimCondition}/{group}{replication}-expression.tsv",
+    # above: data/05-wa-Stringtie/testing/speciesTestingA-trimQ20/T1r1-expression.tsv
+    "[waStringtie]ballgownFolder" : "data/05-wa-ballgown/testing/{annotateCondition}-{trimCondition}-{group}{replication}{group}{replication}",
+    # above: data/05-wa-ballgown/testing/speciesTestingA-trimQ20-T1r1/
+    "[waStringtie]gtfFileName" : "data/05-wa-ballgown/testing/{annotateCondition}-{trimCondition}-{group}{replication}/{group}{replication}-expression.gtf",
+    # above: data/05-wa-ballgown/testing/speciesTestingA-trimQ20-T1r1/T1r1-expression.gtf
     "testing" : False,
 }
 expRep.modeStr = "UPDATE"
