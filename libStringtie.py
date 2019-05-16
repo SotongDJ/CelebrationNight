@@ -45,7 +45,7 @@ class assembler:
         branchStr = Target.storeDict.get("branch","")
         groupList = Target.storeDict.get("group",[])
         replicationList = Target.storeDict.get("replication",[])
-        hisat2ConditionStr = Target.storeDict.get("[{}}]hisat2Condition".format(self.headerStr),"")
+        hisat2ConditionStr = Target.storeDict.get("[{}]hisat2Condition".format(self.headerStr),"")
         conditionList = Target.storeDict.get("[{}]conditionList".format(self.headerStr),[])
         inputFileNameStr = Target.storeDict.get("[{}]inputFileName".format(self.headerStr),"")
         outputFileNameStr = Target.storeDict.get("[{}]outputFileName".format(self.headerStr),"")
