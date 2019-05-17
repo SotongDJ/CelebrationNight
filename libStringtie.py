@@ -124,7 +124,7 @@ class merger:
     def merging(self):
         # ---- Parameter for Assembling ----
         BinMap = libConfig.config()
-        BinMap.queryStr = "bin{}-MERGE"
+        BinMap.queryStr = "binStringTie-MERGE"
         BinMap.folderStr = "config/"
         BinMap.modeStr = "UPDATE"
         BinMap.load()
