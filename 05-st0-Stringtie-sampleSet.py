@@ -3,7 +3,7 @@ import libConfig
 # ---- Configuration of Experiment Design ---- 
 expRep = libConfig.config()
 expRep.queryStr = "testing"
-expRep.folderStr = "data/config/"
+expRep.folderStr = "config/"
 # Arguments/Parameters below need to modify depend on 
 # your experiment design and naming style
 expRep.queryDict = {
@@ -14,8 +14,8 @@ expRep.queryDict = {
     "unpairPostfix" : "unpair",
     "[Stringtie]hisat2Condition" : "hisat2ForStringtie",
     "[Stringtie]conditionList" : [("speciesTestingA","trimQ20"),("speciesTestingB","trimQ20"),("speciesTestingC","trimQ20")],
-    "[Stringtie]inputFileName" : "data/04-hisat2/testing/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}{replication}-sorted.bam",
-    # above: data/04-hisat2/testing/speciesTestingA-trimQ20/hisat2ForStringtie-T1r1-sorted.bam
+    "[Stringtie]inputFileName" : "large/04-hisat2/testing/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}{replication}-sorted.bam",
+    # above: large/04-hisat2/testing/speciesTestingA-trimQ20/hisat2ForStringtie-T1r1-sorted.bam
     "[Stringtie]outputFolder" : "data/05-st-Stringtie/testing/{annotateCondition}-{trimCondition}/",
     "[Stringtie]outputFileName" : "data/05-st-Stringtie/testing/{annotateCondition}-{trimCondition}/{group}{replication}.gtf",
     # above: data/05-st-Stringtie/testing/speciesTestingA-trimQ20/T1r1.gtf
@@ -36,7 +36,7 @@ expRep.save()
 # ---- Configuration of Mapping Conditions ---- 
 SpeA = libConfig.config()
 SpeA.queryStr = "speciesTestingA"
-SpeA.folderStr = "data/config/"
+SpeA.folderStr = "config/"
 SpeA.queryDict = {
     "from" : "binHISAT2-BUILD",
     "seqPath" : "data/GenomeSequence/SpeA.fa",
@@ -51,7 +51,7 @@ SpeA.save()
 
 SpeB = libConfig.config()
 SpeB.queryStr = "speciesTestingB"
-SpeB.folderStr = "data/config/"
+SpeB.folderStr = "config/"
 SpeB.queryDict = {
     "from" : "binHISAT2-BUILD",
     "seqPath" : "data/GenomeSequence/SpeB.fna",
@@ -66,7 +66,7 @@ SpeB.save()
 
 SpeC = libConfig.config()
 SpeC.queryStr = "speciesTestingC"
-SpeC.folderStr = "data/config/"
+SpeC.folderStr = "config/"
 SpeC.queryDict = {
     "from" : "binHISAT2-BUILD",
     "seqPath" : "data/GenomeSequence/SpeC.fasta",
@@ -88,7 +88,7 @@ Original command:
 
 Stringtie = libConfig.config()
 Stringtie.queryStr = "binStringTie-RUN"
-Stringtie.folderStr = "data/config/"
+Stringtie.folderStr = "config/"
 Stringtie.queryDict = {
     "command" : 
         "bin/stringtie/stringtie {bamfile} -v -o {outputfile} "+
@@ -99,7 +99,7 @@ Stringtie.save()
 
 Stringtie = libConfig.config()
 Stringtie.queryStr = "binStringTie-RUN-withoutAnnotation"
-Stringtie.folderStr = "data/config/"
+Stringtie.folderStr = "config/"
 Stringtie.queryDict = {
     "command" : 
         "bin/stringtie/stringtie {bamfile} -v -o {outputfile} "+
@@ -110,7 +110,7 @@ Stringtie.save()
 
 StMerge = libConfig.config()
 StMerge.queryStr = "binStringTie-MERGE"
-StMerge.folderStr = "data/config/"
+StMerge.folderStr = "config/"
 StMerge.queryDict = {
     "command" : 
         "bin/stringtie/stringtie {inputfiles} --merge -v -o {outputfile} "+
@@ -121,7 +121,7 @@ StMerge.save()
 
 StEstimate = libConfig.config()
 StEstimate.queryStr = "binStringTie-ESTIMATE"
-StEstimate.folderStr = "data/config/"
+StEstimate.folderStr = "config/"
 StEstimate.queryDict = {
     "command" : 
         "bin/stringtie/stringtie {bamfile} -v "+
