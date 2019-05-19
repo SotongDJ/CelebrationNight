@@ -71,7 +71,8 @@ class assembler:
 
             # ---- Action ----
             Print = libPrint.timer()
-            Print.logFilenameStr = "05-stringtie-assembling-{branch}-{annotate}-{trim}".format(
+            Print.logFilenameStr = "05-{stringtie}-assembling-{branch}-{annotate}-{trim}".format(
+                stringtie=self.headerStr,
                 branch=branchStr,
                 annotate=antCondStr,
                 trim=trimCondStr,
@@ -166,7 +167,8 @@ class merger:
 
             # ---- Action ----
             Print = libPrint.timer()
-            Print.logFilenameStr = "05-stringtie-merging-{branch}-{annotate}-{trim}".format(
+            Print.logFilenameStr = "05-{stringtie}-merging-{branch}-{annotate}-{trim}".format(
+                stringtie=self.headerStr,
                 branch=branchStr,
                 annotate=antCondStr,
                 trim=trimCondStr,
@@ -267,7 +269,8 @@ class estimator:
 
             # ---- Action ----
             Print = libPrint.timer()
-            Print.logFilenameStr = "05-stringtie-estimating-{branch}-{annotate}-{trim}".format(
+            Print.logFilenameStr = "05-{stringtie}-estimating-{branch}-{annotate}-{trim}".format(
+                stringtie=self.headerStr,
                 branch=branchStr,
                 annotate=antCondStr,
                 trim=trimCondStr,
