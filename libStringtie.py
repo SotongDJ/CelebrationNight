@@ -187,24 +187,23 @@ class merger:
                     )
                     pathlib.Path(outputFolderStr).mkdir(parents=True,exist_ok=True)
 
-                    inputFileNameStr = inputFileNameStr.format(
+                    inputFileName = inputFileNameStr.format(
                         annotateCondition=antCondStr,
                         trimCondition=trimCondStr,
                         group=groupStr,
                         replication=repliStr
                     )
-                    gtfFileList.append(inputFileNameStr)
+                    gtfFileList.append(inputFileName)
 
-            outputFilenameStr = outputFileNameStr.format(
+            outputFilename = outputFileNameStr.format(
                 annotateCondition=antCondStr,
                 trimCondition=trimCondStr,
             )
-            gtfFileList.append(inputFileNameStr)
 
             inputFilesStr = " ".join(gtfFileList)
             CommandStr = commandStr.format(
                 inputfiles=inputFilesStr,
-                outputfile=outputFilenameStr,
+                outputfile=outputFilename,
                 thread=threadStr,
                 antPath=antPathStr
             )
