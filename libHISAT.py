@@ -123,9 +123,9 @@ class aligner:
         unpairPostfixStr = expRep.storeDict.get("unpairPostfix","")
         groupList = expRep.storeDict.get("group",[])
         replicationList = expRep.storeDict.get("replication",[])
+        conditionList = expRep.storeDict.get("conditionList",[])
 
-        hisat2ConditionList = expRep.storeDict.get("[hisat2]hisat2Condition",[])
-        conditionList = expRep.storeDict.get("[hisat2]conditionList",[])
+        hisat2ConditionList = expRep.storeDict.get("[hisat2]Condition",[])
 
         directionDict = expRep.storeDict.get("[hisat2]direction",dict())
 
@@ -314,7 +314,7 @@ class summariser:
         expRep.load()
 
         trimConditionList = expRep.storeDict.get("[trim]condition",[])
-        hisat2ConditionList = expRep.storeDict.get("[hisat2]hisat2Condition",[])
+        hisat2ConditionList = expRep.storeDict.get("[hisat2]Condition",[])
         annotateConditionList = expRep.storeDict.get("[hisat2]annotateCondition",[])
         groupList = expRep.storeDict.get("group",[])
         replicationList = expRep.storeDict.get("replication",[])
