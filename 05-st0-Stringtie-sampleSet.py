@@ -1,5 +1,20 @@
 #!/usr/bin/env python3
 import libConfig
+# ---- Keyword list ----
+"""
+large/04-hisat2/testing/speciesTestingA-trimQ30/hisat2ForStringtie-T1r1-sorted.bam
+data/05-st-Stringtie/testing/speciesTestingA-trimQ30/T1r1.gtf
+data/05-st-Stringtie/testing/speciesTestingA-trimQ30-merged.gtf
+data/05-st-Stringtie/testing/speciesTestingA-trimQ30/T1r1-expression.tsv
+data/05-st-ballgown/testing/speciesTestingA-trimQ30-T1r1/
+data/05-st-ballgown/testing/speciesTestingA-trimQ30-T1r1/T1r1-expression.gtf
+testing =>
+["Control","T1","T2","T3","T4","T5"]
+["r1","r2","r3"]
+SpeA, speciesTestingA
+SpeB, speciesTestingB
+SpeC, speciesTestingC
+"""
 # ---- Configuration of Experiment Design ---- 
 expRep = libConfig.config()
 expRep.queryStr = "testing"
@@ -9,25 +24,25 @@ expRep.folderStr = "config/"
 expRep.queryDict = {
     "branch" : "testing",
     "group" : ["Control","T1","T2","T3","T4","T5"],
-    "replication" : ["r1"],
+    "replication" : ["r1","r2","r3"],
     "pairPostfix" : "pair",
     "unpairPostfix" : "unpair",
-    "[Stringtie]hisat2Condition" : "hisat2ForStringtie",
-    "[Stringtie]conditionList" : [("speciesTestingA","trimQ20"),("speciesTestingB","trimQ20"),("speciesTestingC","trimQ20")],
+    "[hisat2]Condition" : "hisat2ForStringtie",
+    "conditionList" : [("speciesTestingB",'trimQ30'),("speciesTestingA",'trimQ30'),("speciesTestingC",'trimQ30')],
     "[Stringtie]inputFileName" : "large/04-hisat2/testing/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}{replication}-sorted.bam",
-    # above: large/04-hisat2/testing/speciesTestingA-trimQ20/hisat2ForStringtie-T1r1-sorted.bam
+    # above: large/04-hisat2/testing/speciesTestingA-trimQ30/hisat2ForStringtie-T1r1-sorted.bam
     "[Stringtie]outputFolder" : "data/05-st-Stringtie/testing/{annotateCondition}-{trimCondition}/",
     "[Stringtie]outputFileName" : "data/05-st-Stringtie/testing/{annotateCondition}-{trimCondition}/{group}{replication}.gtf",
-    # above: data/05-st-Stringtie/testing/speciesTestingA-trimQ20/T1r1.gtf
+    # above: data/05-st-Stringtie/testing/speciesTestingA-trimQ30/T1r1.gtf
     "[Stringtie]mergedFolder" : "data/05-st-Stringtie/testing/",
     "[Stringtie]mergedFileName" : "data/05-st-Stringtie/testing/{annotateCondition}-{trimCondition}-merged.gtf",
-    # above: data/05-st-Stringtie/testing/speciesTestingA-trimQ20-merged.gtf
+    # above: data/05-st-Stringtie/testing/speciesTestingA-trimQ30-merged.gtf
     "[Stringtie]tsvFileName" : "data/05-st-Stringtie/testing/{annotateCondition}-{trimCondition}/{group}{replication}-expression.tsv",
-    # above: data/05-st-Stringtie/testing/speciesTestingA-trimQ20/T1r1-expression.tsv
-    "[Stringtie]ballgownFolder" : "data/05-st-ballgown/testingv/{annotateCondition}-{trimCondition}-{group}{replication}{group}{replication}/",
-    # above: data/05-st-ballgown/testing/speciesTestingA-trimQ20-T1r1/
+    # above: data/05-st-Stringtie/testing/speciesTestingA-trimQ30/T1r1-expression.tsv
+    "[Stringtie]ballgownFolder" : "data/05-st-ballgown/testing/{annotateCondition}-{trimCondition}-{group}{replication}/",
+    # above: data/05-st-ballgown/testing/speciesTestingA-trimQ30-T1r1/
     "[Stringtie]gtfFileName" : "data/05-st-ballgown/testing/{annotateCondition}-{trimCondition}-{group}{replication}/{group}{replication}-expression.gtf",
-    # above: data/05-st-ballgown/testing/speciesTestingA-trimQ20-T1r1/T1r1-expression.gtf
+    # above: data/05-st-ballgown/testing/speciesTestingA-trimQ30-T1r1/T1r1-expression.gtf
     "testing" : False,
 }
 expRep.modeStr = "UPDATE"
@@ -38,45 +53,42 @@ SpeA = libConfig.config()
 SpeA.queryStr = "speciesTestingA"
 SpeA.folderStr = "config/"
 SpeA.queryDict = {
-    "from" : "binHISAT2-BUILD",
-    "seqPath" : "data/GenomeSequence/SpeA.fa",
-    "antPath" : "data/GenomeSequence/SpeA.gff3",
-    "indexHeader" : "data/02-hisat2Index/SpeA",
-    "checkFolder"    : "data/02-hisat2Index/",
+    "seqPath" : "data/dbgs-GenomeSequence/speciesTestingA/speciesTestingA.fa",
+    "antPath" : "data/dbga-GenomeAnnotation/speciesTestingA/speciesTestingA.gff3",
+    "indexHeader" : "large/02-hisat2Index/speciesTestingA",
+    "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
-    "testing" : True,
+    "testing" : False,
 }
-SpeA.modeStr = "OVERWRITE"
+SpeA.modeStr = "UPDATE"
 SpeA.save()
 
 SpeB = libConfig.config()
 SpeB.queryStr = "speciesTestingB"
 SpeB.folderStr = "config/"
 SpeB.queryDict = {
-    "from" : "binHISAT2-BUILD",
-    "seqPath" : "data/GenomeSequence/SpeB.fna",
-    "antPath" : "data/GenomeSequence/SpeB.gff3",
-    "indexHeader" : "data/02-hisat2Index/SpeB",
-    "checkFolder"    : "data/02-hisat2Index/",
+    "seqPath" : "data/dbgs-GenomeSequence/speciesTestingB/speciesTestingB.fna",
+    "antPath" : "data/dbga-GenomeAnnotation/speciesTestingB/speciesTestingB.gff3",
+    "indexHeader" : "large/02-hisat2Index/speciesTestingB",
+    "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
-    "testing" : True,
+    "testing" : False,
 }
-SpeB.modeStr = "OVERWRITE"
+SpeB.modeStr = "UPDATE"
 SpeB.save()
 
 SpeC = libConfig.config()
 SpeC.queryStr = "speciesTestingC"
 SpeC.folderStr = "config/"
 SpeC.queryDict = {
-    "from" : "binHISAT2-BUILD",
-    "seqPath" : "data/GenomeSequence/SpeC.fasta",
-    "antPath" : "data/GenomeSequence/SpeC.gff3",
-    "indexHeader" : "data/02-hisat2Index/SpeC",
-    "checkFolder"    : "data/02-hisat2Index/",
+    "seqPath" : "data/dbgs-GenomeSequence/speciesTestingC/speciesTestingC.fasta",
+    "antPath" : "data/dbga-GenomeAnnotation/speciesTestingC/speciesTestingC.gff3",
+    "indexHeader" : "large/02-hisat2Index/speciesTestingC",
+    "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
-    "testing" : True,
+    "testing" : False,
 }
-SpeC.modeStr = "OVERWRITE"
+SpeC.modeStr = "UPDATE"
 SpeC.save()
 
 # ---- Configuration of Mapping Command ---- 
