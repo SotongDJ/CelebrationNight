@@ -1,18 +1,24 @@
 #!/usr/bin/env python3
 import libConfig
+# ---- Keyword list ----
+"""
+SpeA, speciesTestingA
+SpeB, speciesTestingB
+SpeC, speciesTestingC
+"""
 # ---- Configuration of Indexing Conditions ---- 
 SpeA = libConfig.config()
 SpeA.queryStr = "speciesTestingA"
 SpeA.folderStr = "config/"
 SpeA.queryDict = {
     "from" : "binHISAT2-BUILD",
-    "seqPath" : "large/GenomeSequence/SpeA.fa",
-    "indexHeader" : "large/02-hisat2Index/SpeA",
+    "seqPath" : "large/dbgs-GenomeSequence/speciesTestingA/speciesTestingA.fa",
+    "indexHeader" : "large/02-hisat2Index/speciesTestingA",
     "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
-    "testing" : True,
+    "testing" : False,
 }
-SpeA.modeStr = "OVERWRITE"
+SpeA.modeStr = "UPDATE"
 SpeA.save()
 
 SpeB = libConfig.config()
@@ -20,13 +26,13 @@ SpeB.queryStr = "speciesTestingB"
 SpeB.folderStr = "config/"
 SpeB.queryDict = {
     "from" : "binHISAT2-BUILD",
-    "seqPath" : "large/GenomeSequence/SpeB.fna",
-    "indexHeader" : "large/02-hisat2Index/SpeB",
+    "seqPath" : "large/dbgs-GenomeSequence/speciesTestingB/speciesTestingB.fna",
+    "indexHeader" : "large/02-hisat2Index/speciesTestingB",
     "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
-    "testing" : True,
+    "testing" : False,
 }
-SpeB.modeStr = "OVERWRITE"
+SpeB.modeStr = "UPDATE"
 SpeB.save()
 
 SpeC = libConfig.config()
@@ -34,13 +40,13 @@ SpeC.queryStr = "speciesTestingC"
 SpeC.folderStr = "config/"
 SpeC.queryDict = {
     "from" : "binHISAT2-BUILD",
-    "seqPath" : "large/GenomeSequence/SpeC.fasta",
-    "indexHeader" : "large/02-hisat2Index/SpeC",
+    "seqPath" : "large/dbgs-GenomeSequence/speciesTestingC/speciesTestingC.fasta",
+    "indexHeader" : "large/02-hisat2Index/speciesTestingC",
     "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
-    "testing" : True,
+    "testing" : False,
 }
-SpeC.modeStr = "OVERWRITE"
+SpeC.modeStr = "UPDATE"
 SpeC.save()
 # ---- Configuration of Indexing Command ---- 
 """

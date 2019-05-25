@@ -1,12 +1,24 @@
 #!/usr/bin/env python3
 import libConfig
+# ---- Keyword list ----
+"""
+large/01-raw/T1r1-F.fastq
+large/03-trimed/testing/trimQ30-T1r1-F-pair.fastq
+testing
+["Control","T1","T2","T3","T4","T5"]
+["F","R"]
+["r1"]
+SpeA, speciesTestingA
+SpeB, speciesTestingB
+SpeC, speciesTestingC
+"""
 # ---- Configuration of Experiment Design ---- 
-Testing = libConfig.config()
-Testing.queryStr = "testing"
-Testing.folderStr = "config/"
+expRep = libConfig.config()
+expRep.queryStr = "testing"
+expRep.folderStr = "config/"
 # Arguments/Parameters below need to modify depend on 
 # your experiment design and naming style
-Testing.queryDict = {
+expRep.queryDict = {
     "branch"               : "testing",
     "group"                : ["Control","T1","T2","T3","T4","T5"],
     "direction"            : ["F","R"],
@@ -14,16 +26,16 @@ Testing.queryDict = {
     "pairPostfix"          : "pair",
     "unpairPostfix"        : "unpair",
     "[trim]checkFolder"    : ["large/01-raw/","large/03-trimed/testing/"],
-    "[trim]condition"      : ["trimQ20","trimQ30"],
-    "[trim]inputFileName"  : "large/01-raw/{group}-{replication}-{direction}{fileType}",
-    # above: data/tmp/T1-r1-F.fastq
-    "[trim]outputFileName" : "large/03-trimed/testing/{condition}-{group}-{replication}-{direction}-{pairType}{fileType}",
-    # above: large/03-trimed/testing/trimQ20-T1-r1-F-pair.fastq
+    "[trim]condition"      : ["trimQ30"],
+    "[trim]inputFileName"  : "large/01-raw/{group}{replication}-{direction}{fileType}",
+    # above: large/01-raw/T1r1-F.fastq
+    "[trim]outputFileName" : "large/03-trimed/testing/{condition}-{group}{replication}-{direction}-{pairType}{fileType}",
+    # above: large/03-trimed/testing/trimQ30-T1r1-F-pair.fastq
     "[trim]fileType"       : ".fastq",
-    "testing"              : True,
+    "testing"              : False,
 }
-Testing.modeStr = "UPDATE"
-Testing.save()
+expRep.modeStr = "UPDATE"
+expRep.save()
 
 # ---- Configuration of Trimming Conditions ---- 
 TrimParA = libConfig.config()

@@ -1,5 +1,18 @@
 #!/usr/bin/env python3
 import libConfig
+# ---- Keyword list ----
+"""
+large/04-hisat2/testing/speciesTestingA-trimQ30/hisat2ForStringtie-T1r1.sam
+large/03-trimed/testing/trimQ30-T1r1-F-pair.fastq
+testing
+["Control","T1","T2","T3","T4","T5"]
+"F"
+"R"
+["r1"]
+SpeA, speciesTestingA
+SpeB, speciesTestingB
+SpeC, speciesTestingC
+"""
 # ---- Configuration of Experiment Design ---- 
 expRep = libConfig.config()
 expRep.queryStr = "testing"
@@ -17,14 +30,15 @@ expRep.queryDict = {
         '1' : "F",
         '2' : "R",
     },
-    "[hisat2]inputFileName" : "large/03-trimed/testing/{trimCondition}-{group}-{replication}-{direction}-{pairType}{fileType}",
-    # above: data/tmp/trimQ20-T1-r1-F-pair.fastq
-    "[hisat2]Condition" : ["hisat2ForStringtie","hisat2ForCufflinks"],
-    "conditionList" : [("speciesTestingA","trimQ20"),("speciesTestingB","trimQ20"),("speciesTestingC","trimQ20")],
-    "[hisat2]outputFolder" : "large/04-hisat2/testing/{annotateCondition}-{trimCondition}/",
-    "[hisat2]outputFileName" : "large/04-hisat2/testing/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}-{replication}{fileType}",
-    # above: date/04-hisat2/testing/speciesTestingA-trimQ20/hisat2ForStringtie-T1-r1.sam
-    "testing" : True,
+    "[hisat2]inputFileName" : "large/03-trimed/testing/{trimCondition}-{group}{replication}-{direction}-{pairType}{fileType}",
+    # above: large/03-trimed/testing/trimQ30-T1r1-F-pair.fastq
+    # "[hisat2]Condition" : ["hisat2ForStringtie","hisat2ForCufflinks"],
+    "[hisat2]Condition" : ["hisat2ForStringtie"],
+    "conditionList" : [("speciesTestingA","trimQ30"),("speciesTestingB","trimQ30"),("speciesTestingC","trimQ30")],
+    "[hisat2]outputFolder" : "large/04-hisat2/tripleRep/{annotateCondition}-{trimCondition}/",
+    "[hisat2]outputFileName" : "large/04-hisat2/tripleRep/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}{replication}{fileType}",
+    # above: large/04-hisat2/testing/speciesTestingA-trimQ30/hisat2ForStringtie-T1r1.sam
+    "testing" : False,
 }
 expRep.modeStr = "UPDATE"
 expRep.save()
