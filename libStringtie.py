@@ -2,9 +2,9 @@
 import libConfig, libPrint
 import pathlib
 """
-    --- README of Stringtie 2 related actions ---
+    --- README of Stringtie related actions ---
 Original Command:
-    # Stringtie 2 assembling
+    # Stringtie assembling
     stringtie [BAM file] -o [Result GTF file] \
         -p [Thread] -G [Reference GFF file] -e
 
