@@ -33,11 +33,11 @@ expRep.queryDict = {
         "dsStringtie" : "05-ds-Stringtie",
         "waStringtie" : "05-wa-Stringtie"
     },
-    "[CuffDiff]bamFileName" : "large/04-hisat2/{batch}/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}{replication}-sorted.bam",
+    "[CuffDiff]bamFileName" : "large/04-hisat2/{branch}/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}{replication}-sorted.bam",
     # above: large/04-hisat2/testing/speciesTestingA-trimQ30/hisat2ForStringtie-T1r1-sorted.bam
-    "[CuffDiff]gtfFileName" : "data/{sourceFolder}/{batch}/{annotateCondition}-{trimCondition}-merged.gtf",
+    "[CuffDiff]gtfFileName" : "data/{sourceFolder}/{branch}/{annotateCondition}-{trimCondition}-merged.gtf",
     # above: data/05-st-Stringtie/testing/speciesTestingA-trimQ30-merged.gtf
-    "[CuffDiff]resultFolder" : "data/06-cd-CuffDiff/{batch}-{method}/{annotateCondition}-{trimCondition}/",
+    "[CuffDiff]resultFolder" : "data/06-cd-CuffDiff/{branch}-{method}/{annotateCondition}-{trimCondition}/",
     # above: data/06-cd-CuffDiff/testing-Stringtie/speciesTestingA-trimQ30/
     "testing" : False,
 }
@@ -64,7 +64,7 @@ CuffDiff.queryDict = {
         "-p {thread} "+
         "-o {outputFolder} "+
         "-L {labelList} "+
-        "{mergedGTF} {bamFiles} "
+        "{mergedGTF} {bamFiles}"
 }
 CuffDiff.modeStr = "UPDATE"
 CuffDiff.save()

@@ -13,12 +13,12 @@ Original command:
 
     --- README ---
 """
-class assembler:
+class differ:
     def __init__(self):
         self.branchStr = ""
         self.testingBool = True
 
-    def assembling(self):
+    def diffing(self):
         # ---- Parameter for Assembling ----
         BinMap = libConfig.config()
         BinMap.queryStr = "binCuffDiff-RUN"
@@ -80,7 +80,7 @@ class assembler:
                 
                 gtfFileStr = gtfFileNameStr.format(
                     sourceFolder=sourceFolderStr,
-                    batch=branchStr,
+                    branch=branchStr,
                     annotateCondition=antCondStr,
                     trimCondition=trimCondStr,
                 )
@@ -91,7 +91,7 @@ class assembler:
                     for repliStr in replicationList:
 
                         bamFileStr = bamFileNameStr.format(
-                            batch=branchStr,
+                            branch=branchStr,
                             annotateCondition=antCondStr,
                             trimCondition=trimCondStr,
                             hisat2Condition=hisat2ConditionStr,
