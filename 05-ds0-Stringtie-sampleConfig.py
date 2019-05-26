@@ -6,12 +6,13 @@ large/04-hisat2/testing/speciesTestingA-trimQ30/hisat2ForStringtie-T1r1-sorted.b
 data/05-ds-Stringtie/testing/speciesTestingA-trimQ30/T1r1-expression.tsv
 data/05-ds-ballgown/testing/speciesTestingA-trimQ30-T1r1/
 data/05-ds-ballgown/testing/speciesTestingA-trimQ30-T1r1/T1r1-expression.gtf
-testing => testing
-["Control","T1","T2","T3","T4","T5"] => ["Control","T1","T2","T3","T4","T5"]
-["r1","r2","r3"] => ["r1","r2","r3"]
-SpeA, speciesTestingA => SpeA, speciesTestingA
-SpeB, speciesTestingB => SpeB, speciesTestingB
-SpeC, speciesTestingC => SpeC, speciesTestingC
+data/05-st-Stringtie/testing/speciesTestingA-trimQ30-merged.gtf
+testing
+["Control","T1","T2","T3","T4","T5"]
+["r1","r2","r3"]
+SpeA, speciesTestingA
+SpeB, speciesTestingB
+SpeC, speciesTestingC
 """
 # ---- Configuration of Experiment Design ---- 
 expRep = libConfig.config()
@@ -35,6 +36,11 @@ expRep.queryDict = {
     # above: data/05-ds-ballgown/testing/speciesTestingA-trimQ30-T1r1/
     "[dsStringtie]gtfFileName" : "data/05-ds-ballgown/testing/{annotateCondition}-{trimCondition}-{group}{replication}/{group}{replication}-expression.gtf",
     # above: data/05-ds-ballgown/testing/speciesTestingA-trimQ30-T1r1/T1r1-expression.gtf
+    "[dsStringtie]outputFileName" : "data/05-ds-ballgown/testing/{annotateCondition}-{trimCondition}-{group}{replication}/{group}{replication}-expression.gtf",
+    # above: data/05-ds-ballgown/testing/speciesTestingA-trimQ30-A1/A1-expression.gtf
+    "[dsStringtie]mergedFolder" : "data/05-ds-Stringtie/testing/",
+    "[dsStringtie]mergedFileName" : "data/05-ds-Stringtie/testing/{annotateCondition}-{trimCondition}-merged.gtf",
+    # above: data/05-ds-Stringtie/testing/speciesTestingA-trimQ30-merged.gtf
     "testing" : False,
 }
 expRep.modeStr = "UPDATE"
