@@ -324,7 +324,6 @@ class sqlImporter:
 
 
                 insertComStr = "INSERT INTO TranscriptExpressionSummary ({column}) VALUES ({value})"
-                a = 0
                 for uuid in resultDict.keys():
                     valueList = list()
                     for posInt in range(len(insertColumnList)):
