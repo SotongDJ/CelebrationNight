@@ -50,7 +50,7 @@ class sqlImporter:
             "insertCommand" : str(),
         }
 
-    def importing(self):
+    def importingStringtie(self):
         # ---- Initialization for Converting ----
         Target = libConfig.config()
         Target.queryStr = self.branchStr
@@ -338,3 +338,12 @@ class sqlImporter:
                 Print.printing("[SQLite3:Close]\n")
 
                 Print.stopLog()
+
+
+    def importingCuffdiff(self):
+        # ---- Initialization for Converting ----
+        Target = libConfig.config()
+        Target.queryStr = self.branchStr
+        Target.folderStr = "config/"
+        Target.modeStr = "UPDATE"
+        Target.load()
