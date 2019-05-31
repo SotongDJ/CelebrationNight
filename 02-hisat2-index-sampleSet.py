@@ -12,7 +12,7 @@ SpeA.queryStr = "speciesTestingA"
 SpeA.folderStr = "config/"
 SpeA.queryDict = {
     "from" : "binHISAT2-BUILD",
-    "seqPath" : "large/dbgs-GenomeSequence/speciesTestingA/speciesTestingA.fa",
+    "seqPath" : "data/dbgs-GenomeSequence/speciesTestingA/speciesTestingA.fa",
     "indexHeader" : "large/02-hisat2Index/speciesTestingA",
     "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
@@ -26,7 +26,7 @@ SpeB.queryStr = "speciesTestingB"
 SpeB.folderStr = "config/"
 SpeB.queryDict = {
     "from" : "binHISAT2-BUILD",
-    "seqPath" : "large/dbgs-GenomeSequence/speciesTestingB/speciesTestingB.fna",
+    "seqPath" : "data/dbgs-GenomeSequence/speciesTestingB/speciesTestingB.fna",
     "indexHeader" : "large/02-hisat2Index/speciesTestingB",
     "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
@@ -40,7 +40,7 @@ SpeC.queryStr = "speciesTestingC"
 SpeC.folderStr = "config/"
 SpeC.queryDict = {
     "from" : "binHISAT2-BUILD",
-    "seqPath" : "large/dbgs-GenomeSequence/speciesTestingC/speciesTestingC.fasta",
+    "seqPath" : "data/dbgs-GenomeSequence/speciesTestingC/speciesTestingC.fasta",
     "indexHeader" : "large/02-hisat2Index/speciesTestingC",
     "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",

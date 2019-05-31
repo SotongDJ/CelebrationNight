@@ -122,6 +122,7 @@ class aligner:
         pairPostfixStr = expRep.storeDict.get("pairPostfix","")
         unpairPostfixStr = expRep.storeDict.get("unpairPostfix","")
         groupList = expRep.storeDict.get("group",[])
+        modeStr = expRep.storeDict.get("mode","")
         replicationList = expRep.storeDict.get("replication",[])
         conditionList = expRep.storeDict.get("conditionList",[])
 
@@ -177,39 +178,48 @@ class aligner:
                         finalDict.update({
                             "indexHeader" : Spec.storeDict.get("indexHeader","")
                         })
+                        
+                        if modeStr == "pairEnd":
+                            pairForwardDict = {
+                                "trimCondition" : trimConditionStr,
+                                "group" : groupStr,
+                                "replication": replicationStr,
+                                "direction" : directionDict['1'],
+                                "pairType" : pairPostfixStr,
+                                "fileType" : fileTypeStr,
+                            }
+                            pairReverseDict = {
+                                "trimCondition" : trimConditionStr,
+                                "group" : groupStr,
+                                "replication": replicationStr,
+                                "direction" : directionDict['2'],
+                                "pairType" : pairPostfixStr,
+                                "fileType" : fileTypeStr,
+                            }
+                            unpairForwardDict = {
+                                "trimCondition" : trimConditionStr,
+                                "group" : groupStr,
+                                "replication": replicationStr,
+                                "direction" : directionDict['1'],
+                                "pairType" : unpairPostfixStr,
+                                "fileType" : fileTypeStr,
+                            }
+                            unpairReverseDict = {
+                                "trimCondition" : trimConditionStr,
+                                "group" : groupStr,
+                                "replication": replicationStr,
+                                "direction" : directionDict['2'],
+                                "pairType" : unpairPostfixStr,
+                                "fileType" : fileTypeStr,
+                            }
+                        elif modeStr == "singleEnd":
+                            unpairDict = {
+                                "trimCondition" : trimConditionStr,
+                                "group" : groupStr,
+                                "replication": replicationStr,
+                                "fileType" : fileTypeStr,
+                            }
 
-                        pairForwardDict = {
-                            "trimCondition" : trimConditionStr,
-                            "group" : groupStr,
-                            "replication": replicationStr,
-                            "direction" : directionDict['1'],
-                            "pairType" : pairPostfixStr,
-                            "fileType" : fileTypeStr,
-                        }
-                        pairReverseDict = {
-                            "trimCondition" : trimConditionStr,
-                            "group" : groupStr,
-                            "replication": replicationStr,
-                            "direction" : directionDict['2'],
-                            "pairType" : pairPostfixStr,
-                            "fileType" : fileTypeStr,
-                        }
-                        unpairForwardDict = {
-                            "trimCondition" : trimConditionStr,
-                            "group" : groupStr,
-                            "replication": replicationStr,
-                            "direction" : directionDict['1'],
-                            "pairType" : unpairPostfixStr,
-                            "fileType" : fileTypeStr,
-                        }
-                        unpairReverseDict = {
-                            "trimCondition" : trimConditionStr,
-                            "group" : groupStr,
-                            "replication": replicationStr,
-                            "direction" : directionDict['2'],
-                            "pairType" : unpairPostfixStr,
-                            "fileType" : fileTypeStr,
-                        }
                         samDict = {
                             "annotateCondition": annotateConditionStr,
                             "trimCondition": trimConditionStr,
@@ -242,17 +252,27 @@ class aligner:
                             Print.phraseStr = "SAM File existed: "+samFileStr
                             Print.printTimeStamp()
                         elif not pathlib.Path(samFileStr).exists() and not pathlib.Path(bamFileStr).exists() and not pathlib.Path(sortedBAMFileStr).exists():
-                            commandStr = BinHISAT2.storeDict.get("command","")
-                            finalDict.update({
-                                "pairForwardFASTQ" : inputFileNameStr.format(**pairForwardDict),
-                                "pairReverseFASTQ" : inputFileNameStr.format(**pairReverseDict),
-                                "unpairForwardFASTQ" : inputFileNameStr.format(**unpairForwardDict),
-                                "unpairReverseFASTQ" : inputFileNameStr.format(**unpairReverseDict),
-                                "outputSAM"    : samFileStr
-                            })
-                            finalCommandStr = commandStr.format(**finalDict)
-                            Print.phraseStr = finalCommandStr
-                            Print.runCommand()
+                            if modeStr == "pairEnd":
+                                commandStr = BinHISAT2.storeDict.get("command-PE","")
+                                finalDict.update({
+                                    "pairForwardFASTQ" : inputFileNameStr.format(**pairForwardDict),
+                                    "pairReverseFASTQ" : inputFileNameStr.format(**pairReverseDict),
+                                    "unpairForwardFASTQ" : inputFileNameStr.format(**unpairForwardDict),
+                                    "unpairReverseFASTQ" : inputFileNameStr.format(**unpairReverseDict),
+                                    "outputSAM"    : samFileStr
+                                })
+                                finalCommandStr = commandStr.format(**finalDict)
+                                Print.phraseStr = finalCommandStr
+                                Print.runCommand()
+                            elif modeStr == "singleEnd":
+                                commandStr = BinHISAT2.storeDict.get("command-SE","")
+                                finalDict.update({
+                                    "unpairFASTQ" : inputFileNameStr.format(**unpairDict),
+                                    "outputSAM"    : samFileStr
+                                })
+                                finalCommandStr = commandStr.format(**finalDict)
+                                Print.phraseStr = finalCommandStr
+                                Print.runCommand()
 
                         if pathlib.Path(bamFileStr).exists():
                             Print.phraseStr = "BAM File existed: "+bamFileStr

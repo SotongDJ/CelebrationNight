@@ -83,13 +83,18 @@ HISAT2 = libConfig.config()
 HISAT2.queryStr = "binHISAT2-RUN"
 HISAT2.folderStr = "config/"
 HISAT2.queryDict = {
-    "command" : 
+    "command-PE" : 
         "bin/hisat2/hisat2 -q {dta} --phred{phred} -p {thread} " +
         "-x {indexHeader} " +
         "-1 {pairForwardFASTQ} " +
         "-2 {pairReverseFASTQ} " +
         "-U {unpairForwardFASTQ},{unpairReverseFASTQ} " +
-        "-S {outputSAM}"
+        "-S {outputSAM}",
+    "command-SE" : 
+        "bin/hisat2/hisat2 -q {dta} --phred{phred} -p {thread} " +
+        "-x {indexHeader} " +
+        "-U {unpairFASTQ} " +
+        "-S {outputSAM}",
 }
 HISAT2.modeStr = "OVERWRITE"
 HISAT2.save()
