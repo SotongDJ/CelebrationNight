@@ -15,6 +15,12 @@ import pathlib
     <ILLUMINACLIP> <LEADING> \\
     <TRAILING> <SLIDINGWINDOW> <MINLEN>
 
+  java -jar <bin>/trimmomatic-0.35.jar SE \\
+    -phred33 -threads <threads> \\
+    input.fq.gz output.fq.gz \\
+    <ILLUMINACLIP> <LEADING> \\
+    <TRAILING> <SLIDINGWINDOW> <MINLEN>
+
    --- README ---
 """
 class trimmer:
@@ -47,6 +53,7 @@ class trimmer:
         branchStr = ExpRep.storeDict.get("branch","")
         pairStr = ExpRep.storeDict.get("pairPostfix","")
         unpairStr = ExpRep.storeDict.get("unpairPostfix","")
+        modeStr = ExpRep.storeDict.get("mode","")
 
         inputFileNameStr = ExpRep.storeDict.get("[trim]inputFileName","")
         outputFileNameStr = ExpRep.storeDict.get("[trim]outputFileName","")
@@ -78,47 +85,77 @@ class trimmer:
                 TrimPara.folderStr = "config/"
                 TrimPara.modeStr = "UPDATE"
                 TrimPara.load()
+                headerStr = TrimPara.storeDict.get('header',"")
 
                 for groupStr in groupList:
                     for replicationStr in replicationList:
-                        inputFileList = list()
-                        outputFileList = list()
-                        for directionStr in directionList:
+                        if modeStr == "pairEnd":
+                            inputFileList = list()
+                            outputFileList = list()
+                            for directionStr in directionList:
+                                inputStr = inputFileNameStr.format(
+                                    group=groupStr,
+                                    replication=replicationStr,
+                                    direction=directionStr,
+                                    fileType=fileTypeStr
+                                )
+                                inputFileList.append(inputStr)
+                                outputPairStr = outputFileNameStr.format(
+                                    condition=headerStr,
+                                    direction=directionStr,
+                                    group=groupStr,
+                                    replication=replicationStr,
+                                    pairType=pairStr,
+                                    fileType=fileTypeStr,
+                                )
+                                outputFileList.append(outputPairStr)
+                                outputUnPairStr = outputFileNameStr.format(
+                                    condition=headerStr,
+                                    direction=directionStr,
+                                    group=groupStr,
+                                    replication=replicationStr,
+                                    pairType=unpairStr,
+                                    fileType=fileTypeStr,
+                                )
+                                outputFileList.append(outputUnPairStr)
+
+                            fileList = inputFileList + outputFileList
+                            fileStr = " ".join(fileList)
+
+                            commandDict = dict()
+                            commandDict.update(TrimPara.storeDict)
+                            commandDict.update({ 
+                                'files' : fileStr,
+                                'mode'  : "PE",
+                            })
+                            CommandStr = commandStr.format(**commandDict)
+                            Print.phraseStr = CommandStr
+                            Print.runCommand()
+
+                        elif modeStr == "singleEnd":
                             inputStr = inputFileNameStr.format(
                                 group=groupStr,
                                 replication=replicationStr,
-                                direction=directionStr,
                                 fileType=fileTypeStr
                             )
-                            inputFileList.append(inputStr)
-                            outputPairStr = outputFileNameStr.format(
-                                condition=conditionStr,
-                                direction=directionStr,
+                            outputStr = outputFileNameStr.format(
+                                condition=headerStr,
                                 group=groupStr,
                                 replication=replicationStr,
-                                pairType=pairStr,
                                 fileType=fileTypeStr,
                             )
-                            outputFileList.append(outputPairStr)
-                            outputUnPairStr = outputFileNameStr.format(
-                                condition=conditionStr,
-                                direction=directionStr,
-                                group=groupStr,
-                                replication=replicationStr,
-                                pairType=unpairStr,
-                                fileType=fileTypeStr,
-                            )
-                            outputFileList.append(outputUnPairStr)
 
-                        fileList = inputFileList + outputFileList
-                        fileStr = " ".join(fileList)
+                            fileStr = "{} {}".format(inputStr,outputStr)
 
-                        commandDict = dict()
-                        commandDict.update(TrimPara.storeDict)
-                        commandDict.update({ 'files' : fileStr })
-                        CommandStr = commandStr.format(**commandDict)
-                        Print.phraseStr = CommandStr
-                        Print.runCommand()
+                            commandDict = dict()
+                            commandDict.update(TrimPara.storeDict)
+                            commandDict.update({ 
+                                'files' : fileStr,
+                                'mode'  : "SE",
+                            })
+                            CommandStr = commandStr.format(**commandDict)
+                            Print.phraseStr = CommandStr
+                            Print.runCommand()
 
                 Print.stopLog()
 

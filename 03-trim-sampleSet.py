@@ -25,6 +25,7 @@ expRep.queryDict = {
     "replication"          : ["r1"],
     "pairPostfix"          : "pair",
     "unpairPostfix"        : "unpair",
+    "mode"                 : "pairEnd",
     "[trim]checkFolder"    : ["large/01-raw/","large/03-trimed/testing/"],
     "[trim]condition"      : ["trimQ30"],
     "[trim]inputFileName"  : "large/01-raw/{group}{replication}-{direction}{fileType}",
@@ -42,7 +43,7 @@ TrimParA = libConfig.config()
 TrimParA.queryStr = "trimQ20"
 TrimParA.folderStr = "config/"
 TrimParA.queryDict = {
-    "singlePair" : "PE", # Pair end
+    "header"     : "trimQ20",
     "phred"      : "33", # sequencing type, illumina solexa = 33
     "thread"     : "6", # cluster server have 8 cores
     "lead"       : "LEADING:20",
@@ -58,7 +59,7 @@ TrimParB = libConfig.config()
 TrimParB.queryStr = "trimQ30"
 TrimParB.folderStr = "config/"
 TrimParB.queryDict = {
-    "singlePair" : "PE", # Pair end
+    "header"     : "trimQ30",
     "phred"      : "33", # sequencing type, illumina solexa = 33
     "thread"     : "6", # cluster server have 8 cores
     "lead"       : "LEADING:30",
@@ -70,6 +71,21 @@ TrimParB.queryDict = {
 TrimParB.modeStr = "OVERWRITE"
 TrimParB.save()
 
+TrimParC = libConfig.config()
+TrimParC.queryStr = "trimQ30-SE"
+TrimParC.folderStr = "config/"
+TrimParC.queryDict = {
+    "header"     : "trimQ30",
+    "phred"      : "33", # sequencing type, illumina solexa = 33
+    "thread"     : "6", # cluster server have 8 cores
+    "lead"       : "LEADING:30",
+    "trail"      : "TRAILING:30",
+    "slide"      : "SLIDINGWINDOW:4:30",
+    "length"     : "MINLEN:36",
+    "adapter"    : "ILLUMINACLIP:bin/trimmomatic/adapters/TruSeq3-SE.fa:2:30:10",
+}
+TrimParC.modeStr = "OVERWRITE"
+TrimParC.save()
 # ---- Configuration of Trimming Command ---- 
 """
 FROM: http://www.usadellab.org/cms/?page=trimmomatic
@@ -117,7 +133,7 @@ Trim.folderStr = "config/"
 Trim.queryDict = {
     "command" : 
         "java -jar bin/trimmomatic/trimmomatic-0.36.jar "+
-        "{singlePair} -phred{phred} -threads {thread} {files} "+
+        "{mode} -phred{phred} -threads {thread} {files} "+
         "{adapter} {lead} {trail} {slide} {length}"
 }
 Trim.modeStr = "OVERWRITE"
