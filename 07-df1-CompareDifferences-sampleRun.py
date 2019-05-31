@@ -9,8 +9,8 @@ branchStr = "testing"
 antStr = "speciesTestingA"
 controlStr = "Controlr1"
 sampleList = ["Controlr1","T1r1","T2r1","T3r1","T4r1","T5r1"]
-trim20PathStr = 'data/07-sl-expressionTable-SQLite3/{branch}/Expression-{ant}-trimQ20.db'
-trim30PathStr = 'data/07-sl-expressionTable-SQLite3/{branch}/Expression-{ant}-trimQ30.db'
+trim20PathStr = 'data/07-st-expressionTable-SQLite3/{branch}/Expression-{ant}-trimQ20.db'
+trim30PathStr = 'data/07-st-expressionTable-SQLite3/{branch}/Expression-{ant}-trimQ30.db'
 sqlFolderStr = "data/07-df-differenceDistribution/{branch}/"
 sqlPathStr = 'data/07-df-differenceDistribution/{branch}/Difference-{ant}.db'
 

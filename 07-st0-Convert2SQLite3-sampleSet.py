@@ -40,8 +40,8 @@ expRep.queryDict = {
     "[sqlite]geneSourcePathStr" : "data/{folder}/{branch}/{ant}-{trim}/{sample}-expression.tsv",
     "[sqlite]transcriptSourcePathStr" : "data/{folder}/{branch}/{ant}-{trim}-{sample}/t_data.ctab",
     "[sqlite]logFilename" : 'Expression-{ant}-{trim}',
-    "sqlFolderStr" : "data/07-sl-expressionTable-SQLite3/{branch}-{method}/",
-    "sqlPathStr" : 'data/07-sl-expressionTable-SQLite3/{branch}-{method}/Expression-{ant}-{trim}.db',
+    "sqlFolderStr" : "data/07-st-expressionTable-SQLite3/{branch}-{method}/",
+    "sqlPathStr" : 'data/07-st-expressionTable-SQLite3/{branch}-{method}/Expression-{ant}-{trim}.db',
     "testing" : False,
 }
 expRep.modeStr = "UPDATE"
