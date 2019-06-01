@@ -37,6 +37,10 @@ expRep.queryDict = {
     # above: large/04-hisat2/testing/speciesTestingA-trimQ30/hisat2ForStringtie-T1r1-sorted.bam
     "[CuffDiff]gtfFileName" : "data/{sourceFolder}/{branch}/{annotateCondition}-{trimCondition}-merged.gtf",
     # above: data/05-st-Stringtie/testing/speciesTestingA-trimQ30-merged.gtf
+    # NOTE:
+    #     If you want to use cuffdiff to estimate without transcriptome assembly, use gffread convert gff3 file (genome annotation) to gtf file (transcriptome annotation)
+    #     After that, copy the gtf file to the path above and rename as mimic of merged transcriptome annotation
+    #
     "[CuffDiff]resultFolder" : "data/06-cd-CuffDiff/{branch}-{method}/{annotateCondition}-{trimCondition}/",
     # above: data/06-cd-CuffDiff/testing-Stringtie/speciesTestingA-trimQ30/
     "testing" : False,
