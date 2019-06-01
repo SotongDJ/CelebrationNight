@@ -38,6 +38,29 @@ expRep.queryDict = {
 expRep.modeStr = "UPDATE"
 expRep.save()
 
+expRep = libConfig.config()
+expRep.queryStr = "testing-singleEnd-{direction}-{pairType}"
+expRep.folderStr = "config/"
+expRep.queryDict = {
+    "branch"               : "testing-singleEnd",
+    "group"                : ["Control","T1","T2","T3","T4","T5"],
+    "direction"            : ["F","R"],
+    "replication"          : ["r1"],
+    "pairPostfix"          : "pair",
+    "unpairPostfix"        : "unpair",
+    "mode"                 : "singleEnd",
+    "[trim]checkFolder"    : ["large/01-raw/","large/03-trimed/testing/"],
+    "[trim]condition"      : ["trimQ30-SE"],
+    "[trim]inputFileName"  : "large/01-raw/{group}{replication}{fileType}",
+    # above: large/01-raw/T1r1.fastq
+    "[trim]outputFileName" : "large/03-trimed/testing/{condition}-{group}{replication}{fileType}",
+    # above: large/03-trimed/testing/trimQ30-T1r1.fastq
+    "[trim]fileType"       : ".fastq",
+    "testing"              : False,
+}
+expRep.modeStr = "UPDATE"
+expRep.save()
+
 # ---- Configuration of Trimming Conditions ---- 
 TrimParA = libConfig.config()
 TrimParA.queryStr = "trimQ20"

@@ -23,6 +23,7 @@ expRep.queryDict = {
     "branch" : "testing",
     "group" : ["Control","T1","T2","T3","T4","T5"],
     "replication" : ["r1"],
+    "mode" : "pairEnd",
     "pairPostfix" : "pair",
     "unpairPostfix" : "unpair",
     "[trim]fileType" : ".fastq",
@@ -32,6 +33,32 @@ expRep.queryDict = {
     },
     "[hisat2]inputFileName" : "large/03-trimed/testing/{trimCondition}-{group}{replication}-{direction}-{pairType}{fileType}",
     # above: large/03-trimed/testing/trimQ30-T1r1-F-pair.fastq
+    # "[hisat2]Condition" : ["hisat2ForStringtie","hisat2ForCufflinks"],
+    "[hisat2]Condition" : ["hisat2ForStringtie"],
+    "conditionList" : [("speciesTestingA","trimQ30"),("speciesTestingB","trimQ30"),("speciesTestingC","trimQ30")],
+    "[hisat2]outputFolder" : "large/04-hisat2/tripleRep/{annotateCondition}-{trimCondition}/",
+    "[hisat2]outputFileName" : "large/04-hisat2/tripleRep/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}{replication}{fileType}",
+    # above: large/04-hisat2/testing/speciesTestingA-trimQ30/hisat2ForStringtie-T1r1.sam
+    "testing" : False,
+}
+expRep.modeStr = "UPDATE"
+expRep.save()
+
+expRep = libConfig.config()
+expRep.queryStr = "testing-singleEnd"
+expRep.folderStr = "config/"
+# Arguments/Parameters below need to modify depend on 
+# your experiment design and naming style
+expRep.queryDict = {
+    "branch" : "testing-singleEnd",
+    "group" : ["Control","T1","T2","T3","T4","T5"],
+    "replication" : ["r1"],
+    "mode" : "singleEnd",
+    "pairPostfix" : "pair",
+    "unpairPostfix" : "unpair",
+    "[trim]fileType" : ".fastq",
+    "[hisat2]inputFileName" : "large/03-trimed/testing/{trimCondition}-{group}{replication}{fileType}",
+    # above: large/03-trimed/testing/trimQ30-T1r1.fastq
     # "[hisat2]Condition" : ["hisat2ForStringtie","hisat2ForCufflinks"],
     "[hisat2]Condition" : ["hisat2ForStringtie"],
     "conditionList" : [("speciesTestingA","trimQ30"),("speciesTestingB","trimQ30"),("speciesTestingC","trimQ30")],
