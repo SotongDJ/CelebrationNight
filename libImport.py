@@ -61,6 +61,7 @@ class sqlImporter:
         branchStr = self.branchStr
 
         controlStr = Target.storeDict.get("controlSample","")
+        controlSafeStr = controlStr.replace("-","_")
         groupList = Target.storeDict.get("group",[])
         replicationList = Target.storeDict.get("replication",[])
         patternStr = Target.storeDict.get("samplePattern","")
@@ -98,6 +99,7 @@ class sqlImporter:
                 Print.startLog()
 
                 for sampleStr in sampleList:
+                    sampleSafeStr = sampleStr.replace("-","_")
                     Print.phraseStr = "-- Data format conversion for Gene Expression in {} --".format(sampleStr)
                     Print.printTimeStamp()
                     geneSamplePath = geneExpPathStr.format(
@@ -142,9 +144,9 @@ class sqlImporter:
                         'End'   INTEGER NOT NULL, 
                         'Coverage'  REAL    NOT NULL, 
                         'FPKM'  REAL    NOT NULL, 
-                        'TPM'   REAL    NOT NULL);""".format(sampleStr)
+                        'TPM'   REAL    NOT NULL);""".format(sampleSafeStr)
                     insertCommandStr = "INSERT INTO GeneExpression_{} ('UUID','GeneID','GeneName','Reference','Strand','Start','End','Coverage','FPKM','TPM')\
-                        VALUES (?,?,?,?,?,?,?,?,?,?)".format(sampleStr)
+                        VALUES (?,?,?,?,?,?,?,?,?,?)".format(sampleSafeStr)
                     self.expressionInputDict = {
                         "sqlPath" : sqlPath,
                         "count" : countInt,
@@ -202,9 +204,9 @@ class sqlImporter:
                         'GeneID'    TEXT  NOT NULL, 
                         'GeneName'    TEXT  NOT NULL, 
                         'Coverage'  REAL    NOT NULL, 
-                        'FPKM'  REAL    NOT NULL);""".format(sampleStr)
+                        'FPKM'  REAL    NOT NULL);""".format(sampleSafeStr)
                     insertCommandStr = "INSERT INTO TranscriptExpression_{} ('UUID','TranscriptID','Chromosome','Strand','Start','End','TranscriptName','ExonCount','Length','GeneID','GeneName','Coverage','FPKM')\
-                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)".format(sampleStr)
+                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)".format(sampleSafeStr)
                     self.expressionInputDict = {
                         "sqlPath" : sqlPath,
                         "count" : countInt,
@@ -226,9 +228,10 @@ class sqlImporter:
                 insertColumnList = ["UUID", "GeneID", "GeneName"]
                 for targetStr in ["FPKM","TPM"]:
                     for sampleStr in sampleList:
-                        columnStr = "{target}_{sample} REAL".format(target=targetStr,sample=sampleStr)
+                        sampleSafeStr = sampleStr.replace("-","_")
+                        columnStr = "{target}_{sample} REAL".format(target=targetStr,sample=sampleSafeStr)
                         createColumnList.append(columnStr)
-                        insertColumnList.append("{target}_{sample}".format(target=targetStr,sample=sampleStr))
+                        insertColumnList.append("{target}_{sample}".format(target=targetStr,sample=sampleSafeStr))
 
                 Connect = sqlite3.connect(sqlPath)
                 Cursor = Connect.cursor()
@@ -237,7 +240,7 @@ class sqlImporter:
                 Print.printing("[SQLite3:CreateTable] "+sqlPath)
 
                 resultDict = dict()
-                controlExc = Cursor.execute("SELECT UUID, GeneID, GeneName from GeneExpression_{}".format(controlStr))
+                controlExc = Cursor.execute("SELECT UUID, GeneID, GeneName from GeneExpression_{}".format(controlSafeStr))
                 for rowList in controlExc:
                     uuid, geneid, genename = rowList
                     subDict = {
@@ -249,13 +252,14 @@ class sqlImporter:
 
 
                 for sampleStr in sampleList:
-                    sampleExc = Cursor.execute("SELECT UUID, FPKM, TPM  from GeneExpression_{}".format(sampleStr))
+                    sampleSafeStr = sampleStr.replace("-","_")
+                    sampleExc = Cursor.execute("SELECT UUID, FPKM, TPM  from GeneExpression_{}".format(sampleSafeStr))
                     for rowList in sampleExc:
                         uuid, fpkm, tpm = rowList
                         subDict = resultDict[uuid]
                         subDict.update({
-                            "FPKM_{}".format(sampleStr) : fpkm,
-                            "TPM_{}".format(sampleStr) : tpm
+                            "FPKM_{}".format(sampleSafeStr) : fpkm,
+                            "TPM_{}".format(sampleSafeStr) : tpm
                         })
                         resultDict.update({ uuid : subDict })
 
@@ -288,9 +292,10 @@ class sqlImporter:
                 ]
                 insertColumnList = ["UUID", "TranscriptID", "TranscriptName", "GeneID", "GeneName"]
                 for sampleStr in sampleList:
-                    columnStr = "FPKM_{sample} REAL".format(sample=sampleStr)
+                    sampleSafeStr = sampleStr.replace("-","_")
+                    columnStr = "FPKM_{sample} REAL".format(sample=sampleSafeStr)
                     createColumnList.append(columnStr)
-                    insertColumnList.append("FPKM_{sample}".format(sample=sampleStr))
+                    insertColumnList.append("FPKM_{sample}".format(sample=sampleSafeStr))
 
                 Connect = sqlite3.connect(sqlPath)
                 Cursor = Connect.cursor()
@@ -299,7 +304,7 @@ class sqlImporter:
                 Print.printing("[SQLite3:CreateTable] "+sqlPath)
 
                 resultDict = dict()
-                controlExc = Cursor.execute("SELECT UUID, TranscriptID, TranscriptName, GeneID, GeneName from TranscriptExpression_{}".format(controlStr))
+                controlExc = Cursor.execute("SELECT UUID, TranscriptID, TranscriptName, GeneID, GeneName from TranscriptExpression_{}".format(controlSafeStr))
                 for rowList in controlExc:
                     uuid, tid, tname, geneid, genename = rowList
                     subDict = {
@@ -313,12 +318,13 @@ class sqlImporter:
 
 
                 for sampleStr in sampleList:
-                    sampleExc = Cursor.execute("SELECT UUID, FPKM  from TranscriptExpression_{}".format(sampleStr))
+                    sampleSafeStr = sampleStr.replace("-","_")
+                    sampleExc = Cursor.execute("SELECT UUID, FPKM  from TranscriptExpression_{}".format(sampleSafeStr))
                     for rowList in sampleExc:
                         uuid, fpkm = rowList
                         subDict = resultDict[uuid]
                         subDict.update({
-                            "FPKM_{}".format(sampleStr) : fpkm
+                            "FPKM_{}".format(sampleSafeStr) : fpkm
                         })
                         resultDict.update({ uuid : subDict })
 
