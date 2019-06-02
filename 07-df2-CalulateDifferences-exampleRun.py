@@ -85,7 +85,7 @@ for sampleInt in range(len(sampleList)):
     norm = matplotlib.colors.Normalize(fracs.min(), fracs.max())
 
     for thisfrac, thispatch in zip(fracs, patches):
-        color = plt.cm.plasma(norm(thisfrac))
+        color = plt.cm.plasma(norm(thisfrac)) # pylint: disable=maybe-no-member
         thispatch.set_facecolor(color)
 
 # plt.xticks(np.arange(-2, 4, step=1))
