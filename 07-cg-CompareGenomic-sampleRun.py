@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import pathlib, sqlite3, math, pprint, json
 import numpy as np
 import pandas as pd

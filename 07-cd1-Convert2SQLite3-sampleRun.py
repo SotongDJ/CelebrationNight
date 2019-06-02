@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import pandas as pd
 import sqlite3
 
@@ -15,6 +16,7 @@ configList = [
         "trim"     : ["trimQ30"]
     }
 ]
+
 diffFilePathStr = "data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}/gene_exp.diff"
 sqlFilePathStr = 'data/06-cd-CuffDiff/{branch}-{method}-{annotate}-{trim}-geneExpression.db'
 
