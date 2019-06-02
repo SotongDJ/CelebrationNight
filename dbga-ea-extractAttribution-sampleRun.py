@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import pandas as pd
 import sqlite3
-annotationStr = "speciesTestingA"
+annotationStr = "speciesAnnotationA"
 conversionBoo = True
 
 gffPath = "data/dbga-GenomeAnnotation/{ant}/{ant}.gff3".format(ant=annotationStr)
