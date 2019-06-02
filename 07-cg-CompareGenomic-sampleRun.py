@@ -6,7 +6,7 @@ import libPrint
 
 branchList = ["testing"]
 methodList = ["dsStringtie","Stringtie","waStringtie"]
-conditionList = [("speciesTestingA","trimQ30"),("speciesTestingB","trimQ30"),("speciesTestingC","trimQ30")]
+conditionList = [("speciesAnnotationA","trimQ30"),("speciesAnnotationB","trimQ30"),("speciesAnnotationC","trimQ30")]
 controlStr = "Controlr1"
 controlSafeStr = "Controlr1"
 sampleList = ["Controlr1","T1r1","T2r1","T3r1","T4r1","T5r1"]
