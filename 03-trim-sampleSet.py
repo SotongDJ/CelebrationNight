@@ -8,9 +8,9 @@ testing
 ["Control","T1","T2","T3","T4","T5"]
 ["F","R"]
 ["r1"]
-SpeA, speciesTestingA
-SpeB, speciesTestingB
-SpeC, speciesTestingC
+SpeA, speciesAnnotationA
+SpeB, speciesAnnotationB
+SpeC, speciesAnnotationC
 """
 # ---- Configuration of Experiment Design ---- 
 expRep = libConfig.config()

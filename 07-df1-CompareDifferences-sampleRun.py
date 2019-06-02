@@ -6,7 +6,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 branchStr = "testing"
-antStr = "speciesTestingA"
+antStr = "speciesAnnotationA"
 controlStr = "Controlr1"
 sampleList = ["Controlr1","T1r1","T2r1","T3r1","T4r1","T5r1"]
 trim20PathStr = 'data/07-st-expressionTable-SQLite3/{branch}/Expression-{ant}-trimQ20.db'

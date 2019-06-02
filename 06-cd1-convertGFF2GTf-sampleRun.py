@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import libPrint
 import pathlib
-baCombineList = [["testing","speciesTestingA"]]
+baCombineList = [["testing","speciesAnnotationA"]]
 
 testingBool = False
 gffreadStr = "bin/cufflinks/gffread {inputFile} -T -o {outputFile}"

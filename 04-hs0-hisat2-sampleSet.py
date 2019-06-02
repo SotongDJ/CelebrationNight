@@ -2,16 +2,16 @@
 import libConfig
 # ---- Keyword list ----
 """
-large/04-hisat2/testing/speciesTestingA-trimQ30/hisat2ForStringtie-T1r1.sam
+large/04-hisat2/testing/speciesAnnotationA-trimQ30/hisat2ForStringtie-T1r1.sam
 large/03-trimed/testing/trimQ30-T1r1-F-pair.fastq
 testing
 ["Control","T1","T2","T3","T4","T5"]
 "F"
 "R"
 ["r1"]
-SpeA, speciesTestingA
-SpeB, speciesTestingB
-SpeC, speciesTestingC
+SpeA, speciesAnnotationA
+SpeB, speciesAnnotationB
+SpeC, speciesAnnotationC
 """
 # ---- Configuration of Experiment Design ---- 
 expRep = libConfig.config()
@@ -35,10 +35,10 @@ expRep.queryDict = {
     # above: large/03-trimed/testing/trimQ30-T1r1-F-pair.fastq
     # "[hisat2]Condition" : ["hisat2ForStringtie","hisat2ForCufflinks"],
     "[hisat2]Condition" : ["hisat2ForStringtie"],
-    "conditionList" : [("speciesTestingA","trimQ30"),("speciesTestingB","trimQ30"),("speciesTestingC","trimQ30")],
+    "conditionList" : [("speciesAnnotationA","trimQ30"),("speciesAnnotationB","trimQ30"),("speciesAnnotationC","trimQ30")],
     "[hisat2]outputFolder" : "large/04-hisat2/tripleRep/{annotateCondition}-{trimCondition}/",
     "[hisat2]outputFileName" : "large/04-hisat2/tripleRep/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}{replication}{fileType}",
-    # above: large/04-hisat2/testing/speciesTestingA-trimQ30/hisat2ForStringtie-T1r1.sam
+    # above: large/04-hisat2/testing/speciesAnnotationA-trimQ30/hisat2ForStringtie-T1r1.sam
     "testing" : False,
 }
 expRep.modeStr = "UPDATE"
@@ -61,10 +61,10 @@ expRep.queryDict = {
     # above: large/03-trimed/testing/trimQ30-T1r1.fastq
     # "[hisat2]Condition" : ["hisat2ForStringtie","hisat2ForCufflinks"],
     "[hisat2]Condition" : ["hisat2ForStringtie"],
-    "conditionList" : [("speciesTestingA","trimQ30"),("speciesTestingB","trimQ30"),("speciesTestingC","trimQ30")],
+    "conditionList" : [("speciesAnnotationA","trimQ30"),("speciesAnnotationB","trimQ30"),("speciesAnnotationC","trimQ30")],
     "[hisat2]outputFolder" : "large/04-hisat2/tripleRep/{annotateCondition}-{trimCondition}/",
     "[hisat2]outputFileName" : "large/04-hisat2/tripleRep/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}{replication}{fileType}",
-    # above: large/04-hisat2/testing/speciesTestingA-trimQ30/hisat2ForStringtie-T1r1.sam
+    # above: large/04-hisat2/testing/speciesAnnotationA-trimQ30/hisat2ForStringtie-T1r1.sam
     "testing" : False,
 }
 expRep.modeStr = "UPDATE"

@@ -6,7 +6,7 @@ import libPrint
 
 branshStr = "testing"
 trimList = ["trimQ20","trimQ30"]
-antStr = "speciesTestingA"
+antStr = "speciesAnnotationA"
 sampleList = ["Controlr1","T1r1","T2r1","T3r1","T4r1","T5r1"]
 testingBool = True
 saveFolderStr = "data/07-da-DitributionAnalysis/{branch}/"

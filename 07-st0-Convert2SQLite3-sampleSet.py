@@ -6,9 +6,9 @@ testing
 ["Control","T1","T2","T3","T4","T5"]
 ["r1","r2","r3"]
 "ControlT1"
-speciesTestingA
-speciesTestingB
-speciesTestingC
+speciesAnnotationA
+speciesAnnotationB
+speciesAnnotationC
 """
 # ---- Configuration of Experiment Design ---- 
 expRep = libConfig.config()
@@ -25,7 +25,7 @@ expRep.queryDict = {
     "pairPostfix" : "pair",
     "unpairPostfix" : "unpair",
     "hisat2Condition" : "hisat2ForStringtie",
-    "conditionList" : [("speciesTestingB",'trimQ30'),("speciesTestingA",'trimQ30'),("speciesTestingC",'trimQ30')],
+    "conditionList" : [("speciesAnnotationB",'trimQ30'),("speciesAnnotationA",'trimQ30'),("speciesAnnotationC",'trimQ30')],
     "methodList" : ["Stringtie","dsStringtie","waStringtie"],
     "[sqlite]geneSourceDict" : {
         "Stringtie" : "05-st-Stringtie",

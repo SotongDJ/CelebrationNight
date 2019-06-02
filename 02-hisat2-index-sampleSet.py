@@ -2,18 +2,18 @@
 import libConfig
 # ---- Keyword list ----
 """
-SpeA, speciesTestingA
-SpeB, speciesTestingB
-SpeC, speciesTestingC
+SpeA, speciesAnnotationA
+SpeB, speciesAnnotationB
+SpeC, speciesAnnotationC
 """
 # ---- Configuration of Indexing Conditions ---- 
 SpeA = libConfig.config()
-SpeA.queryStr = "speciesTestingA"
+SpeA.queryStr = "speciesAnnotationA"
 SpeA.folderStr = "config/"
 SpeA.queryDict = {
     "from" : "binHISAT2-BUILD",
-    "seqPath" : "data/dbgs-GenomeSequence/speciesTestingA/speciesTestingA.fa",
-    "indexHeader" : "large/02-hisat2Index/speciesTestingA",
+    "seqPath" : "data/dbgs-GenomeSequence/speciesAnnotationA/speciesAnnotationA.fa",
+    "indexHeader" : "large/02-hisat2Index/speciesAnnotationA",
     "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
     "testing" : False,
@@ -22,12 +22,12 @@ SpeA.modeStr = "UPDATE"
 SpeA.save()
 
 SpeB = libConfig.config()
-SpeB.queryStr = "speciesTestingB"
+SpeB.queryStr = "speciesAnnotationB"
 SpeB.folderStr = "config/"
 SpeB.queryDict = {
     "from" : "binHISAT2-BUILD",
-    "seqPath" : "data/dbgs-GenomeSequence/speciesTestingB/speciesTestingB.fna",
-    "indexHeader" : "large/02-hisat2Index/speciesTestingB",
+    "seqPath" : "data/dbgs-GenomeSequence/speciesAnnotationB/speciesAnnotationB.fna",
+    "indexHeader" : "large/02-hisat2Index/speciesAnnotationB",
     "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
     "testing" : False,
@@ -36,12 +36,12 @@ SpeB.modeStr = "UPDATE"
 SpeB.save()
 
 SpeC = libConfig.config()
-SpeC.queryStr = "speciesTestingC"
+SpeC.queryStr = "speciesAnnotationC"
 SpeC.folderStr = "config/"
 SpeC.queryDict = {
     "from" : "binHISAT2-BUILD",
-    "seqPath" : "data/dbgs-GenomeSequence/speciesTestingC/speciesTestingC.fasta",
-    "indexHeader" : "large/02-hisat2Index/speciesTestingC",
+    "seqPath" : "data/dbgs-GenomeSequence/speciesAnnotationC/speciesAnnotationC.fasta",
+    "indexHeader" : "large/02-hisat2Index/speciesAnnotationC",
     "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
     "testing" : False,

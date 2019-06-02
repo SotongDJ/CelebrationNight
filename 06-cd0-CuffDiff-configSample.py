@@ -2,15 +2,15 @@
 import libConfig
 # ---- Keyword list ----
 """
-large/04-hisat2/testing/speciesTestingA-trimQ30/hisat2ForStringtie-T1r1-sorted.bam
-data/05-st-Stringtie/testing/speciesTestingA-trimQ30-merged.gtf
-data/06-cd-CuffDiff/testing-Stringtie/speciesTestingA-trimQ30/
+large/04-hisat2/testing/speciesAnnotationA-trimQ30/hisat2ForStringtie-T1r1-sorted.bam
+data/05-st-Stringtie/testing/speciesAnnotationA-trimQ30-merged.gtf
+data/06-cd-CuffDiff/testing-Stringtie/speciesAnnotationA-trimQ30/
 testing
 ["Control","T1","T2","T3","T4","T5"]
 ["r1","r2","r3"]
-speciesTestingA
-speciesTestingB
-speciesTestingC
+speciesAnnotationA
+speciesAnnotationB
+speciesAnnotationC
 """
 # ---- Configuration of Experiment Design ---- 
 expRep = libConfig.config()
@@ -26,7 +26,7 @@ expRep.queryDict = {
     "unpairPostfix" : "unpair",
     "thread" : "6",
     "[hisat2]Condition" : "hisat2ForStringtie",
-    "conditionList" : [("speciesTestingB",'trimQ30'),("speciesTestingA",'trimQ30'),("speciesTestingC",'trimQ30')],
+    "conditionList" : [("speciesAnnotationB",'trimQ30'),("speciesAnnotationA",'trimQ30'),("speciesAnnotationC",'trimQ30')],
     "methodList" : ["Stringtie","dsStringtie","waStringtie"],
     "[CuffDiff]sourceDict" : {
         "Stringtie" : "05-st-Stringtie",
@@ -34,15 +34,15 @@ expRep.queryDict = {
         "waStringtie" : "05-wa-Stringtie"
     },
     "[CuffDiff]bamFileName" : "large/04-hisat2/{branch}/{annotateCondition}-{trimCondition}/{hisat2Condition}-{group}{replication}-sorted.bam",
-    # above: large/04-hisat2/testing/speciesTestingA-trimQ30/hisat2ForStringtie-T1r1-sorted.bam
+    # above: large/04-hisat2/testing/speciesAnnotationA-trimQ30/hisat2ForStringtie-T1r1-sorted.bam
     "[CuffDiff]gtfFileName" : "data/{sourceFolder}/{branch}/{annotateCondition}-{trimCondition}-merged.gtf",
-    # above: data/05-st-Stringtie/testing/speciesTestingA-trimQ30-merged.gtf
+    # above: data/05-st-Stringtie/testing/speciesAnnotationA-trimQ30-merged.gtf
     # NOTE:
     #     If you want to use cuffdiff to estimate without transcriptome assembly, use gffread convert gff3 file (genome annotation) to gtf file (transcriptome annotation)
     #     After that, copy the gtf file to the path above and rename as mimic of merged transcriptome annotation
     #
     "[CuffDiff]resultFolder" : "data/06-cd-CuffDiff/{branch}-{method}/{annotateCondition}-{trimCondition}/",
-    # above: data/06-cd-CuffDiff/testing-Stringtie/speciesTestingA-trimQ30/
+    # above: data/06-cd-CuffDiff/testing-Stringtie/speciesAnnotationA-trimQ30/
     "testing" : False,
 }
 expRep.modeStr = "UPDATE"
