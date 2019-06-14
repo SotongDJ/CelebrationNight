@@ -10,73 +10,85 @@
 ## Script Type
 ### CoFRIL
 
-- Full form:
-    
-    - **Co**nfig **F**irst and **R**un **I**t **L**ater
-    
-- Defination:
-    
-    |   **Defination**   |
-    | ---- |
-    | 1. Pack process code into python class (**.py** file with "lib" prefix) |
-    | 2. must run \*-setConfig.py to configure dependent variables |
-    | (\*-setConfig.py template: "\*-configExample.py") |
-    | 3. run related python class in \*-run.py |
-    | (\*-run.py template: "\*-exampleRun.py") |
+- Full form: **Co**nfig **F**irst and **R**un **I**t **L**ater
+
+|   **Definition**   |
+| ---- |
+| 1. Pack process code into python class (**.py** file with "lib" prefix) |
+| 2. must run \*-setConfig.py to configure dependent variables |
+| (\*-setConfig.py template: "\*-configExample.py") |
+| 3. run related python class in \*-run.py |
+| (\*-run.py template: "\*-exampleRun.py") |
 
 ### RuDi
 
-- Full form:
-    
-    - **Ru**n **Di**rectly
-    
-- Defination:
-    
-    |   **Defination**                   |
-    | ----                               |
-    | 1. Declare sample-dependent variables on the begining of script |
-    | 2. Derive downstream variables     |
-    | 3. Run code directly without class |    
+- Full form: **Ru**n **Di**rectly
+
+|   **Definition**                   |
+| ----                               |
+| 1. Declare sample-dependent variables on the begining of script |
+| 2. Derive downstream variables     |
+| 3. Run code directly without class |
 
 ## Processing Stage (General usage)
 
 ### Stage 01 - FASTQ Quality Report
-- Checking Quality
-
-    | List   | Detail            |
-    | ----   | ----              | 
-    | Type   | Under development |
-    | Binary | FastQC            |
+| List     | Detail            |
+| ----     | ----              |
+| Codename | **01-fastqc**     |
+| Usage    | Check Quality     |
+| Type     | Under development |
+| Binary   | FastQC            |
+| Input    | NGS FASTQ         |
 
 ### Stage 02 - HISAT2 index
-- Prepare HISAT2 index
-
-    | List   | Detail             |
-    | ----   | ----               | 
-    | Type   | CoFRIL             |
-    | Class  | libHISAT.indexer() |
-    | Binary | HISAT2 (index)     |
+| List     | Detail                   |
+| ----     | ----                     |
+| Codename | **02-hisat2-index**      |
+| Usage    | Build HISAT2 index       |
+| Type     | CoFRIL                   |
+| Class    | libHISAT.indexer()       |
+| Binary   | hisat2-build from HISAT2 |
+| Input    | Genome sequences         |
 
 ### Stage 03 - Trim
-- Trim FASTQ files
-
-    | List   | Detail            |
-    | ----   | ----              | 
-    | Type   | CoFRIL            |
-    | Class  | libTrim.trimmer() |
-    | Binary | Trimmomatic       |
-    | Input  | raw NGS FASTQ     |
+| List     | Detail            |
+| ----     | ----              |
+| Codename | **03-trim**       |
+| Usage    | Trim FASTQ files  |
+| Type     | CoFRIL            |
+| Class    | libTrim.trimmer() |
+| Binary   | Trimmomatic       |
+| Input    | raw NGS FASTQ     |
 
 ### Stage 04 - HISAT2
-
+| List     | Detail                 |
+| ----     | ----                   |
+| Codename | **04-hisat2**          |
+| Usage    | Alignment and mapping  |
+| Type     | CoFRIL                 |
+| Class    | libHISAT.aligner()     |
+| Binary   | samtools from SAMtools |
+|          | hisat2 from HISAT2     |
+| Input    | **02-hisat2-index**    |
+|          | **03-trim**            |
 
 ## Processing Stage (Distinctive usage)
 
-### Stage 07 - Comparing Genomic Annotation
-- Get information of isoform under each gene model
+### Stage 04 - HISAT2 Summariser
+| List     | Detail                 |
+| ----     | ----                   |
+| Codename | **04-hs**              |
+| Usage    | Analyse HISAT2 result  |
+| Type     | CoFRIL                 |
+| Class    | libHISAT.summariser()  |
+| Binary   | samtools from SAMtools |
+| Input    | **04-hisat2**          |
 
-    | List         | Detail    |
-    | ----         | ----      | 
-    | Abbreviation | **07-cg** |
-    | Type         | RuDi      |
-    | Input        | **07-st** |
+### Stage 07 - Comparing Genomic Annotation
+| List     | Detail    |
+| ----     | ----      |
+| Codename | **07-cg** |
+| Usage    | Get information of isoform under each gene model |
+| Type     | RuDi      |
+| Input    | **07-st** |
