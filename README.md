@@ -74,6 +74,7 @@
 |          | **03-trim**            |
 
 ## Processing Stage (Distinctive usage)
+**The scripts under this catalogue may lose function as their development didn't stick to the current coding style.**
 
 ### Stage 04 - HISAT2 Summariser
 | List     | Detail                 |
