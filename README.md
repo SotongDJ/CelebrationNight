@@ -10,19 +10,19 @@
 ## Script Type
 ### CoFRIL
 
-- Full form: **Co**nfig **F**irst and **R**un **I**t **L**ater
+- **Co**nfig **F**irst and **R**un **I**t **L**ater
 
 |   **Definition**   |
 | ---- |
 | 1. Pack process code into python class (**.py** file with "lib" prefix) |
-| 2. must run \*-setConfig.py to configure dependent variables |
+| 2. Run \*-setConfig.py first to configure dependent variables (Initialization) |
 | (\*-setConfig.py template: "\*-configExample.py") |
-| 3. run related python class in \*-run.py |
+| 3. Run related python class in \*-run.py |
 | (\*-run.py template: "\*-exampleRun.py") |
 
 ### RuDi
 
-- Full form: **Ru**n **Di**rectly
+- **Ru**n **Di**rectly
 
 |   **Definition**                   |
 | ----                               |
