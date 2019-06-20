@@ -175,6 +175,7 @@ class aligner:
                         Spec.folderStr = "config/"
                         Spec.modeStr = "UPDATE"
                         Spec.load()
+                        
                         finalDict.update({
                             "indexHeader" : Spec.storeDict.get("indexHeader","")
                         })
