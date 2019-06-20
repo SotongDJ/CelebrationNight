@@ -13,6 +13,85 @@ Original command:
 
     --- README ---
 """
+class converter:
+    def __init__(self):
+        self.branchStr = ""
+        self.testingBool = True
+
+    def converting(self):
+        # ---- Parameter ----
+        BinGFF = libConfig.config()
+        BinGFF.queryStr = "binCufflinks-gffread"
+        BinGFF.folderStr = "config/"
+        BinGFF.modeStr = "UPDATE"
+        BinGFF.load()
+
+        Copying = libConfig.config()
+        Copying.queryStr = "commandCP"
+        Copying.folderStr = "config/"
+        Copying.modeStr = "UPDATE"
+        Copying.load()
+
+        # ---- Initialization for Assembling ----
+        Target = libConfig.config()
+        Target.queryStr = self.branchStr
+        Target.folderStr = "config/"
+        Target.modeStr = "UPDATE"
+        Target.load()
+
+        if not Target.storeDict.get("testing",True):
+            self.testingBool = False
+        else:
+            self.testingBool = True
+
+        gffreadStr = BinGFF.storeDict["command"]
+        copyStr = Copying.storeDict["command"]
+
+        branchStr = self.branchStr
+        conditionList = Target.storeDict.get("conditionList",[])
+        targetFolderStr = Target.storeDict.get("gtfFolder","")
+        targetStr = Target.storeDict.get("gtfFile","")
+
+        for conditionTup in conditionList:
+            annotationStr = conditionTup[0]
+            trimStr = conditionTup[1]
+
+            Spec = libConfig.config() #parameters
+            Spec.queryStr = annotationStr
+            Spec.folderStr = "config/"
+            Spec.modeStr = "UPDATE"
+            Spec.load()
+
+            inputStr = Spec.storeDict.get("antPath","")
+            outputStr = Spec.storeDict.get("gtfPath","")
+            outputFolderStr = Spec.storeDict.get("dbgaPath","")
+
+            Print = libPrint.timer()
+            Print.logFilenameStr = "06-cd1-gffConversion-{branch}-{annotate}".format(
+                branch=branchStr,
+                annotate=annotationStr,
+            )
+            Print.folderStr = outputFolderStr
+            Print.testingBool = self.testingBool
+            Print.startLog()
+            
+            targetPath = targetStr.format(branch=branchStr,annotation=annotationStr,trimCondition=trimStr)
+
+            if not pathlib.Path(outputStr).exists():
+                CommandStr = gffreadStr.format(inputFile=inputStr,outputFile=outputStr)
+                Print.phraseStr = CommandStr
+                Print.runCommand()
+
+            folderPath = targetFolderStr.format(branch=branchStr)
+            pathlib.Path(folderPath).mkdir(parents=True,exist_ok=True)
+            
+            CommandStr = copyStr.format(output=outputStr,target=targetPath)
+            Print.phraseStr = CommandStr
+            Print.runCommand()
+
+            Print.stopLog()
+
+
 class differ:
     def __init__(self):
         self.branchStr = ""

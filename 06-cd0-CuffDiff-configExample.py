@@ -43,10 +43,31 @@ expRep.queryDict = {
     #
     "[CuffDiff]resultFolder" : "data/06-cd-CuffDiff/{branch}-{method}/{annotateCondition}-{trimCondition}/",
     # above: data/06-cd-CuffDiff/testing-Stringtie/speciesAnnotationA-trimQ30/
+
+    "gtfFolder" : "data/05-ds-Stringtie/{branch}/",
+    "gtfFile" : "data/05-ds-Stringtie/{branch}/{annotation}-{trimCondition}-merged.gtf",
     "testing" : False,
 }
 expRep.modeStr = "UPDATE"
 expRep.save()
+
+# ---- Configuration of Mapping Conditions ---- 
+SpeA = libConfig.config()
+SpeA.queryStr = "speciesAnnotationA"
+SpeA.folderStr = "config/"
+SpeA.queryDict = {
+    "dbgaPath" : "data/dbga-GenomeAnnotation/speciesAnnotationA/",
+    "seqPath" : "data/dbgs-GenomeSequence/speciesAnnotationA/speciesAnnotationA.fa",
+    "antPath" : "data/dbga-GenomeAnnotation/speciesAnnotationA/speciesAnnotationA.gff3",
+    "gtfPath" : "data/dbga-GenomeAnnotation/speciesAnnotationA/speciesAnnotationA.gtf",
+    "indexHeader" : "large/02-hisat2Index/speciesAnnotationA",
+    "checkFolder"    : "large/02-hisat2Index/",
+    "thread" : "6",
+    "testing" : False,
+}
+SpeA.modeStr = "UPDATE"
+SpeA.save()
+
 # ---- Configuration of cuffdiff Command ---- 
 """
 Original command:
@@ -72,3 +93,21 @@ CuffDiff.queryDict = {
 }
 CuffDiff.modeStr = "UPDATE"
 CuffDiff.save()
+
+gffReader = libConfig.config()
+gffReader.queryStr = "binCufflinks-gffread"
+gffReader.folderStr = "config/"
+gffReader.queryDict = {
+    "command" : "bin/cufflinks/gffread {inputFile} -T -o {outputFile}"
+}
+gffReader.modeStr = "UPDATE"
+gffReader.save()
+
+Copying = libConfig.config()
+Copying.queryStr = "commandCP"
+Copying.folderStr = "config/"
+Copying.queryDict = {
+    "command" : "cp -vf {output} {target}"
+}
+Copying.modeStr = "OVERWRITE"
+Copying.save()
