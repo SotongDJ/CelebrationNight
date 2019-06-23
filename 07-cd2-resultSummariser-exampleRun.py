@@ -9,7 +9,7 @@ configList = [
         "branch"  : ["testing1"],
         "method"  : ["dsStringtie"],
         "control" : "Control",
-        "group"   : ["Control","T1","T2","T3","T4","T5"],
+        "group"   : ["T1","T2","T3","T4","T5"], # without control
         "annotate" : "speciesTAIR",
         "compare"  : [["T1","T2"],["T3","T4"]],
         "trim"     : "trimQ30", 
@@ -18,14 +18,14 @@ configList = [
         "branch"  : ["testing2","testing3"],
         "method"  : ["dsStringtie","waStringtie"],
         "control" : "Control",
-        "group"   : ["Control","S1","S2"],
+        "group"   : ["S1","S2"], # without control
         "annotate" : "speciesEnsembl",
+        "compare"  : [],
         "trim"     : "trimQ30", 
     },
 ]
-
 sourceFilePathStr = 'data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-geneExpression.db'
-resultFilePathStr = 'data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary.db'
+resultFilePathStr = 'data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary'
 referencePathStr = 'data/dbga-GenomeAnnotation/{annotate}/{annotate}-attributes.json'
 logFolderPathStr = 'data/06-cd-CuffDiff/{branch}-{method}/'
 logFilePathStr = '{annotate}-{trim}-expressionSummary'
@@ -36,6 +36,7 @@ for configDict in configList:
     controlStr  = configDict.get("control","")
     groupList   = configDict.get("group",[])
     compareList = configDict.get("compare",[])
+    compareCStr = "; ".join([ "\t".join(sorted(x)) for x in compareList ])
     annotateStr = configDict.get("annotate","")
     trimStr     = configDict.get("trim","")
     
@@ -70,7 +71,7 @@ for configDict in configList:
                 geneidStr = tempList[2]
                 sampleAStr = tempList[5]
                 sampleBStr = tempList[6]
-                sampleStr = sampleAStr+";"+sampleBStr
+                sampleStr = "\t".join(sorted([sampleAStr, sampleBStr]))
                 testStr = tempList[7]
                 fpkmAFlt = tempList[8]
                 fpkmBFlt = tempList[9]
@@ -81,36 +82,75 @@ for configDict in configList:
                 
                 errorInt = 0
                 subDict = resultDict.get(geneidStr,dict())
-                testBool = (fpkmAFlt > 0) or (fpkmBFlt > 0)
-                if controlStr in sampleStr and testBool:
+                haveSignalBool = (fpkmAFlt > 0) or (fpkmBFlt > 0)
+                if controlStr in sampleStr and haveSignalBool:
                     if sampleAStr == controlStr:
                         aStr = sampleAStr
                         bStr = sampleBStr
                         faFlt = fpkmAFlt
                         fbFlt = fpkmBFlt
                         fcFlt = foldFlt
+                        diFlt = fbFlt - faFlt
                     elif sampleBStr == controlStr:
                         aStr = sampleBStr
                         bStr = sampleAStr
                         faFlt = fpkmBFlt
                         fbFlt = fpkmAFlt
                         fcFlt = foldFlt * -1
+                        diFlt = fbFlt - faFlt
                     else:
                         errorInt = errorInt + 1
-                        print("[ERROR{}:A!=Control,B!=Control]".format(str(errorInt)),end="\r")
+                        print("[ERROR{}:A!=Control,B!=Control]".format(str(errorInt)))
                     
                     inputDict = {
-                        "FPKM_{}".format(aStr) : faFlt,
-                        "FPKM_{}".format(bStr) : fbFlt,
-                        "Ratio_{}".format(bStr) : fcFlt,
-                        "passTest_{}".format(bStr) : testStr,
-                        "pValue_{}".format(bStr) : pvFlt,
-                        "qValue_{}".format(bStr) : qvFlt,
-                        "significant_{}".format(bStr) : sigStr,
+                        "fpkm-{}".format(aStr) : faFlt,
+                        "fpkm-{}".format(bStr) : fbFlt,
+                        "diff-{}_m_{}".format(bStr,aStr) : diFlt,
+                        "ratio-{}_vs_{}".format(bStr,aStr) : fcFlt,
+                        "pass-{}_vs_{}".format(bStr,aStr) : testStr,
+                        "p-{}_vs_{}".format(bStr,aStr) : pvFlt,
+                        "q-{}_vs_{}".format(bStr,aStr) : qvFlt,
+                        "sig-{}_vs_{}".format(bStr,aStr) : sigStr,
                     }
                     subDict.update(inputDict)
                     columnSet.update(set(inputDict.keys()))
                     resultDict.update({ geneidStr : subDict })
+
+                elif sampleStr in compareCStr and haveSignalBool:
+                    for compareSubList in compareList:
+                        baseStr = compareSubList[0]
+                        elemStr = compareSubList[1]
+                        if (baseStr in sampleStr) and (elemStr in sampleStr):
+                            if sampleAStr == baseStr:
+                                aStr = sampleAStr
+                                bStr = sampleBStr
+                                faFlt = fpkmAFlt
+                                fbFlt = fpkmBFlt
+                                fcFlt = foldFlt
+                                diFlt = fbFlt - faFlt
+                            elif sampleBStr == baseStr:
+                                aStr = sampleBStr
+                                bStr = sampleAStr
+                                faFlt = fpkmBFlt
+                                fbFlt = fpkmAFlt
+                                fcFlt = foldFlt * -1
+                                diFlt = fbFlt - faFlt
+                            else:
+                                errorInt = errorInt + 1
+                                print("[ERROR{}:A!=Control,B!=Control]".format(str(errorInt)))
+                            
+                            inputDict = {
+                                "compare-{}_vs_{}".format(bStr,aStr) : fcFlt,
+                                "diff-{}_m_{}".format(bStr,aStr) : diFlt,
+                                "pass-{}_vs_{}".format(bStr,aStr) : testStr,
+                                "p-{}_vs_{}".format(bStr,aStr) : pvFlt,
+                                "q-{}_vs_{}".format(bStr,aStr) : qvFlt,
+                                "sig-{}_vs_{}".format(bStr,aStr) : sigStr,
+                            }
+                            subDict.update(inputDict)
+                            columnSet.update(set(inputDict.keys()))
+                            resultDict.update({ geneidStr : subDict })
+
 
                 countInt = countInt + 1
                 print(countInt,end='\r')
@@ -119,21 +159,34 @@ for configDict in configList:
 
             Print.printing("[Organise] create list of column names")
             columnList = ['Gene_ID','Description']
-            sectionList = [
-                "FPKM",
-                "Ratio",
-                "passTest",
-                "pValue",
-                "qValue",
-                "significant",
+            columnList.append("fpkm-{}".format(controlStr))
+            columnList.extend(["fpkm-{}".format(x) for x in groupList])
+            sampleSectionList = [
+                "diff-{}_m_{}",
+                "ratio-{}_vs_{}",
+                "pass-{}_vs_{}",
+                "p-{}_vs_{}",
+                "q-{}_vs_{}",
+                "sig-{}_vs_{}",
             ]
             for groupStr in groupList:
-                for sectionStr in sectionList:
-                    if sectionStr == "FPKM" and groupStr == controlStr:
-                        columnList.append("FPKM_{}".format(groupStr))
-                    elif groupStr != controlStr:
-                        columnList.append("{}_{}".format(sectionStr,groupStr))
+                for sampleSectionStr in sampleSectionList:
+                    columnList.append(sampleSectionStr.format(groupStr,controlStr))
             
+            compareSectionList = [
+                "diff-{}_m_{}",
+                "compare-{}_vs_{}",
+                "pass-{}_vs_{}",
+                "p-{}_vs_{}",
+                "q-{}_vs_{}",
+                "sig-{}_vs_{}",
+            ]
+            for compareSubList in compareList:
+                for compareSectionStr in compareSectionList:
+                    baseStr = compareSubList[0]
+                    elemStr = compareSubList[1]
+                    columnList.append(compareSectionStr.format(elemStr,baseStr))
+
             Print.printing("[Arrange] fill the values into DataFrame")
             geneList = list(resultDict.keys())
             resultDF = pd.DataFrame(index=range(len(geneList)), columns=columnList)
@@ -148,10 +201,13 @@ for configDict in configList:
                 resultDF.at[rowInt, 'Description'] = descriDict.get(geneStr,np.NaN)
 
             Print.printing("[Export] export as expressionSummary.db")
-            Connect = sqlite3.connect(resultPathStr)
+            Connect = sqlite3.connect(resultPathStr+".db")
             resultDF.to_sql(name='Summary', con=Connect)
             Connect.commit()
             Connect.close()
 
+            Print.printing("[Export] export as expressionSummary.tsv")
+            resultDF.to_csv(resultPathStr+".tsv", index=False, sep='\t', encoding='utf-8')
+            
             Print.stopLog()
             print("\n")
