@@ -11,6 +11,7 @@ configList = [
         "control" : "Control",
         "group"   : ["Control","T1","T2","T3","T4","T5"],
         "annotate" : "speciesTAIR",
+        "compare"  : [["T1","T2"],["T3","T4"]],
         "trim"     : "trimQ30", 
     },
     {
@@ -18,8 +19,7 @@ configList = [
         "method"  : ["dsStringtie","waStringtie"],
         "control" : "Control",
         "group"   : ["Control","S1","S2"],
-        "compare"  : [["A","B"],["C","D"]],
-        "annotate" : "speciesTAIR",
+        "annotate" : "speciesEnsembl",
         "trim"     : "trimQ30", 
     },
 ]
