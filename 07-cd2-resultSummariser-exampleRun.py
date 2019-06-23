@@ -6,27 +6,34 @@ import libPrint
 # Declaration of sample-dependent variables
 configList = [
     {
-        "branch"  : ["testing1"],
-        "method"  : ["dsStringtie"],
-        "control" : "Control",
-        "group"   : ["T1","T2","T3","T4","T5"], # without control
-        "annotate" : "speciesTAIR",
-        "compare"  : [["T1","T2"],["T3","T4"]],
-        "trim"     : "trimQ30", 
+        "branch"    : ["testing1"],
+        "method"    : ["dsStringtie"],
+        "control"   : "Control",
+        "group"     : ["T1","T2","T3","T4","T5"], # without control
+        "annotate"  : "speciesTAIR",
+        "compare"   : [],
+        "trim"      : "trimQ30", 
+        "attribute" : {
+            'description' : 'data/dbga-GenomeAnnotation/speciesTAIR/speciesTAIR-attributes.json',
+        }
     },
     {
-        "branch"  : ["testing2","testing3"],
-        "method"  : ["dsStringtie","waStringtie"],
-        "control" : "Control",
-        "group"   : ["S1","S2"], # without control
-        "annotate" : "speciesEnsembl",
-        "compare"  : [],
-        "trim"     : "trimQ30", 
+        "branch"    : ["testing2","testing3"],
+        "method"    : ["dsStringtie","waStringtie"],
+        "control"   : "Control",
+        "group"     : ["S1","S2"], # without control
+        "annotate"  : "speciesEnsembl",
+        "compare"   : [["S1","S2"]],
+        "trim"      : "trimQ30",  
+        "attribute" : {
+            'description' : 'data/dbga-GenomeAnnotation/speciesEnsembl/speciesEnsembl-attributes.json',
+            'homolog' : 'data/dbga-GenomeAnnotation/speciesEnsembl/speciesEnsembl-homolog.json',
+        }
     },
 ]
+
 sourceFilePathStr = 'data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-geneExpression.db'
 resultFilePathStr = 'data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary'
-referencePathStr = 'data/dbga-GenomeAnnotation/{annotate}/{annotate}-attributes.json'
 logFolderPathStr = 'data/06-cd-CuffDiff/{branch}-{method}/'
 logFilePathStr = '{annotate}-{trim}-expressionSummary'
 
@@ -39,9 +46,14 @@ for configDict in configList:
     compareCStr = "; ".join([ "\t".join(sorted(x)) for x in compareList ])
     annotateStr = configDict.get("annotate","")
     trimStr     = configDict.get("trim","")
+    attriDict   = configDict.get("attribute",dict())
     
-    descriDict  = json.load(open(referencePathStr.format(annotate=annotateStr),'r'))
-
+    descriDict = dict()
+    descriList = list(attriDict.keys())
+    for labelStr in descriList:
+        labelDict = json.load(open(attriDict[labelStr]))
+        descriDict.update({ labelStr : labelDict })
+    
     for branchStr in branchList:
         for methodStr in methodList:
             sourcePathStr = sourceFilePathStr.format(branch=branchStr,method=methodStr,annotate=annotateStr,trim=trimStr)
@@ -158,7 +170,8 @@ for configDict in configList:
             Connect.close()
 
             Print.printing("[Organise] create list of column names")
-            columnList = ['Gene_ID','Description']
+            columnList = ['Gene_ID']
+            columnList.extend(descriList)
             columnList.append("fpkm-{}".format(controlStr))
             columnList.extend(["fpkm-{}".format(x) for x in groupList])
             sampleSectionList = [
@@ -198,7 +211,8 @@ for configDict in configList:
                 for titleStr in [ x for x in columnList if x != 'Gene_ID' ]:
                     resultDF.at[rowInt, titleStr] = valueDict.get(titleStr,np.NaN)
                 
-                resultDF.at[rowInt, 'Description'] = descriDict.get(geneStr,np.NaN)
+                for labelStr in descriList:
+                    resultDF.at[rowInt, labelStr] = descriDict.get(labelStr,dict()).get(geneStr,np.NaN)
 
             Print.printing("[Export] export as expressionSummary.db")
             Connect = sqlite3.connect(resultPathStr+".db")
