@@ -94,8 +94,9 @@ for configDict in configList:
                 
                 errorInt = 0
                 subDict = resultDict.get(geneidStr,dict())
-                haveSignalBool = (fpkmAFlt > 0) or (fpkmBFlt > 0)
-                if controlStr in sampleStr and haveSignalBool:
+                # haveSignalBool = (fpkmAFlt > 0) or (fpkmBFlt > 0)
+                # if controlStr in sampleStr and haveSignalBool:
+                if controlStr in sampleStr:
                     if sampleAStr == controlStr:
                         aStr = sampleAStr
                         bStr = sampleBStr
@@ -128,7 +129,8 @@ for configDict in configList:
                     columnSet.update(set(inputDict.keys()))
                     resultDict.update({ geneidStr : subDict })
 
-                elif sampleStr in compareCStr and haveSignalBool:
+                # elif sampleStr in compareCStr and haveSignalBool:
+                elif sampleStr in compareCStr:
                     for compareSubList in compareList:
                         baseStr = compareSubList[0]
                         elemStr = compareSubList[1]
