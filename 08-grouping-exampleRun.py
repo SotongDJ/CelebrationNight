@@ -53,7 +53,7 @@ databasePathStr = 'data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expre
 jsonPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/{title}-{level}-list-{type}-.json'
 logFolderPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/'
 logFilePathStr = '{title}-list'
-printOutStr = "\tCount of {target} is {number}"
+printOutStr = "    Count of {target} is {number}"
 
 def action(targetStr,inputValue,levelInt,conditionStr):
     exportStr = ""
