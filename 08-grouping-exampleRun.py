@@ -4,6 +4,33 @@ import pathlib, sqlite3, json
 import pandas as pd
 import numpy as np
 
+conditionDict = {
+    "tripleRep-homoDEG" : {
+        "branch" : "testing1",
+        "method" : "dsStringtie",
+        "annotate" : "speciesEnsembl",
+        "trim" : "trimQ30",
+        "column" : "homolog",
+        "regulate" : ["ratio-T1_vs_Control","ratio-T2_vs_Control"],
+        "compare" : [
+            ["[UP in ratio-T1_vs_Control]","[MINOR in ratio-T2_vs_Control]"],
+            ["[DOWN in ratio-T1_vs_Control]","[MINOR in ratio-T2_vs_Control]"],
+            ["[UP in ratio-T1_vs_Control]","[DOWN in ratio-T2_vs_Control]"],
+            ["[DOWN in ratio-T1_vs_Control]","[UP in ratio-T2_vs_Control]"],
+            ["[APR in ratio-T1_vs_Control]","[NOVALUE in ratio-T2_vs_Control]"],
+            ["[DIS in ratio-T1_vs_Control]","[VALUE in ratio-T2_vs_Control]"],
+        ],
+        "condition" : ["UP","MINOR","DOWN","APR","DIS","VALUE","NOVALUE"],
+        "levelList" : [1,4,7],
+    },
+}
+
+databasePathStr = 'data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary.db'
+jsonPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/{title}-{level}-list-{type}-.json'
+logFolderPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/'
+logFilePathStr = '{title}-{level}-list'
+printOutStr = "\tCount of {target} is {number}"
+
 def action(targetStr,inputValue,levelInt,conditionStr):
     exportStr = ""
     if targetStr == None:
@@ -26,35 +53,6 @@ def action(targetStr,inputValue,levelInt,conditionStr):
                 exportStr = targetStr
             
     return exportStr
-
-conditionDict = {
-    "tripleRep-homoDEG" : {
-        "branch" : "testing1",
-        "method" : "dsStringtie",
-        "annotate" : "speciesEnsembl",
-        "trim" : "trimQ30",
-        "column" : "homolog",
-        "regulate" : ["ratio-T1_vs_Control","ratio-T2_vs_Control"],
-        "compare" : [
-            ["[UP in ratio-T1_vs_Control]","[MINOR in ratio-T2_vs_Control]"],
-            ["[DOWN in ratio-T1_vs_Control]","[MINOR in ratio-T2_vs_Control]"],
-            ["[UP in ratio-T1_vs_Control]","[DOWN in ratio-T2_vs_Control]"],
-            ["[DOWN in ratio-T1_vs_Control]","[UP in ratio-T2_vs_Control]"],
-            ["[APR in ratio-T1_vs_Control]","[NOVALUE in ratio-T2_vs_Control]"],
-            ["[DIS in ratio-T1_vs_Control]","[VALUE in ratio-T2_vs_Control]"],
-        ],
-        "condition" : ["UP","MINOR","DOWN","APR","DIS","VALUE","NOVALUE"],
-        "levelList" : [1,4,7],
-    },
-}
-
-
-databasePathStr = 'data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary.db'
-jsonPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/{title}-{level}-list-{type}-.json'
-logFolderPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/'
-logFilePathStr = '{title}-{level}-list'
-printOutStr = "\tCount of {target} is {number}"
-
 
 for titleStr in list(conditionDict.keys()):
     conditionSubDict = conditionDict[titleStr]
