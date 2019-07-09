@@ -50,7 +50,7 @@ sampleList = [
 ]
 
 databasePathStr = 'data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary.db'
-jsonPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/{title}-{level}-list-{type}-.json'
+jsonPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/{title}-{level}-list-{type}.json'
 logFolderPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/'
 logFilePathStr = '{title}-list'
 printOutStr = "    Count of {target} is {number}"
@@ -141,10 +141,16 @@ for sampleDict in sampleList:
 
             Print.printing("[Comparing] finish")
 
-            Print.printing("[Deduplicating] finish")
+            Print.printing("[Deduplicating] start: combinationDict")
             for combinationStr in list(combinationDict.keys()):
                 combinationDict[combinationStr] = sorted(list(set(combinationDict[combinationStr])))
                 Print.printing(printOutStr.format(target=combinationStr,number=str(len(combinationDict[combinationStr]))))
+
+            Print.printing("[Deduplicating] start: significantDict")
+
+            for combinationStr in list(significantDict.keys()):
+                significantDict[combinationStr] = sorted(list(set(significantDict[combinationStr])))
+                Print.printing(printOutStr.format(target=combinationStr,number=str(len(significantDict[combinationStr]))))
 
             Print.printing("[Deduplicating] finish")
 
@@ -186,9 +192,9 @@ for sampleDict in sampleList:
                     backOnlyList = [ x for x in unionSet if (( x not in targetDict.get(frontStr,[]) )and( x in targetDict.get(backStr,[]) ))]
 
                     targetDict.update({
-                        "_and_".join(sorted([frontStr,backStr])) : andList,
-                        frontStr+"_only" : frontOnlyList,
-                        backStr+"_only" : backOnlyList,
+                        "_and_".join(sorted([frontStr,backStr])) : list(set(andList)),
+                        frontStr+"_out_"+backStr                 : list(set(frontOnlyList)),
+                        backStr+"_out_"+frontStr                 : list(set(backOnlyList)),
                     })
 
                     Print.printing(printOutStr.format(target="_and_".join(sorted([frontStr,backStr])),number=str(len(andList))))
