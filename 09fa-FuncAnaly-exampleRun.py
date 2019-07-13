@@ -6,208 +6,186 @@ import numpy as np
 
 sampleList = [
     {
-        "string" : {
+        "string": {
             "branch" : "testing1",
             "method" : "dsStringtie",
-            "annotate" : "speciesEnsembl",
+            "annotate" : "brapaEnsembl",
             "trim" : "trimQ30",
-            "title" : "",
-            "level" : "",
-            "type" : ""
+            "title" : "homoDEG",
+            "level" : "1",
+            "type" : "significant",
+            "compare" : [
+                "[DOWN in compare-T2_vs_T1]_and_[UP in ratio-T1_vs_Control]",
+                "[DOWN in ratio-T1_vs_Control]_and_[UP in compare-T2_vs_T1]",
+                "[MINOR in compare-T2_vs_T1]_and_[UP in ratio-T1_vs_Control]",
+                "[DOWN in ratio-T1_vs_Control]_and_[MINOR in compare-T2_vs_T1]",
+            ],
         },
         "condition" : {
-            "testing1-homoDEG" : {
-                "column" : "homolog",
-                "regulate" : ["ratio-T1_vs_Control","ratio-T2_vs_Control"],
-                "compare" : [
-                    ["[UP in ratio-T1_vs_Control]","[MINOR in ratio-T2_vs_Control]"],
-                    ["[DOWN in ratio-T1_vs_Control]","[MINOR in ratio-T2_vs_Control]"],
-                    ["[UP in ratio-T1_vs_Control]","[DOWN in ratio-T2_vs_Control]"],
-                    ["[DOWN in ratio-T1_vs_Control]","[UP in ratio-T2_vs_Control]"],
-                    ["[APR in ratio-T1_vs_Control]","[NOVALUE in ratio-T2_vs_Control]"],
-                    ["[DIS in ratio-T1_vs_Control]","[VALUE in ratio-T2_vs_Control]"],
-                ],
-                # "condition" : ["UP","MINOR","DOWN","APR","DIS","VALUE","NOVALUE"],
-                "condition" : ["UP","MINOR","DOWN","APR","DIS","VALUE","NOVALUE"],
-                "levelList" : [1,4,7],
+            "GO" : {
+                "gene2term"    : "data/dbgo-GOdatabase/tair-gene2term.json",
+                "term2gene"    : "data/dbgo-GOdatabase/tair-term2gene.json",
+                "count"        : "data/dbgo-GOdatabase/tair-count.json",
+                "hierarchical" : "data/dbgo-GOdatabase/tair-branchSummary.json",
+                "description"  : "data/dbgo-GOdatabase/tair-description.json",
             },
-            "testing1-homoSEG" : {
-                "column" : "homolog",
-                "regulate" : [
-                    "ratio-T1_vs_Control","ratio-T2_vs_Control","compare-T2_vs_T1"
-                ],
-                "compare" : [
-                    ["[UP in ratio-T1_vs_Control]","[DOWN in compare-T2_vs_T1]"],
-                    ["[DOWN in ratio-T1_vs_Control]","[UP in compare-T2_vs_T1]"],
-                    ["[UP in ratio-T1_vs_Control]","[MINOR in compare-T2_vs_T1]"],
-                    ["[DOWN in ratio-T1_vs_Control]","[MINOR in compare-T2_vs_T1]"],
-                ],
-                "condition" : ["UP","MINOR","DOWN"],
-                "levelList" : [1,4,7],
+            "KEGG" : {
+                "gene2term"    : "data/dbkg-KEGG-hirTree/ath00001-gene2term.json",
+                "term2gene"    : "data/dbkg-KEGG-hirTree/ath00001-term2gene.json",
+                "count"        : "data/dbkg-KEGG-hirTree/ath00001-count.json",
+                "hierarchical" : "data/dbkg-KEGG-hirTree/ath00001-branchSummary.json",
+                "description"  : "data/dbkg-KEGG-hirTree/ath00001-description.json",
             },
-        },
+            "TF": {
+                "gene2term"     : "data/dbtf-TFdb/at-tf-gene2term.json",
+                "term2gene"     : "data/dbtf-TFdb/at-tf-term2gene.json",
+                "count"         : "data/dbtf-TFdb/at-tf-count.json",
+                "hierarchical"  : "",
+                "description"   : "",
+            },
+        }
     },
 ]
 
-databasePathStr = 'data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary.db'
-jsonPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/{title}-{level}-list-{type}.json'
-logFolderPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/'
-logFilePathStr = '{title}-list'
-printOutStr = "    Count of {target} is {number}"
-
-def action(targetStr,inputValue,levelInt,conditionStr):
-    exportStr = ""
-    if targetStr == None:
-        targetStr = ""
-    if inputValue == np.float64('0.0') and conditionStr == "NOVALUE":
-        exportStr = targetStr
-    elif inputValue != np.float64('0.0') and conditionStr == "VALUE":
-        exportStr = targetStr
-    else:
-        if inputValue == np.float64('-inf') and conditionStr == "DIS":
-            exportStr = targetStr
-        elif inputValue == np.float64('inf') and conditionStr == "APR":
-            exportStr = targetStr
-        elif inputValue != np.float64('-inf') and inputValue != np.float64('inf'):
-            if inputValue > levelInt and conditionStr == "UP":
-                exportStr = targetStr
-            elif inputValue < (levelInt*-1) and conditionStr == "DOWN":
-                exportStr = targetStr
-            elif inputValue <= levelInt and inputValue >= (levelInt*-1) and conditionStr == "MINOR":
-                exportStr = targetStr
-            
-    return exportStr
-
 for sampleDict in sampleList:
     stringDict = sampleDict["string"]
-    conditionDict = sampleDict["condition"]
-    for titleStr in list(conditionDict.keys()):
-        conditionSubDict = conditionDict[titleStr]
-        stringDict.update({"title":titleStr})
+    for databaseStr in list(sampleDict["condition"].keys()):
+        databaseDict = sampleDict["condition"][databaseStr]
 
-        databaseStr = databasePathStr.format(**stringDict)
-        logFolderStr = logFolderPathStr.format(**stringDict)
-        pathlib.Path( logFolderStr ).mkdir(parents=True,exist_ok=True)
-        logFileStr = logFilePathStr.format(**stringDict)
+        levelStr = stringDict["level"]
+        columnList = stringDict["compare"]
+        branchStr = stringDict["branch"]
+        titleStr = stringDict["title"]
 
-        Print = libPrint.timer()
-        Print.logFilenameStr = logFileStr
-        Print.folderStr = logFolderStr
-        Print.testingBool = False
-        Print.startLog()
-        Print.printing("Process: {}".format(titleStr))
-        Print.printing("Source: {}".format(databasePathStr.format(**stringDict)))
+        g2termDict = json.load(open(databaseDict["gene2term"],'r'))
+        t2geneDict = json.load(open(databaseDict["term2gene"],'r'))
+        countDict = json.load(open(databaseDict["count"],'r'))
+        if databaseDict["hierarchical"] != "":
+            pathDict = json.load(open(databaseDict["hierarchical"],'r'))
+        else:
+            pathDict = dict()
 
-        columnStr = conditionSubDict["column"]
-        regulateList = conditionSubDict["regulate"]
-        compareList = conditionSubDict["compare"]
-        conditionList = conditionSubDict["condition"]
-        levelList = conditionSubDict["levelList"]
+        if databaseDict["description"] != "":
+            descriDict = json.load(open(databaseDict["description"],'r'))
+        else:
+            descriDict = dict()
 
-        Connect = sqlite3.connect(databaseStr)
-        summaryDF = pd.read_sql_query("SELECT * FROM Summary", Connect)
-        countInt = len(summaryDF.index)
+        detailPathStr = 'data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary.db'
+        detailPath = detailPathStr.format(**stringDict)
+        groupPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/{branch}-{title}-{level}-list-{type}.json'
+        groupPath = groupPathStr.format(**stringDict)
 
-        for levelInt in levelList:
-            # levelInt = levelList[0]
-            stringDict.update({"level":str(levelInt)})
+        # expressionDict = json.load(open(detailPathStr,'r'))
+        groupDict      = json.load(open(groupPath,'r'))
 
-            combinationDict = dict()
-            significantDict = dict()
+        # --- Directory confirmation ---
+        pathlib.Path( 'data/09fa-{}-functionalAnalysis'.format(databaseStr) ).mkdir(parents=True,exist_ok=True)
+        pathlib.Path( "data/09fa-{}-functionalAnalysis/{}-{}".format(databaseStr, branchStr, titleStr) ).mkdir(parents=True,exist_ok=True)
 
-            Print.printing("Threshold: {}".format(str(levelInt)))
-            Print.printing("[Comparing] start")
-            for rowInt in range(countInt):
-                print("[{}/{}]".format(str(rowInt),str(countInt)),end="\r")
-                targetStr = summaryDF.at[rowInt,columnStr] # pylint: disable=maybe-no-member
+        foldchangeDict = dict()
+        sumDict = dict()
+        compareList = []
+        #
+        print("Fold Change: "+levelStr)
+        print("Step 0: Check combination")
+        for compare in columnList:
+            if compare in set(groupDict.keys()):
+                compareList.append(compare)
+            else:
+                print("    {} doesn't appeared in DEG libraries".format(compare))
 
-                for regulateStr in regulateList:
-                    sigColumStr = regulateStr.replace("ratio-","sig-").replace("compare-","sig-")
-                    sigInputStr = summaryDF.at[rowInt,sigColumStr] # pylint: disable=maybe-no-member
-                    inputValue = summaryDF.at[rowInt,regulateStr] # pylint: disable=maybe-no-member
+        print("Step 1: Comparing "+databaseStr)
+        for compare in compareList:
+            compareDict = dict()
+            targetSet = set(groupDict[compare])
+            #
+            totalCountStr = str(len(targetSet))
+            countInt = 0
+            #
+            for gene in targetSet:
+                #
+                countInt = countInt + 1
+                print("{}:[{}/{}]{}".format(compare,str(countInt),totalCountStr,gene),end="\r")
+                #
+                if gene in set(g2termDict.keys()):
+                    for termID in g2termDict[gene]:
+                        # detailDict = expressionDict[gene]
+                        detailDict = dict()
 
-                    for conditionStr in conditionList:
-                        tempStr = action(targetStr,inputValue,levelInt,conditionStr)
-                        dictNameStr = "[{} in {}]".format(conditionStr,regulateStr)
-                        if tempStr != "":
-                            combinationList = combinationDict.get(dictNameStr,list())
-                            combinationList.append(tempStr)
-                            combinationDict.update({ dictNameStr : combinationList })
-                        
-                        if tempStr != "" and sigInputStr == "yes" :
-                            significantList = significantDict.get(dictNameStr,list())
-                            significantList.append(tempStr)
-                            significantDict.update({ dictNameStr : significantList })
+                        tempList = compareDict.get(termID,[])
+                        tempList.append(detailDict)
+                        compareDict.update({ termID : tempList })
 
-            Print.printing("[Comparing] finish")
+                    tempList = sumDict.get(compare,[])
+                    tempList.append(gene)
+                    sumDict.update({ compare : list(set(tempList)) })
 
-            Print.printing("[Deduplicating] start: combinationDict")
-            for combinationStr in list(combinationDict.keys()):
-                combinationDict[combinationStr] = sorted(list(set(combinationDict[combinationStr])))
-                Print.printing(printOutStr.format(target=combinationStr,number=str(len(combinationDict[combinationStr]))))
+            foldchangeDict.update({ compare : compareDict })
 
-            Print.printing("[Deduplicating] start: significantDict")
+        for compare in list(sumDict.keys()):
+            sumDict.update({ compare : len(sumDict[compare]) })
 
-            for combinationStr in list(significantDict.keys()):
-                significantDict[combinationStr] = sorted(list(set(significantDict[combinationStr])))
-                Print.printing(printOutStr.format(target=combinationStr,number=str(len(significantDict[combinationStr]))))
+        foldchangeDict.update({ "#SUM" : sumDict })
 
-            Print.printing("[Deduplicating] finish")
+        print("")
+        print("Step 2: Exporting results into JSON files")
 
-            Print.printing("[Rearranging] start")
-            crossSet = set()
-            """
-            for frontStr in list(combinationDict.keys()):
-                for backStr in list(combinationDict.keys()):
-                    if frontStr != backStr:
-                        crossSet.update({"_and_".join(sorted([frontStr,backStr]))})
-            """
-            for compareSubList in compareList:
-                crossSet.update({"_and_".join(sorted(compareSubList))})
+        targetFilenameStr = "data/09fa-{databaseStr}-functionalAnalysis/{branchStr}-{titleStr}/FoldChange-{foldStr}.json".format(
+            databaseStr=databaseStr,
+            branchStr=branchStr,
+            titleStr=titleStr,
+            foldStr=levelStr
+        )
+        with open(targetFilenameStr,'w') as resultFile:
+            json.dump(foldchangeDict,resultFile,indent=2,sort_keys=True)
 
-            Print.printing("[Rearranging] finish")
+        print("Step 3: Generating TSV files")
 
-            dictionaryDict = {
-                "comparison" : combinationDict,
-                "significant" : significantDict,
-            }
-            for targetStr in list(dictionaryDict.keys()):
-                Print.printing("[Concluding] start: {}".format(targetStr))
-                stringDict.update({"type":targetStr})
-                targetDict = dictionaryDict[targetStr]
-                totalSetInt = len(crossSet)
-                countSetInt = 0
-                for crossStr in crossSet:
-                    countSetInt = countSetInt + 1
-                    print("[{}/{}] {}".format(str(countSetInt),str(totalSetInt),crossStr),end="\r")
-                    # crossStr = list(crossSet)[0]
-                    frontStr = crossStr.split("_and_")[0]
-                    backStr  = crossStr.split("_and_")[1]
-                    unionSet = set()
-                    unionSet.update(set(targetDict.get(frontStr,[])))
-                    unionSet.update(set(targetDict.get(backStr,[])))
+        targetFilenameStr = "data/09fa-{databaseStr}-functionalAnalysis/{branchStr}-{titleStr}/FoldChange-{foldStr}.tsv".format(
+            databaseStr=databaseStr,
+            branchStr=branchStr,
+            titleStr=titleStr,
+            foldStr=levelStr,
+        )
+        with open(targetFilenameStr,'w') as resultFile:
+            columnTup = tuple(compareList)
+            pathBool = (pathDict != dict())
+            descriBool = (descriDict != dict())
 
-                    andList = [ x for x in unionSet if (( x in targetDict.get(frontStr,[]) )and( x in targetDict.get(backStr,[]) ))]
-                    frontOnlyList = [ x for x in unionSet if (( x in targetDict.get(frontStr,[]) )and( x not in targetDict.get(backStr,[]) ))]
-                    backOnlyList = [ x for x in unionSet if (( x not in targetDict.get(frontStr,[]) )and( x in targetDict.get(backStr,[]) ))]
+            columnHeaderList = list()
+            footerList = list()
+            columnHeaderList.append("{} id".format(databaseStr))
+            footerList.append("Total genes with {} annotation".format(databaseStr))
+            if pathBool:
+                columnHeaderList.append("{} Path".format(databaseStr))
+                footerList.append('')
+            if descriBool:
+                columnHeaderList.append("{} Annotation".format(databaseStr))            
+                footerList.append('')
+            columnHeaderList.append("{} Sum".format(databaseStr))
 
-                    targetDict.update({
-                        "_and_".join(sorted([frontStr,backStr])) : list(set(andList)),
-                        frontStr+"_out_"+backStr                 : list(set(frontOnlyList)),
-                        backStr+"_out_"+frontStr                 : list(set(backOnlyList)),
-                    })
+            columnStr = "{}\t{}\n".format( "\t".join(columnHeaderList), "\t".join(columnTup))
+            resultFile.write(columnStr)
+            
+            for termID in list(t2geneDict.keys()):
+                valueList = list()
+                valueList.append(termID)
+                if pathBool:
+                    valueList.append(pathDict.get(termID,'NONE'))
+                if descriBool:
+                    valueList.append(descriDict.get(termID,'NONE'))            
+                valueList.append(str(countDict[termID]))
 
-                    Print.printing(printOutStr.format(target="_and_".join(sorted([frontStr,backStr])),number=str(len(andList))))
-                    Print.printing(printOutStr.format(target=frontStr+"_only", number=str(len(frontOnlyList))))
-                    Print.printing(printOutStr.format(target=backStr+"_only",  number=str(len(backOnlyList) )))
+                resultFile.write("\t".join(valueList))
 
-                Print.printing("[Concluding] finish: {}".format(targetStr))
-                Print.printing("[Exporting] start: {}".format(targetStr))
-                
-                jsonStr = jsonPathStr.format(**stringDict)
-                with open(jsonStr, "w") as targetHandle:
-                    json.dump(targetDict,targetHandle,indent=2)
+                for colName in columnTup: # colName = name of compare combination
+                    resultFile.write(str(len(foldchangeDict[colName].get(termID,[])))+"\t")
+                resultFile.write("\n")
 
-                Print.printing("[Exporting] finish: {}".format(targetStr))
-        Print.stopLog()
-        
+            sumTup = tuple([ str(sumDict.get(x,'NONE')) for x in compareList])
+            
+            footerList.append(str(countDict["#SUM"]))
+            footerList.extend(sumTup)
+            resultFile.write("\t".join(footerList))
+
+        print("Finish\n")
