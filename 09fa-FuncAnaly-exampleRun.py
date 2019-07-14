@@ -9,8 +9,9 @@ sampleList = [
         "string": {
             "branch" : "testing1",
             "method" : "dsStringtie",
-            "annotate" : "brapaEnsembl",
+            "annotate" : "speciesEnsembl",
             "trim" : "trimQ30",
+            # use Arabidopsis homolog id instead of species geneid
             "title" : "homoDEG",
             "level" : "1",
             "type" : "significant",
@@ -60,132 +61,140 @@ for sampleDict in sampleList:
         g2termDict = json.load(open(databaseDict["gene2term"],'r'))
         t2geneDict = json.load(open(databaseDict["term2gene"],'r'))
         countDict = json.load(open(databaseDict["count"],'r'))
+
         if databaseDict["hierarchical"] != "":
             pathDict = json.load(open(databaseDict["hierarchical"],'r'))
+            pathBool = True
         else:
             pathDict = dict()
+            pathBool = False
 
         if databaseDict["description"] != "":
             descriDict = json.load(open(databaseDict["description"],'r'))
+            descriBool = True
         else:
             descriDict = dict()
+            descriBool = False
 
-        detailPathStr = 'data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary.db'
-        detailPath = detailPathStr.format(**stringDict)
-        groupPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/{branch}-{title}-{level}-list-{type}.json'
-        groupPath = groupPathStr.format(**stringDict)
+        for typeStr in ["significant","comparison"]:
+            stringDict.update({ "type" : typeStr })
+            stringDict.update({ "database" : databaseStr })
+            detailPathStr = 'data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary.db'
+            detailPath = detailPathStr.format(**stringDict)
+            groupPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/{branch}-{title}-{level}-list-{type}.json'
+            groupPath = groupPathStr.format(**stringDict)
 
-        # expressionDict = json.load(open(detailPathStr,'r'))
-        groupDict      = json.load(open(groupPath,'r'))
+            # expressionDict = json.load(open(detailPathStr,'r'))
+            groupDict      = json.load(open(groupPath,'r'))
 
-        # --- Directory confirmation ---
-        pathlib.Path( 'data/09fa-{}-functionalAnalysis'.format(databaseStr) ).mkdir(parents=True,exist_ok=True)
-        pathlib.Path( "data/09fa-{}-functionalAnalysis/{}-{}".format(databaseStr, branchStr, titleStr) ).mkdir(parents=True,exist_ok=True)
+            # --- Directory confirmation ---
+            pathlib.Path( "data/09fa-{database}-functionalAnalysis/{branch}-{method}-{annotate}-{trim}/".format(**stringDict) ).mkdir(parents=True,exist_ok=True)
 
-        foldchangeDict = dict()
-        sumDict = dict()
-        compareList = []
-        #
-        print("Fold Change: "+levelStr)
-        print("Step 0: Check combination")
-        for compare in columnList:
-            if compare in set(groupDict.keys()):
-                compareList.append(compare)
-            else:
-                print("    {} doesn't appeared in DEG libraries".format(compare))
-
-        print("Step 1: Comparing "+databaseStr)
-        for compare in compareList:
-            compareDict = dict()
-            targetSet = set(groupDict[compare])
+            foldchangeDict = dict()
+            sumDict = dict()
+            compareList = []
+            absenceList = []
             #
-            totalCountStr = str(len(targetSet))
-            countInt = 0
-            #
-            for gene in targetSet:
+            print("Target: "+levelStr)
+            print("Step 0: Check combination")
+            for compare in columnList:
+                if compare in set(groupDict.keys()):
+                    compareList.append(compare)
+                else:
+                    absenceList.append(compare)
+
+            print("Step 1: Comparing "+databaseStr)
+            for compare in compareList:
+                compareDict = dict()
+                targetSet = set(groupDict[compare])
                 #
-                countInt = countInt + 1
-                print("{}:[{}/{}]{}".format(compare,str(countInt),totalCountStr,gene),end="\r")
+                totalCountStr = str(len(targetSet))
+                countInt = 0
                 #
-                if gene in set(g2termDict.keys()):
-                    for termID in g2termDict[gene]:
-                        # detailDict = expressionDict[gene]
-                        detailDict = dict()
+                for gene in targetSet:
+                    #
+                    countInt = countInt + 1
+                    print("{}:[{}/{}]{}".format(compare,str(countInt),totalCountStr,gene),end="\r")
+                    #
+                    if gene in set(g2termDict.keys()):
+                        for termID in g2termDict[gene]:
+                            # detailDict = expressionDict[gene]
+                            detailDict = dict()
 
-                        tempList = compareDict.get(termID,[])
-                        tempList.append(detailDict)
-                        compareDict.update({ termID : tempList })
+                            tempList = compareDict.get(termID,[])
+                            tempList.append(detailDict)
+                            compareDict.update({ termID : tempList })
 
-                    tempList = sumDict.get(compare,[])
-                    tempList.append(gene)
-                    sumDict.update({ compare : list(set(tempList)) })
+                        tempList = sumDict.get(compare,[])
+                        tempList.append(gene)
+                        sumDict.update({ compare : list(set(tempList)) })
 
-            foldchangeDict.update({ compare : compareDict })
+                foldchangeDict.update({ compare : compareDict })
 
-        for compare in list(sumDict.keys()):
-            sumDict.update({ compare : len(sumDict[compare]) })
+            for compare in list(sumDict.keys()):
+                sumDict.update({ compare : len(sumDict[compare]) })
 
-        foldchangeDict.update({ "#SUM" : sumDict })
+            foldchangeDict.update({ "#SUM" : sumDict })
 
-        print("")
-        print("Step 2: Exporting results into JSON files")
+            print("")
+            print("Step 2: Exporting results into JSON files")
 
-        targetFilenameStr = "data/09fa-{databaseStr}-functionalAnalysis/{branchStr}-{titleStr}/FoldChange-{foldStr}.json".format(
-            databaseStr=databaseStr,
-            branchStr=branchStr,
-            titleStr=titleStr,
-            foldStr=levelStr
-        )
-        with open(targetFilenameStr,'w') as resultFile:
-            json.dump(foldchangeDict,resultFile,indent=2,sort_keys=True)
+            targetFilenameStr = "data/09fa-{database}-functionalAnalysis/{branch}-{method}-{annotate}-{trim}/{branch}-{title}-FoldChange-{level}-{type}.json".format(**stringDict)
+            with open(targetFilenameStr,'w') as resultFile:
+                json.dump(foldchangeDict,resultFile,indent=2,sort_keys=True)
 
-        print("Step 3: Generating TSV files")
+            print("Step 3: Generating TSV files")
 
-        targetFilenameStr = "data/09fa-{databaseStr}-functionalAnalysis/{branchStr}-{titleStr}/FoldChange-{foldStr}.tsv".format(
-            databaseStr=databaseStr,
-            branchStr=branchStr,
-            titleStr=titleStr,
-            foldStr=levelStr,
-        )
-        with open(targetFilenameStr,'w') as resultFile:
-            columnTup = tuple(compareList)
-            pathBool = (pathDict != dict())
-            descriBool = (descriDict != dict())
+            targetFilenameStr = "data/09fa-{database}-functionalAnalysis/{branch}-{method}-{annotate}-{trim}/{branch}-{title}-FoldChange-{level}-{type}.tsv".format(**stringDict)
+            with open(targetFilenameStr,'w') as resultFile:
+                columnTup = tuple(sorted(compareList))
 
-            columnHeaderList = list()
-            footerList = list()
-            columnHeaderList.append("{} id".format(databaseStr))
-            footerList.append("Total genes with {} annotation".format(databaseStr))
-            if pathBool:
-                columnHeaderList.append("{} Path".format(databaseStr))
-                footerList.append('')
-            if descriBool:
-                columnHeaderList.append("{} Annotation".format(databaseStr))            
-                footerList.append('')
-            columnHeaderList.append("{} Sum".format(databaseStr))
-
-            columnStr = "{}\t{}\n".format( "\t".join(columnHeaderList), "\t".join(columnTup))
-            resultFile.write(columnStr)
-            
-            for termID in list(t2geneDict.keys()):
-                valueList = list()
-                valueList.append(termID)
+                headerList = list()
+                calculationList = list()
+                headerList.append("{} id".format(databaseStr))
+                calculationList.append("Total genes with {} annotation".format(databaseStr))
                 if pathBool:
-                    valueList.append(pathDict.get(termID,'NONE'))
+                    headerList.append("{} Path".format(databaseStr))
+                    calculationList.append('')
                 if descriBool:
-                    valueList.append(descriDict.get(termID,'NONE'))            
-                valueList.append(str(countDict[termID]))
+                    headerList.append("{} Annotation".format(databaseStr))            
+                    calculationList.append('')
+                headerList.append("{} Sum".format(databaseStr))
+                calculationList.append(str(countDict["#SUM"]))
 
-                resultFile.write("\t".join(valueList))
-
-                for colName in columnTup: # colName = name of compare combination
-                    resultFile.write(str(len(foldchangeDict[colName].get(termID,[])))+"\t")
+                resultFile.write("\t".join(headerList))
+                resultFile.write("\t")
+                resultFile.write("\t".join([ n.replace("_"," ") for n in columnTup ]))
+                resultFile.write("\t")
+                resultFile.write("\t".join(absenceList))
                 resultFile.write("\n")
+                
+                sumList = [ str(sumDict.get(x,'irrelevant')) for x in columnTup ]
+                calculationList.extend(sumList)
+                resultFile.write("\t".join(calculationList))
+                resultFile.write("\t")
+                resultFile.write("\t".join([ 'absence' for x in absenceList ]))
+                resultFile.write("\n")
+                
+                for termID in list(t2geneDict.keys()):
+                    valueIdentityList = list()
+                    valueIdentityList.append(termID)
+                    if pathBool:
+                        valueIdentityList.append(pathDict.get(termID,'NONE'))
 
-            sumTup = tuple([ str(sumDict.get(x,'NONE')) for x in compareList])
-            
-            footerList.append(str(countDict["#SUM"]))
-            footerList.extend(sumTup)
-            resultFile.write("\t".join(footerList))
+                    if descriBool:
+                        valueIdentityList.append(descriDict.get(termID,'NONE'))  
 
-        print("Finish\n")
+                    valueIdentityList.append(str(countDict[termID]))
+
+                    resultFile.write("\t".join(valueIdentityList))
+                    resultFile.write("\t")
+
+                    valueNumberList = list()
+                    # colName = name of compare combination
+                    valueNumberList = [str(len(foldchangeDict[colName].get(termID,[]))) for colName in columnTup]
+                    
+                    resultFile.write("\t".join(valueNumberList))
+                    resultFile.write("\n")
+
+            print("Finish\n")
