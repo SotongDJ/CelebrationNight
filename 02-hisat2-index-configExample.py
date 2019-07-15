@@ -1,46 +1,52 @@
 #!/usr/bin/env python3
 import libConfig
+# ---- Keyword list ----
+"""
+SpeA, speciesAnnotationA
+SpeB, speciesAnnotationB
+SpeC, speciesAnnotationC
+"""
 # ---- Configuration of Indexing Conditions ---- 
 SpeA = libConfig.config()
-SpeA.queryStr = "speciesTestingA"
-SpeA.folderStr = "data/config/"
+SpeA.queryStr = "speciesAnnotationA"
+SpeA.folderStr = "config/"
 SpeA.queryDict = {
     "from" : "binHISAT2-BUILD",
-    "seqPath" : "data/GenomeSequence/SpeA.fa",
-    "indexHeader" : "data/02-hisat2Index/SpeA",
-    "checkFolder"    : "data/02-hisat2Index/",
+    "seqPath" : "data/dbgs-GenomeSequence/speciesAnnotationA/speciesAnnotationA.fa",
+    "indexHeader" : "large/02-hisat2Index/speciesAnnotationA",
+    "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
-    "testing" : True,
+    "testing" : False,
 }
-SpeA.modeStr = "OVERWRITE"
+SpeA.modeStr = "UPDATE"
 SpeA.save()
 
 SpeB = libConfig.config()
-SpeB.queryStr = "speciesTestingB"
-SpeB.folderStr = "data/config/"
+SpeB.queryStr = "speciesAnnotationB"
+SpeB.folderStr = "config/"
 SpeB.queryDict = {
     "from" : "binHISAT2-BUILD",
-    "seqPath" : "data/GenomeSequence/SpeB.fna",
-    "indexHeader" : "data/02-hisat2Index/SpeB",
-    "checkFolder"    : "data/02-hisat2Index/",
+    "seqPath" : "data/dbgs-GenomeSequence/speciesAnnotationB/speciesAnnotationB.fna",
+    "indexHeader" : "large/02-hisat2Index/speciesAnnotationB",
+    "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
-    "testing" : True,
+    "testing" : False,
 }
-SpeB.modeStr = "OVERWRITE"
+SpeB.modeStr = "UPDATE"
 SpeB.save()
 
 SpeC = libConfig.config()
-SpeC.queryStr = "speciesTestingC"
-SpeC.folderStr = "data/config/"
+SpeC.queryStr = "speciesAnnotationC"
+SpeC.folderStr = "config/"
 SpeC.queryDict = {
     "from" : "binHISAT2-BUILD",
-    "seqPath" : "data/GenomeSequence/SpeC.fasta",
-    "indexHeader" : "data/02-hisat2Index/SpeC",
-    "checkFolder"    : "data/02-hisat2Index/",
+    "seqPath" : "data/dbgs-GenomeSequence/speciesAnnotationC/speciesAnnotationC.fasta",
+    "indexHeader" : "large/02-hisat2Index/speciesAnnotationC",
+    "checkFolder"    : "large/02-hisat2Index/",
     "thread" : "6",
-    "testing" : True,
+    "testing" : False,
 }
-SpeC.modeStr = "OVERWRITE"
+SpeC.modeStr = "UPDATE"
 SpeC.save()
 # ---- Configuration of Indexing Command ---- 
 """
@@ -62,7 +68,7 @@ Main arguments
 
 HISAT = libConfig.config()
 HISAT.queryStr = "binHISAT2-BUILD"
-HISAT.folderStr = "data/config/"
+HISAT.folderStr = "config/"
 HISAT.queryDict = {
     "command" : "bin/hisat2/hisat2-build -p {thread} {seqPath} {indexHeader}"
 }

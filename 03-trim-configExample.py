@@ -1,36 +1,72 @@
 #!/usr/bin/env python3
 import libConfig
+# ---- Keyword list ----
+"""
+large/01-raw/T1r1-F.fastq
+large/03-trimed/testing/trimQ30-T1r1-F-pair.fastq
+testing
+["Control","T1","T2","T3","T4","T5"]
+["F","R"]
+["r1"]
+SpeA, speciesAnnotationA
+SpeB, speciesAnnotationB
+SpeC, speciesAnnotationC
+"""
 # ---- Configuration of Experiment Design ---- 
-Testing = libConfig.config()
-Testing.queryStr = "testing"
-Testing.folderStr = "data/config/"
+expRep = libConfig.config()
+expRep.queryStr = "testing"
+expRep.folderStr = "config/"
 # Arguments/Parameters below need to modify depend on 
 # your experiment design and naming style
-Testing.queryDict = {
+expRep.queryDict = {
     "branch"               : "testing",
     "group"                : ["Control","T1","T2","T3","T4","T5"],
     "direction"            : ["F","R"],
     "replication"          : ["r1"],
     "pairPostfix"          : "pair",
     "unpairPostfix"        : "unpair",
-    "[trim]checkFolder"    : ["data/01-raw/","data/03-trimed/testing/"],
-    "[trim]condition"      : ["trimQ20","trimQ30"],
-    "[trim]inputFileName"  : "data/01-raw/{group}-{replication}-{direction}{fileType}",
-    # above: data/tmp/T1-r1-F.fastq
-    "[trim]outputFileName" : "data/03-trimed/testing/{condition}-{group}-{replication}-{direction}-{pairType}{fileType}",
-    # above: data/03-trimed/testing/trimQ20-T1-r1-F-pair.fastq
+    "mode"                 : "pairEnd",
+    "[trim]checkFolder"    : ["large/01-raw/","large/03-trimed/testing/"],
+    "[trim]condition"      : ["trimQ30"],
+    "[trim]inputFileName"  : "large/01-raw/{group}{replication}-{direction}{fileType}",
+    # above: large/01-raw/T1r1-F.fastq
+    "[trim]outputFileName" : "large/03-trimed/testing/{condition}-{group}{replication}-{direction}-{pairType}{fileType}",
+    # above: large/03-trimed/testing/trimQ30-T1r1-F-pair.fastq
     "[trim]fileType"       : ".fastq",
-    "testing"              : True,
+    "testing"              : False,
 }
-Testing.modeStr = "UPDATE"
-Testing.save()
+expRep.modeStr = "UPDATE"
+expRep.save()
+
+expRep = libConfig.config()
+expRep.queryStr = "testing-singleEnd-{direction}-{pairType}"
+expRep.folderStr = "config/"
+expRep.queryDict = {
+    "branch"               : "testing-singleEnd",
+    "group"                : ["Control","T1","T2","T3","T4","T5"],
+    "direction"            : ["F","R"],
+    "replication"          : ["r1"],
+    "pairPostfix"          : "pair",
+    "unpairPostfix"        : "unpair",
+    "mode"                 : "singleEnd",
+    "[trim]checkFolder"    : ["large/01-raw/","large/03-trimed/testing/"],
+    "[trim]condition"      : ["trimQ30-SE"],
+    "[trim]inputFileName"  : "large/01-raw/{group}{replication}{fileType}",
+    # above: large/01-raw/T1r1.fastq
+    "[trim]outputFileName" : "large/03-trimed/testing/{condition}-{group}{replication}{fileType}",
+    # above: large/03-trimed/testing/trimQ30-T1r1.fastq
+    "[trim]fileType"       : ".fastq",
+    "testing"              : False,
+}
+expRep.modeStr = "UPDATE"
+expRep.save()
 
 # ---- Configuration of Trimming Conditions ---- 
 TrimParA = libConfig.config()
 TrimParA.queryStr = "trimQ20"
-TrimParA.folderStr = "data/config/"
+TrimParA.folderStr = "config/"
 TrimParA.queryDict = {
-    "singlePair" : "PE", # Pair end
+    "header"     : "trimQ20",
     "phred"      : "33", # sequencing type, illumina solexa = 33
     "thread"     : "6", # cluster server have 8 cores
     "lead"       : "LEADING:20",
@@ -44,9 +80,9 @@ TrimParA.save()
 
 TrimParB = libConfig.config()
 TrimParB.queryStr = "trimQ30"
-TrimParB.folderStr = "data/config/"
+TrimParB.folderStr = "config/"
 TrimParB.queryDict = {
-    "singlePair" : "PE", # Pair end
+    "header"     : "trimQ30",
     "phred"      : "33", # sequencing type, illumina solexa = 33
     "thread"     : "6", # cluster server have 8 cores
     "lead"       : "LEADING:30",
@@ -58,6 +94,21 @@ TrimParB.queryDict = {
 TrimParB.modeStr = "OVERWRITE"
 TrimParB.save()
 
+TrimParC = libConfig.config()
+TrimParC.queryStr = "trimQ30-SE"
+TrimParC.folderStr = "config/"
+TrimParC.queryDict = {
+    "header"     : "trimQ30",
+    "phred"      : "33", # sequencing type, illumina solexa = 33
+    "thread"     : "6", # cluster server have 8 cores
+    "lead"       : "LEADING:30",
+    "trail"      : "TRAILING:30",
+    "slide"      : "SLIDINGWINDOW:4:30",
+    "length"     : "MINLEN:36",
+    "adapter"    : "ILLUMINACLIP:bin/trimmomatic/adapters/TruSeq3-SE.fa:2:30:10",
+}
+TrimParC.modeStr = "OVERWRITE"
+TrimParC.save()
 # ---- Configuration of Trimming Command ---- 
 """
 FROM: http://www.usadellab.org/cms/?page=trimmomatic
@@ -101,11 +152,11 @@ Step options:
 
 Trim = libConfig.config()
 Trim.queryStr = "binTrimmomatic"
-Trim.folderStr = "data/config/"
+Trim.folderStr = "config/"
 Trim.queryDict = {
     "command" : 
         "java -jar bin/trimmomatic/trimmomatic-0.36.jar "+
-        "{singlePair} -phred{phred} -threads {thread} {files} "+
+        "{mode} -phred{phred} -threads {thread} {files} "+
         "{adapter} {lead} {trail} {slide} {length}"
 }
 Trim.modeStr = "OVERWRITE"

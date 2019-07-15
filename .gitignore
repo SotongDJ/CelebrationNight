@@ -1,6 +1,13 @@
 # something need to be exclude
 bin/
+large/
+large
 data/
+data
+config/
+config
+log/
+log
 archive/
 temp/
 .vscode/

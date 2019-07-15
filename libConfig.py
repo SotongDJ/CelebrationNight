@@ -3,7 +3,7 @@ import json, pathlib
 class config:
     def __init__(self):
         self.queryStr = ""
-        self.folderStr = "data/config/"
+        self.folderStr = "config/"
         self.storeDict = dict()
         self.queryDict = dict()
         self.modeStr = "OVERWRITE"
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     Config = config()
 
     Config.queryStr = "testing"
-    Config.folderStr = "data/config/"
+    Config.folderStr = "config/"
     Config.queryDict = {
         "haha" : "ha",
         "ho" : "hohoho",

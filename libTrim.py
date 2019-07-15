@@ -15,127 +15,147 @@ import pathlib
     <ILLUMINACLIP> <LEADING> \\
     <TRAILING> <SLIDINGWINDOW> <MINLEN>
 
+  java -jar <bin>/trimmomatic-0.35.jar SE \\
+    -phred33 -threads <threads> \\
+    input.fq.gz output.fq.gz \\
+    <ILLUMINACLIP> <LEADING> \\
+    <TRAILING> <SLIDINGWINDOW> <MINLEN>
+
    --- README ---
 """
 class trimmer:
     def __init__(self):
         # ---- Initialization ----
-        self.commandStr = str()
         self.queryStr = str()
-
-        self.conditionList = list()
-        self.groupList = list()
-        self.replicationList = list()
-        self.directionList = list()
-
-        self.branchStr = str()
-        self.pairStr = str()
-        self.unpairStr = str()
-
-        self.inputFileNameStr = str()
-        self.outputFileNameStr = str()
-        self.fileTypeStr = str()
-        self.checkFolderList = str()
-
-        self.testingBool = True
 
     def trimming(self):
         # ---- Parameter ----
         BinTrim = libConfig.config()
         BinTrim.queryStr = "binTrimmomatic"
-        BinTrim.folderStr = "data/config/"
+        BinTrim.folderStr = "config/"
         BinTrim.modeStr = "UPDATE"
         BinTrim.load()
 
         ExpRep = libConfig.config()
         ExpRep.queryStr = self.queryStr
-        ExpRep.folderStr = "data/config/"
+        ExpRep.folderStr = "config/"
         ExpRep.modeStr = "UPDATE"
         ExpRep.load()
 
         # ---- Initialization ----
-        self.commandStr = BinTrim.storeDict["command"]
+        commandStr = BinTrim.storeDict["command"]
 
-        self.conditionList = ExpRep.storeDict.get("[trim]condition",[])
-        self.groupList = ExpRep.storeDict.get("group",[])
-        self.replicationList = ExpRep.storeDict.get("replication",[])
-        self.directionList = ExpRep.storeDict.get("direction",[])
+        conditionList = ExpRep.storeDict.get("[trim]condition",[])
+        groupList = ExpRep.storeDict.get("group",[])
+        replicationList = ExpRep.storeDict.get("replication",[])
+        directionList = ExpRep.storeDict.get("direction",[])
 
-        self.branchStr = ExpRep.storeDict.get("branch","")
-        self.pairStr = ExpRep.storeDict.get("pairPostfix","")
-        self.unpairStr = ExpRep.storeDict.get("unpairPostfix","")
+        branchStr = ExpRep.storeDict.get("branch","")
+        pairStr = ExpRep.storeDict.get("pairPostfix","")
+        unpairStr = ExpRep.storeDict.get("unpairPostfix","")
+        modeStr = ExpRep.storeDict.get("mode","")
 
-        self.inputFileNameStr = ExpRep.storeDict.get("[trim]inputFileName","")
-        self.outputFileNameStr = ExpRep.storeDict.get("[trim]outputFileName","")
-        self.fileTypeStr = ExpRep.storeDict.get("[trim]fileType","")
-        self.checkFolderList = ExpRep.storeDict.get("[trim]checkFolder",[])
+        inputFileNameStr = ExpRep.storeDict.get("[trim]inputFileName","")
+        outputFileNameStr = ExpRep.storeDict.get("[trim]outputFileName","")
+        fileTypeStr = ExpRep.storeDict.get("[trim]fileType","")
+        checkFolderList = ExpRep.storeDict.get("[trim]checkFolder",[])
 
         if not ExpRep.storeDict.get("testing",True):
-            self.testingBool = False
+            testingBool = False
         else:
-            self.testingBool = True
+            testingBool = True
 
         # ---- Action ----
-        for folderStr in self.checkFolderList:
+        for folderStr in checkFolderList:
             pathlib.Path(folderStr).mkdir(parents=True,exist_ok=True)
 
-        if type(self.conditionList) == type(list()) and self.conditionList != []:
-            for conditionStr in self.conditionList:
+        if type(conditionList) == type(list()) and conditionList != []:
+            for conditionStr in conditionList:
                 Print = libPrint.timer()
                 Print.logFilenameStr = "03-trim-{branch}-{cond}".format(
-                    branch=self.branchStr,
+                    branch=branchStr,
                     cond=conditionStr
                 )
-                Print.folderStr = "data/log/"
-                Print.testingBool = self.testingBool
+                Print.folderStr = "log/"
+                Print.testingBool = testingBool
                 Print.startLog()
 
                 TrimPara = libConfig.config()
                 TrimPara.queryStr = conditionStr
-                TrimPara.folderStr = "data/config/"
+                TrimPara.folderStr = "config/"
                 TrimPara.modeStr = "UPDATE"
                 TrimPara.load()
+                headerStr = TrimPara.storeDict.get('header',"")
 
-                for groupStr in self.groupList:
-                    for replicationStr in self.replicationList:
-                        inputFileList = list()
-                        outputFileList = list()
-                        for directionStr in self.directionList:
-                            inputStr = self.inputFileNameStr.format(
+                for groupStr in groupList:
+                    for replicationStr in replicationList:
+                        if modeStr == "pairEnd":
+                            inputFileList = list()
+                            outputFileList = list()
+                            for directionStr in directionList:
+                                inputStr = inputFileNameStr.format(
+                                    group=groupStr,
+                                    replication=replicationStr,
+                                    direction=directionStr,
+                                    fileType=fileTypeStr
+                                )
+                                inputFileList.append(inputStr)
+                                outputPairStr = outputFileNameStr.format(
+                                    condition=headerStr,
+                                    direction=directionStr,
+                                    group=groupStr,
+                                    replication=replicationStr,
+                                    pairType=pairStr,
+                                    fileType=fileTypeStr,
+                                )
+                                outputFileList.append(outputPairStr)
+                                outputUnPairStr = outputFileNameStr.format(
+                                    condition=headerStr,
+                                    direction=directionStr,
+                                    group=groupStr,
+                                    replication=replicationStr,
+                                    pairType=unpairStr,
+                                    fileType=fileTypeStr,
+                                )
+                                outputFileList.append(outputUnPairStr)
+
+                            fileList = inputFileList + outputFileList
+                            fileStr = " ".join(fileList)
+
+                            commandDict = dict()
+                            commandDict.update(TrimPara.storeDict)
+                            commandDict.update({ 
+                                'files' : fileStr,
+                                'mode'  : "PE",
+                            })
+                            CommandStr = commandStr.format(**commandDict)
+                            Print.phraseStr = CommandStr
+                            Print.runCommand()
+
+                        elif modeStr == "singleEnd":
+                            inputStr = inputFileNameStr.format(
                                 group=groupStr,
                                 replication=replicationStr,
-                                direction=directionStr,
-                                fileType=self.fileTypeStr
+                                fileType=fileTypeStr
                             )
-                            inputFileList.append(inputStr)
-                            outputPairStr = self.outputFileNameStr.format(
-                                condition=conditionStr,
-                                direction=directionStr,
+                            outputStr = outputFileNameStr.format(
+                                condition=headerStr,
                                 group=groupStr,
                                 replication=replicationStr,
-                                pairType=self.pairStr,
-                                fileType=self.fileTypeStr,
+                                fileType=fileTypeStr,
                             )
-                            outputFileList.append(outputPairStr)
-                            outputUnPairStr = self.outputFileNameStr.format(
-                                condition=conditionStr,
-                                direction=directionStr,
-                                group=groupStr,
-                                replication=replicationStr,
-                                pairType=self.unpairStr,
-                                fileType=self.fileTypeStr,
-                            )
-                            outputFileList.append(outputUnPairStr)
 
-                        fileList = inputFileList + outputFileList
-                        fileStr = " ".join(fileList)
+                            fileStr = "{} {}".format(inputStr,outputStr)
 
-                        commandDict = dict()
-                        commandDict.update(TrimPara.storeDict)
-                        commandDict.update({ 'files' : fileStr })
-                        CommandStr = self.commandStr.format(**commandDict)
-                        Print.phraseStr = CommandStr
-                        Print.runCommand()
+                            commandDict = dict()
+                            commandDict.update(TrimPara.storeDict)
+                            commandDict.update({ 
+                                'files' : fileStr,
+                                'mode'  : "SE",
+                            })
+                            CommandStr = commandStr.format(**commandDict)
+                            Print.phraseStr = CommandStr
+                            Print.runCommand()
 
                 Print.stopLog()
 
