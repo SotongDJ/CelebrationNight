@@ -1,6 +1,6 @@
 # CelebrationNight
 **This project released under GPL-3.0 License.**
-## Scripts for StringTie/Cufflink hybrid protocol.
+## DEG analytic tools for non-model organism.
 
 - This project include some experiment coding for testing purpose.
 - Use it at your own risk.
