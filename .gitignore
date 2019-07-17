@@ -11,8 +11,8 @@ log
 archive/
 temp/
 .vscode/
-*-run*.py
-*-set*.py
+*-run*.*
+*-set*.*
 
 .fuse*
 testing*.*
