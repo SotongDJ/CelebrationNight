@@ -130,11 +130,18 @@ for branchStr in branchList:
                     Print.printing("# error: "+pprint.pformat(convertList))
             
             for annotatedTypeStr in annotationDict.keys():
+                transCountInt = 0
+                geneCountInt = 0
                 Print.printing("# Type: "+annotatedTypeStr)
                 Print.printing("MemberCount\tGeneCount")
                 typeDict = annotationDict[annotatedTypeStr]
                 for lenInt in sorted(list(typeDict.keys())):
                     Print.printing("{}\t{}".format(str(lenInt),str(len(typeDict[lenInt]))))
+                    geneCountInt = geneCountInt + len(typeDict[lenInt])
+                    transCountInt = transCountInt + (len(typeDict[lenInt]) * lenInt)
+                
+                Print.printing("# Gene Count: "+str(geneCountInt))
+                Print.printing("# Transcript Count: "+str(transCountInt))
 
             for tnameStr in list(tname2geneidDict.keys()):
                 lenInt = len(tname2geneidDict[tnameStr])
