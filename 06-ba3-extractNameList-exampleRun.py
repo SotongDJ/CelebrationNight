@@ -8,7 +8,6 @@ pathList = [
 ]
 percentageLimit = 90 # lower than 100
 
-
 matchRatio = percentageLimit/100
 # lossLimit = 0
 # lossDiff = 0
@@ -40,11 +39,11 @@ for pathStr in pathList:
         
         tscpPairStr = "{}\t{}".format(qNameStr,tNameStr)
 
-        qGeneNameList = qNameStr.split(".")
+        qGeneNameList = [ query.replace("transcript","gene") for query in qNameStr.split(".")]
         del qGeneNameList[-1]
         qGeneNameStr = ".".join(qGeneNameList)
 
-        tGeneNameList = tNameStr.split(".")
+        tGeneNameList = [ target.replace("transcript","gene") for target in tNameStr.split(".")]
         del tGeneNameList[-1]
         tGeneNameStr = ".".join(tGeneNameList)
         
@@ -104,7 +103,13 @@ for pathStr in pathList:
         resultDict = dict()
         for targetStr in list(tscpFilterDict.keys()):
             keyStr, valueStr = targetStr.split("\t")
-            resultDict.update({ keyStr : valueStr })
+            tempStr = resultDict.get(keyStr,"")
+            tempList = tempStr.split(",")
+            if tempList == ['']:
+                tempList = list()
+            tempList.append(valueStr)
+            tempStr = ",".join(tempList)
+            resultDict.update({ keyStr : tempStr })
         
         json.dump(resultDict,targetHandle,indent=2,sort_keys=True)
 
@@ -116,7 +121,13 @@ for pathStr in pathList:
         resultDict = dict()
         for targetStr in list(geneFilterDict.keys()):
             keyStr, valueStr = targetStr.split("\t")
-            resultDict.update({ keyStr : valueStr })
+            tempStr = resultDict.get(keyStr,"")
+            tempList = tempStr.split(",")
+            if tempList == ['']:
+                tempList = list()
+            tempList.append(valueStr)
+            tempStr = ",".join(tempList)
+            resultDict.update({ keyStr : tempStr })
 
         json.dump(resultDict,targetHandle,indent=2,sort_keys=True)
 
