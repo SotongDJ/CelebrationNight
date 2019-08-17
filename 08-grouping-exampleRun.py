@@ -9,6 +9,7 @@ sampleList = [
         "string" : {
             "branch" : "testing1",
             "method" : "dsStringtie",
+            "description" : "data/dbga-GenomeAnnotation/speciesEnsembl/speciesEnsembl-attributes.json",
             "annotate" : "speciesEnsembl",
             "trim" : "trimQ30",
             "title" : "",
@@ -49,8 +50,9 @@ sampleList = [
     },
 ]
 
-databasePathStr = 'data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary.db'
+databasePathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary.db'
 jsonPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/{title}-{level}-list-{type}.json'
+tsvPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/{title}-{level}-list-{type}.tsv'
 logFolderPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/'
 logFilePathStr = '{title}-list'
 printOutStr = "    Count of {target} is {number}"
@@ -81,6 +83,13 @@ def action(targetStr,inputValue,levelInt,conditionStr):
 for sampleDict in sampleList:
     stringDict = sampleDict["string"]
     conditionDict = sampleDict["condition"]
+
+    descriPathStr = stringDict.get("description","")
+    if descriPathStr != "":
+        descriDict = json.load(open(descriPathStr,'r'))
+    else:
+        descriDict = dict()
+    
     for titleStr in list(conditionDict.keys()):
         conditionSubDict = conditionDict[titleStr]
         stringDict.update({"title":titleStr})
@@ -156,12 +165,7 @@ for sampleDict in sampleList:
 
             Print.printing("[Rearranging] start")
             crossSet = set()
-            """
-            for frontStr in list(combinationDict.keys()):
-                for backStr in list(combinationDict.keys()):
-                    if frontStr != backStr:
-                        crossSet.update({"_and_".join(sorted([frontStr,backStr]))})
-            """
+
             for compareSubList in compareList:
                 crossSet.update({"_and_".join(sorted(compareSubList))})
 
@@ -171,43 +175,60 @@ for sampleDict in sampleList:
                 "comparison" : combinationDict,
                 "significant" : significantDict,
             }
-            for targetStr in list(dictionaryDict.keys()):
-                Print.printing("[Concluding] start: {}".format(targetStr))
-                stringDict.update({"type":targetStr})
-                targetDict = dictionaryDict[targetStr]
+            for targetTypeStr in list(dictionaryDict.keys()):
+                Print.printing("[Concluding] start: {}".format(targetTypeStr))
+                stringDict.update({"type":targetTypeStr})
+                targetDict = dict()
+                targetDict.update(dictionaryDict[targetTypeStr])
                 totalSetInt = len(crossSet)
                 countSetInt = 0
-                for crossStr in crossSet:
-                    countSetInt = countSetInt + 1
-                    print("[{}/{}] {}".format(str(countSetInt),str(totalSetInt),crossStr),end="\r")
-                    # crossStr = list(crossSet)[0]
-                    frontStr = crossStr.split("_and_")[0]
-                    backStr  = crossStr.split("_and_")[1]
-                    unionSet = set()
-                    unionSet.update(set(targetDict.get(frontStr,[])))
-                    unionSet.update(set(targetDict.get(backStr,[])))
 
-                    andList = [ x for x in unionSet if (( x in targetDict.get(frontStr,[]) )and( x in targetDict.get(backStr,[]) ))]
-                    frontOnlyList = [ x for x in unionSet if (( x in targetDict.get(frontStr,[]) )and( x not in targetDict.get(backStr,[]) ))]
-                    backOnlyList = [ x for x in unionSet if (( x not in targetDict.get(frontStr,[]) )and( x in targetDict.get(backStr,[]) ))]
+                tsvStr = tsvPathStr.format(**stringDict)
+                with open(tsvStr, "w") as targetHandle:
+                    for crossStr in crossSet:
+                        countSetInt = countSetInt + 1
+                        print("[{}/{}] {}".format(str(countSetInt),str(totalSetInt),crossStr),end="\r")
+                        # crossStr = list(crossSet)[0]
+                        frontStr = crossStr.split("_and_")[0]
+                        backStr  = crossStr.split("_and_")[1]
+                        unionSet = set()
+                        unionSet.update(set(targetDict.get(frontStr,[])))
+                        unionSet.update(set(targetDict.get(backStr,[])))
 
-                    targetDict.update({
-                        "_and_".join(sorted([frontStr,backStr])) : list(set(andList)),
-                        frontStr+"_out_"+backStr                 : list(set(frontOnlyList)),
-                        backStr+"_out_"+frontStr                 : list(set(backOnlyList)),
-                    })
+                        andList = [ x for x in unionSet if (( x in targetDict.get(frontStr,[]) )and( x in targetDict.get(backStr,[]) ))]
+                        frontOnlyList = [ x for x in unionSet if (( x in targetDict.get(frontStr,[]) )and( x not in targetDict.get(backStr,[]) ))]
+                        backOnlyList = [ x for x in unionSet if (( x not in targetDict.get(frontStr,[]) )and( x in targetDict.get(backStr,[]) ))]
 
-                    Print.printing(printOutStr.format(target="_and_".join(sorted([frontStr,backStr])),number=str(len(andList))))
-                    Print.printing(printOutStr.format(target=frontStr+"_only", number=str(len(frontOnlyList))))
-                    Print.printing(printOutStr.format(target=backStr+"_only",  number=str(len(backOnlyList) )))
+                        targetDict.update({
+                            "_and_".join(sorted([frontStr,backStr])) : list(set(andList)),
+                            frontStr+"_without_"+backStr             : list(set(frontOnlyList)),
+                            backStr+"_without_"+frontStr             : list(set(backOnlyList)),
+                        })
+                        targetHandle.write("Condition: {}\n".format("_and_".join(sorted([frontStr,backStr]))))
+                        targetHandle.write("Count: {}\nGeneID\tDescription\n".format(str(len(andList))))
+                        targetHandle.write("\n".join([ "{}\t{}".format(keyStr,descriDict.get(keyStr,"")) for keyStr in list(set(andList)) ]))
+                        targetHandle.write("\n")
 
-                Print.printing("[Concluding] finish: {}".format(targetStr))
-                Print.printing("[Exporting] start: {}".format(targetStr))
+                        targetHandle.write("Condition: {}\n".format("{}_without_{}\n".format(frontStr,backStr)))
+                        targetHandle.write("Count: {}\nGeneID\tDescription\n".format(str(len(frontOnlyList))))
+                        targetHandle.write("\n".join([ "{}\t{}".format(keyStr,descriDict.get(keyStr,"")) for keyStr in list(set(frontOnlyList)) ]))
+                        targetHandle.write("\n")
+
+                        targetHandle.write("Condition: {}\n".format("{}_without_{}\n".format(backStr,frontStr)))
+                        targetHandle.write("Count: {}\nGeneID\tDescription\n".format(str(len(backOnlyList) )))
+                        targetHandle.write("\n".join([ "{}\t{}".format(keyStr,descriDict.get(keyStr,"")) for keyStr in list(set(backOnlyList)) ]))
+                        targetHandle.write("\n")
+
+                        Print.printing(printOutStr.format(target="_and_".join(sorted([frontStr,backStr])),number=str(len(andList))))
+                        Print.printing(printOutStr.format(target=frontStr+"_only", number=str(len(frontOnlyList))))
+                        Print.printing(printOutStr.format(target=backStr+"_only",  number=str(len(backOnlyList) )))
+
+                Print.printing("[Concluding] finish: {}".format(targetTypeStr))
+                Print.printing("[Exporting] start: {}".format(targetTypeStr))
                 
                 jsonStr = jsonPathStr.format(**stringDict)
                 with open(jsonStr, "w") as targetHandle:
                     json.dump(targetDict,targetHandle,indent=2)
 
-                Print.printing("[Exporting] finish: {}".format(targetStr))
+                Print.printing("[Exporting] finish: {}".format(targetTypeStr))
         Print.stopLog()
-        
