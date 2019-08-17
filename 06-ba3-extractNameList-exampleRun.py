@@ -3,8 +3,11 @@ import pathlib, sqlite3, math, json
 import numpy as np
 import pandas as pd
 
-pathList = [
-    "data/06-ba-blat/speciesEnsembl/T??Q**-testing-trimQ30",
+conditionList = [
+    {
+        "dataPath"  : "data/06-ba-blat/speciesEnsembl/T??Q**-testing-trimQ30",
+        "referPath" : "data/dbga-GenomeAnnotation/arathTAIR/arathTAIR-attributes.json"
+    },
 ]
 percentageLimit = 90 # lower than 100
 
@@ -12,7 +15,10 @@ matchRatio = percentageLimit/100
 # lossLimit = 0
 # lossDiff = 0
 
-for pathStr in pathList:
+for conditionDict in conditionList:
+    pathStr = conditionDict.get("dataPath","")
+    print("Data: {}".format(pathStr))
+    referStr = conditionDict.get("referPath","")
     blatDF = pd.read_csv("{}.tsv".format(pathStr),delimiter="\t",header=0)
     rowList = blatDF.values.tolist()
     tscpFilterDict = dict()
@@ -141,3 +147,31 @@ for pathStr in pathList:
         targetHandle.write("\nDistribution of coverage (Gene level)\n")
         for levelInt in sorted(list(geneRoundDict.keys())):
             targetHandle.write("{}\t{}\n".format(str(levelInt),str(len(geneRoundDict[levelInt]))))
+
+    if referStr != "": 
+        print("Reference: {}".format(referStr))
+        referDict = json.load(open(referStr,'r'))    
+        descriptDict = dict()
+        with open("{}-descriptionList.json".format(pathStr),"w") as targetHandle:
+            for targetStr in list(geneFilterDict.keys()):
+                keyStr, valueStr = targetStr.split("\t")
+
+                descriptList = [valueStr]
+                if valueStr in list(referDict.keys()):
+                    descriptList.append(referDict[valueStr])
+                valueStr = " => ".join(descriptList)
+
+                tempStr = descriptDict.get(keyStr,"")
+                tempList = tempStr.split(",")
+                if tempList == ['']:
+                    tempList = list()
+                tempList.append(valueStr)
+                tempStr = "; ".join(tempList)
+                
+                descriptDict.update({ keyStr : tempStr })
+
+            json.dump(descriptDict,targetHandle,indent=2,sort_keys=True)
+        
+        with open("{}-descriptionList.tsv".format(pathStr),"w") as targetHandle:
+            targetHandle.write("Query\tTarget\n")
+            targetHandle.write("\n".join([ "{}\t{}".format(keyStr,descriptDict.get(keyStr,"")) for keyStr in sorted(list(descriptDict.keys())) ]))
