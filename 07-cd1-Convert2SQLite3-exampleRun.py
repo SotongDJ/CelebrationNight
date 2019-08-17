@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import pandas as pd
-import sqlite3
+import sqlite3, pathlib
 
 configList = [
     {
@@ -17,12 +17,15 @@ configList = [
     }
 ]
 
+# Don't touch the code below if you don't how it works
 typeList = [
     ["gene_exp", "geneExpression"],
     ["isoform_exp", "transcriptExpression"]
 ]
 diffFilePathStr = "data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}/{source}.diff"
-sqlFilePathStr = 'data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-{target}.db'
+sqlFilePathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-{target}.db'
+sqlFolderPathStr = 'data/07-cd-CuffDiff/{branch}-{method}/'
+
 for combinationList in typeList:
     sourceStr = combinationList[0]
     targetStr = combinationList[1]
@@ -45,6 +48,8 @@ for combinationList in typeList:
                         }
                         pathStr = diffFilePathStr.format(**parameterDict)
                         sqlPathStr = sqlFilePathStr.format(**parameterDict)
+                        sqlFolderStr = sqlFolderPathStr.format(**parameterDict)
+                        pathlib.Path( sqlFolderStr ).mkdir(parents=True,exist_ok=True)
 
                         diffDF = pd.read_csv(pathStr,delimiter="\t",header=0)
                         rowList = diffDF.values.tolist()
