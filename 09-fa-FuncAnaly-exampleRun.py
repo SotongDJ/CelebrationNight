@@ -47,7 +47,6 @@ sampleList = [
         }
     },
 ]
-
 for sampleDict in sampleList:
     stringDict = sampleDict["string"]
     for databaseStr in list(sampleDict["condition"].keys()):
@@ -79,16 +78,18 @@ for sampleDict in sampleList:
         for typeStr in ["significant","comparison"]:
             stringDict.update({ "type" : typeStr })
             stringDict.update({ "database" : databaseStr })
-            detailPathStr = 'data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary.db'
+            detailPathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary.db'
             detailPath = detailPathStr.format(**stringDict)
             groupPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/{branch}-{title}-{level}-list-{type}.json'
             groupPath = groupPathStr.format(**stringDict)
 
-            # expressionDict = json.load(open(detailPathStr,'r'))
-            groupDict      = json.load(open(groupPath,'r'))
+            Connect = sqlite3.connect(detailPath)
+            expressionDF = pd.read_sql_query("SELECT * FROM Summary", Connect)
+            expressionDict = expressionDF.set_index('Gene_ID').T.to_dict('dict')
+            groupDict = json.load(open(groupPath,'r'))
 
             # --- Directory confirmation ---
-            pathlib.Path( "data/09fa-{database}-functionalAnalysis/{branch}-{method}-{annotate}-{trim}/".format(**stringDict) ).mkdir(parents=True,exist_ok=True)
+            pathlib.Path( "data/09-fa-{database}-functionalAnalysis/{branch}-{method}-{annotate}-{trim}/".format(**stringDict) ).mkdir(parents=True,exist_ok=True)
 
             foldchangeDict = dict()
             sumDict = dict()
@@ -118,8 +119,7 @@ for sampleDict in sampleList:
                     #
                     if gene in set(g2termDict.keys()):
                         for termID in g2termDict[gene]:
-                            # detailDict = expressionDict[gene]
-                            detailDict = dict()
+                            detailDict = expressionDict[gene]
 
                             tempList = compareDict.get(termID,[])
                             tempList.append(detailDict)
@@ -139,13 +139,13 @@ for sampleDict in sampleList:
             print("")
             print("Step 2: Exporting results into JSON files")
 
-            targetFilenameStr = "data/09fa-{database}-functionalAnalysis/{branch}-{method}-{annotate}-{trim}/{branch}-{title}-FoldChange-{level}-{type}.json".format(**stringDict)
+            targetFilenameStr = "data/09-fa-{database}-functionalAnalysis/{branch}-{method}-{annotate}-{trim}/{branch}-{title}-FoldChange-{level}-{type}.json".format(**stringDict)
             with open(targetFilenameStr,'w') as resultFile:
                 json.dump(foldchangeDict,resultFile,indent=2,sort_keys=True)
 
             print("Step 3: Generating TSV files")
 
-            targetFilenameStr = "data/09fa-{database}-functionalAnalysis/{branch}-{method}-{annotate}-{trim}/{branch}-{title}-FoldChange-{level}-{type}.tsv".format(**stringDict)
+            targetFilenameStr = "data/09-fa-{database}-functionalAnalysis/{branch}-{method}-{annotate}-{trim}/{branch}-{title}-FoldChange-{level}-{type}.tsv".format(**stringDict)
             with open(targetFilenameStr,'w') as resultFile:
                 columnTup = tuple(sorted(compareList))
 
