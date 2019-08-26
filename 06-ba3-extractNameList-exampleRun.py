@@ -12,9 +12,6 @@ conditionList = [
 percentageLimit = 90 # lower than 100
 
 matchRatio = percentageLimit/100
-# lossLimit = 0
-# lossDiff = 0
-
 for conditionDict in conditionList:
     pathStr = conditionDict.get("dataPath","")
     print("Data: {}".format(pathStr))
@@ -27,13 +24,8 @@ for conditionDict in conditionList:
     tDict = dict()
     tscpRoundDict = dict()
     geneRoundDict = dict()
-    # 
-    # matchList = rowList[0]
-    # for n in range(21):
-    #     [n,str(blatDF.columns.tolist()[n]),str(rowList[0][n])]
     for matchList in rowList:
         matchInt = matchList[0]
-        # lossInt = matchList[1]
         qNameStr = matchList[9]
         tNameStr = matchList[13]
         qSizeInt = matchList[10]
@@ -79,14 +71,6 @@ for conditionDict in conditionList:
                 } 
             })
         
-        # tempList = qDict.get(qRoundInt,list())
-        # tempList.append([qNameStr,tNameStr])
-        # qDict.update( { qRoundInt : tempList } )
-        
-        # tempList = tDict.get(tRoundInt,list())
-        # tempList.append([qNameStr,tNameStr])
-        # tDict.update( { tRoundInt : tempList } )
-        
         minRoundInt = min([qRoundInt,tRoundInt])
         tempList = tscpRoundDict.get(minRoundInt,list())
         tempList.append([qNameStr,tNameStr])
@@ -97,11 +81,6 @@ for conditionDict in conditionList:
         tempSet.update({genePairStr})
         geneRoundDict.update( { minRoundInt : tempSet } )
         
-    # print("\n".join([ str(n) + " "  + str(len(tscpRoundDict[n])) for n in sorted(list(tscpRoundDict.keys())) ]))
-    # with open("{}-grouping-transcript.tsv","w") as targetHandle:
-    # print("\n".join([ str(n) + " "  + str(len(geneRoundDict[n])) for n in sorted(list(geneRoundDict.keys())) ]))
-    # with open("{}-grouping-gene.tsv","w") as targetHandle:
-    # len(tscpFilterDict.keys())
     with open("{}-nameList-transcript.tsv".format(pathStr),"w") as targetHandle:
         targetHandle.write("Query\tTarget\n")
         targetHandle.write("\n".join(list(tscpFilterDict.keys())))
@@ -109,13 +88,9 @@ for conditionDict in conditionList:
         resultDict = dict()
         for targetStr in list(tscpFilterDict.keys()):
             keyStr, valueStr = targetStr.split("\t")
-            tempStr = resultDict.get(keyStr,"")
-            tempList = tempStr.split(",")
-            if tempList == ['']:
-                tempList = list()
-            tempList.append(valueStr)
-            tempStr = ",".join(tempList)
-            resultDict.update({ keyStr : tempStr })
+            tempSet = set(resultDict.get(keyStr,list()))
+            tempSet.update({valueStr})
+            resultDict.update({ keyStr : list(tempSet) })
         
         json.dump(resultDict,targetHandle,indent=2,sort_keys=True)
 
@@ -127,13 +102,9 @@ for conditionDict in conditionList:
         resultDict = dict()
         for targetStr in list(geneFilterDict.keys()):
             keyStr, valueStr = targetStr.split("\t")
-            tempStr = resultDict.get(keyStr,"")
-            tempList = tempStr.split(",")
-            if tempList == ['']:
-                tempList = list()
-            tempList.append(valueStr)
-            tempStr = ",".join(tempList)
-            resultDict.update({ keyStr : tempStr })
+            tempSet = set(resultDict.get(keyStr,list()))
+            tempSet.update({valueStr})
+            resultDict.update({ keyStr : list(tempSet) })
 
         json.dump(resultDict,targetHandle,indent=2,sort_keys=True)
 
@@ -152,25 +123,32 @@ for conditionDict in conditionList:
         print("Reference: {}".format(referStr))
         referDict = json.load(open(referStr,'r'))    
         descriptDict = dict()
+        synonymDict = dict()
+        for targetStr in list(geneFilterDict.keys()):
+            keyStr, valueStr = targetStr.split("\t")
+
+            tempList = synonymDict.get(keyStr,list())
+            tempList.append(valueStr)
+            synonymDict.update({ keyStr : tempList })
+
+            descriptList = [valueStr]
+            if valueStr in list(referDict.keys()):
+                descriptList.append(referDict[valueStr])
+            valueStr = " => ".join(descriptList)
+
+            tempStr = descriptDict.get(keyStr,"")
+            tempList = tempStr.split(",")
+            if tempList == ['']:
+                tempList = list()
+            tempList.append(valueStr)
+            tempStr = "; ".join(tempList)
+            descriptDict.update({ keyStr : tempStr })
+
         with open("{}-descriptionList.json".format(pathStr),"w") as targetHandle:
-            for targetStr in list(geneFilterDict.keys()):
-                keyStr, valueStr = targetStr.split("\t")
-
-                descriptList = [valueStr]
-                if valueStr in list(referDict.keys()):
-                    descriptList.append(referDict[valueStr])
-                valueStr = " => ".join(descriptList)
-
-                tempStr = descriptDict.get(keyStr,"")
-                tempList = tempStr.split(",")
-                if tempList == ['']:
-                    tempList = list()
-                tempList.append(valueStr)
-                tempStr = "; ".join(tempList)
-                
-                descriptDict.update({ keyStr : tempStr })
-
             json.dump(descriptDict,targetHandle,indent=2,sort_keys=True)
+
+        with open("{}-synonymList.json".format(pathStr),"w") as targetHandle:
+            json.dump(synonymDict,targetHandle,indent=2,sort_keys=True)
         
         with open("{}-descriptionList.tsv".format(pathStr),"w") as targetHandle:
             targetHandle.write("Query\tTarget\n")
