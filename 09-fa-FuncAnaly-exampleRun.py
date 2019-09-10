@@ -47,6 +47,12 @@ sampleList = [
         }
     },
 ]
+
+detailPathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary.db'
+groupPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/{branch}-{title}-{level}-list-{type}.json'
+resultPathStr = "data/09-fa-{database}-functionalAnalysis/{branch}-{method}-{annotate}-{trim}/"
+resultFilePathStr = "data/09-fa-{database}-functionalAnalysis/{branch}-{method}-{annotate}-{trim}/{branch}-{title}-FoldChange-{level}-{type}.{outputFormat}"
+
 for sampleDict in sampleList:
     stringDict = sampleDict["string"]
     for databaseStr in list(sampleDict["condition"].keys()):
@@ -78,9 +84,7 @@ for sampleDict in sampleList:
         for typeStr in ["significant","comparison"]:
             stringDict.update({ "type" : typeStr })
             stringDict.update({ "database" : databaseStr })
-            detailPathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary.db'
             detailPath = detailPathStr.format(**stringDict)
-            groupPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/{branch}-{title}-{level}-list-{type}.json'
             groupPath = groupPathStr.format(**stringDict)
 
             Connect = sqlite3.connect(detailPath)
@@ -89,7 +93,7 @@ for sampleDict in sampleList:
             groupDict = json.load(open(groupPath,'r'))
 
             # --- Directory confirmation ---
-            pathlib.Path( "data/09-fa-{database}-functionalAnalysis/{branch}-{method}-{annotate}-{trim}/".format(**stringDict) ).mkdir(parents=True,exist_ok=True)
+            pathlib.Path( resultPathStr.format(**stringDict) ).mkdir(parents=True,exist_ok=True)
 
             foldchangeDict = dict()
             sumDict = dict()
@@ -139,13 +143,15 @@ for sampleDict in sampleList:
             print("")
             print("Step 2: Exporting results into JSON files")
 
-            targetFilenameStr = "data/09-fa-{database}-functionalAnalysis/{branch}-{method}-{annotate}-{trim}/{branch}-{title}-FoldChange-{level}-{type}.json".format(**stringDict)
+            stringDict.update({ "outputFormat" : "json" })
+            targetFilenameStr = resultFilePathStr.format(**stringDict)
             with open(targetFilenameStr,'w') as resultFile:
                 json.dump(foldchangeDict,resultFile,indent=2,sort_keys=True)
 
             print("Step 3: Generating TSV files")
 
-            targetFilenameStr = "data/09-fa-{database}-functionalAnalysis/{branch}-{method}-{annotate}-{trim}/{branch}-{title}-FoldChange-{level}-{type}.tsv".format(**stringDict)
+            stringDict.update({ "outputFormat" : "tsv" })
+            targetFilenameStr = resultFilePathStr.format(**stringDict)
             with open(targetFilenameStr,'w') as resultFile:
                 columnTup = tuple(sorted(compareList))
 
@@ -197,4 +203,5 @@ for sampleDict in sampleList:
                     resultFile.write("\t".join(valueNumberList))
                     resultFile.write("\n")
 
+            stringDict.update({ "outputFormat" : "---" })
             print("Finish\n")
