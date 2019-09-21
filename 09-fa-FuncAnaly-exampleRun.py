@@ -53,6 +53,13 @@ groupPathStr = 'data/08-grouping/{branch}-{method}-{annotate}-{trim}/{branch}-{t
 resultPathStr = "data/09-fa-{database}-functionalAnalysis/{branch}-{method}-{annotate}-{trim}/"
 resultFilePathStr = "data/09-fa-{database}-functionalAnalysis/{branch}-{method}-{annotate}-{trim}/{branch}-{title}-FoldChange-{level}-{type}.{outputFormat}"
 
+def printR(msg,numInt):
+    spaceInt = numInt - len(msg)
+    if spaceInt > 0:
+        print(msg+(" "*spaceInt),end="\r")
+    else:
+        print(msg,end="\r")
+
 for sampleDict in sampleList:
     stringDict = sampleDict["string"]
     for databaseStr in list(sampleDict["condition"].keys()):
@@ -87,9 +94,9 @@ for sampleDict in sampleList:
             detailPath = detailPathStr.format(**stringDict)
             groupPath = groupPathStr.format(**stringDict)
 
-            Connect = sqlite3.connect(detailPath)
-            expressionDF = pd.read_sql_query("SELECT * FROM Summary", Connect)
-            expressionDict = expressionDF.set_index('Gene_ID').T.to_dict('dict')
+            # Connect = sqlite3.connect(detailPath)
+            # expressionDF = pd.read_sql_query("SELECT * FROM Summary", Connect)
+            # expressionDict = expressionDF.set_index('Gene_ID').T.to_dict('dict')
             groupDict = json.load(open(groupPath,'r'))
 
             # --- Directory confirmation ---
@@ -100,7 +107,8 @@ for sampleDict in sampleList:
             compareList = []
             absenceList = []
             #
-            print("Target: "+levelStr)
+            print("Target: "+typeStr)
+            print("Level: "+levelStr)
             print("Step 0: Check combination")
             for compare in columnList:
                 if compare in set(groupDict.keys()):
@@ -109,6 +117,7 @@ for sampleDict in sampleList:
                     absenceList.append(compare)
 
             print("Step 1: Comparing "+databaseStr)
+            lenInt = 0
             for compare in compareList:
                 compareDict = dict()
                 targetSet = set(groupDict[compare])
@@ -119,26 +128,33 @@ for sampleDict in sampleList:
                 for gene in targetSet:
                     #
                     countInt = countInt + 1
-                    print("{}:[{}/{}]{}".format(compare,str(countInt),totalCountStr,gene),end="\r")
+                    msgStr = "{}:[{}/{}]{}".format(compare,str(countInt),totalCountStr,gene)
+                    printR(msgStr,lenInt)
+                    lenInt = len(msgStr)
                     #
                     if gene in set(g2termDict.keys()):
                         for termID in g2termDict[gene]:
-                            detailDict = expressionDict[gene]
+                            # detailDict = expressionDict[gene]
+                            # detailDict.update({ "Gene_ID" : gene })
 
                             tempList = compareDict.get(termID,[])
-                            tempList.append(detailDict)
+                            # tempList.append(detailDict)
+                            tempList.append(gene)
                             compareDict.update({ termID : tempList })
 
-                        tempList = sumDict.get(compare,[])
-                        tempList.append(gene)
-                        sumDict.update({ compare : list(set(tempList)) })
+                        sumSet = sumDict.get(compare,set())
+                        sumSet.update({gene})
+                        sumDict.update({ compare : sumSet })
 
                 foldchangeDict.update({ compare : compareDict })
 
+            sumCountDict = dict()
             for compare in list(sumDict.keys()):
-                sumDict.update({ compare : len(sumDict[compare]) })
+                sumCountDict[compare] = len(sumDict[compare]) 
+                sumDict[compare] = list(sumDict[compare]) 
 
-            foldchangeDict.update({ "#SUM" : sumDict })
+            foldchangeDict.update({ "# Sum of Involved Genes" : sumCountDict })
+            foldchangeDict.update({ "# Involved Genes" : sumDict })
 
             print("")
             print("Step 2: Exporting results into JSON files")
@@ -170,12 +186,12 @@ for sampleDict in sampleList:
 
                 resultFile.write("\t".join(headerList))
                 resultFile.write("\t")
-                resultFile.write("\t".join([ n.replace("_"," ") for n in columnTup ]))
+                resultFile.write("\t".join(list(columnTup)))
                 resultFile.write("\t")
                 resultFile.write("\t".join(absenceList))
                 resultFile.write("\n")
                 
-                sumList = [ str(sumDict.get(x,'irrelevant')) for x in columnTup ]
+                sumList = [ str(sumCountDict.get(x,'irrelevant')) for x in columnTup ]
                 calculationList.extend(sumList)
                 resultFile.write("\t".join(calculationList))
                 resultFile.write("\t")
