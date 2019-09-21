@@ -41,6 +41,7 @@ for sampleDict in sampleList:
             initCountInt = 1
             totalCountInt = len(inputKeyList)
             #
+            """
             hmDict = dict()
             for hmStr in inputKeyList:
                 #
@@ -63,7 +64,22 @@ for sampleDict in sampleList:
                 #
             id2HmDict = dict()
             id2HmDict.update(hmDict)
-
+            """
+            for hmStr in inputKeyList:
+                #
+                print("[{}/{}]".format(initCountInt,totalCountInt), end="\r")
+                #
+                if hmStr in hm2IdKeyList:
+                    for idStr in hm2IdDict[hmStr]:
+                        tempSet = set(hm2IdDict.get(idStr,list()))
+                        if type(inputDict[hmStr]) == type(str()):
+                            tempSet.update({inputDict[hmStr]})
+                        elif type(inputDict[hmStr]) == type(list()):
+                            tempSet.update(set(inputDict[hmStr]))
+                        hm2IdDict.update({ idStr : list(tempSet) })
+                #
+                initCountInt = initCountInt + 1
+                #
             print("")
 
         hm2IdDict = dict()
@@ -83,6 +99,13 @@ for sampleDict in sampleList:
             initCountInt = initCountInt + 1
             #
         print("")
+    
+    with open(outputFolderStr+outputFileStr.format(database="mapping",type="id2homolog"),'w') as dictFile:
+        json.dump(id2HmDict, dictFile, indent=4, sort_keys=True)
+    
+    with open(outputFolderStr+outputFileStr.format(database="mapping",type="homolog2id"),'w') as dictFile:
+        json.dump(hm2IdDict, dictFile, indent=4, sort_keys=True)
+
     # The following codes fuse with some older but still unpublish codes
     #     that related to gene2term/term2gene/count generation.
     for databaseStr in list(databaseDict.keys()):
@@ -94,7 +117,7 @@ for sampleDict in sampleList:
         countDict = dict()
         #
         initCountInt = 1
-        totalCountInt = len(list(id2HmDict.keys()))
+        totalCountInt = len(list(hm2IdDict.keys()))
         #
         for hmStr in list(hm2IdDict.keys()):
             #
@@ -138,4 +161,3 @@ for sampleDict in sampleList:
 
         with open(outputFolderStr+outputFileStr.format(database=databaseStr,type="gene2term"),'w') as dictFile:
             json.dump(gene2TermDict, dictFile, indent=4, sort_keys=True)
-
