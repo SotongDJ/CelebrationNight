@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import pandas as pd
 import numpy as np
-import sqlite3, json
+import sqlite3, json, pathlib
 import libPrint
 # Declaration of sample-dependent variables
 configList = [
@@ -45,7 +45,7 @@ configList = [
     },
 ]
 
-# Don't touch the code below if you don't how it works
+# Don't touch the code below if you don't know how it works
 sourceFilePathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-geneExpression.db'
 resultFilePathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary'
 logFolderPathStr = 'data/07-cd-CuffDiff/{branch}-{method}/'
@@ -129,14 +129,14 @@ for configDict in configList:
                     print("[ERROR{}:A!=Control,B!=Control]".format(str(errorInt)))
                 
                 inputDict = {
-                    "fpkm-{}".format(aStr) : faFlt,
-                    "fpkm-{}".format(bStr) : fbFlt,
-                    "diff-{}_m_{}".format(bStr,aStr) : diFlt,
-                    "ratio-{}_vs_{}".format(bStr,aStr) : fcFlt,
-                    "pass-{}_vs_{}".format(bStr,aStr) : testStr,
-                    "p-{}_vs_{}".format(bStr,aStr) : pvFlt,
-                    "q-{}_vs_{}".format(bStr,aStr) : qvFlt,
-                    "sig-{}_vs_{}".format(bStr,aStr) : sigStr,
+                    "fpkm：{}".format(aStr) : faFlt,
+                    "fpkm：{}".format(bStr) : fbFlt,
+                    "diff：{}－{}".format(bStr,aStr) : diFlt,
+                    "ratio：{}／{}".format(bStr,aStr) : fcFlt,
+                    "pass：{}／{}".format(bStr,aStr) : testStr,
+                    "pVal：{}／{}".format(bStr,aStr) : pvFlt,
+                    "qVal：{}／{}".format(bStr,aStr) : qvFlt,
+                    "signi：{}／{}".format(bStr,aStr) : sigStr,
                 }
                 subDict.update(inputDict)
                 columnSet.update(set(inputDict.keys()))
@@ -167,47 +167,48 @@ for configDict in configList:
                             print("[ERROR{}:A!=Control,B!=Control]".format(str(errorInt)))
                         
                         inputDict = {
-                            "compare-{}_vs_{}".format(bStr,aStr) : fcFlt,
-                            "diff-{}_m_{}".format(bStr,aStr) : diFlt,
-                            "pass-{}_vs_{}".format(bStr,aStr) : testStr,
-                            "p-{}_vs_{}".format(bStr,aStr) : pvFlt,
-                            "q-{}_vs_{}".format(bStr,aStr) : qvFlt,
-                            "sig-{}_vs_{}".format(bStr,aStr) : sigStr,
+                            "compare：{}／{}".format(bStr,aStr) : fcFlt,
+                            "diff：{}－{}".format(bStr,aStr) : diFlt,
+                            "pass：{}／{}".format(bStr,aStr) : testStr,
+                            "pVal：{}／{}".format(bStr,aStr) : pvFlt,
+                            "qVal：{}／{}".format(bStr,aStr) : qvFlt,
+                            "signi：{}／{}".format(bStr,aStr) : sigStr,
                         }
                         subDict.update(inputDict)
                         columnSet.update(set(inputDict.keys()))
                         resultDict.update({ geneidStr : subDict })
 
-
             countInt = countInt + 1
-            print(countInt,end='\r')
+            print("[{}]".format(countInt),end='\r')
+        
+        print("")
         Print.printing("[Finish] scan throught {} lines (with \"OK\")".format(str(countInt)))
         Connect.close()
 
         Print.printing("[Organise] create list of column names")
         columnList = ['Gene_ID']
         columnList.extend(descriList)
-        columnList.append("fpkm-{}".format(controlStr))
-        columnList.extend(["fpkm-{}".format(x) for x in groupList])
+        columnList.append("fpkm：{}".format(controlStr))
+        columnList.extend(["fpkm：{}".format(x) for x in groupList])
         sampleSectionList = [
-            "diff-{}_m_{}",
-            "ratio-{}_vs_{}",
-            "pass-{}_vs_{}",
-            "p-{}_vs_{}",
-            "q-{}_vs_{}",
-            "sig-{}_vs_{}",
+            "diff：{}－{}",
+            "ratio：{}／{}",
+            "pass：{}／{}",
+            "pVal：{}／{}",
+            "qVal：{}／{}",
+            "signi：{}／{}",
         ]
         for groupStr in groupList:
             for sampleSectionStr in sampleSectionList:
                 columnList.append(sampleSectionStr.format(groupStr,controlStr))
         
         compareSectionList = [
-            "diff-{}_m_{}",
-            "compare-{}_vs_{}",
-            "pass-{}_vs_{}",
-            "p-{}_vs_{}",
-            "q-{}_vs_{}",
-            "sig-{}_vs_{}",
+            "diff：{}－{}",
+            "compare：{}／{}",
+            "pass：{}／{}",
+            "pVal：{}／{}",
+            "qVal：{}／{}",
+            "signi：{}／{}",
         ]
         for compareSubList in compareList:
             for compareSectionStr in compareSectionList:
@@ -228,8 +229,11 @@ for configDict in configList:
             
             for labelStr in descriList:
                 resultDF.at[rowInt, labelStr] = descriDict.get(labelStr,dict()).get(geneStr,np.NaN)
-
+        
+        print("")
         Print.printing("[Export] export as expressionSummary.db")
+        if pathlib.Path(resultPathStr+".db").exists():
+            pathlib.Path(resultPathStr+".db").unlink()
         Connect = sqlite3.connect(resultPathStr+".db")
         resultDF.to_sql(name='Summary', con=Connect)
         Connect.commit()
