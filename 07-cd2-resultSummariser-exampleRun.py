@@ -70,10 +70,17 @@ for configDict in configList:
         descriDict.update({ labelStr : labelDict })
     
     for branchStr in branchList:
-        sourcePathStr = sourceFilePathStr.format(branch=branchStr,method=methodStr,annotate=annotateStr,trim=trimStr)
-        resultPathStr = resultFilePathStr.format(branch=branchStr,method=methodStr,annotate=annotateStr,trim=trimStr)
-        logFolderPath = logFolderPathStr.format(branch=branchStr,method=methodStr)
-        logPathStr = logFilePathStr.format(branch=branchStr,method=methodStr,annotate=annotateStr,trim=trimStr)
+        infoDict = {
+            "branch"     : branchStr,
+            "method"     : methodStr,
+            "annotate"   : annotateStr,
+            "trim"       : trimStr,
+            "targetType" : targetTypeStr
+        }
+        sourcePathStr = sourceFilePathStr.format(**infoDict)
+        resultPathStr = resultFilePathStr.format(**infoDict)
+        logFolderPath = logFolderPathStr.format(**infoDict)
+        logPathStr = logFilePathStr.format(**infoDict)
 
         Print = libPrint.timer()
         Print.logFilenameStr = logPathStr
