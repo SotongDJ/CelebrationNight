@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import pandas as pd
 import numpy as np
-import sqlite3, json, pathlib
+import sqlite3, json, pathlib, math
 import libPrint
 # Declaration of sample-dependent variables
 configList = [
@@ -18,27 +18,29 @@ configList = [
         }
     },
     {
-        "branch"    : ["testing2","testing3"],
-        "method"    : "dsStringtie",
-        "control"   : "Control",
-        "group"     : ["S1","S2"], # without control
-        "annotate"  : "speciesEnsembl",
-        "compare"   : [["S1","S2"]],
-        "trim"      : "trimQ30",  
-        "attribute" : {
+        "branch"     : ["testing2","testing3"],
+        "method"     : "dsStringtie",
+        "control"    : "Control",
+        "group"      : ["S1","S2"], # without control
+        "annotate"   : "speciesEnsembl",
+        "compare"    : [["S1","S2"]],
+        "trim"       : "trimQ30",
+        "targetType" : "transcript",
+        "attribute"  : {
             'description' : 'data/dbga-GenomeAnnotation/speciesEnsembl/speciesEnsembl-attributes.json',
             'homolog' : 'data/dbga-GenomeAnnotation/speciesEnsembl/speciesEnsembl-homolog.json',
         }
     },
     {
-        "branch"    : ["testing2","testing3"],
-        "method"    : "waStringtie",
-        "control"   : "Control",
-        "group"     : ["S1","S2"], # without control
-        "annotate"  : "speciesEnsembl",
-        "compare"   : [["S1","S2"]],
-        "trim"      : "trimQ30",  
-        "attribute" : {
+        "branch"     : ["testing2","testing3"],
+        "method"     : "waStringtie",
+        "control"    : "Control",
+        "group"      : ["S1","S2"], # without control
+        "annotate"   : "speciesEnsembl",
+        "compare"    : [["S1","S2"]],
+        "trim"       : "trimQ30",
+        "targetType" : "gene",
+        "attribute"  : {
             'description' : 'data/dbga-GenomeAnnotation/speciesEnsembl/speciesEnsembl-attributes.json',
             'homolog' : 'data/dbga-GenomeAnnotation/speciesEnsembl/speciesEnsembl-homolog.json',
         }
@@ -136,15 +138,27 @@ for configDict in configList:
                     errorInt = errorInt + 1
                     print("[ERROR{}:A!=Control,B!=Control]".format(str(errorInt)))
                 
+                if faFlt == 0.0:
+                    logaEle = "noSignal"
+                else:
+                    logaEle = math.log10(faFlt)
+
+                if fbFlt == 0.0:
+                    logbEle = "noSignal"
+                else:
+                    logbEle = math.log10(fbFlt)
+
                 inputDict = {
-                    "fpkm：{}".format(aStr) : faFlt,
-                    "fpkm：{}".format(bStr) : fbFlt,
-                    "diff：{}－{}".format(bStr,aStr) : diFlt,
-                    "ratio：{}／{}".format(bStr,aStr) : fcFlt,
-                    "pass：{}／{}".format(bStr,aStr) : testStr,
-                    "pVal：{}／{}".format(bStr,aStr) : pvFlt,
-                    "qVal：{}／{}".format(bStr,aStr) : qvFlt,
-                    "signi：{}／{}".format(bStr,aStr) : sigStr,
+                    "[FPKM:{}]".format(aStr) : faFlt,
+                    "[FPKM:{}]".format(bStr) : fbFlt,
+                    "[log10(FPKM:{})]".format(aStr) : logaEle,
+                    "[log10(FPKM:{})]".format(bStr) : logbEle,
+                    "[diff:{}-{}]".format(bStr,aStr) : diFlt,
+                    "[ratio:{}/{}]".format(bStr,aStr) : fcFlt,
+                    "[pass:{}/{}]".format(bStr,aStr) : testStr,
+                    "[pVal:{}/{}]".format(bStr,aStr) : pvFlt,
+                    "[qVal:{}/{}]".format(bStr,aStr) : qvFlt,
+                    "[signi:{}/{}]".format(bStr,aStr) : sigStr,
                 }
                 subDict.update(inputDict)
                 columnSet.update(set(inputDict.keys()))
@@ -175,12 +189,12 @@ for configDict in configList:
                             print("[ERROR{}:A!=Control,B!=Control]".format(str(errorInt)))
                         
                         inputDict = {
-                            "compare：{}／{}".format(bStr,aStr) : fcFlt,
-                            "diff：{}－{}".format(bStr,aStr) : diFlt,
-                            "pass：{}／{}".format(bStr,aStr) : testStr,
-                            "pVal：{}／{}".format(bStr,aStr) : pvFlt,
-                            "qVal：{}／{}".format(bStr,aStr) : qvFlt,
-                            "signi：{}／{}".format(bStr,aStr) : sigStr,
+                            "[compare:{}/{}]".format(bStr,aStr) : fcFlt,
+                            "[diff:{}-{}]".format(bStr,aStr) : diFlt,
+                            "[pass:{}/{}]".format(bStr,aStr) : testStr,
+                            "[pVal:{}/{}]".format(bStr,aStr) : pvFlt,
+                            "[qVal:{}/{}]".format(bStr,aStr) : qvFlt,
+                            "[signi:{}/{}]".format(bStr,aStr) : sigStr,
                         }
                         subDict.update(inputDict)
                         columnSet.update(set(inputDict.keys()))
@@ -196,27 +210,30 @@ for configDict in configList:
         Print.printing("[Organise] create list of column names")
         columnList = ['Gene_ID']
         columnList.extend(descriList)
-        columnList.append("fpkm：{}".format(controlStr))
-        columnList.extend(["fpkm：{}".format(x) for x in groupList])
+        columnList.append("[FPKM:{}]".format(controlStr))
+        columnList.extend(["[FPKM:{}]".format(x) for x in groupList])
+        columnList.append("[log10(FPKM:Total)]")
+        columnList.append("[log10(FPKM:{})]".format(controlStr))
         sampleSectionList = [
-            "diff：{}－{}",
-            "ratio：{}／{}",
-            "pass：{}／{}",
-            "pVal：{}／{}",
-            "qVal：{}／{}",
-            "signi：{}／{}",
+            "[diff:{}-{}]",
+            "[ratio:{}/{}]",
+            "[pass:{}/{}]",
+            "[pVal:{}/{}]",
+            "[qVal:{}/{}]",
+            "[signi:{}/{}]",
         ]
         for groupStr in groupList:
+            columnList.append("[log10(FPKM:{})]".format(groupStr))
             for sampleSectionStr in sampleSectionList:
                 columnList.append(sampleSectionStr.format(groupStr,controlStr))
         
         compareSectionList = [
-            "diff：{}－{}",
-            "compare：{}／{}",
-            "pass：{}／{}",
-            "pVal：{}／{}",
-            "qVal：{}／{}",
-            "signi：{}／{}",
+            "[diff:{}-{}]",
+            "[compare:{}/{}]",
+            "[pass:{}/{}]",
+            "[pVal:{}/{}]",
+            "[qVal:{}/{}]",
+            "[signi:{}/{}]",
         ]
         for compareSubList in compareList:
             for compareSectionStr in compareSectionList:
@@ -234,6 +251,15 @@ for configDict in configList:
             valueDict = resultDict[geneList[rowInt]]
             for titleStr in [ x for x in columnList if x != 'Gene_ID' ]:
                 resultDF.at[rowInt, titleStr] = valueDict.get(titleStr,np.NaN)
+
+            sumFlt = 0.0
+            fpkmList = [ x for x in columnList if "[FPKM:" in x ]
+            for titleStr in fpkmList:
+                sumFlt = sumFlt + valueDict.get(titleStr,np.NaN)
+            if sumFlt == 0.0:
+                resultDF.at[rowInt, "[log10(FPKM:Total)]"] = "noSignal"
+            else:
+                resultDF.at[rowInt, "[log10(FPKM:Total)]"] = math.log10(sumFlt)
             
             for labelStr in descriList:
                 resultDF.at[rowInt, labelStr] = descriDict.get(labelStr,dict()).get(geneStr,np.NaN)
