@@ -46,21 +46,22 @@ configList = [
 ]
 
 # Don't touch the code below if you don't know how it works
-sourceFilePathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-geneExpression.db'
-resultFilePathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-expressionSummary'
+sourceFilePathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-{targetType}Expression.db'
+resultFilePathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-{targetType}ExpressionSummary'
 logFolderPathStr = 'data/07-cd-CuffDiff/{branch}-{method}/'
-logFilePathStr = '{annotate}-{trim}-expressionSummary'
+logFilePathStr = '{annotate}-{trim}-{targetType}ExpressionSummary'
 
 for configDict in configList:    
-    branchList  = configDict.get("branch",[])
-    methodStr  = configDict.get("method","")
-    controlStr  = configDict.get("control","")
-    groupList   = configDict.get("group",[])
-    compareList = configDict.get("compare",[])
-    compareCStr = "; ".join([ "\t".join(sorted(x)) for x in compareList ])
-    annotateStr = configDict.get("annotate","")
-    trimStr     = configDict.get("trim","")
-    attriDict   = configDict.get("attribute",dict())
+    branchList    = configDict.get("branch",[])
+    methodStr     = configDict.get("method","")
+    annotateStr   = configDict.get("annotate","")
+    trimStr       = configDict.get("trim","")
+    targetTypeStr = configDict.get("targetType","")
+    controlStr    = configDict.get("control","")
+    groupList     = configDict.get("group",[])
+    compareList   = configDict.get("compare",[])
+    compareCStr   = "; ".join([ "\t".join(sorted(x)) for x in compareList ])
+    attriDict     = configDict.get("attribute",dict())
     
     descriDict = dict()
     descriList = list(attriDict.keys())
@@ -80,7 +81,7 @@ for configDict in configList:
         Print.testingBool = False
         Print.startLog()
 
-        Print.printing("branch = {branch}\nmethod = {method}\nannotate = {annotate}\ntrim = {trim}".format(branch=branchStr,method=methodStr,annotate=annotateStr,trim=trimStr))
+        Print.printing("branch = {branch}\nmethod = {method}\nannotate = {annotate}\ntrim = {trim}\ntype = {targetType}".format(**infoDict))
         Print.printing("[SQL-load] open expression database")
         Connect = sqlite3.connect(sourcePathStr)
         Cursor = Connect.cursor()
