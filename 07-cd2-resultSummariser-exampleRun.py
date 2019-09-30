@@ -10,8 +10,8 @@ configList = [
         "method"    : "dsStringtie",
         "control"   : "Control",
         "group"     : ["T1","T2","T3","T4","T5"], # without control
-        "annotate"  : "speciesTAIR",
         "compare"   : [],
+        "annotate"  : "speciesTAIR",
         "trim"      : "trimQ30", 
         "attribute" : {
             'description' : 'data/dbga-GenomeAnnotation/speciesTAIR/speciesTAIR-attributes.json',
@@ -22,8 +22,8 @@ configList = [
         "method"     : "dsStringtie",
         "control"    : "Control",
         "group"      : ["S1","S2"], # without control
-        "annotate"   : "speciesEnsembl",
         "compare"    : [["S1","S2"]],
+        "annotate"   : "speciesEnsembl",
         "trim"       : "trimQ30",
         "targetType" : "transcript",
         "attribute"  : {
@@ -36,8 +36,8 @@ configList = [
         "method"     : "waStringtie",
         "control"    : "Control",
         "group"      : ["S1","S2"], # without control
-        "annotate"   : "speciesEnsembl",
         "compare"    : [["S1","S2"]],
+        "annotate"   : "speciesEnsembl",
         "trim"       : "trimQ30",
         "targetType" : "gene",
         "attribute"  : {
@@ -48,17 +48,18 @@ configList = [
 ]
 
 # Don't touch the code below if you don't know how it works
-sourceFilePathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-{targetType}Expression.db'
-resultFilePathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-{targetType}ExpressionSummary'
+sourceFilePathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-{omic}Expression.db'
+resultFilePathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-{omic}ExpressionSummary'
+namePairFilePathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-{omic}NamePair.json'
 logFolderPathStr = 'data/07-cd-CuffDiff/{branch}-{method}/'
-logFilePathStr = '{annotate}-{trim}-{targetType}ExpressionSummary'
+logFilePathStr = '{annotate}-{trim}-{omic}ExpressionSummary'
 
 for configDict in configList:    
     branchList    = configDict.get("branch",[])
     methodStr     = configDict.get("method","")
     annotateStr   = configDict.get("annotate","")
     trimStr       = configDict.get("trim","")
-    targetTypeStr = configDict.get("targetType","")
+    omicStr = configDict.get("omic","")
     controlStr    = configDict.get("control","")
     groupList     = configDict.get("group",[])
     compareList   = configDict.get("compare",[])
@@ -77,7 +78,7 @@ for configDict in configList:
             "method"     : methodStr,
             "annotate"   : annotateStr,
             "trim"       : trimStr,
-            "targetType" : targetTypeStr
+            "omic" : omicStr
         }
         sourcePathStr = sourceFilePathStr.format(**infoDict)
         resultPathStr = resultFilePathStr.format(**infoDict)
@@ -90,7 +91,7 @@ for configDict in configList:
         Print.testingBool = False
         Print.startLog()
 
-        Print.printing("branch = {branch}\nmethod = {method}\nannotate = {annotate}\ntrim = {trim}\ntype = {targetType}".format(**infoDict))
+        Print.printing("branch = {branch}\nmethod = {method}\nannotate = {annotate}\ntrim = {trim}\ntype = {omic}".format(**infoDict))
         Print.printing("[SQL-load] open expression database")
         Connect = sqlite3.connect(sourcePathStr)
         Cursor = Connect.cursor()
@@ -98,11 +99,12 @@ for configDict in configList:
         expExc = Cursor.execute(selectStr)
 
         Print.printing("[Compare] adjust combination")
-        columnSet = {'Gene_ID'}
+        columnSet = {'[Object ID]'}
         resultDict = dict()
         countInt = 0
         for expList in expExc:
             tempList = list(expList)
+            testIDStr = tempList[1]
             geneidStr = tempList[2]
             sampleAStr = tempList[5]
             sampleBStr = tempList[6]
@@ -116,7 +118,7 @@ for configDict in configList:
             sigStr = tempList[14]
             
             errorInt = 0
-            subDict = resultDict.get(geneidStr,dict())
+            subDict = resultDict.get(testIDStr,dict())
             # haveSignalBool = (fpkmAFlt > 0) or (fpkmBFlt > 0)
             # if controlStr in sampleStr and haveSignalBool:
             if controlStr in sampleStr:
@@ -149,6 +151,7 @@ for configDict in configList:
                     logbEle = math.log10(fbFlt)
 
                 inputDict = {
+                    '[Gene ID]' : geneidStr,
                     "[FPKM:{}]".format(aStr) : faFlt,
                     "[FPKM:{}]".format(bStr) : fbFlt,
                     "[log10(FPKM:{})]".format(aStr) : logaEle,
@@ -162,7 +165,7 @@ for configDict in configList:
                 }
                 subDict.update(inputDict)
                 columnSet.update(set(inputDict.keys()))
-                resultDict.update({ geneidStr : subDict })
+                resultDict.update({ testIDStr : subDict })
 
             # elif sampleStr in compareCStr and haveSignalBool:
             elif sampleStr in compareCStr:
@@ -198,7 +201,7 @@ for configDict in configList:
                         }
                         subDict.update(inputDict)
                         columnSet.update(set(inputDict.keys()))
-                        resultDict.update({ geneidStr : subDict })
+                        resultDict.update({ testIDStr : subDict })
 
             countInt = countInt + 1
             print("[{}]".format(countInt),end='\r')
@@ -208,7 +211,7 @@ for configDict in configList:
         Connect.close()
 
         Print.printing("[Organise] create list of column names")
-        columnList = ['Gene_ID']
+        columnList = ['[Object ID]','[Gene ID]']
         columnList.extend(descriList)
         columnList.append("[FPKM:{}]".format(controlStr))
         columnList.extend(["[FPKM:{}]".format(x) for x in groupList])
@@ -242,14 +245,20 @@ for configDict in configList:
                 columnList.append(compareSectionStr.format(elemStr,baseStr))
 
         Print.printing("[Arrange] fill the values into DataFrame")
-        geneList = list(resultDict.keys())
-        resultDF = pd.DataFrame(index=range(len(geneList)), columns=columnList)
-        for rowInt in range(len(geneList)):
-            print("[{}/{}]".format(str(rowInt),str(len(geneList))),end="\r")
-            geneStr = geneList[rowInt]
-            resultDF.at[rowInt, 'Gene_ID'] = geneStr
-            valueDict = resultDict[geneList[rowInt]]
-            for titleStr in [ x for x in columnList if x != 'Gene_ID' ]:
+        testList = list(resultDict.keys())
+        nameListDict = dict()
+        resultDF = pd.DataFrame(index=range(len(testList)), columns=columnList)
+        for rowInt in range(len(testList)):
+            print("[{}/{}]".format(str(rowInt),str(len(testList))),end="\r")
+            testStr = testList[rowInt]
+            resultDF.at[rowInt, '[Object ID]'] = testStr
+            valueDict = resultDict[testList[rowInt]]
+
+            geneIDStr = valueDict.get(columnList[1],np.NaN)
+            if testStr != geneIDStr:
+                nameListDict.update({ testStr : geneIDStr })
+
+            for titleStr in [ x for x in columnList if x != '[Object ID]' ]:
                 resultDF.at[rowInt, titleStr] = valueDict.get(titleStr,np.NaN)
 
             sumFlt = 0.0
@@ -262,7 +271,15 @@ for configDict in configList:
                 resultDF.at[rowInt, "[log10(FPKM:Total)]"] = math.log10(sumFlt)
             
             for labelStr in descriList:
-                resultDF.at[rowInt, labelStr] = descriDict.get(labelStr,dict()).get(geneStr,np.NaN)
+                descriEle = descriDict.get(labelStr,dict()).get(testStr,np.NaN)
+                if type(descriEle) == type(list()):
+                    descriStr = "; ".join(descriEle)
+                elif  type(descriEle) == type(str()):
+                    descriStr = descriEle
+                else:
+                    descriStr = np.NaN
+                
+                resultDF.at[rowInt, labelStr] = descriStr
         
         print("")
         Print.printing("[Export] export as expressionSummary.db")
@@ -276,5 +293,10 @@ for configDict in configList:
         Print.printing("[Export] export as expressionSummary.tsv")
         resultDF.to_csv(resultPathStr+".tsv", index=False, sep='\t', encoding='utf-8')
         
+        if nameListDict != dict():
+            Print.printing("[Export] export namePair.json")
+            with open(namePairFilePathStr.format(**infoDict),"w") as targetHandle:
+                json.dump(nameListDict,targetHandle,indent=1)
+
         Print.stopLog()
         print("\n")
