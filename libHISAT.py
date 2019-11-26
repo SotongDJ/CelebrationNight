@@ -336,7 +336,7 @@ class summariser:
 
         trimConditionList = expRep.storeDict.get("[trim]condition",[])
         hisat2ConditionList = expRep.storeDict.get("[hisat2]Condition",[])
-        annotateConditionList = expRep.storeDict.get("[hisat2]annotateCondition",[])
+        annotateConditionList = expRep.storeDict.get("conditionList",[])
         groupList = expRep.storeDict.get("group",[])
         replicationList = expRep.storeDict.get("replication",[])
 
@@ -349,7 +349,8 @@ class summariser:
             self.testingBool = True
 
         for trimConditionStr in trimConditionList:
-            for annotateConditionStr in annotateConditionList:
+            for conditionList in annotateConditionList:
+                annotateConditionStr = conditionList[0]
                 finalOutputFolderStr = outputFolderStr.format(
                     annotateCondition=annotateConditionStr,
                     trimCondition=trimConditionStr
