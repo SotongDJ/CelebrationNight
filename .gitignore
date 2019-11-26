@@ -13,6 +13,7 @@ temp/
 .vscode/
 *-run*.*
 *-set*.*
+*-backupList*.*
 
 .fuse*
 testing*.*
