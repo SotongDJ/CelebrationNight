@@ -45,7 +45,7 @@ class trimmer:
         # ---- Initialization ----
         commandStr = BinTrim.storeDict["command"]
 
-        conditionList = ExpRep.storeDict.get("[trim]condition",[])
+        conditionList = ExpRep.storeDict.get("conditionsList",[])
         groupList = ExpRep.storeDict.get("group",[])
         replicationList = ExpRep.storeDict.get("replication",[])
         directionList = ExpRep.storeDict.get("direction",[])
@@ -58,7 +58,7 @@ class trimmer:
         inputFileNameStr = ExpRep.storeDict.get("[trim]inputFileName","")
         outputFileNameStr = ExpRep.storeDict.get("[trim]outputFileName","")
         fileTypeStr = ExpRep.storeDict.get("[trim]fileType","")
-        checkFolderList = ExpRep.storeDict.get("[trim]checkFolder",[])
+        checkFolderList = ExpRep.storeDict.get("checkFolder",[])
 
         if not ExpRep.storeDict.get("testing",True):
             testingBool = False
@@ -70,7 +70,8 @@ class trimmer:
             pathlib.Path(folderStr).mkdir(parents=True,exist_ok=True)
 
         if type(conditionList) == type(list()) and conditionList != []:
-            for conditionStr in conditionList:
+            for conditionDict in conditionList:
+                conditionStr = conditionDict['trim']
                 Print = libPrint.timer()
                 Print.logFilenameStr = "03-trim-{branch}-{cond}".format(
                     branch=branchStr,

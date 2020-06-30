@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import pathlib, sqlite3
 import numpy as np
 import pandas as pd
@@ -26,7 +27,7 @@ class sqlImporter:
         Connect = sqlite3.connect(sqlPath)
         Cursor = Connect.cursor()
         clPrint.printing("[SQLite3:CreateTable] "+sqlPath)
-        ReturnMsg = Cursor.execute(createCommandStr)
+        ReturnMsg = Cursor.execute(createCommandStr) # pylint: disable=unused-variable
         Connect.commit()
         clPrint.printing("[SQLite3:FinishCreating]")
 
@@ -235,7 +236,7 @@ class sqlImporter:
 
                 Connect = sqlite3.connect(sqlPath)
                 Cursor = Connect.cursor()
-                ReturnMsg = Cursor.execute(createComStr.format(",".join(createColumnList)))
+                ReturnMsg = Cursor.execute(createComStr.format(",".join(createColumnList))) # pylint: disable=unused-variable
                 Connect.commit()
                 Print.printing("[SQLite3:CreateTable] "+sqlPath)
 

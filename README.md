@@ -4,8 +4,8 @@
 
 - This project include some experiment coding for testing purpose.
 - Use it at your own risk.
-- I will try my best to write descriptions.
-
+- I will try my best to write documentation.
+- Scripts for Stringtie were removed in current version (108-2 Generation)
 
 ## Script Type
 ### CoFRIL
@@ -15,9 +15,9 @@
 |   **Definition**   |
 | ---- |
 | 1. Pack process code into python class (**.py** file with "lib" prefix) |
-| 2. Run \*-setConfig.py first to configure dependent variables (Initialization) |
-| (\*-setConfig.py template: "\*-configExample.py") |
-| 3. Run related python class in \*-run.py |
+| 2. Run cf-\*.py first to configure dependent variables (Initialization) |
+| (cf-\*.py template: "cf-\*-exampleRun.py") |
+| 3. Run related python scripts in \*-run.py |
 | (\*-run.py template: "\*-exampleRun.py") |
 
 ### RuDi
@@ -33,13 +33,13 @@
 ## Processing Stage (General usage)
 
 ### Stage 01 - FASTQ Quality Report
-| List     | Detail            |
-| ----     | ----              |
-| Codename | **01-fastqc**     |
-| Usage    | Check Quality     |
-| Type     | Under development |
-| Binary   | FastQC            |
-| Input    | NGS FASTQ         |
+| List     | Detail        |
+| ----     | ----          |
+| Codename | **01-fastqc** |
+| Usage    | Check Quality |
+| Type     | RuDi          |
+| Binary   | FastQC        |
+| Input    | NGS FASTQ     |
 
 ### Stage 02 - HISAT2 index
 | List     | Detail                   |
@@ -73,23 +73,39 @@
 | Input    | **02-hisat2-index**    |
 |          | **03-trim**            |
 
-## Processing Stage (Distinctive usage)
-**The scripts under this catalogue may lose function as their development didn't stick to the current coding style.**
+### Stage 05 - Transcriptome conversion
+| List     | Detail                          |
+| ----     | ----                            |
+| Codename | **05-gffread**                  |
+| Usage    | Convert genome to transcriptome |
+| Type     | CoFRIL                          |
+| Class    | libCuffdiff.converter()         |
+| Binary   | gffread                         |
+| Input    | Genomic annotation              |
 
-### Stage 04 - HISAT2 Summariser
-| List     | Detail                 |
-| ----     | ----                   |
-| Codename | **04-hs**              |
-| Usage    | Analyse HISAT2 result  |
-| Type     | CoFRIL                 |
-| Class    | libHISAT.summariser()  |
-| Binary   | samtools from SAMtools |
-| Input    | **04-hisat2**          |
+### Stage 06 - Transcripts extraction and analysis
+| List     | Detail           |
+| ----     | ----             |
+| Codename | **06-fastn**     |
+| Usage    | Extract transcripts from transcriptome and analysis properties of transcriptome |
+| Type     | RuDi             |
+| Class    | none             |
+| Binary   | none             |
+| Input    | **05-gffread**   |
+|          | **05-stringtie** |
+|          | **05-cufflink**  |
 
-### Stage 07 - Comparing Genomic Annotation
-| List     | Detail    |
-| ----     | ----      |
-| Codename | **07-cg** |
-| Usage    | Get information of isoform under each gene model |
-| Type     | RuDi      |
-| Input    | **07-st** |
+### Stage 07 - Expression estimation
+| List     | Detail                          |
+| ----     | ----                            |
+| Codename | **07-cuffdiff**                 |
+| Usage    | Estimate the expression profile |
+| Type     | CoFRIL                          |
+| Class    | libCuffdiff.differ()            |
+| Binary   | cuffdiff                        |
+| Input    | **04-hisat2**                   |
+|          | **05-gffread**                  |
+|          | **05-stringtie**                |
+|          | **05-cufflink**                 |
+
+### Stage 08 - Homologous functional annotation
