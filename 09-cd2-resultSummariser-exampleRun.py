@@ -6,65 +6,65 @@ import libPrint
 # Declaration of sample-dependent variables
 configList = [
     {
-        "branch"    : ["testing1"],
-        "method"    : "dsStringtie",
-        "control"   : "Control",
-        "group"     : ["T1","T2","T3","T4","T5"], # without control
-        "compare"   : [],
-        "annotate"  : "speciesTAIR",
-        "trim"      : "trimQ30", 
-        "attribute" : {
-            'description' : 'data/dbga-GenomeAnnotation/speciesTAIR/speciesTAIR-attributes.json',
+        "branch"     : ["speciesTreatment"],
+        "method"     : "gffRead",
+        "control"    : "control",
+        "group"      : ["treat1","treat2","treat3","treat4"], # without control
+        "compare"    : [ ["treat2","treat1"],["treat4","treat3"],["treat2","treat3"],["treat1","treat4"] ],
+        "note"       : "All",
+        "annotate"   : "speciesDatabase",
+        "trim"       : "trimQ30",
+        "omic" : "transcript",
+        "attribute"  : {
+            'description' : 'userData/08-an-annotateTranscriptome/speciesTreatment-gffRead/speciesDatabase-transcript-attribute-description.json',
+            'homolog' : 'userData/08-an-annotateTranscriptome/speciesTreatment-gffRead/speciesDatabase-transcript-attribute-homolog.json',
+            "GO" : "userData/08-an-annotateTranscriptome/speciesTreatment-gffRead/speciesDatabase-transcript-GO-gene2term.json",
+            "KO" : "userData/08-an-annotateTranscriptome/speciesTreatment-gffRead/speciesDatabase-transcript-KO-gene2term.json",
+            "EC" : "userData/08-an-annotateTranscriptome/speciesTreatment-gffRead/speciesDatabase-transcript-EC-gene2term.json",
+            "TF" : "userData/08-an-annotateTranscriptome/speciesTreatment-gffRead/speciesDatabase-transcript-TF-gene2term.json",
+            "SR" : "userData/08-an-annotateTranscriptome/speciesTreatment-gffRead/speciesDatabase-transcript-SR-gene2term.json",
         }
     },
     {
-        "branch"     : ["testing2","testing3"],
-        "method"     : "dsStringtie",
-        "control"    : "Control",
-        "group"      : ["S1","S2"], # without control
-        "compare"    : [["S1","S2"]],
-        "annotate"   : "speciesEnsembl",
+        "branch"     : ["speciesTreatment2"],
+        "method"     : "gffRead",
+        "control"    : "Normal",
+        "group"      : ["treatI","treatJ"], # without control
+        "compare"    : [["treatI","treatJ"]],
+        "note"       : "All",
+        "annotate"   : "speciesDatabase",
         "trim"       : "trimQ30",
-        "targetType" : "transcript",
+        "omic" : "transcript",
         "attribute"  : {
-            'description' : 'data/dbga-GenomeAnnotation/speciesEnsembl/speciesEnsembl-attributes.json',
-            'homolog' : 'data/dbga-GenomeAnnotation/speciesEnsembl/speciesEnsembl-homolog.json',
-        }
-    },
-    {
-        "branch"     : ["testing2","testing3"],
-        "method"     : "waStringtie",
-        "control"    : "Control",
-        "group"      : ["S1","S2"], # without control
-        "compare"    : [["S1","S2"]],
-        "annotate"   : "speciesEnsembl",
-        "trim"       : "trimQ30",
-        "targetType" : "gene",
-        "attribute"  : {
-            'description' : 'data/dbga-GenomeAnnotation/speciesEnsembl/speciesEnsembl-attributes.json',
-            'homolog' : 'data/dbga-GenomeAnnotation/speciesEnsembl/speciesEnsembl-homolog.json',
+            'description' : 'userData/08-an-annotateTranscriptome/speciesTreatment2-gffRead/speciesDatabase-transcript-attribute-description.json',
+            'homolog' : 'userData/08-an-annotateTranscriptome/speciesTreatment2-gffRead/speciesDatabase-transcript-attribute-homolog.json',
+            "GO" : "userData/08-an-annotateTranscriptome/speciesTreatment2-gffRead/speciesDatabase-transcript-GO-gene2term.json",
+            "KO" : "userData/08-an-annotateTranscriptome/speciesTreatment2-gffRead/speciesDatabase-transcript-KO-gene2term.json",
+            "EC" : "userData/08-an-annotateTranscriptome/speciesTreatment2-gffRead/speciesDatabase-transcript-EC-gene2term.json",
+            "TF" : "userData/08-an-annotateTranscriptome/speciesTreatment2-gffRead/speciesDatabase-transcript-TF-gene2term.json",
+            "SR" : "userData/08-an-annotateTranscriptome/speciesTreatment2-gffRead/speciesDatabase-transcript-SR-gene2term.json",
         }
     },
 ]
-
 # Don't touch the code below if you don't know how it works
-sourceFilePathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-{omic}Expression.db'
-resultFilePathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-{omic}ExpressionSummary'
-namePairFilePathStr = 'data/07-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}-{omic}NamePair.json'
-logFolderPathStr = 'data/07-cd-CuffDiff/{branch}-{method}/'
-logFilePathStr = '{annotate}-{trim}-{omic}ExpressionSummary'
+sourceFilePathStr = 'userData/09-cd-transcriptomeSummary/{branch}-{method}/{annotate}-{trim}-{omic}Expression.db'
+resultFilePathStr = 'userData/09-cd-transcriptomeSummary/{branch}-{method}-{annotate}-{trim}/ExpressionSummary-{note}-{omic}'
+namePairFilePathStr = 'userData/09-cd-transcriptomeSummary/{branch}-{method}-{annotate}-{trim}/NamePair-{note}-{omic}.json'
+logFolderPathStr = 'userData/09-cd-transcriptomeSummary/{branch}-{method}-{annotate}-{trim}/'
+logFilePathStr = 'ExpressionSummary-{note}-{omic}'
 
 for configDict in configList:    
-    branchList    = configDict.get("branch",[])
-    methodStr     = configDict.get("method","")
-    annotateStr   = configDict.get("annotate","")
-    trimStr       = configDict.get("trim","")
-    omicStr = configDict.get("omic","")
-    controlStr    = configDict.get("control","")
-    groupList     = configDict.get("group",[])
-    compareList   = configDict.get("compare",[])
-    compareCStr   = "; ".join([ "\t".join(sorted(x)) for x in compareList ])
-    attriDict     = configDict.get("attribute",dict())
+    branchList  = configDict.get("branch",[])
+    methodStr   = configDict.get("method","")
+    annotateStr = configDict.get("annotate","")
+    trimStr     = configDict.get("trim","")
+    omicStr     = configDict.get("omic","")
+    noteStr     = configDict.get("note","")
+    controlStr  = configDict.get("control","")
+    groupList   = configDict.get("group",[])
+    compareList = configDict.get("compare",[])
+    compareCStr = "; ".join([ "\t".join(sorted(x)) for x in compareList ])
+    attriDict   = configDict.get("attribute",dict())
     
     descriDict = dict()
     descriList = list(attriDict.keys())
@@ -74,17 +74,19 @@ for configDict in configList:
     
     for branchStr in branchList:
         infoDict = {
-            "branch"     : branchStr,
-            "method"     : methodStr,
-            "annotate"   : annotateStr,
-            "trim"       : trimStr,
-            "omic" : omicStr
+            "branch"   : branchStr,
+            "method"   : methodStr,
+            "annotate" : annotateStr,
+            "trim"     : trimStr,
+            "omic"     : omicStr,
+            "note"     : noteStr
         }
         sourcePathStr = sourceFilePathStr.format(**infoDict)
         resultPathStr = resultFilePathStr.format(**infoDict)
         logFolderPath = logFolderPathStr.format(**infoDict)
         logPathStr = logFilePathStr.format(**infoDict)
 
+        pathlib.Path( logFolderPath ).mkdir(parents=True,exist_ok=True)
         Print = libPrint.timer()
         Print.logFilenameStr = logPathStr
         Print.folderStr = logFolderPath

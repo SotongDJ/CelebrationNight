@@ -4,44 +4,40 @@ import sqlite3, pathlib
 
 configList = [
     {
-        "branch"   : {
-            "testing1" : "FirstTest",
-            "testing2" : "SecondTest",
-        },
-        "method"   : ["dsStringtie"],
-        "annotate" : ["speciesAAnotationA"],
+        "branch"   : {"speciesTreatment" : "Treatment on Species"},
+        "method"   : ["gffRead"],
+        "annotate" : ["speciesDatabase"],
         "trim"     : ["trimQ30"],
         "sampleRename" : {
-            "control" : "Mock",
-            "d1" : "Drug1",
+            "control" : "ControlTreatment",
+            "treat1" : "TreatmentOne",
+            "treat2" : "TreatmentTwo",
+            "treat3" : "TreatmentThree",
+            "treat4" : "TreatmentFour"
         }
     },
     {
-        "branch"   : {
-            "testing3" : "ThirdTest",
-            "testing4" : "ForthTest",
-        },
-        "method"   : ["dsStringtie","waStringtie"],
-        "annotate" : ["speciesBAnotationA","speciesBAnotationB","speciesBAnotationC"],
+        "branch"   : {"speciesTreatment2" : "Second Treatment on Species"},
+        "method"   : ["gffRead"],
+        "annotate" : ["speciesDatabase"],
         "trim"     : ["trimQ30"],
         "sampleRename" : {
-            "control" : "Mock",
-            "d2" : "Drug2",
-            "d3" : "Drug3",
+            "Normal" : "NormalTreatment",
+            "treatI" : "TreatmentI",
+            "treatJ" : "TreatmentJ",
         }
     },
 ]
-
 # Don't touch the code below if you don't how it works
 
 typeList = [
-    ["gene_exp", "geneExpression"],
-    ["isoform_exp", "transcriptExpression"]
+    ["gene_exp", "gene"],
+    ["isoform_exp", "transcript"]
 ]
 
-diffFilePathStr = "data/06-cd-CuffDiff/{branch}-{method}/{annotate}-{trim}/{source}.diff"
-sqlFilePathStr = 'data/07-cd-CuffDiff/{renameBranch}-{method}/{annotate}-{trim}-{target}.db'
-sqlFolderPathStr = 'data/07-cd-CuffDiff/{renameBranch}-{method}/'
+diffFilePathStr = "userData/07-cd-estimateExpression/{branch}-{method}/{annotate}-{trim}/{source}.diff"
+sqlFilePathStr = 'userData/09-cd-transcriptomeSummary/{renameBranch}-{method}/{annotate}-{trim}-{target}Expression.db'
+sqlFolderPathStr = 'userData/09-cd-transcriptomeSummary/{renameBranch}-{method}/'
 
 for combinationList in typeList:
     """
@@ -119,8 +115,7 @@ for combinationList in typeList:
                             for columnInt,columnStr in enumerate(columnTup):
                                 contentEle = eachRowList[columnInt]
                                 if type(contentEle) == type(str()) and contentEle in renameDict.keys():
-                                    for fromStr, toStr in renameDict.items():
-                                        contentEle = contentEle.replace(fromStr,toStr)
+                                    contentEle = renameDict[contentEle]
                                 columnDict[columnStr] = contentEle
                             contentList = [ rowInt ]
                             contentList.extend([ columnDict[n] for n in columnTup ])

@@ -48,41 +48,51 @@ class converter:
         copyStr = Copying.storeDict["command"]
 
         branchStr = self.branchStr
-        conditionList = Target.storeDict.get("conditionList",[])
-        targetFolderStr = Target.storeDict.get("gtfFolder","")
-        targetStr = Target.storeDict.get("gtfFile","")
+        conditionsList = [ n for n in Target.storeDict["conditionsList"] if n["transcriptome"] == "gffRead" ]
+        gtfDict = Target.storeDict["gtfDict"]
 
-        for conditionTup in conditionList:
-            annotationStr = conditionTup[0]
-            trimStr = conditionTup[1]
+        for conditionDict in conditionsList:
+            genomeStr = conditionDict["genome"]
+            trimStr = conditionDict["trim"]
+            transcriptomeStr = conditionDict["transcriptome"]
+
+            folderStr = gtfDict[transcriptomeStr]['folder']
+            infoDict = {
+                "branch" : self.branchStr,
+                "annotate" : genomeStr,
+                "trim" : trimStr,
+                "folder" : folderStr,
+            }
+            targetFolderStr = Target.storeDict["transcriptomeFolder"]
+            targetStr = Target.storeDict["transcriptomeGTF"]
 
             Spec = libConfig.config() #parameters
-            Spec.queryStr = annotationStr
+            Spec.queryStr = genomeStr
             Spec.folderStr = "config/"
             Spec.modeStr = "UPDATE"
             Spec.load()
 
-            inputStr = Spec.storeDict.get("antPath","")
-            outputStr = Spec.storeDict.get("gtfPath","")
-            outputFolderStr = Spec.storeDict.get("dbgaPath","")
+            inputStr = Spec.storeDict["antPath"]
+            outputStr = Spec.storeDict["gtfPath"]
+            outputFolderStr = Spec.storeDict["dbgaPath"]
 
             Print = libPrint.timer()
-            Print.logFilenameStr = "06-cd1-gffConversion-{branch}-{annotate}".format(
+            Print.logFilenameStr = "05-gffConversion-{branch}-{annotate}".format(
                 branch=branchStr,
-                annotate=annotationStr,
+                annotate=genomeStr,
             )
             Print.folderStr = outputFolderStr
             Print.testingBool = self.testingBool
             Print.startLog()
             
-            targetPath = targetStr.format(branch=branchStr,annotation=annotationStr,trimCondition=trimStr)
+            targetPath = targetStr.format(**infoDict)
 
             if not pathlib.Path(outputStr).exists():
                 CommandStr = gffreadStr.format(inputFile=inputStr,outputFile=outputStr)
                 Print.phraseStr = CommandStr
                 Print.runCommand()
 
-            folderPath = targetFolderStr.format(branch=branchStr)
+            folderPath = targetFolderStr.format(**infoDict)
             pathlib.Path(folderPath).mkdir(parents=True,exist_ok=True)
             
             CommandStr = copyStr.format(output=outputStr,target=targetPath)
@@ -90,7 +100,6 @@ class converter:
             Print.runCommand()
 
             Print.stopLog()
-
 
 class differ:
     def __init__(self):
@@ -114,83 +123,76 @@ class differ:
         Target.modeStr = "UPDATE"
         Target.load()
 
-        branchStr = Target.storeDict.get("branch","")
-        groupList = Target.storeDict.get("group",[])
-        replicationList = Target.storeDict.get("replication",[])
-        threadStr = Target.storeDict.get("thread","1")
-        hisat2ConditionStr = Target.storeDict.get("[hisat2]Condition","")
-        conditionList = Target.storeDict.get("conditionList",[])
-        methodList = Target.storeDict.get("methodList",[])
-        sourceDict = Target.storeDict.get("[CuffDiff]sourceDict",dict())
-        bamFileNameStr = Target.storeDict.get("[CuffDiff]bamFileName","")
-        gtfFileNameStr = Target.storeDict.get("[CuffDiff]gtfFileName","")
-        resultFolderStr = Target.storeDict.get("[CuffDiff]resultFolder","")
-        
-        if not Target.storeDict.get("testing",True):
-            self.testingBool = False
-        else:
-            self.testingBool = True
+        groupList = Target.storeDict["group"]
+        replicationList = Target.storeDict["replication"]
+        threadStr = Target.storeDict["thread"]
+        bamFileNameStr = Target.storeDict["[hisat2]outputFileName"]
+        gtfFileNameStr = Target.storeDict["transcriptomeGTF"]
+        gtfDict = Target.storeDict["gtfDict"]
+        resultFolderStr = Target.storeDict["[CuffDiff]resultFolder"]
 
-        for methodStr in methodList:
-            sourceFolderStr = sourceDict.get(methodStr,"")
-            for conditionTup in conditionList:
-                antCondStr = conditionTup[0]
-                trimCondStr = conditionTup[1]
+        conditionsList = Target.storeDict["conditionsList"]
+        for conditionDict in conditionsList:
+            genomeStr = conditionDict["genome"]
+            trimStr = conditionDict["trim"]
+            transcriptomeStr = conditionDict["transcriptome"]
+            folderStr = gtfDict[transcriptomeStr]['folder']
+            hisat2ConditionStr = conditionDict["map"]
 
-                # ---- Action ----
-                Print = libPrint.timer()
-                Print.logFilenameStr = "06-CuffDiff-{branch}-from({method})-{annotate}-{trim}".format(
-                    branch=branchStr,
-                    method=methodStr,
-                    annotate=antCondStr,
-                    trim=trimCondStr,
-                )
-                Print.folderStr = "log/"
-                Print.testingBool = self.testingBool
-                Print.startLog()
-                
-                resultPathStr = resultFolderStr.format(
-                    branch=branchStr,
-                    method=methodStr,
-                    annotateCondition=antCondStr,
-                    trimCondition=trimCondStr,
-                )
-                pathlib.Path(resultPathStr).mkdir(parents=True,exist_ok=True)
-                
-                gtfFileStr = gtfFileNameStr.format(
-                    sourceFolder=sourceFolderStr,
-                    branch=branchStr,
-                    annotateCondition=antCondStr,
-                    trimCondition=trimCondStr,
-                )
+            if not Target.storeDict.get("testing",True):
+                self.testingBool = False
+            else:
+                self.testingBool = True
 
-                bamGroupList = list()
-                for groupStr in groupList:
-                    bamFileList = list()
-                    for repliStr in replicationList:
+            infoDict = {
+                "branch" : self.branchStr,
+                "method" : transcriptomeStr,
+                "annotate" : genomeStr,
+                "trim" : trimStr,
+                "folder" : folderStr,
+                "hisat2Condition" : hisat2ConditionStr,
+                "fileType" : "-sorted.bam",
+            }
 
-                        bamFileStr = bamFileNameStr.format(
-                            branch=branchStr,
-                            annotateCondition=antCondStr,
-                            trimCondition=trimCondStr,
-                            hisat2Condition=hisat2ConditionStr,
-                            group=groupStr,
-                            replication=repliStr,
-                        )
-                        bamFileList.append(bamFileStr)
+            # ---- Action ----
+            Print = libPrint.timer()
+            Print.logFilenameStr = "07-CuffDiff-{branch}-from({method})-{annotate}-{trim}".format(**infoDict)
+            Print.folderStr = "log/"
+            Print.testingBool = self.testingBool
+            Print.startLog()
+            
+            resultPathStr = resultFolderStr.format(**infoDict)
+            pathlib.Path(resultPathStr).mkdir(parents=True,exist_ok=True)
+            
+            gtfFileStr = gtfFileNameStr.format(**infoDict)
 
-                    bamGroupList.append(",".join(bamFileList))
-                bamSampleStr = " ".join(bamGroupList)
+            bamGroupList = list()
+            for groupStr in groupList:
+                bamFileList = list()
+                for repliStr in replicationList:
+                    bamFileDict = dict()
+                    bamFileDict.update(infoDict)
+                    bamFileDict.update({
+                        "group" : groupStr,
+                        "replication" : repliStr,
+                    })
 
-                CommandStr = commandStr.format(
-                    thread=threadStr,
-                    outputFolder=resultPathStr,
-                    labelList=",".join(groupList),
-                    mergedGTF=gtfFileStr,
-                    bamFiles=bamSampleStr,
-                )
-                
-                Print.phraseStr = CommandStr
-                Print.runCommand()
+                    bamFileStr = bamFileNameStr.format(**bamFileDict)
+                    bamFileList.append(bamFileStr)
 
-                Print.stopLog()
+                bamGroupList.append(",".join(bamFileList))
+            bamSampleStr = " ".join(bamGroupList)
+
+            infoDict.update({
+                "thread" : threadStr,
+                "outputFolder" : resultPathStr,
+                "labelList" : ",".join(groupList),
+                "mergedGTF" : gtfFileStr,
+                "bamFiles" : bamSampleStr,
+            })
+            CommandStr = commandStr.format(**infoDict)
+            
+            Print.phraseStr = CommandStr
+            Print.runCommand()
+
+            Print.stopLog()
