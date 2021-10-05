@@ -1,15 +1,18 @@
+
 # CelebrationNight
+
 **This project was released under GPL-3.0 License.**
 
-## Scripts for transcriptome analysis.
+## Scripts for transcriptome analysis
+
 - This project include some experiment coding for testing purpose.
 - Use it at your own risk.
 - I will try my best to complete and polish this documentation.
 
-
 ## Type of process
 
 ### CoFRIL
+
 - **Co**nfig **F**irst and **R**un **I**t **L**ater
 
 |   **Definition**   |  **Naming**   |
@@ -21,6 +24,7 @@
 | | **template**:  "\*-exampleRun.py" |
 
 ### ReRa
+
 - **Re**lay **Ra**ce
 
 | **Definition**                                               |
@@ -29,6 +33,7 @@
 | 2. Use executable binary or script language or both to process information |
 
 ### RuDi
+
 - **Ru**n **Di**rectly
 
 | **Definition**                                               |
@@ -40,37 +45,39 @@
 ## Configuration
 
 ### libConfig
-**For general-purpose  storage of configuration**
 
-- *Coming soon*
+- **For general-purpose  storage of configuration**
+  - *Coming soon*
 
 ### cf-Branch
-**For experiment design**
 
-- *Coming soon*
+- **For experiment design**
+  - *Coming soon*
 
 ### cf-Command
-**For version management of executable**
 
-- *Coming soon*
+- **For version management of executable**
+  - *Coming soon*
 
 ### cf-Parameter
-**For adjustment**
 
-- *Coming soon*
+- **For adjustment**
+  - *Coming soon*
 
 ## Database conversion (Preparation)
 
 ### Extract information from Genome annotation
+
 - *Coming soon*
 
 ### Reconstruct information from functional annotation database
-- *Coming soon*
 
+- *Coming soon*
 
 ## Processing Stage (General usage)
 
 ### Stage 01 - FASTQ Quality Report
+
 | List     | Detail            |
 | ----     | ----              |
 | Codename | **01-fq-fastqc**     |
@@ -81,10 +88,14 @@
 | Input    | NGS reads, FASTQ format |
 | Output   | HTML reports      |
 
- - **Command:** 
-    - `bin/FastQC/fastqc -f fastq -o [largeData/04-hisat2/species/speciesDatabase-trimQ30/report]`
+- **Command:**
+
+    ``` bash
+    bin/FastQC/fastqc -f fastq -o [largeData/04-hisat2/species/speciesDatabase-trimQ30/report]
+    ```
 
 ### Stage 02 - HISAT2 index
+
 | List     | Detail                   |
 | ----     | ----                     |
 | Codename | **02-hisat2-index**      |
@@ -96,6 +107,7 @@
 | Output   | HISAT2 index of genome   |
 
 ### Stage 03 - Trim
+
 | List     | Detail              |
 | ----     | ----                |
 | Codename | **03-trim**         |
@@ -107,6 +119,7 @@
 | Output   | Trimmed reads, FASTQ format |
 
 ### Stage 04 - HISAT2
+
 | List     | Detail                 |
 | -------- | ---------------------- |
 | Codename | **04-hisat2**          |
@@ -120,6 +133,7 @@
 | Output   | Alignments, BAM format |
 
 ### Stage 05 - gffRead
+
 | List     | Detail                 |
 | -------- | ---------------------- |
 | Codename | **05-gr-gffRead**          |
@@ -131,6 +145,7 @@
 | Output   | Transcriptome annotation, GTF2 format |
 
 ### Stage 06 - Transcripts extraction
+
 | List     | Detail                  |
 | -------- | ----------------------  |
 | Codename | **06-fn**          |
@@ -143,13 +158,17 @@
 | Output   | Transcripts, FASTA format |
 |          | Transcripts table, TSV format |
 
- - **Command:** 
-    - `bin/cufflinks/gffread\`
-        `-g userData/dbgs-GenomeSequence/speciesDatabase/speciesDatabase.fn\`
-        `-w userData/06-gr-exportTranscript/speciesTreatment/speciesDatabase-trimQ30-transcript.fn\`
-        `userData/05-gr-transcriptomeConstruction/speciesTreatment/speciesDatabase-trimQ30-final.gtf`
+- **Command:**
+
+    ``` bash
+    bin/cufflinks/gffread\
+        -g userData/dbgs-GenomeSequence/speciesDatabase/speciesDatabase.fn\
+        -w userData/06-gr-exportTranscript/speciesTreatment/speciesDatabase-trimQ30-transcript.fn\
+        userData/05-gr-transcriptomeConstruction/speciesTreatment/speciesDatabase-trimQ30-final.gtf
+    ```
 
 ### Stage 07 - Transcript abundances estimation
+
 | List     | Detail                  |
 | -------- | ----------------------  |
 | Codename | **07-cd-CuffDiff**      |
@@ -162,6 +181,7 @@
 | Output   | Abundances/Expression profile, DIFF format (TSV format) |
 
 ### Stage 08 - Homologous annotation
+
 | List     | Detail            |
 | ----     | ----              |
 | Codename | **08-an**     |
@@ -179,6 +199,7 @@
 | Output   | Homologous annotations, JSONs format (various files) |
 
 ### Stage 09 - Transcriptome information summarizer
+
 | List     | Detail            |
 | ----     | ----              |
 | Codename | **09-cd**     |
@@ -193,6 +214,7 @@
 |          | Annotated abundances/expression profile, TSV format |
 
 ### Stage 10 - Differential Expression Analysis (Haven't release)
+
 | List     | Detail            |
 | ----     | ----              |
 | Codename | **10-grouping** |
@@ -206,6 +228,7 @@
 |          | DEA count record, LOG format (TXT format) |
 
 ### Stage 11 - Gene set enrichment analysis (Haven't release)
+
 | List     | Detail            |
 | ----     | ----              |
 | Codename | **11-ea-enrichAnaly** |
@@ -219,6 +242,7 @@
 |          | GSEA result files, TSV format |
 
 ### Stage 12 - Fisher's Exact Test and visualization (Haven't release)
+
 | List     | Detail            |
 | ----     | ----              |
 | Codename | **12-ft** |
@@ -235,69 +259,109 @@
 ## Python Library (Module & Classes)
 
 ### libHISAT
- - Original Command:
-    - **<a name="indexer">libHISAT.indexer()</a> **
-        - `hisat2-build \` **#Building HISAT2 Index**
-            `-p [THREAD] <Path and Name of GENOME File> \` 
-            `< prefix of HISAT2-build genome index (path+header)>`
-    - **<a name="aligner">libHISAT.aligner()</a> **
-        - `hisat2 \` **#Aligning and mapping**
-            `-q [--dta/--dta-cufflinks] --phred <phred> -p <thread> \`
-            `-x <prefix of HISAT2-build genome index> \`
-            `-1 <forward fastq files of samples> \`
-            `-2 <reverse fastq files of samples> \`
-            `-S <output SAM files> \`
-        - `samtools view -o <out.bam> -Su <in.sam>` **#Convert SAM to BAM**
-        - `samtools sort -o <out-sorted.bam> <in.bam>` **#Sorting BAM for decreasing file size**
+
+- Original Command:
+  - **<a name="indexer">libHISAT.indexer()</a> #Building HISAT2 Index**
+
+    ``` bash
+    hisat2-build \` 
+        -p [THREAD] <Path and Name of GENOME File> \
+        < prefix of HISAT2-build genome index (path+header)>
+    ```
+
+  - **<a name="aligner">libHISAT.aligner()</a>**
+    - **#Aligning and mapping**
+
+        ``` bash
+        hisat2 \
+            -q [--dta/--dta-cufflinks] --phred <phred> -p <thread> \
+            -x <prefix of HISAT2-build genome index> \
+            -1 <forward fastq files of samples> \
+            -2 <reverse fastq files of samples> \
+            -S <output SAM files> \
+        ```
+
+    - **#Convert SAM to BAM**
+
+        ``` bash
+        samtools view -o <out.bam> -Su <in.sam>
+        ```
+
+    - **#Sorting BAM for decreasing file size**
+
+        ``` bash
+        samtools sort -o <out-sorted.bam> <in.bam>
+        ```
 
 ### libTrim
- - Original Command:
-    - **<a name="trimmer">libTrim.trimmer()</a>**
-        - `java -jar <bin>/trimmomatic-0.35.jar PE \` **#Pair-End**
-            `-phred33 -threads <threads> \`
-            `input_forward.fq.gz input_reverse.fq.gz \`
-            `output_forward_paired.fq.gz output_forward_unpaired.fq.gz \`
-            `output_reverse_paired.fq.gz output_reverse_unpaired.fq.gz \`
-            `<ILLUMINACLIP> <LEADING> \`
-            `<TRAILING> <SLIDINGWINDOW> <MINLEN>`
-        - `java -jar <bin>/trimmomatic-0.35.jar SE \` **#Single-End**
-            `-phred33 -threads <threads> \`
-            `input.fq.gz output.fq.gz \`
-            `<ILLUMINACLIP> <LEADING> \`
-            `<TRAILING> <SLIDINGWINDOW> <MINLEN>`
+
+- Original Command:
+  - **<a name="trimmer">libTrim.trimmer()</a>**
+    - **#Pair-End**
+
+        ``` bash
+        java -jar <bin>/trimmomatic-0.35.jar PE \
+            -phred33 -threads <threads> \
+            input_forward.fq.gz input_reverse.fq.gz \
+            output_forward_paired.fq.gz output_forward_unpaired.fq.gz \
+            output_reverse_paired.fq.gz output_reverse_unpaired.fq.gz \
+            <ILLUMINACLIP> <LEADING> \
+            <TRAILING> <SLIDINGWINDOW> <MINLEN>
+        ```
+
+    - **Single-End**
+
+        ``` bash
+        java -jar <bin>/trimmomatic-0.35.jar SE \
+            -phred33 -threads <threads> \
+            input.fq.gz output.fq.gz \
+            <ILLUMINACLIP> <LEADING> \
+            <TRAILING> <SLIDINGWINDOW> <MINLEN>
+        ```
 
 ### libCuffdiff
- - Original Command:
-    - **<a name="differ">libCuffdiff.differ()</a>**
-        - `cuffdiff \``
-            `-p <int>  -o <string> \`
-            `-L <label1,label2,…,labelN> <transcripts.gtf> \`
-            `[[sample1_replicate1.sam,…] …… […,sampleN_replicateM.sam]]`
-    - **<a name="converter">libCuffdiff.converter()</a>**
-        - `bin/cufflinks/gffread <inputFile> -T -o <outputFile>`
+
+- Original Command:
+  - **<a name="differ">libCuffdiff.differ()</a>**
+
+    ``` bash
+    cuffdiff \
+        -p <int>  -o <string> \
+        -L <label1,label2,…,labelN> <transcripts.gtf> \
+        [[sample1_replicate1.sam,…] …… […,sampleN_replicateM.sam]]
+    ```
+
+  - **<a name="converter">libCuffdiff.converter()</a>**
+
+    ``` bash
+    bin/cufflinks/gffread <inputFile> -T -o <outputFile>
+    ```
 
 ## References
-1. [<a name="fastqc-ref">FastQC</a>] https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
-    - **Andrews,  S.** (2018).  FastQC:  a  quality  control  tool  for  high  throughput  sequence  data (Babraham Bioinformatics, Babraham Institute, Cambridge, United Kingdom). 
-2. [<a name="tuxado-ref">HISAT2</a>] https://doi.org/10.1038/nprot.2016.095 (Article)
+
+1. [<a name="fastqc-ref">FastQC</a>] <https://www.bioinformatics.babraham.ac.uk/projects/fastqc/>
+    - **Andrews,  S.** (2018).  FastQC:  a  quality  control  tool  for  high  throughput  sequence  data (Babraham Bioinformatics, Babraham Institute, Cambridge, United Kingdom).
+2. [<a name="tuxado-ref">HISAT2</a>] <https://doi.org/10.1038/nprot.2016.095> (Article)
     - **Pertea, M., Kim, D., Pertea, G.M., Leek, J.T., and Salzberg, S.L.** (2016). Transcript-level  expression  analysis  of  RNA-seq  experiments  with  HISAT,  StringTie  and Ballgown. Nat Protoc **11,** 1650-1667.
-    - https://ccb.jhu.edu/software/hisat2/manual.shtml (Documentation & Binary)
-3. [<a name="trim-ref">Trimmomatic</a>] https://doi.org/10.1093/bioinformatics/btu170 (Article)
+    - <https://ccb.jhu.edu/software/hisat2/manual.shtml> (Documentation & Binary)
+3. [<a name="trim-ref">Trimmomatic</a>] <https://doi.org/10.1093/bioinformatics/btu170> (Article)
     - **Bolger, A.M., Lohse, M., and Usadel, B.** (2014). Trimmomatic: a flexible trimmer for Illumina sequence data. Bioinformatics **30,** 2114-2120.
-    - http://www.usadellab.org/cms/?page=trimmomatic (Documentation & Binary)
-4. [<a name="samtool-ref">SAMtools</a>] https://www.htslib.org/doc/samtools.html
-5. [<a name="gff-ref">gffread</a>] https://ccb.jhu.edu/software/stringtie/gff.shtml
-6. [<a name="cuff-ref">Cuffdiff</a>]  https://doi.org/10.1038/nbt.2450 (Article)
+    - <http://www.usadellab.org/cms/?page=trimmomatic> (Documentation & Binary)
+4. [<a name="samtool-ref">SAMtools</a>] <https://www.htslib.org/doc/samtools.html>
+5. [<a name="gff-ref">gffread</a>] <https://ccb.jhu.edu/software/stringtie/gff.shtml>
+6. [<a name="cuff-ref">Cuffdiff</a>]  <https://doi.org/10.1038/nbt.2450> (Article)
     - **Trapnell, C., Hendrickson, D.G., Sauvageau, M., Goff, L., Rinn, J.L., and Pachter,
 L.** (2013). Differential analysis of gene regulation at transcript resolution with
 RNA-seq. Nat Biotechnol **31,** 46-53.
-    - https://cole-trapnell-lab.github.io/cufflinks/manual/ (Documentation)
-    - https://cole-trapnell-lab.github.io/cufflinks/install/ (Binary)
+    - <https://cole-trapnell-lab.github.io/cufflinks/manual/> (Documentation)
+    - <https://cole-trapnell-lab.github.io/cufflinks/install/> (Binary)
 
 ## Processing Stage (Distinctive usage)
+
 **The scripts under this catalogue may lose function as their development didn't stick to the current coding style.**
 
 ### Stage 04 - HISAT2 Summariser
+
 | List     | Detail                 |
 | ----     | ----                   |
 | Codename | **04-hs**              |
@@ -308,6 +372,7 @@ RNA-seq. Nat Biotechnol **31,** 46-53.
 | Input    | **04-hisat2**          |
 
 ### Stage 07 - Comparing Genomic Annotation
+
 | List     | Detail    |
 | ----     | ----      |
 | Codename | **07-cg** |
