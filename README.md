@@ -15,13 +15,11 @@
 
 - **Co**nfig **F**irst and **R**un **I**t **L**ater
 
-|   **Definition**   |  **Naming**   |
-| ---- | ---- |
-| 1. Pack process code into python class (**.py** file with "lib" prefix) |  |
-| 2. Run \*-setConfig.py first to configure dependent variables (Initialization) |   \*-setConfig.py  |
-|  |**template**:  "\*-configExample.py" |
-| 3. Run related python class in \*-run.py | \*-run.py  |
-| | **template**:  "\*-exampleRun.py" |
+|   **Definition**   |  **Naming**   | **Example** |
+| ---- | ---- | ---- |
+| 1. Pack process code into python class  | lib\*.py | |
+| 2. Run \*-setConfig.py first to configure dependent variables (Initialization) |   \*-setConfig.py  | \*-configExample.py |
+| 3. Run related python class in \*-run.py | \*-run.py  | \*-exampleRun.py |
 
 ### ReRa
 
